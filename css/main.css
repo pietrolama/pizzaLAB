@@ -101,17 +101,27 @@ nav {
     border-bottom: 1px solid var(--border-color);
 }
 
-nav ul {
+/* Container per il menu e l'hamburger */
+.nav-container {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Stili per le link di navigazione */
+.nav-links {
+    display: flex;
     list-style: none;
 }
 
-nav ul li {
+.nav-links li {
     margin: 0 15px;
 }
 
-nav ul li a {
+.nav-links li a {
     color: var(--text-color);
     text-decoration: none;
     padding: 10px 20px;
@@ -121,7 +131,7 @@ nav ul li a {
     transition: background-color 0.3s, color 0.3s, transform 0.3s;
 }
 
-nav ul li a::after {
+.nav-links li a::after {
     content: '';
     position: absolute;
     bottom: 0;
@@ -132,60 +142,43 @@ nav ul li a::after {
     transition: width 0.4s ease, left 0.4s ease;
 }
 
-nav ul li a:hover {
+.nav-links li a:hover {
     background-color: var(--primary-color);
     color: #fff;
     transform: translateY(-3px);
 }
 
-nav ul li a:hover::after {
+.nav-links li a:hover::after {
     width: 100%;
     left: 0;
 }
 
-/* ===== PARALLAX SECTION ===== */
-.parallax-section {
-    position: relative;
-    min-height: 100vh;
-    background: url('../img/contemporanea2.jpg') no-repeat center center fixed;
-    background-size: cover;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    color: #fff;
-    font-size: 2em;
-    z-index: 1;
+/* ===== MENU HAMBURGER ===== */
+.hamburger {
+    display: none; /* Nascondi di default */
+    flex-direction: column;
+    cursor: pointer;
 }
 
-.parallax-section::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+.hamburger .bar {
+    height: 3px;
+    width: 25px;
+    background-color: var(--text-color);
+    margin: 4px 0;
+    transition: 0.4s;
 }
 
-/* ===== TESTO DELLA PARALLAX ===== */
-.parallax-text {
-    position: relative;
-    animation: fadeIn 1.5s ease-in-out;
-    font-size: 2.5rem;
-    letter-spacing: 2px;
-    line-height: 1.5;
+/* ===== ANIMAZIONE HAMBURGER ===== */
+.hamburger.toggle .bar:nth-child(1) {
+    transform: rotate(-45deg) translate(-5px, 6px);
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(50px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.hamburger.toggle .bar:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.toggle .bar:nth-child(3) {
+    transform: rotate(45deg) translate(-5px, -6px);
 }
 
 /* ===== SEZIONI ===== */
@@ -273,7 +266,6 @@ label {
 }
 
 /* ===== SEZIONI RISULTATO E PIANIFICATORE ===== */
-/* Transizioni uniformi per tutte le recipe-box e gli ID associati */
 .recipe-box, #risultato, #plan-box {
     background: var(--dark-background-color);
     padding: 20px;
@@ -427,18 +419,47 @@ footer p:hover {
 @media (max-width: 768px) {
     header h1 {
         font-size: 2.5em;
+        padding: 60px 20px; /* Riduci il padding per schermi più piccoli */
     }
 
     nav ul {
         flex-direction: column;
+        display: none; /* Nascondi le link di navigazione di default */
+        width: 100%;
+        background: #111;
+        position: absolute;
+        top: 60px; /* Altezza del nav */
+        left: 0;
+    }
+
+    nav ul.active {
+        display: flex;
     }
 
     nav ul li {
         margin: 10px 0;
     }
 
-    section h2 {
-        font-size: 2em;
+    .hamburger {
+        display: flex; /* Mostra l'hamburger su schermi piccoli */
+    }
+
+    .form-container {
+        padding: 10px;
+    }
+
+    .form-group {
+        width: 100%;
+    }
+
+    .recipe-box, #risultato, #plan-box {
+        margin-top: 20px;
+        padding: 15px;
+    }
+
+    .cards-container {
+        flex-direction: column;
+        align-items: center;
     }
 
     .card {
@@ -449,20 +470,111 @@ footer p:hover {
         max-width: 120px;
     }
 
-    /* Assicurati che .recipe-box, #risultato, e #plan-box mantengano la loro visualizzazione */
-    .recipe-box, #risultato, #plan-box {
-        margin-top: 20px;
+    /* Sezione Parallax su dispositivi mobili */
+    .parallax-section {
+        background-attachment: scroll; /* Disabilita l'effetto parallax */
+        background-position: center;
+        background-size: cover;
     }
 }
 
 @media (max-width: 480px) {
     header h1 {
         font-size: 2em;
+        padding: 40px 10px;
     }
 
     .form-group {
         margin-bottom: 15px;
     }
+
+    nav ul {
+        top: 50px; /* Regola la posizione del menu */
+    }
+
+    .recipe-box, #risultato, #plan-box {
+        padding: 10px;
+    }
+
+    input, select, button {
+        font-size: 1em;
+        padding: 8px 12px;
+        max-width: 100%;
+    }
+
+    button {
+        padding: 10px 15px;
+    }
+
+    /* Sezione Parallax su dispositivi mobili */
+    .parallax-text {
+        font-size: 1.5rem;
+    }
+}
+
+/* ===== PARALLAX SECTION ===== */
+.parallax-section {
+    position: relative;
+    min-height: 100vh;
+    background: url('../img/contemporanea2.jpg') no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+    font-size: 2em;
+    z-index: 1;
+}
+
+.parallax-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+/* ===== TESTO DELLA PARALLAX ===== */
+.parallax-text {
+    position: relative;
+    animation: fadeIn 1.5s ease-in-out;
+    font-size: 2.5rem;
+    letter-spacing: 2px;
+    line-height: 1.5;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== ANIMAZIONI E TRANSIZIONI ===== */
+.recipe-box, #risultato, #plan-box {
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
+
+.recipe-box.active, #risultato.active, #plan-box.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.hidden {
+    display: none;
+}
+
+.active {
+    display: block;
 }
 
 /* ===== LINK "LEGGI DI PIÙ" ===== */
@@ -483,7 +595,7 @@ footer p:hover {
 .read-more::before {
     content: '';
     position: absolute;
-    top: 100%;
+    bottom: 100%;
     left: 0;
     width: 100%;
     height: 2px;
