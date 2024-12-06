@@ -655,3 +655,48 @@ footer p:hover {
         margin: 15px 0;
     }
 }
+
+/* ===== DISPOSIZIONE FLEXBOX PER SEZIONI SPECIFICHE ===== */
+.pizza-container section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+}
+
+@media (min-width: 769px) {
+    .pizza-container section {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+
+    .pizza-container section img.pizza-img {
+        max-width: 40%; /* Limita la larghezza dell'immagine */
+    }
+
+    .pizza-container section div.pizza-content {
+        max-width: 60%; /* Limita la larghezza del contenuto testuale */
+        padding-left: 20px;
+    }
+}
+
+/* ===== STILI PER IL CONTENUTO TESTUALE ===== */
+.pizza-content h2 {
+    font-size: 1.8em;
+    margin-bottom: 10px;
+}
+
+.pizza-content p {
+    font-size: 1em;
+    margin-bottom: 10px;
+}
+
+.pizza-content ul {
+    list-style-type: disc;
+    margin-left: 20px;
+}
+
+.pizza-content ul li {
+    margin-bottom: 5px;
+}
