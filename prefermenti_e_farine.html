@@ -1,0 +1,78 @@
+<!DOCTYPE html> 
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prefermenti e Farine</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <header>
+        <h1>Prefermenti e Farine</h1>
+    </header>
+    <!-- Navigazione -->
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="tipi-di-pizza.html">Tipi di Pizza</a></li>
+            <li><a href="prefermenti_e_farine.html">Prefermenti e Farine</a></li>
+            <li><a href="calcolatore.html">Calcolatore</a></li>
+            <li><a href="assistente.html">Assistente</a></li>
+            <li><a href="contatti.html">Contatti</a></li>
+        </ul>
+    </nav>
+     
+      <section>
+        <div class="cards-container">
+            <div class="card">
+                <h2>Prefermenti</h2>
+                <img src="img/biga.jpg" alt="Prefermenti" class="homepage-img">
+                <p>Scopri come preparare la biga, il poolish e il lievito madre.</p>
+                <a href="prefermenti.html" class="read-more">Esplora</a>
+            </div>
+            <div class="card">
+                <h2>Farine</h2>
+                <img src="img/farine.jpg" alt="Farine" class="homepage-img">
+                <p>Conosci i tipi di farina e i loro utilizzi basati su W e proteine.</p>
+                <a href="farine.html" class="read-more">Scopri</a>
+            </div>
+        </div>
+      </section>  
+
+    <footer>
+        <p>© 2024 PizzaLab - La tua guida alla pizza perfetta</p>
+    </footer>
+    <!-- Script per rendere le card cliccabili -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.card');
+
+            cards.forEach(card => {
+                // Trova il link all'interno della card
+                const link = card.querySelector('.read-more');
+                if (link) {
+                    const url = link.getAttribute('href');
+
+                    // Aggiungi l'event listener alla card
+                    card.addEventListener('click', (event) => {
+                        // Se il click non è sul link stesso, reindirizza
+                        if (!event.target.closest('.read-more')) {
+                            window.location.href = url;
+                        }
+                    });
+
+                    // Aggiungi l'event listener per il tasto "Enter"
+                    card.addEventListener('keypress', (event) => {
+                        if (event.key === 'Enter') {
+                            window.location.href = url;
+                        }
+                    });
+
+                    // Rendi la card focalizzabile
+                    card.setAttribute('tabindex', '0');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

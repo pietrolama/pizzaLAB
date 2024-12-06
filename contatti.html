@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contatti</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <header>
+        <h1>Contatti</h1>
+    </header>
+     <!-- Navigazione -->
+     <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="tipi-di-pizza.html">Tipi di Pizza</a></li>
+            <li><a href="prefermenti_e_farine.html">Prefermenti e Farine</a></li>
+            <li><a href="calcolatore.html">Calcolatore</a></li>
+            <li><a href="assistente.html">Assistente</a></li>
+            <li><a href="contatti.html">Contatti</a></li>
+        </ul>
+    </nav>
+    <main class="container">
+        <section class="contact-info">
+            <h2>Informazioni di Contatto</h2>
+            <p>Hai domande o bisogno di supporto? Non esitare a contattarmi!</p>
+            <ul>
+                <li><strong>Nome:</strong> Pietro Lama</li>
+                <li><strong>Email:</strong> <a href="mailto:pietro.lama@example.com">pietro.lama@example.com</a></li>
+                <li><strong>Telefono:</strong> +39 123 456 7890</li>
+                <li><strong>Località:</strong> Napoli, Italia</li>
+            </ul>
+        </section>
+        <section class="contact-form">
+            <h2>Scrivimi un Messaggio</h2>
+            <form action="mailto:pietro.lama@example.com" method="post" enctype="text/plain">
+                <div class="form-group">
+                    <label for="name">Nome:</label>
+                    <input type="text" id="name" name="name" placeholder="Il tuo nome" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" placeholder="La tua email" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Messaggio:</label>
+                    <textarea id="message" name="message" rows="5" placeholder="Scrivi il tuo messaggio qui..." required></textarea>
+                </div>
+                <button type="submit" class="btn">Invia</button>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Pietro Lama. Tutti i diritti riservati.</p>
+    </footer>
+</body>
+</html>

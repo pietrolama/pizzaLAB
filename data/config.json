@@ -1,0 +1,87 @@
+{
+    "napoletana": {
+        "metodi": ["diretto"],
+        "parametri": {
+            "soffice": {
+                "idratazione": [70, 75],
+                "peso_panetto": 250,
+                "tempo_lievitazione": 8,
+                "tempo_frigo": 0
+            },
+            "croccante": {
+                "idratazione": [65, 68],
+                "peso_panetto": 250,
+                "tempo_lievitazione": 8,
+                "tempo_frigo": 0
+            }
+        }
+    },
+    "romana": {
+        "metodi": ["diretto"],
+        "parametri": {
+            "soffice": {
+                "idratazione": [60, 65],
+                "peso_panetto": 200,
+                "tempo_lievitazione": 24,
+                "tempo_frigo": 12
+            },
+            "croccante": {
+                "idratazione": [55, 60],
+                "peso_panetto": 200,
+                "tempo_lievitazione": 24,
+                "tempo_frigo": 12
+            }
+        }
+    },
+    "pala": {
+        "metodi": ["diretto", "biga"],
+        "parametri": {
+            "soffice": {
+                "idratazione": [75, 80],
+                "peso_panetto": 300,
+                "tempo_lievitazione": 48,
+                "tempo_frigo": 24
+            },
+            "croccante": {
+                "idratazione": [70, 75],
+                "peso_panetto": 300,
+                "tempo_lievitazione": 48,
+                "tempo_frigo": 24
+            }
+        }
+    },
+    "contemporanea": {
+        "metodi": ["diretto", "biga", "poolish", "lievito_madre", "biga_poolish"],
+        "parametri": {
+            "soffice": {
+                "idratazione": [75, 80],
+                "peso_panetto": 270,
+                "tempo_lievitazione": 36,
+                "tempo_frigo": 12
+            },
+            "croccante": {
+                "idratazione": [70, 75],
+                "peso_panetto": 270,
+                "tempo_lievitazione": 36,
+                "tempo_frigo": 12
+            }
+        }
+    },
+    "padellino": {
+        "metodi": ["diretto"],
+        "parametri": {
+            "soffice": {
+                "idratazione": [65, 70],
+                "peso_panetto": 200,
+                "tempo_lievitazione": 12,
+                "tempo_frigo": 6
+            },
+            "croccante": {
+                "idratazione": [60, 65],
+                "peso_panetto": 200,
+                "tempo_lievitazione": 12,
+                "tempo_frigo": 6
+            }
+        }
+    }
+}
