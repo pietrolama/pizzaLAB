@@ -656,7 +656,7 @@ footer p:hover {
     }
 }
 
-/* ===== DISPOSIZIONE FLEXBOX PER SEZIONI SPECIFICHE ===== */
+/* ===== PIZZA-CONTAINER SPECIFICO ===== */
 .pizza-container section {
     display: flex;
     flex-direction: column;
@@ -665,6 +665,14 @@ footer p:hover {
     width: 100%;
 }
 
+.pizza-container section img.pizza-img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+/* ===== DISPOSIZIONE TESTO ACCANTO ALL'IMMAGINE SU DESKTOP ===== */
 @media (min-width: 769px) {
     .pizza-container section {
         flex-direction: row;
