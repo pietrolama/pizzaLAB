@@ -641,21 +641,6 @@ footer p:hover {
     box-shadow: 0 12px 40px var(--hover-shadow-color);
 }
 
-/* ===== RESPONSIVITÀ per PREFERMENTI-CONTAINER e PIZZA-CONTAINER ===== */
-@media (max-width: 768px) {
-    .prefermenti-container, .pizza-container {
-        padding: 15px;
-        margin: 20px 0;
-    }
-}
-
-@media (max-width: 480px) {
-    .prefermenti-container, .pizza-container {
-        padding: 10px;
-        margin: 15px 0;
-    }
-}
-
 /* ===== PIZZA-CONTAINER SPECIFICO ===== */
 .pizza-container section {
     display: flex;
