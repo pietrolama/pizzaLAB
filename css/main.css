@@ -476,6 +476,12 @@ footer p:hover {
         background-position: center;
         background-size: cover;
     }
+
+    /* ===== PREFERMENTI-CONTAINER E PIZZA-CONTAINER ===== */
+    .prefermenti-container, .pizza-container {
+        padding: 15px;
+        margin: 20px 0;
+    }
 }
 
 @media (max-width: 480px) {
@@ -509,6 +515,12 @@ footer p:hover {
     /* Sezione Parallax su dispositivi mobili */
     .parallax-text {
         font-size: 1.5rem;
+    }
+
+    /* ===== PREFERMENTI-CONTAINER E PIZZA-CONTAINER ===== */
+    .prefermenti-container, .pizza-container {
+        padding: 10px;
+        margin: 15px 0;
     }
 }
 
