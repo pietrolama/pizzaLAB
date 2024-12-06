@@ -1,0 +1,12 @@
+{
+    "nome": "Pizza Contemporanea",
+    "metodo": "Poolish",
+    "procedimento": [
+        "Mescola <peso_farina_poolish> g di farina con <peso_acqua_poolish> ml di acqua e <peso_lievito_poolish> g di lievito fresco. Copri con pellicola e lascia fermentare a 18°C per 12 ore.",
+        "Aggiungi <peso_farina_principale> g di farina, <peso_acqua_principale> ml di acqua, <peso_sale> g di sale e <peso_olio> ml di olio al poolish. Impasta fino a ottenere un composto morbido.",
+        "Copri l’impasto e lascia lievitare in frigorifero per <tempo_frigo> ore.",
+        "Dividi l’impasto in panetti da <peso_panetto> g ciascuno.",
+        "Lascia i panetti a temperatura ambiente per <tempo_ambientale> ore.",
+        "Stendi i panetti, aggiungi il condimento e cuoci in forno statico a 250°C per 8 minuti."
+    ]
+}

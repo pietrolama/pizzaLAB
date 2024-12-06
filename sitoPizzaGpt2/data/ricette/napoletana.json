@@ -1,0 +1,33 @@
+{
+  "nome": "Pizza Napoletana",
+  "metodo": "Diretto",
+  "ingredienti": [
+    {
+      "nome": "Farina",
+      "quantita": "<peso_farina>"
+    },
+    {
+      "nome": "Acqua",
+      "quantita": "<peso_acqua>"
+    },
+    {
+      "nome": "Lievito",
+      "quantita": "<peso_lievito>"
+    },
+    {
+      "nome": "Sale",
+      "quantita": "<peso_sale>"
+    },
+    {
+      "nome": "Olio",
+      "quantita": "<peso_olio>"
+    }
+  ],
+  "procedimento": [
+    "Mescola <peso_farina> g di farina con <peso_acqua> ml di acqua e <peso_lievito> g di lievito.",
+    "Aggiungi <peso_sale> g di sale e <peso_olio> ml di olio, impasta fino a ottenere un composto omogeneo.",
+    "Lascia lievitare per <tempo_ambientale> ore a temperatura ambiente e <tempo_frigo> ore in frigo.",
+    "Forma i panetti da <peso_panetto> g e lascia lievitare per altre 2 ore.",
+    "Cuoci in forno preriscaldato a 250°C per 7-8 minuti."
+  ]
+}

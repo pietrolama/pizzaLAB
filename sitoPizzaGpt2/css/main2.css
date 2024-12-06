@@ -1,0 +1,449 @@
+/* ===== RESET DI BASE ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ===== STILE GENERALE ===== */
+body {
+    font-family: 'Montserrat', sans-serif;
+    color: #fff;
+    background-color: #000;
+    overflow-x: hidden;
+    perspective: 1px;
+    transform-style: preserve-3d;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+}
+
+/* Aggiunto effetto float al logo */
+.site-logo {
+    width: 100%;
+    max-width: 350px;
+    height: auto;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-15px);
+    }
+}
+
+/* ===== PARALLAX SECTION ===== */
+.parallax-section {
+    position: relative;
+    min-height: 100vh;
+    background: url('../img/contemporanea2.jpg') no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+    font-size: 2em;
+    z-index: 1;
+}
+
+.parallax-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+/* ===== TESTO DELLA PARALLAX ===== */
+.parallax-text {
+    position: relative;
+    animation: fadeIn 1.5s ease-in-out;
+    font-size: 2.5rem;
+    letter-spacing: 2px;
+    line-height: 1.5;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== HEADER ===== */
+header {
+    position: relative;
+    text-align: center;
+    padding: 200px 20px;
+    background: linear-gradient(180deg, #000 30%, #111);
+    color: #fff;
+    animation: pulse 10s infinite;
+    background-size: 400% 400%;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+header h1 {
+    font-size: 4em;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    animation: fadeInDown 1s ease-out forwards;
+    opacity: 0;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== NAVIGAZIONE ===== */
+nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    z-index: 9999;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    padding: 10px 0;
+    transition: background-color 0.3s ease-in-out;
+}
+
+nav ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 20px 0;
+}
+
+nav ul li {
+    margin: 0 30px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.2em;
+    position: relative;
+    overflow: hidden;
+}
+
+nav ul li a::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    background-color: #ff0000;
+    bottom: -5px;
+    left: -100%;
+    transition: left 0.3s;
+}
+
+nav ul li a:hover::before {
+    left: 0;
+}
+
+/* ===== SEZIONI CON EFFETTO SCROLL ===== */
+.section {
+    position: relative;
+    min-height: 100vh;
+    padding: 100px 20px;
+    background: #111;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.section:nth-child(even) {
+    background: #222;
+}
+
+.section h2 {
+    font-size: 3em;
+    margin-bottom: 20px;
+    opacity: 0;
+    transform: translateY(50px);
+    animation: fadeInUp 1s forwards;
+    animation-delay: 0.3s;
+}
+
+.section p {
+    font-size: 1.2em;
+    max-width: 800px;
+    text-align: center;
+    line-height: 1.6;
+    opacity: 0;
+    transform: translateY(50px);
+    animation: fadeInUp 1s forwards;
+    animation-delay: 0.6s;
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== FORM INPUTS ===== */
+input, select, button {
+    font-size: 1.2em;
+    padding: 10px 15px;
+    border: 2px solid #ff7f50;
+    border-radius: 8px;
+    background: #222;
+    color: #fff;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease; /* Aggiunto transform */
+    width: 100%;
+    max-width: 500px;
+    margin-bottom: 20px;
+}
+
+/* Effetto Glow */
+button:hover {
+    box-shadow: 0 0 15px rgba(255, 127, 80, 0.8), 0 0 30px rgba(255, 127, 80, 0.5);
+    transform: scale(1.05); /* Leggero ingrandimento */
+    border-color: #e05b30; /* Cambia leggermente il colore del bordo */
+}
+
+/* Effetto Glow per Focus */
+button:focus {
+    box-shadow: 0 0 20px rgba(255, 127, 80, 0.8);
+    outline: none; /* Rimuove il bordo standard del focus */
+}
+
+input:focus, select:focus {
+    border-color: #e05b30;
+    box-shadow: 0 0 5px rgba(255, 127, 80, 0.8);
+    outline: none;
+}
+
+/* ===== FORM GROUP ===== */
+.form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 600px;
+    margin: 0 auto;
+    align-items: center; /* Aggiungi questa regola */
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra gli elementi nel gruppo */
+}
+
+
+label {
+    margin-bottom: 5px;
+}
+
+.form-control {
+    padding: 10px;
+    border: 2px solid #ff7f50;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.hidden {
+    display: none;
+}
+
+
+.active {
+    display: block;
+}
+
+
+
+/* ===== RISULTATO ===== */
+#risultato {
+    background: #111;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 30px;
+    color: #fff;
+    text-align: center;
+}
+
+/* ===== CARD ===== */
+.cards-container {
+    display: flex; /* Attiva Flexbox */
+    justify-content: center; /* Centra orizzontalmente */
+    align-items: center; /* Centra verticalmente */
+    flex-wrap: wrap; /* Permette alle card di andare su più righe se necessario */
+    gap: 20px; /* Spazio tra le card */
+    margin: 0 auto; /* Centra il contenitore */
+    max-width: 1200px; /* Larghezza massima del contenitore */
+    padding: 20px; /* Spazio interno per estetica */
+}
+
+
+.card {
+    background: linear-gradient(135deg, rgba(34, 34, 34, 0.9), rgba(17, 17, 17, 0.9));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+    flex: 1;
+    min-width: 250px;
+    max-width: 750px;
+    padding: 30px 20px;
+    text-align: center;
+    transition: transform 0.4s, box-shadow 0.4s;
+    position: relative;
+    overflow: hidden;
+    color: #fff;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at center, rgba(255, 127, 80, 0.2), transparent);
+    transform: scale(0);
+    transition: transform 0.5s ease-in-out;
+    pointer-events: none; /* Aggiunto per permettere i clic sui pulsanti */
+}
+
+.card:hover::before {
+    transform: scale(1);
+}
+
+.card:hover {
+    transform: translateY(-15px) scale(1.05);
+    box-shadow: 0 10px 30px rgba(255, 127, 80, 0.5);
+}
+
+.card h3 {
+    margin-bottom: 15px;
+    font-size: 1.8em;
+    color: #ff7f50;
+}
+
+.card p {
+    font-size: 1em;
+    color: #ccc;
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.card img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto 20px;
+    border-radius: 10px;
+    transition: transform 0.3s, filter 0.3s;
+}
+
+.card:hover img {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+}
+
+.card .btn {
+    display: inline-block;
+    padding: 12px 25px;
+    margin-top: 10px;
+    background-color: transparent;
+    color: #ff7f50;
+    text-decoration: none;
+    border: 2px solid #ff7f50;
+    border-radius: 8px;
+    transition: background-color 0.3s, color 0.3s;
+    position: relative; /* Aggiunto */
+    z-index: 1; /* Aggiunto */
+}
+
+.card .btn:hover {
+    background-color: #ff7f50;
+    color: #fff;
+}
+
+/* Responsive Cards */
+@media (max-width: 768px) {
+    .card-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .card {
+        max-width: 500px;
+        margin-bottom: 20px;
+    }
+}
+
+
+
+/* ===== FOOTER ===== */
+footer {
+    background: #000;
+    color: #fff;
+    text-align: center;
+    padding: 50px 20px;
+}
+
+footer p {
+    font-size: 1em;
+}
+
+/* ===== RESPONSIVITÀ ===== */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 2.5em;
+    }
+
+    nav ul li {
+        margin: 0 15px;
+    }
+
+    .section h2 {
+        font-size: 2em;
+    }
+
+    .card {
+        width: 100%;
+        height: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 2em;
+    }
+
+    nav ul {
+        flex-direction: column;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+}

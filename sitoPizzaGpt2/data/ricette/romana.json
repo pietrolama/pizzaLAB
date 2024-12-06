@@ -1,0 +1,13 @@
+{
+    "nome": "Pizza Romana",
+    "metodo": "Diretto",
+    "procedimento": [
+        "In una ciotola, sciogli <peso_lievito> g di lievito fresco in <peso_acqua> ml di acqua a temperatura ambiente.",
+        "Aggiungi gradualmente <peso_farina> g di farina di tipo 0 e impasta per 5 minuti.",
+        "Incorpora <peso_sale> g di sale e <peso_olio> ml di olio extravergine di oliva. Continua a impastare fino a ottenere un composto liscio ed elastico.",
+        "Copri la ciotola con pellicola trasparente e lascia lievitare in frigorifero per <tempo_frigo> ore.",
+        "Togli l’impasto dal frigo e lascia lievitare per altre <tempo_ambientale> ore a temperatura ambiente.",
+        "Stendi l’impasto con il matterello per ottenere una base sottile.",
+        "Condisci a piacere e cuoci in forno ventilato a 240°C per 10-12 minuti."
+    ]
+}
