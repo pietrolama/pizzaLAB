@@ -17,12 +17,4 @@ document.addEventListener('DOMContentLoaded', () => {
             hamburger.classList.remove('toggle');
         });
     });
-
-    // Inizializza AOS (se utilizzato)
-    if (typeof AOS !== 'undefined') {
-        AOS.init({
-            duration: 1000, // Durata dell'animazione in millisecondi
-            once: true, // L'animazione viene eseguita una sola volta
-        });
-    }
 });
