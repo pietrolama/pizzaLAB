@@ -6,14 +6,20 @@
                 { "nome": "Farina", "quantita": "<pesoFarina>" },
                 { "nome": "Acqua", "quantita": "<pesoAcqua>" },
                 { "nome": "Lievito", "quantita": "<pesoLievito>" },
-                { "nome": "Sale", "quantita": "<pesoSale>" }
+                { "nome": "Sale", "quantita": "<pesoSale>" },
+                { "nome": "Zucchero", "quantita": "<pesoZucchero>" },
+                { "nome": "Olio d'oliva", "quantita": "<pesoOlio>" }
             ],
             "procedimento": [
-                "Mescola <pesoFarina> g di farina con <pesoAcqua> ml di acqua e <pesoLievito> g di lievito.",
-                "Aggiungi <pesoSale> g di sale e impasta fino a ottenere un composto omogeneo.",
-                "Lascia lievitare per <tempo_ambientale> ore a temperatura ambiente.",
-                "Forma i panetti da <peso_panetto> g e lascia lievitare per altre 2 ore.",
-                "Cuoci in forno preriscaldato a 450°C per 60-90 secondi."
+                "Sciogliere il sale nell'acqua e aggiungere metà della farina setacciata insieme al lievito sbriciolato.",
+                "Aggiungere la restante farina poco alla volta, quindi zucchero e olio d'oliva.",
+                "Lavorare l'impasto per 10-15 minuti fino a ottenere una consistenza liscia, formare una palla e lasciarlo riposare coperto per 1 ora.",
+                "Dividere l'impasto in <numero_panetti> panetti da <peso_panetto> g e far lievitare per circa <tempo_lievitazione> ore fino al raddoppio del volume.",
+                "Preparare la salsa schiacciando i pomodori pelati con il sale e l'olio d'oliva, lasciandola riposare almeno 2 ore.",
+                "Tagliare la mozzarella a listarelle.",
+                "Stendere ogni panetto senza schiacciare i bordi per mantenere il cornicione alto.",
+                "Condire con salsa di pomodoro, mozzarella, un filo d'olio d'oliva e foglie di basilico fresco.",
+                "Cuocere nel fornetto alla massima potenza per 2-3 minuti o in forno domestico per 8-12 minuti, aggiungendo mozzarella e basilico a metà cottura."
             ]
         }
     },
@@ -25,11 +31,11 @@
                 { "nome": "Acqua", "quantita": "<pesoAcqua>" },
                 { "nome": "Lievito", "quantita": "<pesoLievito>" },
                 { "nome": "Sale", "quantita": "<pesoSale>" },
-                { "nome": "Olio", "quantita": "<pesoOlio>" }
+                { "nome": "Olio d'oliva", "quantita": "<pesoOlio>" }
             ],
             "procedimento": [
                 "Mescola <pesoFarina> g di farina con <pesoAcqua> ml di acqua e <pesoLievito> g di lievito.",
-                "Aggiungi <pesoSale> g di sale e <pesoOlio> ml di olio, impasta fino a ottenere un composto omogeneo.",
+                "Aggiungi <pesoSale> g di sale e <pesoOlio> ml di olio d'oliva, impasta fino a ottenere un composto omogeneo.",
                 "Lascia lievitare per <tempo_ambientale> ore a temperatura ambiente.",
                 "Forma i panetti da <peso_panetto> g e lascia lievitare per altre 2 ore.",
                 "Cuoci in forno preriscaldato a 300°C per 5-6 minuti."
@@ -98,10 +104,14 @@
                 { "nome": "Sale", "quantita": "<pesoSale>" }
             ],
             "procedimento": [
-                "Prepara la biga mescolando <pesoFarinaBiga> g di farina con <pesoAcquaBiga> ml di acqua e <pesoLievitoBiga> g di lievito.",
-                "Lascia riposare per 16 ore a temperatura controllata.",
-                "Aggiungi <pesoFarinaPrincipale> g di farina e <pesoAcquaPrincipale> ml di acqua, impasta fino a ottenere un composto omogeneo.",
-                "Forma i panetti e cuoci in forno preriscaldato a 250°C per 10-12 minuti."
+                "Preparare la biga mescolando <pesoFarinaBiga>, <pesoAcquaBiga> e <pesoLievitoBiga>. Lasciar fermentare a temperatura ambiente per 18 ore.",
+                "In planetaria, biga e metà acqua rimanente. Lavorare fino a eliminare i grumi.",
+                "Aggiungere la restante farina. Quando si forma la maglia glutinica, unire zucchero e olio.",
+                "Incorporare il sale e aggiungere l'acqua rimanente a filo, poco alla volta.",
+                "Trasferire l'impasto su un piano da lavoro e fare delle pieghe fino a ottenere un composto liscio.",
+                "Dividere in <numero_panetti> panetti e lasciar lievitare a temperatura ambiente per 3 ore o in frigorifero, togliendoli 1 ora e 30 minuti prima di usarli.",
+                "Stendere l'impasto e condire a piacere.",
+                "Cuocere in fornetto per pizza preriscaldato al massimo della potenza per circa 4 minuti o in forno domestico per circa 8 minuti (4 minuti sul fondo e i restanti in alto)."
             ]
         },
         "poolish": {
@@ -115,10 +125,38 @@
                 { "nome": "Sale", "quantita": "<pesoSale>" }
             ],
             "procedimento": [
-                "Prepara il poolish mescolando <pesoFarinaPoolish> g di farina con <pesoAcquaPoolish> ml di acqua e <pesoLievitoPoolish> g di lievito.",
-                "Lascia fermentare per 12-14 ore a temperatura ambiente.",
-                "Aggiungi <pesoFarinaPrincipale> g di farina e <pesoAcquaPrincipale> ml di acqua, impasta fino a ottenere un composto omogeneo.",
-                "Forma i panetti e cuoci in forno preriscaldato a 250°C per 10-12 minuti."
+                "Preparare il poolish mescolando <pesoFarinaPoolish>, <pesoAcquaPoolish> e <pesoLievitoPoolish>. Lasciar fermentare a temperatura ambiente per 18 ore.",
+                "In planetaria, poolish e metà acqua rimanente. Lavorare fino a eliminare i grumi.",
+                "Aggiungere la restante farina. Quando si forma la maglia glutinica, unire zucchero e olio.",
+                "Incorporare il sale e aggiungere l'acqua rimanente a filo, poco alla volta.",
+                "Trasferire l'impasto su un piano da lavoro e fare delle pieghe fino a ottenere un composto liscio.",
+                "Dividere in <numero_panetti> panetti e lasciar lievitare a temperatura ambiente per 3 ore o in frigorifero, togliendoli 1 ora e 30 minuti prima di usarli.",
+                "Stendere l'impasto e condire a piacere.",
+                "Cuocere in fornetto per pizza preriscaldato al massimo della potenza per circa 4 minuti o in forno domestico per circa 8 minuti (4 minuti sul fondo e i restanti in alto)."
+            ]
+        },
+        "biga_poolish": {
+            "nome": "Pizza Contemporanea (Biga + Poolish)",
+            "ingredienti": [
+                { "nome": "Farina Biga", "quantita": "<pesoFarinaBiga>" },
+                { "nome": "Acqua per Biga", "quantita": "<pesoAcquaBiga>" },
+                { "nome": "Lievito per Biga", "quantita": "<pesoLievitoBiga>" },
+                { "nome": "Farina Poolish", "quantita": "<pesoFarinaPoolish>" },
+                { "nome": "Acqua per Poolish", "quantita": "<pesoAcquaPoolish>" },
+                { "nome": "Lievito per Poolish", "quantita": "<pesoLievitoPoolish>" },
+                { "nome": "Sale", "quantita": "<pesoSale>" },
+                { "nome": "Zucchero", "quantita": "<pesoZucchero>" },
+                { "nome": "Olio", "quantita": "<pesoOlio>" }
+            ],
+            "procedimento": [
+                "Preparare la biga e il poolish mescolando farina, acqua e lievito per ciascuno. Lasciar fermentare a temperatura ambiente per 18 ore.",
+                "In planetaria, unire biga, poolish e metà acqua rimanente. Lavorare fino a eliminare i grumi.",
+                "Aggiungere la restante farina e il lievito. Quando si forma la maglia glutinica, unire zucchero e olio.",
+                "Incorporare il sale e aggiungere l'acqua rimanente a filo, poco alla volta.",
+                "Trasferire l'impasto su un piano da lavoro e fare delle pieghe fino a ottenere un composto liscio.",
+                "Dividere in panetti e lasciar lievitare a temperatura ambiente per 3 ore o in frigorifero, togliendoli 1 ora e 30 minuti prima di usarli.",
+                "Stendere l'impasto e condire a piacere.",
+                "Cuocere in fornetto per pizza preriscaldato al massimo della potenza per circa 4 minuti o in forno domestico per circa 8 minuti (4 minuti sul fondo e i restanti in alto)."
             ]
         },
         "lievito_madre": {
@@ -136,25 +174,6 @@
                 "Forma i panetti e lascia riposare per altre 2 ore.",
                 "Cuoci in forno preriscaldato a 250°C per 10-12 minuti."
             ]
-        },
-        "biga_poolish": {
-            "nome": "Pizza Contemporanea (Biga + Poolish)",
-            "ingredienti": [
-                { "nome": "Farina Biga", "quantita": "<pesoFarinaBiga>" },
-                { "nome": "Acqua per Biga", "quantita": "<pesoAcquaBiga>" },
-                { "nome": "Lievito per Biga", "quantita": "<pesoLievitoBiga>" },
-                { "nome": "Farina Poolish", "quantita": "<pesoFarinaPoolish>" },
-                { "nome": "Acqua per Poolish", "quantita": "<pesoAcquaPoolish>" },
-                { "nome": "Lievito per Poolish", "quantita": "<pesoLievitoPoolish>" },
-                { "nome": "Sale", "quantita": "<pesoSale>" }
-            ],
-            "procedimento": [
-                "Prepara la biga mescolando <pesoFarinaBiga> g di farina con <pesoAcquaBiga> ml di acqua e <pesoLievitoBiga> g di lievito.",
-                "Lascia riposare per 16 ore a temperatura controllata.",
-                "Prepara il poolish mescolando <pesoFarinaPoolish> g di farina con <pesoAcquaPoolish> ml di acqua e <pesoLievitoPoolish> g di lievito.",
-                "Aggiungi gli ingredienti principali e impasta fino a ottenere un composto omogeneo.",
-                "Forma i panetti e cuoci in forno preriscaldato a 250°C per 10-12 minuti."
-            ]
         }
     },
     "padellino": {
@@ -165,11 +184,11 @@
                 { "nome": "Acqua", "quantita": "<pesoAcqua>" },
                 { "nome": "Lievito", "quantita": "<pesoLievito>" },
                 { "nome": "Sale", "quantita": "<pesoSale>" },
-                { "nome": "Olio", "quantita": "<pesoOlio>" }
+                { "nome": "Olio d'oliva", "quantita": "<pesoOlio>" }
             ],
             "procedimento": [
                 "Mescola <pesoFarina> g di farina con <pesoAcqua> ml di acqua e <pesoLievito> g di lievito.",
-                "Aggiungi <pesoSale> g di sale e <pesoOlio> ml di olio, impasta fino a ottenere un composto omogeneo.",
+                "Aggiungi <pesoSale> g di sale e <pesoOlio> ml di olio d'oliva, impasta fino a ottenere un composto omogeneo.",
                 "Porziona l'impasto nei padellini unti d'olio e lascia lievitare per altre <tempo_ambientale> ore.",
                 "Cuoci in forno preriscaldato a 250°C per 12-15 minuti."
             ]
