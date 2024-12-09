@@ -139,7 +139,6 @@ function calcolaDiretto() {
     const tempoLievitazioneTotale = parseInt(document.getElementById('tempoLievTotale_diretto').value);
     const oreFrigo = parseInt(document.getElementById('tempoFrigo_diretto').value) || 0;
     const temperaturaAmbiente = parseInt(document.getElementById('temperatura_ambiente_diretto').value);
-    const forzaFarina = parseInt(document.getElementById('forza_farina_diretto').value);
     const inTeglia = document.getElementById('usa_teglia_diretto').checked;
 
     if (!pesoPanetto || !idratazioneTotale || !numPanetti || !tempoLievitazioneTotale || !temperaturaAmbiente) {
