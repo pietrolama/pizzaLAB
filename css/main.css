@@ -206,6 +206,28 @@ section h2,
     position: relative;
 }
 
+.pizza-container section,
+.prefermenti-container section,
+.farine-container section {
+    display: flex;
+    /* Imposta il layout flessibile */
+    flex-direction: row;
+    /* Disposizione orizzontale */
+    align-items: flex-start;
+    /* Allinea il contenuto in alto */
+    gap: 20px;
+    /* Spazio tra immagine e testo */
+}
+
+.pizza-container section img.pizza-img,
+.prefermenti-container section img.prefermento-img,
+.farine-container section img.farina-img {
+    max-width: 40%;
+    /* Immagini al 40% della larghezza */
+    height: auto;
+    /* Mantiene il rapporto di aspetto */
+}
+
 /* ===== IMMAGINI ===== */
 .pizza-img,
 .prefermento-img,
