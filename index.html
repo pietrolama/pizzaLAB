@@ -96,29 +96,6 @@
         </section>
     </main>
 
-     <!-- Script per rendere le card cliccabili -->
-     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const cards = document.querySelectorAll('.card');
-
-            cards.forEach(card => {
-                // Trova il link all'interno della card
-                const link = card.querySelector('.btn');
-                if (link) {
-                    const url = link.getAttribute('href');
-
-                    // Aggiungi l'event listener alla card
-                    card.addEventListener('click', (event) => {
-                        // Se il click non è sul link stesso, reindirizza
-                        if (!event.target.closest('.btn')) {
-                            window.location.href = url;
-                        }
-                    });
-                }
-            });
-        });
-    </script>
-
     <!-- Footer -->
     <footer>
         <p>&copy; 2024 PizzaLab - La tua guida alla pizza perfetta</p>
