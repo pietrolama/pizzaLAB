@@ -35,7 +35,7 @@ async function caricaRicette() {
 })();
 
 // Funzione per mostrare/nascondere le sezioni in base al metodo di impasto selezionato
-function toggleSections() { 
+function toggleSections() {
     const metodoImpasto = document.getElementById('tipo_impasto').value;
     console.log('Metodo impasto in toggleSections:', metodoImpasto);
 
@@ -178,14 +178,17 @@ function calcolaDiretto() {
         console.error("Errore nel calcolo del lievito:", lievito);
         lievito = 0; // Imposta un valore di default
     }
-    
+
     return {
-      pesoFarina: pesoFarina.toFixed(2),
-      pesoAcqua: pesoAcqua.toFixed(2),
-      pesoSale: pesoSale.toFixed(2),
-      pesoLievito: lievito.toFixed(2),
-      pesoZucchero: pesoZucchero.toFixed(2),
-      pesoOlio: pesoOlio.toFixed(2),
+        numPanetti: numPanetti.toFixed(0),
+        pesoPanetto: pesoPanetto.toFixed(0),
+        tempoLievitazioneEffettivo: tempoLievitazioneEffettivo.toFixed(0),
+        pesoFarina: pesoFarina.toFixed(2),
+        pesoAcqua: pesoAcqua.toFixed(2),
+        pesoSale: pesoSale.toFixed(2),
+        pesoLievito: lievito.toFixed(2),
+        pesoZucchero: pesoZucchero.toFixed(2),
+        pesoOlio: pesoOlio.toFixed(2),
     };
 }
 
@@ -210,15 +213,15 @@ function calcolaBiga() {
     var sale = 0.02 * pesoTotaleFarina;
     var zucchero = 0.015 * pesoTotaleFarina;
     var olio = 0.03 * pesoTotaleFarina;
-    
+
     return {
-      pesoFarina: pesoFarinaPrincipale.toFixed(2),
-      pesoAcqua: pesoAcquaPrincipale.toFixed(2),
-      pesoSale: sale.toFixed(2),
-      pesoAcquaBiga: pesoAcquaBiga.toFixed(2),
-      pesoFarinaBiga: pesoFarinaBiga.toFixed(2),
-      pesoLievitoBiga: pesoLievitoBiga.toFixed(2),
-      pesoOlio: olio.toFixed(2),
+        pesoFarina: pesoFarinaPrincipale.toFixed(2),
+        pesoAcqua: pesoAcquaPrincipale.toFixed(2),
+        pesoSale: sale.toFixed(2),
+        pesoAcquaBiga: pesoAcquaBiga.toFixed(2),
+        pesoFarinaBiga: pesoFarinaBiga.toFixed(2),
+        pesoLievitoBiga: pesoLievitoBiga.toFixed(2),
+        pesoOlio: olio.toFixed(2),
     };
 }
 
@@ -251,7 +254,7 @@ function calcolaPoolish() {
         pesoFarinaPoolish: pesoFarinaPoolish.toFixed(2),
         pesoLievitoPoolish: pesoLievitoPoolish.toFixed(2),
         pesoOlio: olio.toFixed(2),
-      };
+    };
 }
 
 function calcolaLievitoMadre() {
@@ -285,7 +288,7 @@ function calcolaLievitoMadre() {
 
     var farinaRinfresco2 = pastaMadreIniziale * 2.5;
     var acquaRinfresco2 = farinaRinfresco2 * 0.5;
-    
+
     return {
         pesoFarinaPrincipale: farinaPrincipale.toFixed(2),
         pesoAcquaPrincipale: acquaPrincipale.toFixed(2),
@@ -299,7 +302,7 @@ function calcolaLievitoMadre() {
         acquaRinfresco1: acquaRinfresco1.toFixed(2),
         farinaRinfresco2: farinaRinfresco2.toFixed(2),
         acquaRinfresco2: acquaRinfresco2.toFixed(2),
-      };
+    };
 }
 
 function calcolaBigaPoolish() {
@@ -391,19 +394,19 @@ function mostraRicetta(tipoPizza, metodo) {
     console.log("Dati calcolati:", datiCalcolati);
 
     const ingredienti = ricetta.ingredienti.map(ingrediente => {
-            let quantita = ingrediente.quantita;
-            Object.entries(datiCalcolati).forEach(([key, value]) => {
-                quantita = quantita.replace(`<${key}>`, value || "n.d.");
-            });
-            return `<li>${ingrediente.nome}: ${quantita} g</li>`;
+        let quantita = ingrediente.quantita;
+        Object.entries(datiCalcolati).forEach(([key, value]) => {
+            quantita = quantita.replace(`<${key}>`, value || "n.d.");
+        });
+        return `<li>${ingrediente.nome}: ${quantita} g</li>`;
     }).join("");
 
     const procedura = ricetta.procedimento.map(step => {
-            let proceduraStep = step;
-            Object.entries(datiCalcolati).forEach(([key, value]) => {
-                proceduraStep = proceduraStep.replace(`<${key}>`, value || "n.d.");
-            });
-            return `<p>${proceduraStep}</p>`;
+        let proceduraStep = step;
+        Object.entries(datiCalcolati).forEach(([key, value]) => {
+            proceduraStep = proceduraStep.replace(`<${key}>`, value || "n.d.");
+        });
+        return `<p>${proceduraStep}</p>`;
     }).join("");
 
     // Definizione delle variabili prima dell'uso
@@ -475,7 +478,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 pesoPanettoFieldId = 'peso_panetto_biga';
                 idratazioneFieldId = 'idratazione_totale_biga';
                 percentualeBigaFieldId = 'percentuale_biga';
-                
+
                 document.getElementById(pesoPanettoFieldId).value = config.peso_panetto;
                 document.getElementById(idratazioneFieldId).value = idratazioneMedia;
                 // Imposta la percentuale di biga se presente
