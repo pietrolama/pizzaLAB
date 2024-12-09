@@ -642,7 +642,7 @@ footer p:hover {
 }
 
 
-@media (max-width: 768) {
+@media (max-width: 480) {
 
     /* ===== Navigazione ===== */
     .nav-links {
