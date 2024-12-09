@@ -151,7 +151,8 @@ function calcolaDiretto() {
     if (oreFrigo > 0) {
         tempoLievitazioneEffettivo = tempoLievitazioneTotale - (9 * oreFrigo / 10);
     }
-
+    var massa = tempoLievitazioneEffettivo*10/100;
+    var apretto = tempoLievitazioneEffettivo-massa;
     // Calcolo delle quantità di impasto
     var pesoFarina = (100 * pesoPanetto) / (100 + idratazioneTotale) * numPanetti;
     var pesoAcqua = idratazioneTotale * pesoFarina / 100;
@@ -182,6 +183,8 @@ function calcolaDiretto() {
     return {
         numPanetti: numPanetti.toFixed(0),
         pesoPanetto: pesoPanetto.toFixed(0),
+        massa: massa.toFixed(0),
+        apretto: apretto.toFixed(0),
         tempoLievitazioneEffettivo: tempoLievitazioneEffettivo.toFixed(0),
         pesoFarina: pesoFarina.toFixed(2),
         pesoAcqua: pesoAcqua.toFixed(2),
