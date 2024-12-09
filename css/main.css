@@ -43,9 +43,12 @@ body {
 }
 
 @keyframes float {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: translateY(0);
     }
+
     50% {
         transform: translateY(-15px);
     }
@@ -83,6 +86,7 @@ header h1:hover {
         opacity: 0;
         transform: translateY(-50px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -155,7 +159,8 @@ nav {
 
 /* ===== MENU HAMBURGER ===== */
 .hamburger {
-    display: none; /* Nascondi di default */
+    display: none;
+    /* Nascondi di default */
     flex-direction: column;
     cursor: pointer;
 }
@@ -196,7 +201,8 @@ section:hover {
     transform: translateY(-5px);
 }
 
-section h2, .recipe-box h2 {
+section h2,
+.recipe-box h2 {
     color: var(--primary-color);
     font-size: 2em;
     text-align: center;
@@ -205,8 +211,48 @@ section h2, .recipe-box h2 {
     position: relative;
 }
 
+/* ===== IMMAGINI ===== */
+.pizza-img,
+.prefermento-img,
+.farina-img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+/* ===== CONTENT ===== */
+.item-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.item-content h2,
+.item-content h3 {
+    font-size: 1.8em;
+    margin-bottom: 10px;
+}
+
+.item-content p {
+    font-size: 1em;
+    margin-bottom: 10px;
+}
+
+.item-content ul {
+    list-style-type: disc;
+    margin-left: 20px;
+}
+
+.item-content ul li {
+    margin-bottom: 5px;
+}
+
 /* ===== FORM INPUTS ===== */
-input, select, button {
+input,
+select,
+button {
     font-size: 1.2em;
     padding: 10px 15px;
     border: 2px solid var(--primary-color);
@@ -230,7 +276,8 @@ button:focus {
     outline: none;
 }
 
-input:focus, select:focus {
+input:focus,
+select:focus {
     border-color: var(--secondary-color);
     box-shadow: 0 0 5px var(--primary-color);
     outline: none;
@@ -266,7 +313,9 @@ label {
 }
 
 /* ===== SEZIONI RISULTATO E PIANIFICATORE ===== */
-.recipe-box, #risultato, #plan-box {
+.recipe-box,
+#risultato,
+#plan-box {
     background: var(--dark-background-color);
     padding: 20px;
     border-radius: 15px;
@@ -275,14 +324,19 @@ label {
     text-align: center;
     box-shadow: 0 8px 30px var(--shadow-color);
     transition: opacity 0.5s ease-in-out, transform 0.4s, box-shadow 0.4s;
-    opacity: 0; /* Inizialmente nascosto */
+    opacity: 0;
+    /* Inizialmente nascosto */
 }
 
-.recipe-box.active, #risultato.active, #plan-box.active {
+.recipe-box.active,
+#risultato.active,
+#plan-box.active {
     opacity: 1;
 }
 
-.recipe-box:hover, #risultato:hover, #plan-box:hover {
+.recipe-box:hover,
+#risultato:hover,
+#plan-box:hover {
     transform: scale(1.02);
     box-shadow: 0 12px 40px var(--hover-shadow-color);
 }
@@ -392,8 +446,15 @@ label {
 }
 
 @keyframes fadeInAssistant {
-    0% { opacity: 0; transform: translateY(20px); }
-    100% { opacity: 1; transform: translateY(0); }
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* ===== FOOTER ===== */
@@ -415,123 +476,15 @@ footer p:hover {
     color: var(--primary-color);
 }
 
-/* ===== RESPONSIVITÀ ===== */
-@media (max-width: 768px) {
-    header h1 {
-        font-size: 2.5em;
-        padding: 60px 20px; /* Riduci il padding per schermi più piccoli */
-    }
-
-    /* Nascondi le link di navigazione di default */
-    .nav-links {
-        flex-direction: column;
-        display: none; /* Nascondi di default */
-        width: 100%;
-        background: #111;
-        position: absolute;
-        top: 60px; /* Altezza del nav */
-        left: 0;
-    }
-
-    /* Mostra le link di navigazione quando attive */
-    .nav-links.active {
-        display: flex;
-    }
-
-    nav ul li {
-        margin: 10px 0;
-    }
-
-    .hamburger {
-        display: flex; /* Mostra l'hamburger su schermi piccoli */
-    }
-
-    .form-container {
-        padding: 10px;
-    }
-
-    .form-group {
-        width: 100%;
-    }
-
-    .recipe-box, #risultato, #plan-box {
-        margin-top: 20px;
-        padding: 15px;
-    }
-
-    .cards-container {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .card {
-        max-width: 100%;
-    }
-
-    .site-logo {
-        max-width: 120px;
-    }
-
-    /* Sezione Parallax su dispositivi mobili */
-    .parallax-section {
-        background-attachment: scroll; /* Disabilita l'effetto parallax */
-        background-position: center;
-        background-size: cover;
-    }
-
-    /* ===== PREFERMENTI-CONTAINER E PIZZA-CONTAINER ===== */
-    .prefermenti-container, .pizza-container {
-        padding: 15px;
-        margin: 20px 0;
-    }
-}
-
-@media (max-width: 480px) {
-    header h1 {
-        font-size: 2em;
-        padding: 40px 10px;
-    }
-
-    .form-group {
-        margin-bottom: 15px;
-    }
-
-    nav ul {
-        top: 50px; /* Regola la posizione del menu */
-    }
-
-    .recipe-box, #risultato, #plan-box {
-        padding: 10px;
-    }
-
-    input, select, button {
-        font-size: 1em;
-        padding: 8px 12px;
-        max-width: 100%;
-    }
-
-    button {
-        padding: 10px 15px;
-    }
-
-    /* Sezione Parallax su dispositivi mobili */
-    .parallax-text {
-        font-size: 1.5rem;
-    }
-
-    /* ===== PREFERMENTI-CONTAINER E PIZZA-CONTAINER ===== */
-    .prefermenti-container, .pizza-container {
-        padding: 10px;
-        margin: 15px 0;
-    }
-}
-
 /* ===== PARALLAX SECTION ===== */
 .parallax-section {
     position: relative;
     min-height: 100vh;
-    background: url('../img/contemporanea2.jpg') no-repeat center center fixed;
-    background-size: cover;
+    background: url('../img/contemporanea2.jpg') no-repeat center center;
+    background-size: 100%;
+    /* Inizialmente zoomato */
+    background-attachment: scroll;
+    /* Assicura lo scroll fluido */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -539,6 +492,8 @@ footer p:hover {
     color: #fff;
     font-size: 2em;
     z-index: 1;
+    transition: background-size 0.9s ease;
+    /* Effetto zoom progressivo */
 }
 
 .parallax-section::before {
@@ -549,36 +504,48 @@ footer p:hover {
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
+    opacity: 0.8;
+    /* Aumenta l'effetto durante lo scroll */
 }
 
-/* ===== TESTO DELLA PARALLAX ===== */
-.parallax-text {
+.parallax-section.scroll {
+    background-size: 120%;
+    /* Riduci lo zoom */
+}
+
+/* ===== TESTO DELLA PARALLAX CON GLOW ===== */
+.parallax-text h2,
+.parallax-text p {
+    transition: transform 0.5s ease, opacity 0.5s ease;
     position: relative;
-    animation: fadeIn 1.5s ease-in-out;
-    font-size: 2.5rem;
+    z-index: 1;
+    font-size: 6.5rem;
     letter-spacing: 2px;
     line-height: 1.5;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(50px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    max-width: 80%;
+    /* Limita la larghezza del testo */
+    margin: 0 auto;
+    /* Centra il testo */
+    text-shadow:
+        0 0 5px rgba(255, 255, 255, 0.8),
+        0 0 10px rgba(255, 255, 255, 0.6),
+        0 0 20px var(--primary-color),
+        0 0 30px var(--primary-color),
+        0 0 40px var(--primary-color);
 }
 
 /* ===== ANIMAZIONI E TRANSIZIONI ===== */
-.recipe-box, #risultato, #plan-box {
+.recipe-box,
+#risultato,
+#plan-box {
     opacity: 0;
     transform: translateY(-20px);
     transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
 }
 
-.recipe-box.active, #risultato.active, #plan-box.active {
+.recipe-box.active,
+#risultato.active,
+#plan-box.active {
     opacity: 1;
     transform: translateY(0);
 }
@@ -621,75 +588,261 @@ footer p:hover {
     top: 0;
 }
 
-/* ===== PREFERMENTI-CONTAINER E PIZZA-CONTAINER ===== */
-.prefermenti-container, .pizza-container {
-    background: linear-gradient(145deg, var(--background-color), var(--dark-background-color));
-    padding: 20px;
-    border-radius: 15px;
-    margin: 30px 0;
-    color: var(--text-color);
-    box-shadow: 5px 5px 15px #111, -5px -5px 15px #444;
-    transition: transform 0.3s, box-shadow 0.3s;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-}
-
-.prefermenti-container:hover, .pizza-container:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 40px var(--hover-shadow-color);
-}
-
-/* ===== PIZZA-CONTAINER SPECIFICO ===== */
-.pizza-container section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    width: 100%;
-}
-
-.pizza-container section img.pizza-img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 10px;
-    object-fit: cover;
-}
-
-/* ===== DISPOSIZIONE TESTO ACCANTO ALL'IMMAGINE SU DESKTOP ===== */
-@media (min-width: 769px) {
-    .pizza-container section {
-        flex-direction: row;
-        align-items: flex-start;
-    }
-
-    .pizza-container section img.pizza-img {
-        max-width: 40%; /* Limita la larghezza dell'immagine */
-    }
-
-    .pizza-container section div.pizza-content {
-        max-width: 60%; /* Limita la larghezza del contenuto testuale */
-        padding-left: 20px;
-    }
-}
-
 /* ===== STILI PER IL CONTENUTO TESTUALE ===== */
-.pizza-content h2 {
+.item-content h2,
+.item-content h3 {
     font-size: 1.8em;
     margin-bottom: 10px;
 }
 
-.pizza-content p {
+.item-content p {
     font-size: 1em;
     margin-bottom: 10px;
 }
 
-.pizza-content ul {
+.item-content ul {
     list-style-type: disc;
     margin-left: 20px;
 }
 
-.pizza-content ul li {
+.item-content ul li {
     margin-bottom: 5px;
+}
+
+/* ===== Desktop (Default) ===== */
+.pizza-container section,
+.prefermenti-container section,
+.farine-container section {
+    display: flex;
+    /* Imposta il layout flessibile */
+    flex-direction: row;
+    /* Disposizione orizzontale */
+    align-items: flex-start;
+    /* Allinea il contenuto in alto */
+    gap: 20px;
+    /* Spazio tra immagine e testo */
+}
+
+.pizza-container section img.pizza-img,
+.prefermenti-container section img.prefermento-img,
+.farine-container section img.farina-img {
+    max-width: 40%;
+    /* Immagini al 40% della larghezza */
+    height: auto;
+    /* Mantiene il rapporto di aspetto */
+}
+
+.item-content {
+    max-width: 60%;
+    /* Contenuto testuale al 60% */
+    padding-left: 20px;
+    /* Spazio tra immagine e contenuto */
+    text-align: left;
+    /* Testo allineato a sinistra */
+}
+
+
+@media (max-width: 480px) {
+
+    /* ===== Navigazione ===== */
+    .nav-links {
+        flex-direction: column;
+        display: none;
+        /* Nasconde il menu di navigazione */
+        width: 100%;
+        background: #111;
+        position: absolute;
+        top: 60px;
+        /* Posizionamento sotto l'header */
+        left: 0;
+    }
+
+    .nav-links.active {
+        display: flex;
+        /* Visualizza il menu quando è attivo */
+    }
+
+    nav ul li {
+        margin: 10px 0;
+        /* Spaziatura verticale tra le voci */
+    }
+
+    .hamburger {
+        display: flex;
+        /* Mostra il menu hamburger */
+        flex-direction: column;
+        cursor: pointer;
+    }
+
+    /* ===== Header ===== */
+    header h1 {
+        font-size: 2.5em;
+        /* Riduce la dimensione del titolo */
+        padding: 60px 20px;
+        /* Riduce il padding */
+    }
+
+    /* ===== Parallax Section ===== */
+    .parallax-section {
+        position: relative;
+        background-image: url('../img/contemporanea2.jpg');
+        /* Assicurati che il percorso sia corretto */
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        /* Adatta l'immagine al contenitore */
+        min-height: 60vh;
+        /* Altezza della sezione */
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .parallax-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        /* Copre esattamente l'intera sezione */
+        background: inherit;
+        /* Usa l'immagine di sfondo */
+        background-size: cover;
+        background-position: center;
+        z-index: -1;
+        transform: translateY(0);
+        /* Rimuove movimenti iniziali */
+        transition: transform 0.3s ease-out;
+        /* Movimento fluido */
+        opacity: 0.85;
+        /* Mantieni opacità costante */
+    }
+
+    .parallax-section.scroll::before {
+        transform: scale(1.05) translateY(0);
+        /* Leggero zoom durante lo scroll */
+    }
+
+    .parallax-text h2,
+    .parallax-text p {
+        font-size: 1.4rem;
+        /* Dimensioni leggibili */
+        line-height: 1.8;
+        text-align: center;
+        max-width: 100%;
+        position: relative;
+        z-index: 1;
+        opacity: 1;
+        color: #fff;
+        text-shadow:
+            0 0 5px rgba(255, 255, 255, 0.8),
+            0 0 10px rgba(255, 255, 255, 0.6),
+            0 0 20px var(--primary-color),
+            0 0 30px var(--primary-color),
+            0 0 40px var(--primary-color);
+    }
+
+
+    /* ===== Sezioni (Pizza, Prefermenti, Farine) ===== */
+    .pizza-container section,
+    .prefermenti-container section,
+    .farine-container section {
+        flex-direction: column;
+        /* Disposizione verticale */
+        align-items: center;
+        /* Centra il contenuto */
+        gap: 20px;
+        /* Spaziatura tra gli elementi */
+    }
+
+    .prefermenti-container section img.prefermento-img,
+    .farine-container section img.farina-img,
+    .pizza-container section img.pizza-img {
+        max-width: 100%;
+        /* Immagini larghe 100% */
+        height: auto;
+        /* Mantiene il rapporto di aspetto */
+        border-radius: 10px;
+        /* Arrotonda i bordi */
+        object-fit: cover;
+        margin-bottom: 20px;
+        /* Spaziatura sotto le immagini */
+    }
+
+    .item-content {
+        max-width: 100%;
+        /* Contenuto testuale a larghezza completa */
+        padding-left: 0;
+        /* Rimuove padding laterale */
+        text-align: center;
+        /* Testo centrato */
+    }
+
+    /* ===== Cards ===== */
+    .cards-container {
+        flex-direction: column;
+        /* Disposizione verticale */
+        align-items: center;
+        /* Centra le card */
+    }
+
+    .card {
+        max-width: 100%;
+        /* Le card occupano tutta la larghezza */
+    }
+
+    /* ===== Form e Input ===== */
+    input,
+    select,
+    button {
+        font-size: 1em;
+        /* Riduce la dimensione del testo */
+        padding: 8px 12px;
+        /* Spaziatura compatta */
+        max-width: 100%;
+        /* Adatta alla larghezza dello schermo */
+    }
+
+    button {
+        padding: 10px 15px;
+        /* Dimensione compatta */
+    }
+
+    .form-container {
+        padding: 10px;
+        /* Riduce margini interni */
+    }
+
+    .form-group {
+        width: 100%;
+        /* Input a larghezza piena */
+        margin-bottom: 15px;
+        /* Spaziatura tra i gruppi */
+    }
+
+    /* ===== Recipe Box e Risultati ===== */
+    .recipe-box,
+    #risultato,
+    #plan-box {
+        margin-top: 20px;
+        padding: 15px;
+        text-align: center;
+        /* Testo centrato */
+    }
+
+    /* ===== Footer ===== */
+    footer {
+        padding: 50px 20px;
+        /* Margini ampi per il testo */
+        text-align: center;
+        /* Testo centrato */
+    }
+
+    footer p {
+        font-size: 0.9em;
+        /* Riduce la dimensione del testo */
+    }
 }
