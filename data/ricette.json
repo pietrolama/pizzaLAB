@@ -3,23 +3,39 @@
         "diretto": {
             "nome": "Pizza Napoletana",
             "ingredienti": [
-                { "nome": "Farina", "quantita": "<pesoFarina>" },
-                { "nome": "Acqua", "quantita": "<pesoAcqua>" },
-                { "nome": "Lievito", "quantita": "<pesoLievito>" },
-                { "nome": "Sale", "quantita": "<pesoSale>" },
-                { "nome": "Zucchero", "quantita": "<pesoZucchero>" },
-                { "nome": "Olio d'oliva", "quantita": "<pesoOlio>" }
+                {
+                    "nome": "Farina",
+                    "quantita": "<pesoFarina>"
+                },
+                {
+                    "nome": "Acqua",
+                    "quantita": "<pesoAcqua>"
+                },
+                {
+                    "nome": "Lievito",
+                    "quantita": "<pesoLievito>"
+                },
+                {
+                    "nome": "Sale",
+                    "quantita": "<pesoSale>"
+                },
+                {
+                    "nome": "Zucchero",
+                    "quantita": "<pesoZucchero>"
+                },
+                {
+                    "nome": "Olio d'oliva",
+                    "quantita": "<pesoOlio>"
+                }
             ],
             "procedimento": [
                 "Sciogliere il sale nell'acqua e aggiungere metà della farina setacciata insieme al lievito sbriciolato.",
                 "Aggiungere la restante farina poco alla volta, quindi zucchero e olio d'oliva.",
                 "Lavorare l'impasto per 10-15 minuti fino a ottenere una consistenza liscia, formare una palla e lasciarlo riposare coperto per 1 ora.",
-                "Dividere l'impasto in <numero_panetti> panetti da <peso_panetto> g e far lievitare per circa <tempo_lievitazione> ore fino al raddoppio del volume.",
-                "Preparare la salsa schiacciando i pomodori pelati con il sale e l'olio d'oliva, lasciandola riposare almeno 2 ore.",
-                "Tagliare la mozzarella a listarelle.",
-                "Stendere ogni panetto senza schiacciare i bordi per mantenere il cornicione alto.",
+                "Dividere l'impasto in <numPanetti> panetti da <pesoPanetto> g e far lievitare per circa <tempoLievitazioneEffettivo> ore fino al raddoppio del volume.",
+                "Stendere ogni panetto senza schiacciare i bordi per mantenere un po' di cornicione.",
                 "Condire con salsa di pomodoro, mozzarella, un filo d'olio d'oliva e foglie di basilico fresco.",
-                "Cuocere nel fornetto alla massima potenza per 2-3 minuti o in forno domestico per 8-12 minuti, aggiungendo mozzarella e basilico a metà cottura."
+                "Cuocere nel fornetto alla massima potenza per 2-3 minuti o in forno domestico per 8-12 minuti, aggiungendo i condimenti a metà cottura."
             ]
         }
     },
@@ -27,11 +43,26 @@
         "diretto": {
             "nome": "Pizza Romana",
             "ingredienti": [
-                { "nome": "Farina", "quantita": "<pesoFarina>" },
-                { "nome": "Acqua", "quantita": "<pesoAcqua>" },
-                { "nome": "Lievito", "quantita": "<pesoLievito>" },
-                { "nome": "Sale", "quantita": "<pesoSale>" },
-                { "nome": "Olio d'oliva", "quantita": "<pesoOlio>" }
+                {
+                    "nome": "Farina",
+                    "quantita": "<pesoFarina>"
+                },
+                {
+                    "nome": "Acqua",
+                    "quantita": "<pesoAcqua>"
+                },
+                {
+                    "nome": "Lievito",
+                    "quantita": "<pesoLievito>"
+                },
+                {
+                    "nome": "Sale",
+                    "quantita": "<pesoSale>"
+                },
+                {
+                    "nome": "Olio d'oliva",
+                    "quantita": "<pesoOlio>"
+                }
             ],
             "procedimento": [
                 "Mescola <pesoFarina> g di farina con <pesoAcqua> ml di acqua e <pesoLievito> g di lievito.",
@@ -46,10 +77,22 @@
         "diretto": {
             "nome": "Pizza in Pala (Diretto)",
             "ingredienti": [
-                { "nome": "Farina", "quantita": "<pesoFarina>" },
-                { "nome": "Acqua", "quantita": "<pesoAcqua>" },
-                { "nome": "Lievito", "quantita": "<pesoLievito>" },
-                { "nome": "Sale", "quantita": "<pesoSale>" }
+                {
+                    "nome": "Farina",
+                    "quantita": "<pesoFarina>"
+                },
+                {
+                    "nome": "Acqua",
+                    "quantita": "<pesoAcqua>"
+                },
+                {
+                    "nome": "Lievito",
+                    "quantita": "<pesoLievito>"
+                },
+                {
+                    "nome": "Sale",
+                    "quantita": "<pesoSale>"
+                }
             ],
             "procedimento": [
                 "Mescola <pesoFarina> g di farina con <pesoAcqua> ml di acqua e <pesoLievito> g di lievito.",
@@ -61,12 +104,30 @@
         "biga": {
             "nome": "Pizza in Pala (Biga)",
             "ingredienti": [
-                { "nome": "Farina Biga", "quantita": "<pesoFarinaBiga>" },
-                { "nome": "Acqua per Biga", "quantita": "<pesoAcquaBiga>" },
-                { "nome": "Lievito per Biga", "quantita": "<pesoLievitoBiga>" },
-                { "nome": "Farina Principale", "quantita": "<pesoFarina>" },
-                { "nome": "Acqua Principale", "quantita": "<pesoAcqua>" },
-                { "nome": "Sale", "quantita": "<pesoSale>" }
+                {
+                    "nome": "Farina Biga",
+                    "quantita": "<pesoFarinaBiga>"
+                },
+                {
+                    "nome": "Acqua per Biga",
+                    "quantita": "<pesoAcquaBiga>"
+                },
+                {
+                    "nome": "Lievito per Biga",
+                    "quantita": "<pesoLievitoBiga>"
+                },
+                {
+                    "nome": "Farina Principale",
+                    "quantita": "<pesoFarina>"
+                },
+                {
+                    "nome": "Acqua Principale",
+                    "quantita": "<pesoAcqua>"
+                },
+                {
+                    "nome": "Sale",
+                    "quantita": "<pesoSale>"
+                }
             ],
             "procedimento": [
                 "Prepara la biga mescolando <pesoFarinaBiga> g di farina con <pesoAcquaBiga> ml di acqua e <pesoLievitoBiga> g di lievito.",
@@ -80,28 +141,60 @@
         "diretto": {
             "nome": "Pizza Contemporanea (Diretto)",
             "ingredienti": [
-                { "nome": "Farina", "quantita": "<pesoFarina>" },
-                { "nome": "Acqua", "quantita": "<pesoAcqua>" },
-                { "nome": "Lievito", "quantita": "<pesoLievito>" },
-                { "nome": "Sale", "quantita": "<pesoSale>" }
+                {
+                    "nome": "Farina",
+                    "quantita": "<pesoFarina>"
+                },
+                {
+                    "nome": "Acqua",
+                    "quantita": "<pesoAcqua>"
+                },
+                {
+                    "nome": "Lievito",
+                    "quantita": "<pesoLievito>"
+                },
+                {
+                    "nome": "Sale",
+                    "quantita": "<pesoSale>"
+                }
             ],
             "procedimento": [
-                "Prepara l'impasto mescolando <pesoFarina> g di farina con <pesoAcqua> ml di acqua e <pesoLievito> g di lievito.",
-                "Aggiungi <pesoSale> g di sale e impasta fino a ottenere un composto omogeneo.",
-                "Lascia lievitare per <tempo_ambientale> ore a temperatura ambiente.",
-                "Forma i panetti e lascia lievitare per altre 2 ore.",
-                "Cuoci in forno preriscaldato a 450°C per 60-90 secondi."
+                "Sciogliere il sale nell'acqua e aggiungere metà della farina setacciata insieme al lievito sbriciolato.",
+                "Aggiungere la restante farina poco alla volta, quindi zucchero e olio d'oliva.",
+                "Lavorare l'impasto per 10-15 minuti fino a ottenere una consistenza liscia, formare una palla e lasciarlo riposare coperto per 1 ora.",
+                "Dividere l'impasto in <numPanetti> panetti da <pesoPanetto> g e far lievitare per circa <tempoLievitazioneEffettivo> ore fino al raddoppio del volume.",
+                "Stendere ogni panetto senza schiacciare i bordi per mantenere un po' di cornicione.",
+                "Condire con salsa di pomodoro, mozzarella, un filo d'olio d'oliva e foglie di basilico fresco.",
+                "Cuocere nel fornetto alla massima potenza per 2-3 minuti o in forno domestico per 8-12 minuti, aggiungendo i condimenti a metà cottura."
             ]
         },
         "biga": {
             "nome": "Pizza Contemporanea (Biga)",
             "ingredienti": [
-                { "nome": "Farina Biga", "quantita": "<pesoFarinaBiga>" },
-                { "nome": "Acqua per Biga", "quantita": "<pesoAcquaBiga>" },
-                { "nome": "Lievito per Biga", "quantita": "<pesoLievitoBiga>" },
-                { "nome": "Farina Principale", "quantita": "<pesoFarinaPrincipale>" },
-                { "nome": "Acqua Principale", "quantita": "<pesoAcquaPrincipale>" },
-                { "nome": "Sale", "quantita": "<pesoSale>" }
+                {
+                    "nome": "Farina Biga",
+                    "quantita": "<pesoFarinaBiga>"
+                },
+                {
+                    "nome": "Acqua per Biga",
+                    "quantita": "<pesoAcquaBiga>"
+                },
+                {
+                    "nome": "Lievito per Biga",
+                    "quantita": "<pesoLievitoBiga>"
+                },
+                {
+                    "nome": "Farina Principale",
+                    "quantita": "<pesoFarinaPrincipale>"
+                },
+                {
+                    "nome": "Acqua Principale",
+                    "quantita": "<pesoAcquaPrincipale>"
+                },
+                {
+                    "nome": "Sale",
+                    "quantita": "<pesoSale>"
+                }
             ],
             "procedimento": [
                 "Preparare la biga mescolando <pesoFarinaBiga>, <pesoAcquaBiga> e <pesoLievitoBiga>. Lasciar fermentare a temperatura ambiente per 18 ore.",
@@ -117,12 +210,30 @@
         "poolish": {
             "nome": "Pizza Contemporanea (Poolish)",
             "ingredienti": [
-                { "nome": "Farina Poolish", "quantita": "<pesoFarinaPoolish>" },
-                { "nome": "Acqua per Poolish", "quantita": "<pesoAcquaPoolish>" },
-                { "nome": "Lievito per Poolish", "quantita": "<pesoLievitoPoolish>" },
-                { "nome": "Farina Principale", "quantita": "<pesoFarinaPrincipale>" },
-                { "nome": "Acqua Principale", "quantita": "<pesoAcquaPrincipale>" },
-                { "nome": "Sale", "quantita": "<pesoSale>" }
+                {
+                    "nome": "Farina Poolish",
+                    "quantita": "<pesoFarinaPoolish>"
+                },
+                {
+                    "nome": "Acqua per Poolish",
+                    "quantita": "<pesoAcquaPoolish>"
+                },
+                {
+                    "nome": "Lievito per Poolish",
+                    "quantita": "<pesoLievitoPoolish>"
+                },
+                {
+                    "nome": "Farina Principale",
+                    "quantita": "<pesoFarinaPrincipale>"
+                },
+                {
+                    "nome": "Acqua Principale",
+                    "quantita": "<pesoAcquaPrincipale>"
+                },
+                {
+                    "nome": "Sale",
+                    "quantita": "<pesoSale>"
+                }
             ],
             "procedimento": [
                 "Preparare il poolish mescolando <pesoFarinaPoolish>, <pesoAcquaPoolish> e <pesoLievitoPoolish>. Lasciar fermentare a temperatura ambiente per 18 ore.",
@@ -138,15 +249,42 @@
         "biga_poolish": {
             "nome": "Pizza Contemporanea (Biga + Poolish)",
             "ingredienti": [
-                { "nome": "Farina Biga", "quantita": "<pesoFarinaBiga>" },
-                { "nome": "Acqua per Biga", "quantita": "<pesoAcquaBiga>" },
-                { "nome": "Lievito per Biga", "quantita": "<pesoLievitoBiga>" },
-                { "nome": "Farina Poolish", "quantita": "<pesoFarinaPoolish>" },
-                { "nome": "Acqua per Poolish", "quantita": "<pesoAcquaPoolish>" },
-                { "nome": "Lievito per Poolish", "quantita": "<pesoLievitoPoolish>" },
-                { "nome": "Sale", "quantita": "<pesoSale>" },
-                { "nome": "Zucchero", "quantita": "<pesoZucchero>" },
-                { "nome": "Olio", "quantita": "<pesoOlio>" }
+                {
+                    "nome": "Farina Biga",
+                    "quantita": "<pesoFarinaBiga>"
+                },
+                {
+                    "nome": "Acqua per Biga",
+                    "quantita": "<pesoAcquaBiga>"
+                },
+                {
+                    "nome": "Lievito per Biga",
+                    "quantita": "<pesoLievitoBiga>"
+                },
+                {
+                    "nome": "Farina Poolish",
+                    "quantita": "<pesoFarinaPoolish>"
+                },
+                {
+                    "nome": "Acqua per Poolish",
+                    "quantita": "<pesoAcquaPoolish>"
+                },
+                {
+                    "nome": "Lievito per Poolish",
+                    "quantita": "<pesoLievitoPoolish>"
+                },
+                {
+                    "nome": "Sale",
+                    "quantita": "<pesoSale>"
+                },
+                {
+                    "nome": "Zucchero",
+                    "quantita": "<pesoZucchero>"
+                },
+                {
+                    "nome": "Olio",
+                    "quantita": "<pesoOlio>"
+                }
             ],
             "procedimento": [
                 "Preparare la biga e il poolish mescolando farina, acqua e lievito per ciascuno. Lasciar fermentare a temperatura ambiente per 18 ore.",
@@ -162,10 +300,22 @@
         "lievito_madre": {
             "nome": "Pizza Contemporanea (Lievito Madre)",
             "ingredienti": [
-                { "nome": "Farina", "quantita": "<pesoFarina>" },
-                { "nome": "Acqua", "quantita": "<pesoAcqua>" },
-                { "nome": "Lievito Madre", "quantita": "<pesoLievitoMadre>" },
-                { "nome": "Sale", "quantita": "<pesoSale>" }
+                {
+                    "nome": "Farina",
+                    "quantita": "<pesoFarina>"
+                },
+                {
+                    "nome": "Acqua",
+                    "quantita": "<pesoAcqua>"
+                },
+                {
+                    "nome": "Lievito Madre",
+                    "quantita": "<pesoLievitoMadre>"
+                },
+                {
+                    "nome": "Sale",
+                    "quantita": "<pesoSale>"
+                }
             ],
             "procedimento": [
                 "Prepara l'impasto mescolando <pesoFarina> g di farina con <pesoAcqua> ml di acqua e <pesoLievitoMadre> g di lievito madre.",
@@ -180,11 +330,26 @@
         "diretto": {
             "nome": "Pizza al Padellino",
             "ingredienti": [
-                { "nome": "Farina", "quantita": "<pesoFarina>" },
-                { "nome": "Acqua", "quantita": "<pesoAcqua>" },
-                { "nome": "Lievito", "quantita": "<pesoLievito>" },
-                { "nome": "Sale", "quantita": "<pesoSale>" },
-                { "nome": "Olio d'oliva", "quantita": "<pesoOlio>" }
+                {
+                    "nome": "Farina",
+                    "quantita": "<pesoFarina>"
+                },
+                {
+                    "nome": "Acqua",
+                    "quantita": "<pesoAcqua>"
+                },
+                {
+                    "nome": "Lievito",
+                    "quantita": "<pesoLievito>"
+                },
+                {
+                    "nome": "Sale",
+                    "quantita": "<pesoSale>"
+                },
+                {
+                    "nome": "Olio d'oliva",
+                    "quantita": "<pesoOlio>"
+                }
             ],
             "procedimento": [
                 "Mescola <pesoFarina> g di farina con <pesoAcqua> ml di acqua e <pesoLievito> g di lievito.",
