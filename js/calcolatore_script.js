@@ -112,7 +112,7 @@ function calcola() {
 }
 
 // Funzioni di calcolo per diversi metodi di impasto
-function calcolaLievito(numPanetti, pesoPaniello, idratazione, sale, grassi, tempoLievitazione, oreFrigo, temperaturaAmbiente, forzaFarina, usa_teglia) {
+function calcolaLievito(numPanetti, pesoPaniello, idratazione, sale, grassi, tempoLievitazione, oreFrigo, temperaturaAmbiente, usa_teglia) {
     // Calcoli della funzione
     var tempCorretta = temperaturaAmbiente * (1 - 0.25 * usa_teglia);
     var fattoreCrescitaLievito = 0.005;
@@ -142,7 +142,7 @@ function calcolaDiretto() {
     const forzaFarina = parseInt(document.getElementById('forza_farina_diretto').value);
     const inTeglia = document.getElementById('usa_teglia_diretto').checked;
 
-    if (!pesoPanetto || !idratazioneTotale || !numPanetti || !tempoLievitazioneTotale || isNaN(forzaFarina) || !temperaturaAmbiente) {
+    if (!pesoPanetto || !idratazioneTotale || !numPanetti || !tempoLievitazioneTotale || !temperaturaAmbiente) {
         alert("Inserisci tutti i dati richiesti.");
         return;
     }
@@ -170,7 +170,6 @@ function calcolaDiretto() {
         tempoLievitazioneEffettivo,
         oreFrigo,
         temperaturaAmbiente,
-        forzaFarina,
         inTeglia
     );
 
