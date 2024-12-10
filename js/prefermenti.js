@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const dettagliUrl = `dettagli.html?id=${prefermento.id}`;
 
                 section.innerHTML = `
-                    <img src="${prefermento.immagine}" alt="${prefermento.titolo}" class="prefermento-img">
+                    <img src="${prefermento.immagine}" alt="${prefermento.titolo}" class="prefermenti-img">
                     <div class="item-content">
                         <h2>${prefermento.titolo}</h2>
                         <p>${prefermento.descrizione}</p>
