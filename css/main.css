@@ -477,22 +477,19 @@ label {
     display: inline-block;
     padding: 12px 25px;
     margin-top: 10px;
-    background-color: var(--primary-color);
-    color: #fff;
+    background-color: transparent;
+    color: var(--primary-color);
     text-decoration: none;
     border: 2px solid var(--primary-color);
     border-radius: 8px;
-    transition: background-color 0.3s, color 0.3s, transform 0.3s, box-shadow 0.3s;
-    font-weight: bold;
-    font-size: 1rem;
-    text-align: center;
+    transition: background-color 0.3s, color 0.3s;
+    position: relative;
+    z-index: 1;
 }
 
 .btn:hover {
-    background-color: var(--secondary-color);
+    background-color: var(--primary-color);
     color: #fff;
-    transform: scale(1.05);
-    box-shadow: 0 8px 20px var(--hover-shadow-color);
 }
 
 .btn:focus {
