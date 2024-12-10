@@ -220,7 +220,7 @@ section h2,
 }
 
 .pizza-container section img.pizza-img,
-.prefermenti-container section img.prefermenti-img,
+.prefermenti-container section img.prefermento-img,
 .farine-container section img.farina-img {
     max-width: 40%;
     /* Immagini al 40% della larghezza */
@@ -230,7 +230,7 @@ section h2,
 
 /* ===== IMMAGINI ===== */
 .pizza-img,
-.prefermenti-img,
+.prefermento-img,
 .farina-img {
     max-width: 100%;
     height: auto;
@@ -570,65 +570,6 @@ footer p:hover {
 .read-more:hover::before {
     top: 0;
 }
-
-.pizza-counter {
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-}
-
-.pizza-counter #btn-minus,
-.pizza-counter #btn-plus {
-    background-color: var(--primary-color);
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    width: 40px;
-    height: 40px;
-    font-size: 1.5em;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    text-align: center;
-    line-height: 40px;
-}
-
-.pizza-counter #btn-minus:hover,
-.pizza-counter #btn-plus:hover {
-    background-color: var(--secondary-color);
-}
-
-.pizza-counter #num_pizze {
-    width: 60px;
-    text-align: center;
-    font-size: 1.2em;
-    padding: 5px;
-    border: 2px solid var(--primary-color);
-    border-radius: 5px;
-    background: var(--background-color);
-    color: var(--text-color);
-}
-
-.btn {
-    display: inline-block;
-    padding: 12px 25px;
-    background-color: transparent;
-    color: var(--primary-color);
-    text-decoration: none;
-    border: 2px solid var(--primary-color);
-    border-radius: 8px;
-    transition: background-color 0.3s, color 0.3s;
-    position: relative;
-    z-index: 1;
-}
-
-.btn:hover {
-    background-color: var(--primary-color);
-    color: #fff;
-}
-
 
 /* ===== SEZIONE RESPONSIVE ===== */
 @media (max-width: 768px) {
