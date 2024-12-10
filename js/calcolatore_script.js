@@ -1,4 +1,6 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('ricetteLoaded', inizializzaRicetta);
+
+function inizializzaRicetta() {
     const tipoPizza = getQueryParam('tipo') || 'napoletana';
     let metodo = getQueryParam('metodo') || null;
 
@@ -25,12 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     numPizzeInput.addEventListener('change', aggiornaRicetta);
 
-    const checkRicette = setInterval(() => {
-        if (window.loadedRicette) {
-            clearInterval(checkRicette);
-            mostraMetodiPerPizza(tipoPizza);
-        }
-    }, 200);
+    mostraMetodiPerPizza(tipoPizza);
 
     function mostraMetodiPerPizza(tipoPizza) {
         const pizzaData = window.loadedRicette[tipoPizza];
@@ -68,9 +65,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function aggiornaRicetta() {
-        if (!metodo) return;
+        if (!metodo) {
+            console.warn('Metodo non definito.');
+            return;
+        }
         const numPizze = parseInt(numPizzeInput.value, 10);
         const ricetta = calcolaRicettaFissa(tipoPizza, metodo, numPizze);
+        if (!ricetta) {
+            console.error('Ricetta non trovata.');
+            ricettaContainer.innerHTML = "<p>Ricetta non trovata.</p>";
+            return;
+        }
         mostraRicetta(ricetta);
     }
 
@@ -101,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function capitalizza(str) {
         return str.charAt(0).toUpperCase() + str.slice(1);
     }
-});
+}
 
 function calcolaRicettaFissa(tipoPizza, metodo, numPanetti) {
     const baseRicetta = window.loadedRicette[tipoPizza][metodo];
@@ -143,6 +148,10 @@ function calcolaRicettaFissa(tipoPizza, metodo, numPanetti) {
 
     return { nome: baseRicetta.nome, ingredienti, procedimento };
 }
+
+// Definizione delle altre funzioni calcolaDirettoParam, calcolaBigaParam, ecc.
+// Come mostrato nel tuo codice
+
 
 
 // Le seguenti funzioni devono già esistere o essere definite qui
