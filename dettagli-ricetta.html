@@ -6,10 +6,23 @@
     <title>Dettagli Ricetta</title>
     <link rel="stylesheet" href="css/main.css">
 </head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-1CV0W5QPKV"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-1CV0W5QPKV');
+</script>
+
 <body>
     <header>
         <h1>Dettagli Ricetta</h1>
     </header>
+
+    <!-- Navigazione -->
     <nav>
         <div class="nav-container">
             <ul class="nav-links">
@@ -19,7 +32,7 @@
                 <li><a href="calcolatore.html">Calcolatore</a></li>
                 <li><a href="assistente.html">Assistente</a></li>
                 <li><a href="contatti.html">Contatti</a></li>
-                <li><a href="https://pizzalab.bettermode.io/" target="_blank">PizzaLab Community</a></li>
+                <li><a href="https://pizzalab.bettermode.io/" target="_blank" rel="noopener noreferrer">PizzaLab Community</a></li>
             </ul>
             <div class="hamburger">
                 <span class="bar"></span>
@@ -29,16 +42,9 @@
         </div>
     </nav>
 
-    <main class="container">
-        <div class="form-container">
-            <div class="form-group">
-                <label for="num_pizze">Numero di Pizze:</label>
-                <input type="number" id="num_pizze" value="2" min="1" class="form-control">
-            </div>
-            <button id="genera-ricetta" class="btn">Genera Ricetta</button>
-
-            <div id="risultato-ricetta" class="recipe-box hidden"></div>
-        </div>
+    <main>
+        <!-- Contenitore per mostrare la ricetta -->
+        <div id="ricetta-container"></div>
     </main>
 
     <footer>
