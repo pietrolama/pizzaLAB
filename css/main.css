@@ -599,13 +599,11 @@ footer p:hover {
 
 /* Stile per il contatore delle pizze */
 .pizza-counter {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px; /* Spazio tra i pulsanti e l'input */
-    margin: 20px 0;
-    max-width: 200px; /* Imposta una larghezza massima per il layout */
-    margin: 0 auto; /* Centra il contatore nella pagina */
+    display: flex; /* Usa Flexbox per disposizione orizzontale */
+    align-items: center; /* Centra verticalmente gli elementi */
+    justify-content: center; /* Centra tutto orizzontalmente */
+    gap: 10px; /* Spazio uniforme tra gli elementi */
+    margin: 20px auto; /* Centra l'intero contatore nella pagina */
 }
 
 /* Stile per i pulsanti "+" e "-" */
@@ -634,14 +632,12 @@ footer p:hover {
     color: var(--text-color);
 }
 
-/* Centra il contenuto */
+/* Effetto di focus per il box numerico */
 .pizza-counter input[type="number"]:focus {
     outline: none;
     border-color: var(--secondary-color);
     box-shadow: 0 0 5px var(--primary-color);
 }
-
-
 
 /* ===== SEZIONE RESPONSIVE ===== */
 @media (max-width: 768px) {
