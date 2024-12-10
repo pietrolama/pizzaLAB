@@ -1,4 +1,3 @@
-// dettagli-ricetta.js
 document.addEventListener('DOMContentLoaded', () => {
     const tipoPizza = getQueryParam('tipo') || 'napoletana';
     let metodo = getQueryParam('metodo') || null;
@@ -6,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const numPizzeInput = document.getElementById('num_pizze');
     const btnMinus = document.getElementById('btn-minus');
     const btnPlus = document.getElementById('btn-plus');
-    const ricettaContainer = document.getElementById('recipe-box');
+    const ricettaContainer = document.getElementById('ricetta-container');
     const metodiContainer = document.getElementById('metodi-container');
     const metodiButtons = document.getElementById('metodi-buttons');
 
@@ -26,10 +25,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     numPizzeInput.addEventListener('change', aggiornaRicetta);
 
+    // Attendere il caricamento di loadedRicette
     const checkRicette = setInterval(() => {
         if (window.loadedRicette) {
             clearInterval(checkRicette);
-            console.log("Ricette caricate:", window.loadedRicette);
             mostraMetodiPerPizza(tipoPizza);
         } else {
             console.log("In attesa di loadedRicette...");
@@ -38,20 +37,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function mostraMetodiPerPizza(tipoPizza) {
         const pizzaData = window.loadedRicette[tipoPizza];
-        console.log("Tipo pizza selezionato:", tipoPizza, "Dati trovati:", pizzaData);
-
         if (!pizzaData) {
             ricettaContainer.innerHTML = "<p>Pizza non trovata nel JSON.</p>";
             return;
         }
 
-        const metodiDisponibili = Object.keys(pizzaData);
-        console.log("Metodi disponibili per", tipoPizza, ":", metodiDisponibili);
-
-        if (metodiDisponibili.length > 1) {
+        const metodiDisponibili = Object.keys(pizzaData); // ad es. ["diretto"], o ["diretto","biga"]
+        if (metodiDisponibili.length === 1) {
+            // Un solo metodo
+            metodiContainer.classList.add('hidden');
+            metodo = metodiDisponibili[0];
+            aggiornaRicetta();
+        } else {
+            // Più metodi
             metodiContainer.classList.remove('hidden');
             metodiButtons.innerHTML = '';
-
             metodiDisponibili.forEach(m => {
                 const btn = document.createElement('button');
                 btn.textContent = capitalizza(m);
@@ -62,28 +62,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 metodiButtons.appendChild(btn);
             });
 
-            if (!metodo) {
+            if (!metodo || !metodiDisponibili.includes(metodo)) {
                 metodo = metodiDisponibili[0];
             }
-
-        } else {
-            // Un solo metodo
-            metodiContainer.classList.add('hidden');
-            metodo = metodiDisponibili[0];
+            aggiornaRicetta();
         }
-
-        console.log("Metodo scelto:", metodo);
-        aggiornaRicetta();
     }
 
     function aggiornaRicetta() {
-        if (!metodo) {
-            console.warn("Nessun metodo disponibile.");
-            return;
-        }
+        if (!metodo) return;
         const numPizze = parseInt(numPizzeInput.value, 10);
         const ricetta = calcolaRicettaFissa(tipoPizza, metodo, numPizze);
-        console.log("Ricetta calcolata:", ricetta);
         mostraRicetta(ricetta);
     }
 
@@ -92,7 +81,8 @@ document.addEventListener('DOMContentLoaded', () => {
             ricettaContainer.innerHTML = "<p>Impossibile caricare la ricetta.</p>";
             return;
         }
-        const ingredientiHTML = ricetta.ingredienti.map(ing => `<li>${ing.nome}: ${ing.quantita} g</li>`).join('');
+
+        const ingredientiHTML = ricetta.ingredienti.map(ing => `<li>${ing.nome}: ${ing.quantita}</li>`).join('');
         const proceduraHTML = ricetta.procedimento.map(step => `<p>${step}</p>`).join('');
 
         ricettaContainer.innerHTML = `
@@ -102,6 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <h4>Procedura:</h4>
             ${proceduraHTML}
         `;
+        ricettaContainer.classList.add('active');
     }
 
     function getQueryParam(name) {
@@ -116,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Funzione per calcolare la ricetta in modo fisso
 function calcolaRicettaFissa(tipoPizza, metodo, numPanetti) {
-    // Parametri fissi di esempio
+    // Parametri esempio
     const peso_panetto = 250;
     const idratazione = 70;
     const tempo_lievitazione = 8;
@@ -124,27 +115,33 @@ function calcolaRicettaFissa(tipoPizza, metodo, numPanetti) {
     const temperatura_ambiente = 22;
     const in_teglia = false;
 
-    let datiCalcolati = null;
+    // Percentuali di default
+    const percentualeBiga = 70;
+    const percentualePoolish = 50;
+    const percentualePastaMadre = 30;
+    const percentualeBigaBP = 40;
+    const percentualePoolishBP = 40;
 
-    // Esempio: percentuali per biga, poolish, etc. Se vuoi variarli, puoi farlo qui.
-    const percentualeBiga = 70; // esempio
-    const percentualePoolish = 50; // esempio
-    const percentualePastaMadre = 20; // esempio biga_poolish, poolish puoi cambiare
-    const percentualeBigaBp = 40; 
-    const percentualePoolishBp = 40;
+    let datiCalcolati;
 
-    if (metodo === "diretto") {
-        datiCalcolati = calcolaDirettoParam(numPanetti, peso_panetto, idratazione, tempo_lievitazione, tempo_frigo, temperatura_ambiente, in_teglia);
-    } else if (metodo === "biga") {
-        datiCalcolati = calcolaBigaParam(numPanetti, peso_panetto, idratazione, tempo_lievitazione, tempo_frigo, temperatura_ambiente, in_teglia, percentualeBiga);
-    } else if (metodo === "poolish") {
-        datiCalcolati = calcolaPoolishParam(numPanetti, peso_panetto, idratazione, tempo_lievitazione, tempo_frigo, temperatura_ambiente, in_teglia, percentualePoolish);
-    } else if (metodo === "lievito_madre") {
-        datiCalcolati = calcolaLievitoMadreParam(numPanetti, peso_panetto, idratazione, tempo_lievitazione, tempo_frigo, temperatura_ambiente, in_teglia, percentualePastaMadre);
-    } else if (metodo === "biga_poolish") {
-        datiCalcolati = calcolaBigaPoolishParam(numPanetti, peso_panetto, idratazione, tempo_lievitazione, tempo_frigo, temperatura_ambiente, in_teglia, percentualeBigaBp, percentualePoolishBp);
-    } else {
-        return null;
+    switch (metodo) {
+        case "diretto":
+            datiCalcolati = calcolaDirettoParam(numPanetti, peso_panetto, idratazione, tempo_lievitazione, tempo_frigo, temperatura_ambiente, in_teglia);
+            break;
+        case "biga":
+            datiCalcolati = calcolaBigaParam(numPanetti, peso_panetto, idratazione, tempo_lievitazione, tempo_frigo, temperatura_ambiente, in_teglia, percentualeBiga);
+            break;
+        case "poolish":
+            datiCalcolati = calcolaPoolishParam(numPanetti, peso_panetto, idratazione, tempo_lievitazione, tempo_frigo, temperatura_ambiente, in_teglia, percentualePoolish);
+            break;
+        case "lievito_madre":
+            datiCalcolati = calcolaLievitoMadreParam(numPanetti, peso_panetto, idratazione, tempo_lievitazione, tempo_frigo, temperatura_ambiente, in_teglia, percentualePastaMadre);
+            break;
+        case "biga_poolish":
+            datiCalcolati = calcolaBigaPoolishParam(numPanetti, peso_panetto, idratazione, tempo_lievitazione, tempo_frigo, temperatura_ambiente, in_teglia, percentualeBigaBP, percentualePoolishBP);
+            break;
+        default:
+            return null; 
     }
 
     const baseRicetta = window.loadedRicette[tipoPizza][metodo];
@@ -152,17 +149,17 @@ function calcolaRicettaFissa(tipoPizza, metodo, numPanetti) {
 
     const ingredienti = baseRicetta.ingredienti.map(ing => {
         let q = ing.quantita;
-        Object.entries(datiCalcolati).forEach(([key, value]) => {
+        for (let [key, value] of Object.entries(datiCalcolati)) {
             q = q.replace(`<${key}>`, value);
-        });
-        return {nome: ing.nome, quantita: q};
+        }
+        return { nome: ing.nome, quantita: q };
     });
 
     const procedimento = baseRicetta.procedimento.map(step => {
         let s = step;
-        Object.entries(datiCalcolati).forEach(([key, value]) => {
+        for (let [key, value] of Object.entries(datiCalcolati)) {
             s = s.replace(`<${key}>`, value);
-        });
+        }
         return s;
     });
 
@@ -173,13 +170,14 @@ function calcolaRicettaFissa(tipoPizza, metodo, numPanetti) {
     };
 }
 
-// Funzione parametrica per diretto
+// Le seguenti funzioni devono già esistere o essere definite qui
+// Assicurati che `calcolaLievito` sia definita nel tuo calcolatore_script.js
 function calcolaDirettoParam(numPanetti, pesoPanetto, idratazione, tempoLievitazioneTotale, oreFrigo, temperaturaAmbiente, inTeglia) {
     var tempoLievitazioneEffettivo = tempoLievitazioneTotale;
     if (oreFrigo > 0) {
-        tempoLievitazioneEffettivo = tempoLievitazioneTotale - (9 * oreFrigo / 10);
+        tempoLievitazioneEffettivo -= (9 * oreFrigo / 10);
     }
-    var massa = tempoLievitazioneEffettivo * 10 / 100;
+    var massa = tempoLievitazioneEffettivo * 0.1;
     var apretto = tempoLievitazioneEffettivo - massa;
 
     var pesoFarina = (100 * pesoPanetto) / (100 + idratazione) * numPanetti;
@@ -188,14 +186,8 @@ function calcolaDirettoParam(numPanetti, pesoPanetto, idratazione, tempoLievitaz
     var pesoZucchero = 0.013 * pesoFarina;
     var pesoOlio = 0.032 * pesoFarina;
 
-    var lievito = calcolaLievito(
-        numPanetti, pesoPanetto, idratazione, pesoSale, pesoOlio,
-        tempoLievitazioneEffettivo, oreFrigo, temperaturaAmbiente, inTeglia
-    );
-
-    if (isNaN(lievito)) {
-        lievito = 0;
-    }
+    var lievito = calcolaLievito(numPanetti, pesoPanetto, idratazione, pesoSale, pesoOlio, tempoLievitazioneEffettivo, oreFrigo, temperaturaAmbiente, inTeglia);
+    if (isNaN(lievito)) lievito = 0;
 
     return {
         numPanetti: numPanetti.toFixed(0),
@@ -212,9 +204,8 @@ function calcolaDirettoParam(numPanetti, pesoPanetto, idratazione, tempoLievitaz
     };
 }
 
-// Funzione parametrica per Biga
-function calcolaBigaParam(numPanetti, pesoPanetto, idratazione, tempoLievitazioneTotale, oreFrigo, temperaturaAmbiente, inTeglia, percentualeBiga) {
-    // Calcoli simili a calcolaBiga, ma ora con parametri
+function calcolaBigaParam(numPanetti, pesoPanetto, idratazione, t, f, ta, i, percentualeBiga) {
+    // Implementazione come precedentemente mostrata
     var pesoTotaleFarina = (pesoPanetto * numPanetti) / (1 + idratazione / 100);
     var pesoFarinaBiga = pesoTotaleFarina * (percentualeBiga / 100);
     var pesoAcquaBiga = pesoFarinaBiga * 0.44;
@@ -239,8 +230,7 @@ function calcolaBigaParam(numPanetti, pesoPanetto, idratazione, tempoLievitazion
     };
 }
 
-// Funzione parametrica per Poolish
-function calcolaPoolishParam(numPanetti, pesoPanetto, idratazione, tempoLievitazioneTotale, oreFrigo, temperaturaAmbiente, inTeglia, percentualePoolish) {
+function calcolaPoolishParam(numPanetti, pesoPanetto, idratazione, t, f, ta, i, percentualePoolish) {
     var pesoTotaleFarina = (pesoPanetto * numPanetti) / (1 + idratazione / 100);
     var pesoFarinaPoolish = pesoTotaleFarina * (percentualePoolish / 100);
     var pesoAcquaPoolish = pesoFarinaPoolish;
@@ -265,8 +255,7 @@ function calcolaPoolishParam(numPanetti, pesoPanetto, idratazione, tempoLievitaz
     };
 }
 
-// Funzione parametrica per Lievito Madre
-function calcolaLievitoMadreParam(numPanetti, pesoPanetto, idratazione, tempoLievitazioneTotale, oreFrigo, temperaturaAmbiente, inTeglia, percentualePastaMadre) {
+function calcolaLievitoMadreParam(numPanetti, pesoPanetto, idratazione, t, f, ta, i, percentualePastaMadre) {
     var pesoTotaleImpasto = pesoPanetto * numPanetti;
     var pesoPastaMadreFinale = (percentualePastaMadre / 100) * pesoTotaleImpasto;
 
@@ -294,8 +283,7 @@ function calcolaLievitoMadreParam(numPanetti, pesoPanetto, idratazione, tempoLie
     };
 }
 
-// Funzione parametrica per Biga+Poolish
-function calcolaBigaPoolishParam(numPanetti, pesoPanetto, idratazione, tempoLievitazioneTotale, oreFrigo, temperaturaAmbiente, inTeglia, percentualeBiga, percentualePoolish) {
+function calcolaBigaPoolishParam(numPanetti, pesoPanetto, idratazione, t, f, ta, i, percentualeBiga, percentualePoolish) {
     var pesoTotaleFarina = (pesoPanetto * numPanetti) / (1 + idratazione / 100);
     var pesoFarinaBiga = pesoTotaleFarina * (percentualeBiga / 100);
     var pesoAcquaBiga = pesoFarinaBiga * 0.44;
