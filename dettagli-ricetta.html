@@ -1,86 +1,30 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dettagli Ricetta</title>
     <link rel="stylesheet" href="css/main.css">
-    <style>
-      .num-pizze-container {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-      .num-pizze-container button {
-        background-color: var(--primary-color);
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        width: 30px;
-        height: 30px;
-        cursor: pointer;
-      }
-      .num-pizze-container input {
-        width: 50px;
-        text-align: center;
-      }
-      .recipe-box {
-        margin-top: 30px;
-        text-align: left;
-      }
-      .recipe-box h2,
-      .recipe-box h4 {
-        text-align: center;
-      }
-    </style>
 </head>
 <body>
     <header>
         <h1>Dettagli Ricetta</h1>
     </header>
 
-    <nav>
-        <div class="nav-container">
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="tipi-di-pizza.html">Tipi di Pizza</a></li>
-                <li><a href="prefermenti_e_farine.html">Prefermenti e Farine</a></li>
-                <li><a href="calcolatore.html">Calcolatore</a></li>
-                <li><a href="assistente.html">Assistente</a></li>
-                <li><a href="contatti.html">Contatti</a></li>
-                <li><a href="https://pizzalab.bettermode.io/" target="_blank" rel="noopener noreferrer">PizzaLab Community</a></li>
-            </ul>
-            <div class="hamburger">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
-            </div>
+    <main>
+        <div class="form-group">
+            <button id="btn-minus">-</button>
+            <input type="number" id="num_pizze" value="2" min="1" />
+            <button id="btn-plus">+</button>
         </div>
-    </nav>
-
-    <main class="container">
-        <div class="form-container">
-            <div class="form-group">
-                <label>Numero di pizze:</label>
-                <div class="num-pizze-container">
-                    <button id="btn-minus">-</button>
-                    <input type="number" id="num_pizze" value="2" min="1"/>
-                    <button id="btn-plus">+</button>
-                </div>
-            </div>
-
-            <div id="ricetta-container" class="recipe-box">
-                <!-- Qui verrà mostrata la ricetta calcolata -->
-            </div>
-        </div>
+        <div id="ricetta-container"></div>
     </main>
 
     <footer>
-        <p>&copy; 2024 PizzaLab - La tua guida alla pizza perfetta</p>
+        <p>&copy; 2024 PizzaLab</p>
     </footer>
 
     <script src="js/calcolatore_script.js"></script>
     <script src="js/dettagli-ricetta.js"></script>
-    <script src="js/main.js" defer></script>
 </body>
 </html>
