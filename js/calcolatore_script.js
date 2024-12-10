@@ -561,16 +561,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Funzione per calcolare il piano di lavoro per qualsiasi metodo di impasto
 function generaPianoGenerico() {
-    const infornataTimeInput = document.getElementById('infornata').value;
-    const tipoImpasto = document.getElementById('tipo_impasto').value;
+    const infornataElement = document.getElementById('infornata');
+    const tipoImpastoElement = document.getElementById('tipo_impasto');
+
+    if (!infornataElement || !tipoImpastoElement) {
+        console.error('Gli elementi infornata o tipo_impasto non esistono nel DOM.');
+        alert('Errore: campi mancanti nel modulo!');
+        return;
+    }
+
+    const infornataTimeInput = infornataElement.value;
+    const tipoImpasto = tipoImpastoElement.value;
 
     if (!infornataTimeInput) {
         alert('Inserisci un orario di infornata!');
         return;
     }
 
-    const totalLievitazione = parseFloat(document.getElementById(`tempoLievTotale_${tipoImpasto}`).value);
-    const tempoFrigo = parseFloat(document.getElementById(`tempoFrigo_${tipoImpasto}`).value) || 0;
+    const totalLievitazioneElement = document.getElementById(`tempoLievTotale_${tipoImpasto}`);
+    const tempoFrigoElement = document.getElementById(`tempoFrigo_${tipoImpasto}`);
+
+    if (!totalLievitazioneElement || !tempoFrigoElement) {
+        console.error(`Campi di lievitazione mancanti per il tipo di impasto: ${tipoImpasto}`);
+        alert('Errore: campi di lievitazione mancanti!');
+        return;
+    }
+
+    const totalLievitazione = parseFloat(totalLievitazioneElement.value);
+    const tempoFrigo = parseFloat(tempoFrigoElement.value) || 0;
 
     if (isNaN(totalLievitazione) || totalLievitazione <= 0) {
         alert('Inserisci un tempo di lievitazione valido!');
