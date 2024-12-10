@@ -1,57 +1,44 @@
-// Funzione per leggere un parametro dalla query string
-function getQueryParam(name) {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get(name);
-}
+// dettagli-ricetta.js
 
-// Funzione per mostrare la ricetta nel DOM
-function mostraRicetta(ricetta) {
-    const container = document.getElementById('ricetta-container');
-    if (!container) return;
-
-    // Lista ingredienti
-    const ingredientiHTML = ricetta.ingredienti.map(ingrediente => {
-        return `<li>${ingrediente.nome}: ${ingrediente.quantita}</li>`;
-    }).join('');
-
-    // Procedura
-    const proceduraHTML = ricetta.procedimento.map(passo => `<p>${passo}</p>`).join('');
-
-    container.innerHTML = `
-        <h2>${ricetta.nome}</h2>
-        <h4>Ingredienti:</h4>
-        <ul>${ingredientiHTML}</ul>
-        <h4>Procedura:</h4>
-        ${proceduraHTML}
-    `;
-}
-
-// Caricamento delle ricette e visualizzazione di quella selezionata
 document.addEventListener('DOMContentLoaded', () => {
-    const tipo = getQueryParam('tipo');
-    if (!tipo) {
-        console.error("Nessun tipo di pizza specificato nell'URL.");
-        return;
+    const tipoPizza = getQueryParam('tipo') || 'napoletana'; 
+    // Se vuoi leggere anche il metodo, fallo così:
+    // const metodo = getQueryParam('metodo') || 'diretto';
+    // Per semplicità qui fisseremo il metodo a "diretto"
+    const metodo = 'diretto';
+
+    const numPizzeSelect = document.getElementById('num_pizze');
+    const ricettaContainer = document.getElementById('ricetta-container');
+
+    function aggiornaRicetta() {
+        const numPizze = parseInt(numPizzeSelect.value, 10);
+        
+        // calcolaRicetta è definita in calcolatore_script.js
+        const ricettaCalcolata = calcolaRicetta(tipoPizza, metodo, numPizze); 
+
+        mostraRicetta(ricettaCalcolata);
     }
 
-    // Imposta il metodo di impasto di default (puoi cambiarlo o ottenerlo da query string)
-    const metodo = 'diretto'; // ad esempio, oppure puoi usare un altro metodo se preferisci
-    
-    fetch('data/ricette.json')
-        .then(response => response.json())
-        .then(ricette => {
-            if (!ricette[tipo]) {
-                console.error(`Ricetta per "${tipo}" non trovata nel file JSON.`);
-                return;
-            }
+    numPizzeSelect.addEventListener('change', aggiornaRicetta);
 
-            if (!ricette[tipo][metodo]) {
-                console.error(`Metodo "${metodo}" non disponibile per "${tipo}".`);
-                return;
-            }
+    // Caricamento iniziale
+    aggiornaRicetta();
 
-            const ricetta = ricette[tipo][metodo];
-            mostraRicetta(ricetta);
-        })
-        .catch(error => console.error('Errore nel caricamento delle ricette:', error));
+    function mostraRicetta(ricetta) {
+        const ingredientiHTML = ricetta.ingredienti.map(ing => `<li>${ing.nome}: ${ing.quantita} g</li>`).join('');
+        const proceduraHTML = ricetta.procedimento.map(step => `<p>${step}</p>`).join('');
+
+        ricettaContainer.innerHTML = `
+            <h2>${ricetta.nome}</h2>
+            <h4>Ingredienti:</h4>
+            <ul>${ingredientiHTML}</ul>
+            <h4>Procedura:</h4>
+            ${proceduraHTML}
+        `;
+    }
+
+    function getQueryParam(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+    }
 });
