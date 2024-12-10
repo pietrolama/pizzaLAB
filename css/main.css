@@ -220,7 +220,7 @@ section h2,
 }
 
 .pizza-container section img.pizza-img,
-.prefermenti-container section img.prefermento-img,
+.prefermenti-container section img.prefermenti-img,
 .farine-container section img.farina-img {
     max-width: 40%;
     /* Immagini al 40% della larghezza */
@@ -230,7 +230,7 @@ section h2,
 
 /* ===== IMMAGINI ===== */
 .pizza-img,
-.prefermento-img,
+.prefermenti-img,
 .farina-img {
     max-width: 100%;
     height: auto;
