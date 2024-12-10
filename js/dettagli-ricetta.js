@@ -1,30 +1,46 @@
 // dettagli-ricetta.js
 
 document.addEventListener('DOMContentLoaded', () => {
-    const tipoPizza = getQueryParam('tipo') || 'napoletana'; 
-    // Se vuoi leggere anche il metodo, fallo così:
-    // const metodo = getQueryParam('metodo') || 'diretto';
-    // Per semplicità qui fisseremo il metodo a "diretto"
-    const metodo = 'diretto';
+    const tipoPizza = getQueryParam('tipo') || 'napoletana';
+    const metodo = getQueryParam('metodo') || 'diretto';
 
-    const numPizzeSelect = document.getElementById('num_pizze');
+    const numPizzeInput = document.getElementById('num_pizze');
+    const btnMinus = document.getElementById('btn-minus');
+    const btnPlus = document.getElementById('btn-plus');
+
     const ricettaContainer = document.getElementById('ricetta-container');
 
+    // Funzione per aggiornare la ricetta
     function aggiornaRicetta() {
-        const numPizze = parseInt(numPizzeSelect.value, 10);
-        
-        // calcolaRicetta è definita in calcolatore_script.js
-        const ricettaCalcolata = calcolaRicetta(tipoPizza, metodo, numPizze); 
-
+        const numPizze = parseInt(numPizzeInput.value, 10);
+        const ricettaCalcolata = calcolaRicetta(tipoPizza, metodo, numPizze);
         mostraRicetta(ricettaCalcolata);
     }
 
-    numPizzeSelect.addEventListener('change', aggiornaRicetta);
+    btnMinus.addEventListener('click', () => {
+        let val = parseInt(numPizzeInput.value, 10);
+        if (val > 1) {
+            numPizzeInput.value = val - 1;
+            aggiornaRicetta();
+        }
+    });
+
+    btnPlus.addEventListener('click', () => {
+        let val = parseInt(numPizzeInput.value, 10);
+        numPizzeInput.value = val + 1;
+        aggiornaRicetta();
+    });
+
+    numPizzeInput.addEventListener('change', aggiornaRicetta);
 
     // Caricamento iniziale
     aggiornaRicetta();
 
     function mostraRicetta(ricetta) {
+        if (!ricetta || !ricetta.ingredienti || !ricetta.procedimento) {
+            ricettaContainer.innerHTML = "<p>Impossibile caricare la ricetta.</p>";
+            return;
+        }
         const ingredientiHTML = ricetta.ingredienti.map(ing => `<li>${ing.nome}: ${ing.quantita} g</li>`).join('');
         const proceduraHTML = ricetta.procedimento.map(step => `<p>${step}</p>`).join('');
 
