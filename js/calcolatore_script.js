@@ -585,6 +585,143 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+// Definizione dei metodi disponibili per ogni tipo di pizza
+const metodiPerPizza = {
+    "napoletana": ["diretto"],
+    "romana": ["diretto"],
+    "pala": ["diretto", "biga"],
+    "contemporanea": ["diretto", "biga", "poolish", "lievito_madre", "biga_poolish"],
+    "padellino": ["diretto"]
+};
+
+// Funzione per caricare le ricette dal file JSON
+async function caricaRicette() {
+    try {
+        const response = await fetch('data/ricette.json');
+        if (!response.ok) {
+            console.error(`Errore nel caricamento del JSON: ${response.status}`);
+            return null;
+        }
+        const ricette = await response.json();
+        console.log("Ricette caricate correttamente:", ricette);
+        return ricette;
+    } catch (error) {
+        console.error("Errore durante il caricamento del JSON:", error);
+        return null;
+    }
+}
+
+// Caricamento delle ricette al caricamento della pagina
+(async () => {
+    window.loadedRicette = await caricaRicette();
+    if (!window.loadedRicette) {
+        console.error("JSON non caricato, verifica il percorso o il file.");
+    } else {
+        console.log("Ricette caricate correttamente:", window.loadedRicette);
+    }
+})();
+
+// Funzione per mostrare/nascondere le sezioni in base al metodo di impasto selezionato
+function toggleSections() {
+    const metodoImpasto = document.getElementById('tipo_impasto').value;
+    console.log('Metodo impasto in toggleSections:', metodoImpasto);
+
+    // Nascondi tutte le sezioni
+    const sezioni = ['sezione_diretto', 'sezione_biga', 'sezione_poolish', 'sezione_lievito_madre', 'sezione_biga_poolish'];
+    sezioni.forEach(id => {
+        const elemento = document.getElementById(id);
+        if (elemento) {
+            elemento.classList.add('hidden');
+        }
+    });
+
+    // Mostra la sezione corretta
+    switch (metodoImpasto) {
+        case 'diretto':
+            document.getElementById('sezione_diretto').classList.remove('hidden');
+            break;
+        case 'biga':
+            document.getElementById('sezione_biga').classList.remove('hidden');
+            break;
+        case 'poolish':
+            document.getElementById('sezione_poolish').classList.remove('hidden');
+            break;
+        case 'lievito_madre':
+            document.getElementById('sezione_lievito_madre').classList.remove('hidden');
+            break;
+        case 'biga_poolish':
+            document.getElementById('sezione_biga_poolish').classList.remove('hidden');
+            break;
+        default:
+            console.warn('Metodo di impasto non riconosciuto in toggleSections:', metodoImpasto);
+            break;
+    }
+}
+
+// Event listener per il cambiamento del tipo di pizza
+document.getElementById('tipo_pizza').addEventListener('change', (e) => {
+    const tipoPizza = e.target.value || "napoletana";
+
+    console.log("Tipo di pizza selezionato:", tipoPizza);
+
+    const metodiDisponibili = metodiPerPizza[tipoPizza] || [];
+    const metodoSelect = document.getElementById('tipo_impasto');
+
+    // Rimuove tutte le opzioni esistenti
+    metodoSelect.innerHTML = '';
+
+    // Aggiunge solo le opzioni disponibili
+    metodiDisponibili.forEach(metodo => {
+        const option = document.createElement('option');
+        option.value = metodo;
+        option.textContent = metodo.charAt(0).toUpperCase() + metodo.slice(1).replace('_', ' ');
+        metodoSelect.appendChild(option);
+    });
+
+    // Imposta il valore del menu a tendina al primo metodo disponibile
+    metodoSelect.value = metodiDisponibili[0] || '';
+    metodoSelect.dispatchEvent(new Event('change'));
+});
+
+// Event listener per il caricamento iniziale della pagina
+document.addEventListener('DOMContentLoaded', () => {
+    const tipoPizzaElement = document.getElementById('tipo_pizza');
+    const metodoSelect = document.getElementById('tipo_impasto');
+
+    if (tipoPizzaElement && metodoSelect) {
+        const tipoPizzaIniziale = tipoPizzaElement.value || 'napoletana';
+        const metodiDisponibili = metodiPerPizza[tipoPizzaIniziale] || [];
+
+        metodoSelect.innerHTML = '';
+
+        metodiDisponibili.forEach(metodo => {
+            const option = document.createElement('option');
+            option.value = metodo;
+            option.textContent = metodo.charAt(0).toUpperCase() + metodo.slice(1).replace('_', ' ');
+            metodoSelect.appendChild(option);
+        });
+
+        metodoSelect.value = metodiDisponibili[0] || '';
+        metodoSelect.dispatchEvent(new Event('change'));
+    }
+});
+
+// Event listener per il cambiamento del metodo di impasto
+document.getElementById('tipo_impasto').addEventListener('change', toggleSections);
+
+// Funzione per calcolare e mostrare la ricetta personalizzata
+function calcola() {
+    const tipoPizza = document.getElementById('tipo_pizza').value;
+    const tipoImpasto = document.getElementById('tipo_impasto').value;
+
+    if (!tipoPizza || !tipoImpasto) {
+        alert("Seleziona sia il tipo di pizza che il metodo di impasto.");
+        return;
+    }
+
+    mostraRicetta(tipoPizza, tipoImpasto);
+}
+
 // Funzione per calcolare il piano di lavoro per qualsiasi metodo di impasto
 function generaPianoGenerico() {
     const infornataElement = document.getElementById('infornata');
@@ -663,6 +800,32 @@ function generaPianoGenerico() {
         return;
     }
 
+    // Aggiunta degli step aggiuntivi al piano
+    plan.unshift({
+        time: '',
+        action: "Preparazione biga."
+    });
+
+    plan.splice(plan.length - 2, 0, {
+        time: '',
+        action: "Creazione impasto."
+    });
+
+    plan.push({
+        time: '',
+        action: "Attesa raddoppio."
+    });
+
+    plan.push({
+        time: '',
+        action: "Stesura."
+    });
+
+    plan.push({
+        time: '',
+        action: "Raddoppio."
+    });
+
     // Aggiorna il DOM
     const planBox = document.getElementById('plan-box');
     const planList = document.getElementById('plan-list');
@@ -670,7 +833,7 @@ function generaPianoGenerico() {
 
     plan.forEach(step => {
         const li = document.createElement('li');
-        li.textContent = `${step.time}: ${step.action}`;
+        li.textContent = `${step.time} ${step.action}`;
         planList.appendChild(li);
     });
 
@@ -678,6 +841,7 @@ function generaPianoGenerico() {
     planBox.classList.remove('hidden');
     setTimeout(() => planBox.classList.add('active'), 10); // Ritardo per triggerare l'animazione
 }
+
 // Funzione per calcolare il piano di lavoro per il metodo diretto
 function calculatePlanDiretto(infornataTime, totalLievitazione, tempoFrigo) {
     const plan = [];
