@@ -604,6 +604,8 @@ footer p:hover {
     justify-content: center;
     gap: 10px; /* Spazio tra i pulsanti e l'input */
     margin: 20px 0;
+    max-width: 200px; /* Imposta una larghezza massima per il layout */
+    margin: 0 auto; /* Centra il contatore nella pagina */
 }
 
 /* Stile per i pulsanti "+" e "-" */
@@ -620,14 +622,7 @@ footer p:hover {
     cursor: pointer;
 }
 
-.pizza-counter button:hover {
-    background-color: var(--primary-color);
-    color: #fff;
-    transform: scale(1.1);
-    box-shadow: 0 0 10px var(--primary-color);
-}
-
-/* Stile per l'input numerico */
+/* Stile per il box numerico */
 .pizza-counter input[type="number"] {
     width: 80px;
     height: 40px;
@@ -637,14 +632,15 @@ footer p:hover {
     border-radius: 8px;
     background: var(--background-color);
     color: var(--text-color);
-    margin: 0 10px;
 }
 
+/* Centra il contenuto */
 .pizza-counter input[type="number"]:focus {
     outline: none;
     border-color: var(--secondary-color);
     box-shadow: 0 0 5px var(--primary-color);
 }
+
 
 
 /* ===== SEZIONE RESPONSIVE ===== */
