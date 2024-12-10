@@ -14,6 +14,7 @@ fetch('data/pizze.json')
                     <ul>
                         ${pizza.caratteristiche.map(car => `<li>${car}</li>`).join('')}
                     </ul>
+                    <a href="dettagli-ricetta.html?tipo=${pizza.tipo}" class="btn">Visualizza Ricetta</a>
                 </div>
             `;
             container.appendChild(section);
