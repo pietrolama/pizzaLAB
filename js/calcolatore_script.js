@@ -103,70 +103,47 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Funzione per calcolare la ricetta in modo fisso
 function calcolaRicettaFissa(tipoPizza, metodo, numPanetti) {
-    // Parametri esempio
-    const peso_panetto = 250;
-    const idratazione = 70;
-    const tempo_lievitazione = 8;
-    const tempo_frigo = 0;
-    const temperatura_ambiente = 22;
-    const in_teglia = false;
-
-    // Percentuali di default
-    const percentualeBiga = 70;
-    const percentualePoolish = 50;
-    const percentualePastaMadre = 30;
-    const percentualeBigaBP = 40;
-    const percentualePoolishBP = 40;
-
-    let datiCalcolati;
-
-    switch (metodo) {
-        case "diretto":
-            datiCalcolati = calcolaDirettoParam(numPanetti, peso_panetto, idratazione, tempo_lievitazione, tempo_frigo, temperatura_ambiente, in_teglia);
-            break;
-        case "biga":
-            datiCalcolati = calcolaBigaParam(numPanetti, peso_panetto, idratazione, tempo_lievitazione, tempo_frigo, temperatura_ambiente, in_teglia, percentualeBiga);
-            break;
-        case "poolish":
-            datiCalcolati = calcolaPoolishParam(numPanetti, peso_panetto, idratazione, tempo_lievitazione, tempo_frigo, temperatura_ambiente, in_teglia, percentualePoolish);
-            break;
-        case "lievito_madre":
-            datiCalcolati = calcolaLievitoMadreParam(numPanetti, peso_panetto, idratazione, tempo_lievitazione, tempo_frigo, temperatura_ambiente, in_teglia, percentualePastaMadre);
-            break;
-        case "biga_poolish":
-            datiCalcolati = calcolaBigaPoolishParam(numPanetti, peso_panetto, idratazione, tempo_lievitazione, tempo_frigo, temperatura_ambiente, in_teglia, percentualeBigaBP, percentualePoolishBP);
-            break;
-        default:
-            return null; 
-    }
-
     const baseRicetta = window.loadedRicette[tipoPizza][metodo];
     if (!baseRicetta) return null;
 
+    let datiCalcolati;
+    switch (metodo) {
+        case "diretto":
+            datiCalcolati = calcolaDirettoParam(numPanetti, 250, 70, 8, 0, 22, false);
+            break;
+        case "biga":
+            datiCalcolati = calcolaBigaParam(numPanetti, 250, 70, 8, 0, 22, false, 70);
+            break;
+        case "poolish":
+            datiCalcolati = calcolaPoolishParam(numPanetti, 250, 70, 8, 0, 22, false, 50);
+            break;
+        case "lievito_madre":
+            datiCalcolati = calcolaLievitoMadreParam(numPanetti, 250, 70, 8, 0, 22, false, 30);
+            break;
+        default:
+            return null;
+    }
+
     const ingredienti = baseRicetta.ingredienti.map(ing => {
         let q = ing.quantita;
-        for (let [key, value] of Object.entries(datiCalcolati)) {
+        Object.entries(datiCalcolati).forEach(([key, value]) => {
             q = q.replace(`<${key}>`, value);
-        }
+        });
         return { nome: ing.nome, quantita: q };
     });
 
     const procedimento = baseRicetta.procedimento.map(step => {
         let s = step;
-        for (let [key, value] of Object.entries(datiCalcolati)) {
+        Object.entries(datiCalcolati).forEach(([key, value]) => {
             s = s.replace(`<${key}>`, value);
-        }
+        });
         return s;
     });
 
-    return {
-        nome: baseRicetta.nome,
-        ingredienti,
-        procedimento
-    };
+    return { nome: baseRicetta.nome, ingredienti, procedimento };
 }
+
 
 // Le seguenti funzioni devono già esistere o essere definite qui
 // Assicurati che `calcolaLievito` sia definita nel tuo calcolatore_script.js
