@@ -430,7 +430,7 @@ function mostraRicetta(tipoPizza, metodo) {
 
 // Event listener per il pulsante 'Calcola e Genera Ricetta' e per Genera Piano
 document.getElementById('calcola-button').addEventListener('click', calcola);
-document.getElementById('genera-piano').addEventListener('click', generaPiano);
+document.getElementById('genera-piano').addEventListener('click', generaPianoGenerico);
 
 // Funzione per recuperare la configurazione dal localStorage
 document.addEventListener('DOMContentLoaded', () => {
