@@ -1,3 +1,4 @@
+// dettagli-ricetta.js
 document.addEventListener('DOMContentLoaded', () => {
     const tipoPizza = getQueryParam('tipo') || 'napoletana';
     let metodo = getQueryParam('metodo') || null;
@@ -9,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const metodiContainer = document.getElementById('metodi-container');
     const metodiButtons = document.getElementById('metodi-buttons');
 
+    // Eventi per i pulsanti +/- delle pizze
     btnMinus.addEventListener('click', () => {
         let val = parseInt(numPizzeInput.value, 10);
         if (val > 1) {
@@ -25,10 +27,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     numPizzeInput.addEventListener('change', aggiornaRicetta);
 
+    // Attendere il caricamento di loadedRicette
     const checkRicette = setInterval(() => {
         if (window.loadedRicette) {
             clearInterval(checkRicette);
             mostraMetodiPerPizza(tipoPizza);
+        } else {
+            console.log("In attesa di loadedRicette...");
         }
     }, 200);
 
@@ -40,14 +45,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const metodiDisponibili = Object.keys(pizzaData);
-
         if (metodiDisponibili.length === 1) {
-            // Un solo metodo: lo usiamo direttamente
+            // Un solo metodo
             metodiContainer.classList.add('hidden');
             metodo = metodiDisponibili[0];
             aggiornaRicetta();
         } else {
-            // Più metodi: mostra pulsanti
+            // Più metodi: mostra i pulsanti
             metodiContainer.classList.remove('hidden');
             metodiButtons.innerHTML = '';
 
@@ -81,6 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ricettaContainer.innerHTML = "<p>Impossibile caricare la ricetta.</p>";
             return;
         }
+
         const ingredientiHTML = ricetta.ingredienti.map(ing => `<li>${ing.nome}: ${ing.quantita} g</li>`).join('');
         const proceduraHTML = ricetta.procedimento.map(step => `<p>${step}</p>`).join('');
 
@@ -91,7 +96,6 @@ document.addEventListener('DOMContentLoaded', () => {
             <h4>Procedura:</h4>
             ${proceduraHTML}
         `;
-
         ricettaContainer.classList.add('active');
     }
 
@@ -107,6 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Funzione per calcolare la ricetta in modo fisso
 function calcolaRicettaFissa(tipoPizza, metodo, numPanetti) {
+    // Parametri fissi esemplificativi
     const peso_panetto = 250;
     const idratazione = 70;
     const tempo_lievitazione = 8;
@@ -114,14 +119,14 @@ function calcolaRicettaFissa(tipoPizza, metodo, numPanetti) {
     const temperatura_ambiente = 22;
     const in_teglia = false;
 
-    let datiCalcolati = null;
+    // Default percentuali
+    const percentualeBiga = 70;
+    const percentualePoolish = 50;
+    const percentualePastaMadre = 30;
+    const percentualeBigaBP = 40;
+    const percentualePoolishBP = 40;
 
-    // Valori di default per le percentuali:
-    const percentualeBiga = 70;      // esempio
-    const percentualePoolish = 50;   // esempio
-    const percentualePastaMadre = 30; 
-    const percentualeBigaBP = 40;   
-    const percentualePoolishBP = 40; 
+    let datiCalcolati = null;
 
     switch (metodo) {
         case "diretto":
@@ -151,7 +156,7 @@ function calcolaRicettaFissa(tipoPizza, metodo, numPanetti) {
         Object.entries(datiCalcolati).forEach(([key, value]) => {
             q = q.replace(`<${key}>`, value);
         });
-        return { nome: ing.nome, quantita: q };
+        return {nome: ing.nome, quantita: q};
     });
 
     const procedimento = baseRicetta.procedimento.map(step => {
@@ -169,7 +174,7 @@ function calcolaRicettaFissa(tipoPizza, metodo, numPanetti) {
     };
 }
 
-// Funzioni parametriche aggiuntive
+// Funzioni parametriche per gli altri metodi
 function calcolaBigaParam(numPanetti, pesoPanetto, idratazione, tempoLievitazioneTotale, oreFrigo, temperaturaAmbiente, inTeglia, percentualeBiga) {
     var pesoTotaleFarina = (pesoPanetto * numPanetti) / (1 + idratazione / 100);
     var pesoFarinaBiga = pesoTotaleFarina * (percentualeBiga / 100);
@@ -224,8 +229,8 @@ function calcolaLievitoMadreParam(numPanetti, pesoPanetto, idratazione, tempoLie
     var pesoTotaleImpasto = pesoPanetto * numPanetti;
     var pesoPastaMadreFinale = (percentualePastaMadre / 100) * pesoTotaleImpasto;
 
-    var farinaPastaMadre = pesoPastaMadreFinale * (2 / 3);
-    var acquaPastaMadre = pesoPastaMadreFinale * (1 / 3);
+    var farinaPastaMadre = pesoPastaMadreFinale * (2/3);
+    var acquaPastaMadre = pesoPastaMadreFinale * (1/3);
 
     var farinaPrincipale = (pesoTotaleImpasto - pesoPastaMadreFinale) / (1 + idratazione / 100);
     var acquaPrincipale = farinaPrincipale * (idratazione / 100);
