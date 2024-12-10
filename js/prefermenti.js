@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const container = document.getElementById('prefermenti-container');
             data.forEach(prefermento => {
                 const section = document.createElement('section');
-                section.classList.add('prefermento-section'); // Classe per lo styling
+                section.classList.add('prefermenti-section'); // Classe per lo styling
                 section.setAttribute('tabindex', '0'); // Rende la sezione focalizzabile
 
                 // URL per i dettagli, se necessario
