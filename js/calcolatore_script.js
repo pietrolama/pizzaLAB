@@ -81,16 +81,16 @@ document.addEventListener('DOMContentLoaded', () => {
             ricettaContainer.innerHTML = "<p>Impossibile caricare la ricetta.</p>";
             return;
         }
-        const ingredientiHTML = ricetta.ingredienti.map(ing => <li>${ing.nome}: ${ing.quantita} g</li>).join('');
-        const proceduraHTML = ricetta.procedimento.map(step => <p>${step}</p>).join('');
+        const ingredientiHTML = ricetta.ingredienti.map(ing => `<li>${ing.nome}: ${ing.quantita} g</li>`).join('');
+        const proceduraHTML = ricetta.procedimento.map(step => `<p>${step}</p>`).join('');
 
-        ricettaContainer.innerHTML = 
+        ricettaContainer.innerHTML = `
             <h2>${ricetta.nome}</h2>
             <h4>Ingredienti:</h4>
             <ul>${ingredientiHTML}</ul>
             <h4>Procedura:</h4>
             ${proceduraHTML}
-        ;
+        `;
 
         // Aggiungiamo la classe active per mostrare la ricetta se il CSS richiede .active per opacity 1
         ricettaContainer.classList.add('active');
@@ -131,7 +131,7 @@ function calcolaRicettaFissa(tipoPizza, metodo, numPanetti) {
     const ingredienti = baseRicetta.ingredienti.map(ing => {
         let q = ing.quantita;
         Object.entries(datiCalcolati).forEach(([key, value]) => {
-            q = q.replace(<${key}>, value);
+            q = q.replace(`<${key}>`, value);
         });
         return {nome: ing.nome, quantita: q};
     });
@@ -139,7 +139,7 @@ function calcolaRicettaFissa(tipoPizza, metodo, numPanetti) {
     const procedimento = baseRicetta.procedimento.map(step => {
         let s = step;
         Object.entries(datiCalcolati).forEach(([key, value]) => {
-            s = s.replace(<${key}>, value);
+            s = s.replace(`<${key}>`, value);
         });
         return s;
     });
