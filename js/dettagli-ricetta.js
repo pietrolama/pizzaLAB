@@ -1,4 +1,3 @@
-// dettagli-ricetta.js
 document.addEventListener('DOMContentLoaded', () => {
     const tipoPizza = getQueryParam('tipo') || 'napoletana';
     let metodo = getQueryParam('metodo') || null;
@@ -26,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     numPizzeInput.addEventListener('change', aggiornaRicetta);
 
-    // Attendi che le ricette siano caricate da calcolatore_script.js
     const checkRicette = setInterval(() => {
         if (window.loadedRicette) {
             clearInterval(checkRicette);
@@ -49,7 +47,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const metodiDisponibili = Object.keys(pizzaData);
         console.log("Metodi disponibili per", tipoPizza, ":", metodiDisponibili);
 
-        if (metodiDisponibili.length > 1) {
+        // Se esiste un solo metodo, lo usiamo direttamente
+        if (metodiDisponibili.length === 1) {
+            metodiContainer.classList.add('hidden');
+            metodo = metodiDisponibili[0];
+            aggiornaRicetta();
+        } else {
+            // Più di un metodo: mostra i pulsanti
             metodiContainer.classList.remove('hidden');
             metodiButtons.innerHTML = '';
 
@@ -63,18 +67,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 metodiButtons.appendChild(btn);
             });
 
-            if (!metodo) {
+            // Se un metodo non è stato passato in query string, selezioniamo il primo
+            if (!metodo || !metodiDisponibili.includes(metodo)) {
                 metodo = metodiDisponibili[0];
             }
 
-        } else {
-            // Un solo metodo
-            metodiContainer.classList.add('hidden');
-            metodo = metodiDisponibili[0];
+            aggiornaRicetta();
         }
-
-        console.log("Metodo scelto:", metodo);
-        aggiornaRicetta();
     }
 
     function aggiornaRicetta() {
