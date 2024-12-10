@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const numPizzeInput = document.getElementById('num_pizze');
     const btnMinus = document.getElementById('btn-minus');
     const btnPlus = document.getElementById('btn-plus');
-    const ricettaContainer = document.getElementById('ricetta-container');
+    const ricettaContainer = document.getElementById('recipe-box');
     const metodiContainer = document.getElementById('metodi-container');
     const metodiButtons = document.getElementById('metodi-buttons');
 
