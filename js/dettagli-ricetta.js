@@ -1,6 +1,5 @@
 // dettagli-ricetta.js
-// Supponiamo che il tipo di pizza e il metodo siano ottenuti da query string o fissi.
-// Ad esempio, ?tipo=napoletana&metodo=diretto
+// Otteniamo tipoPizza e metodo dalla query string, es: ?tipo=napoletana&metodo=diretto
 document.addEventListener('DOMContentLoaded', () => {
     const tipoPizza = getQueryParam('tipo') || 'napoletana';
     const metodo = getQueryParam('metodo') || 'diretto';
@@ -63,8 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Questa funzione utilizza le funzioni di calcolo già definite in calcolatore_script.js
-// Qui puoi settare dei parametri fissi (es peso_panetto, idratazione, etc.) o recuperarli dal config
+// Funzione per calcolare la ricetta in modo fisso (esempio)
 function calcolaRicettaFissa(tipoPizza, metodo, numPanetti) {
     // Parametri fissi di esempio
     const peso_panetto = 250; // fisso
@@ -77,7 +75,6 @@ function calcolaRicettaFissa(tipoPizza, metodo, numPanetti) {
     let datiCalcolati = null;
 
     if (metodo === "diretto") {
-        // Adatta la funzione calcolaDirettoParam o usa quella già presente ma passando i parametri
         datiCalcolati = calcolaDirettoParam(numPanetti, peso_panetto, idratazione, tempo_lievitazione, tempo_frigo, temperatura_ambiente, in_teglia);
     } else {
         alert("Metodo non supportato in questa demo.");
@@ -86,6 +83,7 @@ function calcolaRicettaFissa(tipoPizza, metodo, numPanetti) {
 
     const baseRicetta = window.loadedRicette[tipoPizza][metodo];
 
+    // Calcolo ingredienti
     const ingredienti = baseRicetta.ingredienti.map(ing => {
         let q = ing.quantita;
         Object.entries(datiCalcolati).forEach(([key, value]) => {
@@ -94,7 +92,8 @@ function calcolaRicettaFissa(tipoPizza, metodo, numPanetti) {
         return {nome: ing.nome, quantita: q};
     });
 
-    const procedura = baseRicetta.procedimento.map(step => {
+    // Calcolo procedimento (ATTENZIONE qui usiamo 'procedimento' come nome uniforme)
+    const procedimento = baseRicetta.procedimento.map(step => {
         let s = step;
         Object.entries(datiCalcolati).forEach(([key, value]) => {
             s = s.replace(`<${key}>`, value);
