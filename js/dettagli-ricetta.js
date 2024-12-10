@@ -28,32 +28,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const checkRicette = setInterval(() => {
         if (window.loadedRicette) {
             clearInterval(checkRicette);
-            console.log("Ricette caricate:", window.loadedRicette);
             mostraMetodiPerPizza(tipoPizza);
-        } else {
-            console.log("In attesa di loadedRicette...");
         }
     }, 200);
 
     function mostraMetodiPerPizza(tipoPizza) {
         const pizzaData = window.loadedRicette[tipoPizza];
-        console.log("Tipo pizza selezionato:", tipoPizza, "Dati trovati:", pizzaData);
-
         if (!pizzaData) {
             ricettaContainer.innerHTML = "<p>Pizza non trovata nel JSON.</p>";
             return;
         }
 
         const metodiDisponibili = Object.keys(pizzaData);
-        console.log("Metodi disponibili per", tipoPizza, ":", metodiDisponibili);
 
-        // Se esiste un solo metodo, lo usiamo direttamente
         if (metodiDisponibili.length === 1) {
+            // Un solo metodo: lo usiamo direttamente
             metodiContainer.classList.add('hidden');
             metodo = metodiDisponibili[0];
             aggiornaRicetta();
         } else {
-            // Più di un metodo: mostra i pulsanti
+            // Più metodi: mostra pulsanti
             metodiContainer.classList.remove('hidden');
             metodiButtons.innerHTML = '';
 
@@ -67,7 +61,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 metodiButtons.appendChild(btn);
             });
 
-            // Se un metodo non è stato passato in query string, selezioniamo il primo
             if (!metodo || !metodiDisponibili.includes(metodo)) {
                 metodo = metodiDisponibili[0];
             }
@@ -77,13 +70,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function aggiornaRicetta() {
-        if (!metodo) {
-            console.warn("Nessun metodo disponibile.");
-            return;
-        }
+        if (!metodo) return;
         const numPizze = parseInt(numPizzeInput.value, 10);
         const ricetta = calcolaRicettaFissa(tipoPizza, metodo, numPizze);
-        console.log("Ricetta calcolata:", ricetta);
         mostraRicetta(ricetta);
     }
 
@@ -102,6 +91,9 @@ document.addEventListener('DOMContentLoaded', () => {
             <h4>Procedura:</h4>
             ${proceduraHTML}
         `;
+
+        // Aggiungiamo la classe active per mostrare la ricetta se il CSS richiede .active per opacity 1
+        ricettaContainer.classList.add('active');
     }
 
     function getQueryParam(name) {
@@ -114,7 +106,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Funzione per calcolare la ricetta in modo fisso
+// Queste funzioni devono esistere già in calcolatore_script.js o essere definite qui.
+// A scopo dimostrativo, vengono definite minimalmente qui.
+
 function calcolaRicettaFissa(tipoPizza, metodo, numPanetti) {
     const peso_panetto = 250;
     const idratazione = 70;
@@ -162,7 +156,7 @@ function calcolaDirettoParam(numPanetti, pesoPanetto, idratazione, tempoLievitaz
     if (oreFrigo > 0) {
         tempoLievitazioneEffettivo = tempoLievitazioneTotale - (9 * oreFrigo / 10);
     }
-    var massa = tempoLievitazioneEffettivo * 10 / 100;
+    var massa = tempoLievitazioneEffettivo * 0.1;
     var apretto = tempoLievitazioneEffettivo - massa;
 
     var pesoFarina = (100 * pesoPanetto) / (100 + idratazione) * numPanetti;
@@ -171,6 +165,7 @@ function calcolaDirettoParam(numPanetti, pesoPanetto, idratazione, tempoLievitaz
     var pesoZucchero = 0.013 * pesoFarina;
     var pesoOlio = 0.032 * pesoFarina;
 
+    // Assicurarsi che la funzione calcolaLievito esista in calcolatore_script.js
     var lievito = calcolaLievito(
         numPanetti,
         pesoPanetto,
