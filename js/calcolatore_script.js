@@ -578,45 +578,54 @@ function generaPianoGenerico() {
         return;
     }
 
-    const totalLievitazioneElement = document.getElementById(`tempoLievTotale_${tipoImpasto}`);
-    const tempoFrigoElement = document.getElementById(`tempoFrigo_${tipoImpasto}`);
-
-    if (!totalLievitazioneElement || !tempoFrigoElement) {
-        console.error(`Campi di lievitazione mancanti per il tipo di impasto: ${tipoImpasto}`);
-        alert('Errore: campi di lievitazione mancanti!');
-        return;
-    }
-
-    const totalLievitazione = parseFloat(totalLievitazioneElement.value);
-    const tempoFrigo = parseFloat(tempoFrigoElement.value) || 0;
-
-    if (isNaN(totalLievitazione) || totalLievitazione <= 0) {
-        alert('Inserisci un tempo di lievitazione valido!');
-        return;
-    }
-
     // Converti l'orario di infornata in un oggetto Date
     const today = new Date();
     const [hours, minutes] = infornataTimeInput.split(':').map(Number);
     const infornataTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), hours, minutes);
 
-    // Calcola il piano specifico per il metodo
     let plan;
     switch (tipoImpasto) {
         case 'diretto':
+            const totalLievitazione = parseFloat(document.getElementById(`tempoLievTotale_${tipoImpasto}`).value);
+            const tempoFrigo = parseFloat(document.getElementById(`tempoFrigo_${tipoImpasto}`).value) || 0;
+            if (isNaN(totalLievitazione) || totalLievitazione <= 0) {
+                alert('Inserisci un tempo di lievitazione valido!');
+                return;
+            }
             plan = calculatePlanDiretto(infornataTime, totalLievitazione, tempoFrigo);
             break;
         case 'biga':
-            plan = calculatePlanBiga(infornataTime, totalLievitazione);
+            const percentualeBiga = parseFloat(document.getElementById('percentuale_biga').value);
+            if (isNaN(percentualeBiga) || percentualeBiga <= 0) {
+                alert('Inserisci una percentuale di biga valida!');
+                return;
+            }
+            plan = calculatePlanBiga(infornataTime, percentualeBiga);
             break;
         case 'poolish':
-            plan = calculatePlanPoolish(infornataTime, totalLievitazione);
+            const percentualePoolish = parseFloat(document.getElementById('percentuale_poolish').value);
+            if (isNaN(percentualePoolish) || percentualePoolish <= 0) {
+                alert('Inserisci una percentuale di poolish valida!');
+                return;
+            }
+            plan = calculatePlanPoolish(infornataTime, percentualePoolish);
             break;
         case 'lievito_madre':
-            plan = calculatePlanLievitoMadre(infornataTime, totalLievitazione);
+            const percentualeLievitoMadre = parseFloat(document.getElementById('percentuale_lievito').value);
+            if (isNaN(percentualeLievitoMadre) || percentualeLievitoMadre <= 0) {
+                alert('Inserisci una percentuale di lievito madre valida!');
+                return;
+            }
+            plan = calculatePlanLievitoMadre(infornataTime, percentualeLievitoMadre);
             break;
         case 'biga_poolish':
-            plan = calculatePlanBigaPoolish(infornataTime, totalLievitazione);
+            const percentualeBigaBp = parseFloat(document.getElementById('percentuale_biga_bp').value);
+            const percentualePoolishBp = parseFloat(document.getElementById('percentuale_poolish_bp').value);
+            if (isNaN(percentualeBigaBp) || isNaN(percentualePoolishBp) || percentualeBigaBp <= 0 || percentualePoolishBp <= 0) {
+                alert('Inserisci percentuali valide per biga e poolish!');
+                return;
+            }
+            plan = calculatePlanBigaPoolish(infornataTime, percentualeBigaBp, percentualePoolishBp);
             break;
         default:
             alert('Metodo di impasto non riconosciuto!');
@@ -643,7 +652,6 @@ function generaPianoGenerico() {
     planBox.classList.remove('hidden');
     setTimeout(() => planBox.classList.add('active'), 10); // Ritardo per triggerare l'animazione
 }
-
 // Funzione per calcolare il piano di lavoro per il metodo diretto
 function calculatePlanDiretto(infornataTime, totalLievitazione, tempoFrigo) {
     const plan = [];
@@ -702,7 +710,7 @@ function calculatePlanDiretto(infornataTime, totalLievitazione, tempoFrigo) {
 }
 
 // Funzioni per calcolare i piani di lavoro specifici
-function calculatePlanBiga(infornataTime, totalLievitazione) {
+function calculatePlanBiga(infornataTime, percentualeBiga) {
     const plan = [];
     let currentTime = new Date(infornataTime);
 
@@ -712,16 +720,26 @@ function calculatePlanBiga(infornataTime, totalLievitazione) {
         action: "Inforna adesso."
     });
 
-    // Fase finale della lievitazione (50% del tempo totale)
-    const finalLievitazioneMs = (totalLievitazione * 0.5) * 60 * 60 * 1000;
-    currentTime = new Date(currentTime.getTime() - finalLievitazioneMs);
+    // Tempo di raddoppio in base alla percentuale di biga
+    let raddoppioHours;
+    if (percentualeBiga <= 30) {
+        raddoppioHours = 6;
+    } else if (percentualeBiga >= 70) {
+        raddoppioHours = 3;
+    } else {
+        raddoppioHours = 4.5; // Media per percentuali intermedie
+    }
+
+    const raddoppioMs = raddoppioHours * 60 * 60 * 1000;
+    currentTime = new Date(currentTime.getTime() - raddoppioMs);
     plan.push({
         time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        action: "Forma i panetti e inizia la lievitazione finale."
+        action: "Attendi il raddoppio dell'impasto."
     });
 
-    // Lievitazione della biga (50% del tempo totale)
-    const bigaLievitazioneMs = (totalLievitazione * 0.5) * 60 * 60 * 1000;
+    // Lievitazione della biga
+    const bigaLievitazioneHours = 16; // Tempo tipico per la lievitazione della biga
+    const bigaLievitazioneMs = bigaLievitazioneHours * 60 * 60 * 1000;
     currentTime = new Date(currentTime.getTime() - bigaLievitazioneMs);
     plan.push({
         time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
@@ -731,7 +749,7 @@ function calculatePlanBiga(infornataTime, totalLievitazione) {
     return plan.reverse();
 }
 
-function calculatePlanPoolish(infornataTime, totalLievitazione) {
+function calculatePlanPoolish(infornataTime, percentualePoolish) {
     const plan = [];
     let currentTime = new Date(infornataTime);
 
@@ -741,16 +759,26 @@ function calculatePlanPoolish(infornataTime, totalLievitazione) {
         action: "Inforna adesso."
     });
 
-    // Fase finale della lievitazione (40% del tempo totale)
-    const finalLievitazioneMs = (totalLievitazione * 0.4) * 60 * 60 * 1000;
-    currentTime = new Date(currentTime.getTime() - finalLievitazioneMs);
+    // Tempo di raddoppio in base alla percentuale di poolish
+    let raddoppioHours;
+    if (percentualePoolish <= 30) {
+        raddoppioHours = 6;
+    } else if (percentualePoolish >= 70) {
+        raddoppioHours = 3;
+    } else {
+        raddoppioHours = 4.5; // Media per percentuali intermedie
+    }
+
+    const raddoppioMs = raddoppioHours * 60 * 60 * 1000;
+    currentTime = new Date(currentTime.getTime() - raddoppioMs);
     plan.push({
         time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        action: "Forma i panetti e inizia la lievitazione finale."
+        action: "Attendi il raddoppio dell'impasto."
     });
 
-    // Lievitazione del poolish (60% del tempo totale)
-    const poolishLievitazioneMs = (totalLievitazione * 0.6) * 60 * 60 * 1000;
+    // Lievitazione del poolish
+    const poolishLievitazioneHours = 12; // Tempo tipico per la lievitazione del poolish
+    const poolishLievitazioneMs = poolishLievitazioneHours * 60 * 60 * 1000;
     currentTime = new Date(currentTime.getTime() - poolishLievitazioneMs);
     plan.push({
         time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
@@ -760,7 +788,7 @@ function calculatePlanPoolish(infornataTime, totalLievitazione) {
     return plan.reverse();
 }
 
-function calculatePlanLievitoMadre(infornataTime, totalLievitazione) {
+function calculatePlanLievitoMadre(infornataTime, percentualeLievitoMadre) {
     const plan = [];
     let currentTime = new Date(infornataTime);
 
@@ -770,26 +798,36 @@ function calculatePlanLievitoMadre(infornataTime, totalLievitazione) {
         action: "Inforna adesso."
     });
 
-    // Lievitazione finale (30% del tempo totale)
-    const finalLievitazioneMs = (totalLievitazione * 0.3) * 60 * 60 * 1000;
-    currentTime = new Date(currentTime.getTime() - finalLievitazioneMs);
+    // Tempo di raddoppio in base alla percentuale di lievito madre
+    let raddoppioHours;
+    if (percentualeLievitoMadre <= 30) {
+        raddoppioHours = 7;
+    } else if (percentualeLievitoMadre >= 70) {
+        raddoppioHours = 4;
+    } else {
+        raddoppioHours = 5.5; // Media per percentuali intermedie
+    }
+
+    const raddoppioMs = raddoppioHours * 60 * 60 * 1000;
+    currentTime = new Date(currentTime.getTime() - raddoppioMs);
     plan.push({
         time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        action: "Forma i panetti e inizia la lievitazione finale."
+        action: "Attendi il raddoppio dell'impasto."
     });
 
-    // Lievitazione principale (70% del tempo totale)
-    const mainLievitazioneMs = (totalLievitazione * 0.7) * 60 * 60 * 1000;
-    currentTime = new Date(currentTime.getTime() - mainLievitazioneMs);
+    // Lievitazione del lievito madre
+    const lievitoMadreLievitazioneHours = 8; // Tempo tipico per il lievito madre
+    const lievitoMadreLievitazioneMs = lievitoMadreLievitazioneHours * 60 * 60 * 1000;
+    currentTime = new Date(currentTime.getTime() - lievitoMadreLievitazioneMs);
     plan.push({
         time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        action: "Inizia la lievitazione principale."
+        action: "Inizia la lievitazione del lievito madre."
     });
 
     return plan.reverse();
 }
 
-function calculatePlanBigaPoolish(infornataTime, totalLievitazione) {
+function calculatePlanBigaPoolish(infornataTime, percentualeBiga, percentualePoolish) {
     const plan = [];
     let currentTime = new Date(infornataTime);
 
@@ -799,16 +837,27 @@ function calculatePlanBigaPoolish(infornataTime, totalLievitazione) {
         action: "Inforna adesso."
     });
 
-    // Fase finale della lievitazione (30% del tempo totale)
-    const finalLievitazioneMs = (totalLievitazione * 0.3) * 60 * 60 * 1000;
-    currentTime = new Date(currentTime.getTime() - finalLievitazioneMs);
+    // Tempo di raddoppio in base alle percentuali di biga e poolish (media)
+    let raddoppioHours;
+    const percentualeMedia = (percentualeBiga + percentualePoolish) / 2;
+    if (percentualeMedia <= 30) {
+        raddoppioHours = 6;
+    } else if (percentualeMedia >= 70) {
+        raddoppioHours = 3;
+    } else {
+        raddoppioHours = 4.5; // Media per percentuali intermedie
+    }
+
+    const raddoppioMs = raddoppioHours * 60 * 60 * 1000;
+    currentTime = new Date(currentTime.getTime() - raddoppioMs);
     plan.push({
         time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        action: "Forma i panetti e inizia la lievitazione finale."
+        action: "Attendi il raddoppio dell'impasto."
     });
 
-    // Lievitazione combinata biga e poolish (70% del tempo totale)
-    const combinedLievitazioneMs = (totalLievitazione * 0.7) * 60 * 60 * 1000;
+    // Lievitazione combinata biga e poolish
+    const combinedLievitazioneHours = 10; // Tempo tipico per biga + poolish
+    const combinedLievitazioneMs = combinedLievitazioneHours * 60 * 60 * 1000;
     currentTime = new Date(currentTime.getTime() - combinedLievitazioneMs);
     plan.push({
         time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
