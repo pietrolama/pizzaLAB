@@ -1,5 +1,6 @@
 // dettagli-ricetta.js
-
+// Supponiamo che il tipo di pizza e il metodo siano ottenuti da query string o fissi.
+// Ad esempio, ?tipo=napoletana&metodo=diretto
 document.addEventListener('DOMContentLoaded', () => {
     const tipoPizza = getQueryParam('tipo') || 'napoletana';
     const metodo = getQueryParam('metodo') || 'diretto';
@@ -25,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     numPizzeInput.addEventListener('change', aggiornaRicetta);
 
-    // Attendi che le ricette siano caricate da calcolatore_script.js (window.loadedRicette)
+    // Attendi che le ricette siano caricate da calcolatore_script.js
     const checkRicette = setInterval(() => {
         if (window.loadedRicette) {
             clearInterval(checkRicette);
@@ -35,8 +36,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function aggiornaRicetta() {
         const numPizze = parseInt(numPizzeInput.value, 10);
-        const ricettaCalcolata = calcolaRicetta(tipoPizza, metodo, numPizze);
-        mostraRicetta(ricettaCalcolata);
+        const ricetta = calcolaRicettaFissa(tipoPizza, metodo, numPizze);
+        mostraRicetta(ricetta);
     }
 
     function mostraRicetta(ricetta) {
@@ -61,3 +62,95 @@ document.addEventListener('DOMContentLoaded', () => {
         return urlParams.get(name);
     }
 });
+
+// Questa funzione utilizza le funzioni di calcolo già definite in calcolatore_script.js
+// Qui puoi settare dei parametri fissi (es peso_panetto, idratazione, etc.) o recuperarli dal config
+function calcolaRicettaFissa(tipoPizza, metodo, numPanetti) {
+    // Parametri fissi di esempio
+    const peso_panetto = 250; // fisso
+    const idratazione = 70;   // fisso
+    const tempo_lievitazione = 8; // fisso
+    const tempo_frigo = 0; // fisso
+    const temperatura_ambiente = 22; // fisso
+    const in_teglia = false; // fisso
+
+    let datiCalcolati = null;
+
+    if (metodo === "diretto") {
+        // Adatta la funzione calcolaDirettoParam o usa quella già presente ma passando i parametri
+        datiCalcolati = calcolaDirettoParam(numPanetti, peso_panetto, idratazione, tempo_lievitazione, tempo_frigo, temperatura_ambiente, in_teglia);
+    } else {
+        alert("Metodo non supportato in questa demo.");
+        return null;
+    }
+
+    const baseRicetta = window.loadedRicette[tipoPizza][metodo];
+
+    const ingredienti = baseRicetta.ingredienti.map(ing => {
+        let q = ing.quantita;
+        Object.entries(datiCalcolati).forEach(([key, value]) => {
+            q = q.replace(`<${key}>`, value);
+        });
+        return {nome: ing.nome, quantita: q};
+    });
+
+    const procedura = baseRicetta.procedimento.map(step => {
+        let s = step;
+        Object.entries(datiCalcolati).forEach(([key, value]) => {
+            s = s.replace(`<${key}>`, value);
+        });
+        return s;
+    });
+
+    return {
+        nome: baseRicetta.nome,
+        ingredienti,
+        procedimento
+    };
+}
+
+// Funzione parametrica per diretto (simile a quella in calcolatore_script)
+function calcolaDirettoParam(numPanetti, pesoPanetto, idratazione, tempoLievitazioneTotale, oreFrigo, temperaturaAmbiente, inTeglia) {
+    var tempoLievitazioneEffettivo = tempoLievitazioneTotale;
+    if (oreFrigo > 0) {
+        tempoLievitazioneEffettivo = tempoLievitazioneTotale - (9 * oreFrigo / 10);
+    }
+    var massa = tempoLievitazioneEffettivo * 10 / 100;
+    var apretto = tempoLievitazioneEffettivo - massa;
+
+    var pesoFarina = (100 * pesoPanetto) / (100 + idratazione) * numPanetti;
+    var pesoAcqua = idratazione * pesoFarina / 100;
+    var pesoSale = 0.02 * pesoFarina;
+    var pesoZucchero = 0.013 * pesoFarina;
+    var pesoOlio = 0.032 * pesoFarina;
+
+    var lievito = calcolaLievito(
+        numPanetti,
+        pesoPanetto,
+        idratazione,
+        pesoSale,
+        pesoOlio,
+        tempoLievitazioneEffettivo,
+        oreFrigo,
+        temperaturaAmbiente,
+        inTeglia
+    );
+
+    if (isNaN(lievito)) {
+        lievito = 0;
+    }
+
+    return {
+        numPanetti: numPanetti.toFixed(0),
+        pesoPanetto: pesoPanetto.toFixed(0),
+        massa: massa.toFixed(0),
+        apretto: apretto.toFixed(0),
+        tempoLievitazioneEffettivo: tempoLievitazioneEffettivo.toFixed(0),
+        pesoFarina: pesoFarina.toFixed(2),
+        pesoAcqua: pesoAcqua.toFixed(2),
+        pesoSale: pesoSale.toFixed(2),
+        pesoLievito: lievito.toFixed(2),
+        pesoZucchero: pesoZucchero.toFixed(2),
+        pesoOlio: pesoOlio.toFixed(2)
+    };
+}
