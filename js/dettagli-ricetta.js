@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const metodiContainer = document.getElementById('metodi-container');
     const metodiButtons = document.getElementById('metodi-buttons');
 
-    // Aggiorna ricetta quando cambia il numero di pizze
     btnMinus.addEventListener('click', () => {
         let val = parseInt(numPizzeInput.value, 10);
         if (val > 1) {
@@ -30,7 +29,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const checkRicette = setInterval(() => {
         if (window.loadedRicette) {
             clearInterval(checkRicette);
-            // Adesso che abbiamo loadedRicette, mostriamo i metodi per la pizza scelta
             mostraMetodiPerPizza(tipoPizza);
         }
     }, 200);
@@ -42,15 +40,16 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        // pizzaData è un oggetto con chiavi i metodi: ad es. { "diretto": {...}, "biga": {...} }
         const metodiDisponibili = Object.keys(pizzaData);
+
         if (metodiDisponibili.length > 1) {
-            // Se ci sono più metodi, mostriamo i pulsanti
             metodiContainer.classList.remove('hidden');
-            metodiButtons.innerHTML = ''; // svuota
-            
+            metodiButtons.innerHTML = '';
+
             metodiDisponibili.forEach(m => {
                 const btn = document.createElement('button');
-                btn.textContent = m.charAt(0).toUpperCase() + m.slice(1); // capitalizza ad esempio 'diretto' -> 'Diretto'
+                btn.textContent = capitalizza(m); 
                 btn.addEventListener('click', () => {
                     metodo = m;
                     aggiornaRicetta();
@@ -58,21 +57,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 metodiButtons.appendChild(btn);
             });
 
-            // Se il metodo non era specificato, usiamo il primo
+            // Se il metodo non era specificato nella query string, selezioniamo il primo
             if (!metodo) {
                 metodo = metodiDisponibili[0];
             }
+
         } else {
-            // Se c'è un solo metodo, non c'è bisogno di mostrare i pulsanti
+            // Un solo metodo: non mostriamo i pulsanti
             metodiContainer.classList.add('hidden');
-            metodo = metodiDisponibili[0]; // l'unico metodo
+            metodo = metodiDisponibili[0];
         }
 
         aggiornaRicetta();
     }
 
     function aggiornaRicetta() {
-        if (!metodo) return; // se ancora non abbiamo un metodo, aspettiamo
+        if (!metodo) return;
         const numPizze = parseInt(numPizzeInput.value, 10);
         const ricetta = calcolaRicettaFissa(tipoPizza, metodo, numPizze);
         mostraRicetta(ricetta);
@@ -99,30 +99,32 @@ document.addEventListener('DOMContentLoaded', () => {
         const urlParams = new URLSearchParams(window.location.search);
         return urlParams.get(name);
     }
+
+    function capitalizza(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
 });
 
 // Funzione per calcolare la ricetta in modo fisso
 function calcolaRicettaFissa(tipoPizza, metodo, numPanetti) {
-    // Parametri fissi di esempio
-    const peso_panetto = 250; // fisso
-    const idratazione = 70;   // fisso
-    const tempo_lievitazione = 8; // fisso
-    const tempo_frigo = 0; // fisso
-    const temperatura_ambiente = 22; // fisso
-    const in_teglia = false; // fisso
+    const peso_panetto = 250;
+    const idratazione = 70;
+    const tempo_lievitazione = 8;
+    const tempo_frigo = 0;
+    const temperatura_ambiente = 22;
+    const in_teglia = false;
 
     let datiCalcolati = null;
 
     if (metodo === "diretto") {
         datiCalcolati = calcolaDirettoParam(numPanetti, peso_panetto, idratazione, tempo_lievitazione, tempo_frigo, temperatura_ambiente, in_teglia);
     } else {
-        alert("Metodo non supportato in questa demo.");
         return null;
     }
 
     const baseRicetta = window.loadedRicette[tipoPizza][metodo];
+    if (!baseRicetta) return null;
 
-    // Calcolo ingredienti
     const ingredienti = baseRicetta.ingredienti.map(ing => {
         let q = ing.quantita;
         Object.entries(datiCalcolati).forEach(([key, value]) => {
