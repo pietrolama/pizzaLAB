@@ -72,6 +72,7 @@ function toggleSections() {
 }
 
 // Event listener per il cambiamento del tipo di pizza
+// Event listener per il cambiamento del tipo di pizza
 document.getElementById('tipo_pizza').addEventListener('change', (e) => {
     const tipoPizza = e.target.value || "napoletana";
 
@@ -80,19 +81,20 @@ document.getElementById('tipo_pizza').addEventListener('change', (e) => {
     const metodiDisponibili = metodiPerPizza[tipoPizza] || [];
     const metodoSelect = document.getElementById('tipo_impasto');
 
-    // Aggiorna le opzioni disponibili
-    Array.from(metodoSelect.options).forEach(option => {
-        option.disabled = !metodiDisponibili.includes(option.value);
+    // Rimuove tutte le opzioni esistenti
+    metodoSelect.innerHTML = '';
+
+    // Aggiunge solo le opzioni disponibili
+    metodiDisponibili.forEach(metodo => {
+        const option = document.createElement('option');
+        option.value = metodo;
+        option.textContent = metodo.charAt(0).toUpperCase() + metodo.slice(1).replace('_', ' ');
+        metodoSelect.appendChild(option);
     });
 
-    // Se il valore corrente di tipo_impasto non è tra quelli disponibili, impostalo al primo disponibile
-    if (!metodiDisponibili.includes(metodoSelect.value)) {
-        metodoSelect.value = metodiDisponibili[0] || "";
-        metodoSelect.dispatchEvent(new Event('change'));
-    } else {
-        // Se il valore corrente è valido, mantienilo e aggiorna le sezioni
-        toggleSections();
-    }
+    // Imposta il valore del menu a tendina al primo metodo disponibile
+    metodoSelect.value = metodiDisponibili[0] || '';
+    metodoSelect.dispatchEvent(new Event('change'));
 });
 
 // Event listener per il cambiamento del metodo di impasto
