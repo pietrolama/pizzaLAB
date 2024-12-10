@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const metodiContainer = document.getElementById('metodi-container');
     const metodiButtons = document.getElementById('metodi-buttons');
 
+    // Aggiorna il numero di pizze e calcola
     btnMinus.addEventListener('click', () => {
         let val = parseInt(numPizzeInput.value, 10);
         if (val > 1) {
@@ -25,10 +26,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     numPizzeInput.addEventListener('change', aggiornaRicetta);
 
-    // Attendere il caricamento di loadedRicette
+    // Controlla il caricamento delle ricette
     const checkRicette = setInterval(() => {
         if (window.loadedRicette) {
             clearInterval(checkRicette);
+            console.log("loadedRicette caricato:", window.loadedRicette);
             mostraMetodiPerPizza(tipoPizza);
         } else {
             console.log("In attesa di loadedRicette...");
@@ -38,20 +40,22 @@ document.addEventListener('DOMContentLoaded', () => {
     function mostraMetodiPerPizza(tipoPizza) {
         const pizzaData = window.loadedRicette[tipoPizza];
         if (!pizzaData) {
+            console.error(`Tipo pizza "${tipoPizza}" non trovato in loadedRicette.`);
             ricettaContainer.innerHTML = "<p>Pizza non trovata nel JSON.</p>";
             return;
         }
 
-        const metodiDisponibili = Object.keys(pizzaData); // ad es. ["diretto"], o ["diretto","biga"]
+        const metodiDisponibili = Object.keys(pizzaData);
+        console.log("Metodi disponibili:", metodiDisponibili);
+
         if (metodiDisponibili.length === 1) {
-            // Un solo metodo
             metodiContainer.classList.add('hidden');
             metodo = metodiDisponibili[0];
             aggiornaRicetta();
         } else {
-            // Più metodi
             metodiContainer.classList.remove('hidden');
             metodiButtons.innerHTML = '';
+
             metodiDisponibili.forEach(m => {
                 const btn = document.createElement('button');
                 btn.textContent = capitalizza(m);
@@ -70,14 +74,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function aggiornaRicetta() {
-        if (!metodo) return;
+        if (!metodo) {
+            console.warn("Nessun metodo selezionato.");
+            return;
+        }
+
         const numPizze = parseInt(numPizzeInput.value, 10);
+        console.log(`Calcolo ricetta per tipo: ${tipoPizza}, metodo: ${metodo}, numero pizze: ${numPizze}`);
         const ricetta = calcolaRicettaFissa(tipoPizza, metodo, numPizze);
-        mostraRicetta(ricetta);
+        if (ricetta) {
+            mostraRicetta(ricetta);
+        } else {
+            console.error("Ricetta non calcolata correttamente.");
+        }
     }
 
     function mostraRicetta(ricetta) {
         if (!ricetta || !ricetta.ingredienti || !ricetta.procedimento) {
+            console.error("Errore nella ricetta:", ricetta);
             ricettaContainer.innerHTML = "<p>Impossibile caricare la ricetta.</p>";
             return;
         }
@@ -107,59 +121,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Funzione per calcolare la ricetta in modo fisso
 function calcolaRicettaFissa(tipoPizza, metodo, numPanetti) {
-    // Parametri esempio
+    const baseRicetta = window.loadedRicette[tipoPizza]?.[metodo];
+    if (!baseRicetta) {
+        console.error(`Ricetta non trovata per tipo: ${tipoPizza}, metodo: ${metodo}`);
+        return null;
+    }
+
+    // Parametri fissi
     const peso_panetto = 250;
     const idratazione = 70;
     const tempo_lievitazione = 8;
-    const tempo_frigo = 0;
-    const temperatura_ambiente = 22;
-    const in_teglia = false;
 
-    // Percentuali di default
-    const percentualeBiga = 70;
-    const percentualePoolish = 50;
-    const percentualePastaMadre = 30;
-    const percentualeBigaBP = 40;
-    const percentualePoolishBP = 40;
-
-    let datiCalcolati;
-
-    switch (metodo) {
-        case "diretto":
-            datiCalcolati = calcolaDirettoParam(numPanetti, peso_panetto, idratazione, tempo_lievitazione, tempo_frigo, temperatura_ambiente, in_teglia);
-            break;
-        case "biga":
-            datiCalcolati = calcolaBigaParam(numPanetti, peso_panetto, idratazione, tempo_lievitazione, tempo_frigo, temperatura_ambiente, in_teglia, percentualeBiga);
-            break;
-        case "poolish":
-            datiCalcolati = calcolaPoolishParam(numPanetti, peso_panetto, idratazione, tempo_lievitazione, tempo_frigo, temperatura_ambiente, in_teglia, percentualePoolish);
-            break;
-        case "lievito_madre":
-            datiCalcolati = calcolaLievitoMadreParam(numPanetti, peso_panetto, idratazione, tempo_lievitazione, tempo_frigo, temperatura_ambiente, in_teglia, percentualePastaMadre);
-            break;
-        case "biga_poolish":
-            datiCalcolati = calcolaBigaPoolishParam(numPanetti, peso_panetto, idratazione, tempo_lievitazione, tempo_frigo, temperatura_ambiente, in_teglia, percentualeBigaBP, percentualePoolishBP);
-            break;
-        default:
-            return null; 
-    }
-
-    const baseRicetta = window.loadedRicette[tipoPizza][metodo];
-    if (!baseRicetta) return null;
+    let datiCalcolati = calcolaParametri(metodo, numPanetti, peso_panetto, idratazione, tempo_lievitazione);
 
     const ingredienti = baseRicetta.ingredienti.map(ing => {
         let q = ing.quantita;
-        for (let [key, value] of Object.entries(datiCalcolati)) {
+        Object.entries(datiCalcolati).forEach(([key, value]) => {
             q = q.replace(`<${key}>`, value);
-        }
+        });
         return { nome: ing.nome, quantita: q };
     });
 
     const procedimento = baseRicetta.procedimento.map(step => {
         let s = step;
-        for (let [key, value] of Object.entries(datiCalcolati)) {
+        Object.entries(datiCalcolati).forEach(([key, value]) => {
             s = s.replace(`<${key}>`, value);
-        }
+        });
         return s;
     });
 
@@ -170,6 +157,17 @@ function calcolaRicettaFissa(tipoPizza, metodo, numPanetti) {
     };
 }
 
+function calcolaParametri(metodo, numPanetti, pesoPanetto, idratazione, tempoLievitazione) {
+    switch (metodo) {
+        case "diretto":
+            return calcolaDirettoParam(numPanetti, pesoPanetto, idratazione, tempoLievitazione);
+        case "biga":
+            return calcolaBigaParam(numPanetti, pesoPanetto, idratazione, 70);
+        default:
+            console.warn(`Metodo ${metodo} non supportato.`);
+            return {};
+    }
+}
 // Le seguenti funzioni devono già esistere o essere definite qui
 // Assicurati che `calcolaLievito` sia definita nel tuo calcolatore_script.js
 function calcolaDirettoParam(numPanetti, pesoPanetto, idratazione, tempoLievitazioneTotale, oreFrigo, temperaturaAmbiente, inTeglia) {
