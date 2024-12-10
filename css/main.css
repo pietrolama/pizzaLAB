@@ -572,11 +572,11 @@ footer p:hover {
 }
 
 .pizza-counter {
-    display: flex;
+    display: flex !important;
+    flex-direction: row !important;
     align-items: center;
     justify-content: center;
     gap: 10px;
-    margin-bottom: 20px; /* Mantieni uno spazio sotto */
 }
 
 .pizza-counter #btn-minus,
@@ -592,7 +592,7 @@ footer p:hover {
     cursor: pointer;
     transition: background-color 0.3s;
     text-align: center;
-    line-height: 40px; 
+    line-height: 40px;
 }
 
 .pizza-counter #btn-minus:hover,
@@ -610,6 +610,7 @@ footer p:hover {
     background: var(--background-color);
     color: var(--text-color);
 }
+
 
 
 /* ===== SEZIONE RESPONSIVE ===== */
