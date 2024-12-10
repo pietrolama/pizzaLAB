@@ -611,6 +611,23 @@ footer p:hover {
     color: var(--text-color);
 }
 
+.btn {
+    display: inline-block;
+    padding: 12px 25px;
+    background-color: transparent;
+    color: var(--primary-color);
+    text-decoration: none;
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    transition: background-color 0.3s, color 0.3s;
+    position: relative;
+    z-index: 1;
+}
+
+.btn:hover {
+    background-color: var(--primary-color);
+    color: #fff;
+}
 
 
 /* ===== SEZIONE RESPONSIVE ===== */
