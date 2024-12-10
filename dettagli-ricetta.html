@@ -5,6 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dettagli Ricetta</title>
     <link rel="stylesheet" href="css/main.css">
+    <style>
+      .num-pizze-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .num-pizze-container button {
+        background-color: var(--primary-color);
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+      }
+      .num-pizze-container input {
+        width: 50px;
+        text-align: center;
+      }
+    </style>
 </head>
 <body>
     <header>
@@ -32,13 +52,12 @@
     <main class="container">
         <div class="form-container">
             <div class="form-group">
-                <label for="num_pizze">Numero di pizze:</label>
-                <select id="num_pizze" class="form-control">
-                    <option value="2" selected>2</option>
-                    <option value="4">4</option>
-                    <option value="6">6</option>
-                    <option value="8">8</option>
-                </select>
+                <label>Numero di pizze:</label>
+                <div class="num-pizze-container">
+                    <button id="btn-minus">-</button>
+                    <input type="number" id="num_pizze" value="2" min="1">
+                    <button id="btn-plus">+</button>
+                </div>
             </div>
 
             <div id="ricetta-container" class="recipe-box">
@@ -53,6 +72,6 @@
 
     <script src="js/calcolatore_script.js"></script>
     <script src="js/dettagli-ricetta.js"></script>
-    <script src="js/main.js" defer></script> <!-- Nuovo script per il menu hamburger -->
+    <script src="js/main.js" defer></script>
 </body>
 </html>
