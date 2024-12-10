@@ -7,15 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const numPizzeInput = document.getElementById('num_pizze');
     const btnMinus = document.getElementById('btn-minus');
     const btnPlus = document.getElementById('btn-plus');
-
     const ricettaContainer = document.getElementById('ricetta-container');
-
-    // Funzione per aggiornare la ricetta
-    function aggiornaRicetta() {
-        const numPizze = parseInt(numPizzeInput.value, 10);
-        const ricettaCalcolata = calcolaRicetta(tipoPizza, metodo, numPizze);
-        mostraRicetta(ricettaCalcolata);
-    }
 
     btnMinus.addEventListener('click', () => {
         let val = parseInt(numPizzeInput.value, 10);
@@ -33,8 +25,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     numPizzeInput.addEventListener('change', aggiornaRicetta);
 
-    // Caricamento iniziale
-    aggiornaRicetta();
+    // Attendi che le ricette siano caricate da calcolatore_script.js (window.loadedRicette)
+    const checkRicette = setInterval(() => {
+        if (window.loadedRicette) {
+            clearInterval(checkRicette);
+            aggiornaRicetta();
+        }
+    }, 200);
+
+    function aggiornaRicetta() {
+        const numPizze = parseInt(numPizzeInput.value, 10);
+        const ricettaCalcolata = calcolaRicetta(tipoPizza, metodo, numPizze);
+        mostraRicetta(ricettaCalcolata);
+    }
 
     function mostraRicetta(ricetta) {
         if (!ricetta || !ricetta.ingredienti || !ricetta.procedimento) {
