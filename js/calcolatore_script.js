@@ -196,3 +196,112 @@ function calcolaDirettoParam(numPanetti, pesoPanetto, idratazione, tempoLievitaz
         pesoOlio: pesoOlio.toFixed(2)
     };
 }
+
+// Parametrico per Biga
+function calcolaBigaParam(numPanetti, pesoPanetto, idratazione, tempoLievitazioneTotale, oreFrigo, temperaturaAmbiente, inTeglia, percentualeBiga) {
+    var pesoTotaleFarina = (pesoPanetto * numPanetti) / (1 + idratazione / 100);
+    var pesoFarinaBiga = pesoTotaleFarina * (percentualeBiga / 100);
+    var pesoAcquaBiga = pesoFarinaBiga * 0.44;
+    var pesoLievitoBiga = pesoFarinaBiga * 0.01;
+    var pesoFarinaPrincipale = pesoTotaleFarina - pesoFarinaBiga;
+    var pesoAcquaPrincipale = (pesoTotaleFarina * (idratazione / 100)) - pesoAcquaBiga;
+
+    var sale = 0.02 * pesoTotaleFarina;
+    var zucchero = 0.015 * pesoTotaleFarina;
+    var olio = 0.03 * pesoTotaleFarina;
+
+    return {
+        numPanetti: numPanetti.toFixed(0),
+        pesoPanetto: pesoPanetto.toFixed(0),
+        pesoFarina: pesoFarinaPrincipale.toFixed(2),
+        pesoAcqua: pesoAcquaPrincipale.toFixed(2),
+        pesoSale: sale.toFixed(2),
+        pesoAcquaBiga: pesoAcquaBiga.toFixed(2),
+        pesoFarinaBiga: pesoFarinaBiga.toFixed(2),
+        pesoLievitoBiga: pesoLievitoBiga.toFixed(2),
+        pesoOlio: olio.toFixed(2),
+    };
+}
+
+// Parametrico per Poolish
+function calcolaPoolishParam(numPanetti, pesoPanetto, idratazione, tempoLievitazioneTotale, oreFrigo, temperaturaAmbiente, inTeglia, percentualePoolish) {
+    var pesoTotaleFarina = (pesoPanetto * numPanetti) / (1 + idratazione / 100);
+    var pesoFarinaPoolish = pesoTotaleFarina * (percentualePoolish / 100);
+    var pesoAcquaPoolish = pesoFarinaPoolish;
+    var pesoLievitoPoolish = pesoFarinaPoolish * 0.001;
+    var pesoFarinaPrincipale = pesoTotaleFarina - pesoFarinaPoolish;
+    var pesoAcquaPrincipale = (pesoTotaleFarina * (idratazione / 100)) - pesoAcquaPoolish;
+
+    var sale = 0.02 * pesoTotaleFarina;
+    var zucchero = 0.015 * pesoTotaleFarina;
+    var olio = 0.03 * pesoTotaleFarina;
+
+    return {
+        numPanetti: numPanetti.toFixed(0),
+        pesoPanetto: pesoPanetto.toFixed(0),
+        pesoFarina: pesoFarinaPrincipale.toFixed(2),
+        pesoAcqua: pesoAcquaPrincipale.toFixed(2),
+        pesoSale: sale.toFixed(2),
+        pesoAcquaPoolish: pesoAcquaPoolish.toFixed(2),
+        pesoFarinaPoolish: pesoFarinaPoolish.toFixed(2),
+        pesoLievitoPoolish: pesoLievitoPoolish.toFixed(2),
+        pesoOlio: olio.toFixed(2),
+    };
+}
+
+// Parametrico per Lievito Madre
+function calcolaLievitoMadreParam(numPanetti, pesoPanetto, idratazione, tempoLievitazioneTotale, oreFrigo, temperaturaAmbiente, inTeglia, percentualePastaMadre) {
+    var pesoTotaleImpasto = pesoPanetto * numPanetti;
+    var pesoPastaMadreFinale = (percentualePastaMadre / 100) * pesoTotaleImpasto;
+
+    var farinaPastaMadre = pesoPastaMadreFinale * (2/3);
+    var acquaPastaMadre = pesoPastaMadreFinale * (1/3);
+
+    var farinaPrincipale = (pesoTotaleImpasto - pesoPastaMadreFinale) / (1 + idratazione / 100);
+    var acquaPrincipale = farinaPrincipale * (idratazione / 100);
+
+    var pesoZucchero = 0.015 * (farinaPrincipale + farinaPastaMadre);
+    var pesoOlio = 0.03 * (farinaPrincipale + farinaPastaMadre);
+    var pesoSale = 0.02 * (farinaPrincipale + farinaPastaMadre);
+
+    return {
+        numPanetti: numPanetti.toFixed(0),
+        pesoPanetto: pesoPanetto.toFixed(0),
+        pesoFarina: farinaPrincipale.toFixed(2),
+        pesoAcqua: acquaPrincipale.toFixed(2),
+        pesoSale: pesoSale.toFixed(2),
+        pesoZucchero: pesoZucchero.toFixed(2),
+        pesoOlio: pesoOlio.toFixed(2),
+        pesoPastaMadreFinale: pesoPastaMadreFinale.toFixed(2),
+        farinaPastaMadre: farinaPastaMadre.toFixed(2),
+        acquaPastaMadre: acquaPastaMadre.toFixed(2)
+    };
+}
+
+// Parametrico per Biga+Poolish
+function calcolaBigaPoolishParam(numPanetti, pesoPanetto, idratazione, tempoLievitazioneTotale, oreFrigo, temperaturaAmbiente, inTeglia, percentualeBiga, percentualePoolish) {
+    var pesoTotaleFarina = (pesoPanetto * numPanetti) / (1 + idratazione / 100);
+    var pesoFarinaBiga = pesoTotaleFarina * (percentualeBiga / 100);
+    var pesoAcquaBiga = pesoFarinaBiga * 0.44;
+    var pesoFarinaPoolish = pesoTotaleFarina * (percentualePoolish / 100);
+    var pesoAcquaPoolish = pesoFarinaPoolish;
+    var pesoFarinaPrincipale = pesoTotaleFarina - (pesoFarinaBiga + pesoFarinaPoolish);
+    var pesoAcquaPrincipale = (pesoTotaleFarina * (idratazione / 100)) - (pesoAcquaBiga + pesoAcquaPoolish);
+
+    var sale = 0.02 * pesoTotaleFarina;
+    var zucchero = 0.015 * pesoTotaleFarina;
+    var olio = 0.03 * pesoTotaleFarina;
+
+    return {
+        numPanetti: numPanetti.toFixed(0),
+        pesoPanetto: pesoPanetto.toFixed(0),
+        pesoFarinaPrincipale: pesoFarinaPrincipale.toFixed(2),
+        pesoAcquaPrincipale: pesoAcquaPrincipale.toFixed(2),
+        pesoSale: sale.toFixed(2),
+        pesoAcquaPoolish: pesoAcquaPoolish.toFixed(2),
+        pesoFarinaPoolish: pesoFarinaPoolish.toFixed(2),
+        pesoOlio: olio.toFixed(2),
+        pesoAcquaBiga: pesoAcquaBiga.toFixed(2),
+        pesoFarinaBiga: pesoFarinaBiga.toFixed(2),
+    };
+}
