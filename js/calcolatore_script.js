@@ -72,7 +72,6 @@ function toggleSections() {
 }
 
 // Event listener per il cambiamento del tipo di pizza
-// Event listener per il cambiamento del tipo di pizza
 document.getElementById('tipo_pizza').addEventListener('change', (e) => {
     const tipoPizza = e.target.value || "napoletana";
 
@@ -560,8 +559,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Funzione per generare il piano di lavoro
-function generaPiano() {
+// Funzione per calcolare il piano di lavoro per qualsiasi metodo di impasto
+function generaPianoGenerico() {
     const infornataTimeInput = document.getElementById('infornata').value;
     const tipoImpasto = document.getElementById('tipo_impasto').value;
 
@@ -570,13 +569,8 @@ function generaPiano() {
         return;
     }
 
-    if (tipoImpasto !== "diretto") {
-        alert('Questo pianificatore supporta solo il metodo diretto al momento.');
-        return;
-    }
-
-    const totalLievitazione = parseFloat(document.getElementById('tempoLievTotale_diretto').value);
-    const tempoFrigo = parseFloat(document.getElementById('tempoFrigo_diretto').value) || 0;
+    const totalLievitazione = parseFloat(document.getElementById(`tempoLievTotale_${tipoImpasto}`).value);
+    const tempoFrigo = parseFloat(document.getElementById(`tempoFrigo_${tipoImpasto}`).value) || 0;
 
     if (isNaN(totalLievitazione) || totalLievitazione <= 0) {
         alert('Inserisci un tempo di lievitazione valido!');
@@ -588,8 +582,33 @@ function generaPiano() {
     const [hours, minutes] = infornataTimeInput.split(':').map(Number);
     const infornataTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), hours, minutes);
 
-    // Calcola il piano
-    const plan = calculatePlanDiretto(infornataTime, totalLievitazione, tempoFrigo);
+    // Calcola il piano specifico per il metodo
+    let plan;
+    switch (tipoImpasto) {
+        case 'diretto':
+            plan = calculatePlanDiretto(infornataTime, totalLievitazione, tempoFrigo);
+            break;
+        case 'biga':
+            plan = calculatePlanBiga(infornataTime, totalLievitazione);
+            break;
+        case 'poolish':
+            plan = calculatePlanPoolish(infornataTime, totalLievitazione);
+            break;
+        case 'lievito_madre':
+            plan = calculatePlanLievitoMadre(infornataTime, totalLievitazione);
+            break;
+        case 'biga_poolish':
+            plan = calculatePlanBigaPoolish(infornataTime, totalLievitazione);
+            break;
+        default:
+            alert('Metodo di impasto non riconosciuto!');
+            return;
+    }
+
+    if (!plan) {
+        alert('Errore nella generazione del piano di lavoro!');
+        return;
+    }
 
     // Aggiorna il DOM
     const planBox = document.getElementById('plan-box');
@@ -659,6 +678,123 @@ function calculatePlanDiretto(infornataTime, totalLievitazione, tempoFrigo) {
     plan.push({
         time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         action: "Prepara l'impasto.",
+    });
+
+    return plan.reverse();
+}
+
+// Funzioni per calcolare i piani di lavoro specifici
+function calculatePlanBiga(infornataTime, totalLievitazione) {
+    const plan = [];
+    let currentTime = new Date(infornataTime);
+
+    // Inforna adesso
+    plan.push({
+        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        action: "Inforna adesso."
+    });
+
+    // Fase finale della lievitazione (50% del tempo totale)
+    const finalLievitazioneMs = (totalLievitazione * 0.5) * 60 * 60 * 1000;
+    currentTime = new Date(currentTime.getTime() - finalLievitazioneMs);
+    plan.push({
+        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        action: "Forma i panetti e inizia la lievitazione finale."
+    });
+
+    // Lievitazione della biga (50% del tempo totale)
+    const bigaLievitazioneMs = (totalLievitazione * 0.5) * 60 * 60 * 1000;
+    currentTime = new Date(currentTime.getTime() - bigaLievitazioneMs);
+    plan.push({
+        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        action: "Inizia la lievitazione della biga."
+    });
+
+    return plan.reverse();
+}
+
+function calculatePlanPoolish(infornataTime, totalLievitazione) {
+    const plan = [];
+    let currentTime = new Date(infornataTime);
+
+    // Inforna adesso
+    plan.push({
+        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        action: "Inforna adesso."
+    });
+
+    // Fase finale della lievitazione (40% del tempo totale)
+    const finalLievitazioneMs = (totalLievitazione * 0.4) * 60 * 60 * 1000;
+    currentTime = new Date(currentTime.getTime() - finalLievitazioneMs);
+    plan.push({
+        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        action: "Forma i panetti e inizia la lievitazione finale."
+    });
+
+    // Lievitazione del poolish (60% del tempo totale)
+    const poolishLievitazioneMs = (totalLievitazione * 0.6) * 60 * 60 * 1000;
+    currentTime = new Date(currentTime.getTime() - poolishLievitazioneMs);
+    plan.push({
+        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        action: "Inizia la lievitazione del poolish."
+    });
+
+    return plan.reverse();
+}
+
+function calculatePlanLievitoMadre(infornataTime, totalLievitazione) {
+    const plan = [];
+    let currentTime = new Date(infornataTime);
+
+    // Inforna adesso
+    plan.push({
+        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        action: "Inforna adesso."
+    });
+
+    // Lievitazione finale (30% del tempo totale)
+    const finalLievitazioneMs = (totalLievitazione * 0.3) * 60 * 60 * 1000;
+    currentTime = new Date(currentTime.getTime() - finalLievitazioneMs);
+    plan.push({
+        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        action: "Forma i panetti e inizia la lievitazione finale."
+    });
+
+    // Lievitazione principale (70% del tempo totale)
+    const mainLievitazioneMs = (totalLievitazione * 0.7) * 60 * 60 * 1000;
+    currentTime = new Date(currentTime.getTime() - mainLievitazioneMs);
+    plan.push({
+        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        action: "Inizia la lievitazione principale."
+    });
+
+    return plan.reverse();
+}
+
+function calculatePlanBigaPoolish(infornataTime, totalLievitazione) {
+    const plan = [];
+    let currentTime = new Date(infornataTime);
+
+    // Inforna adesso
+    plan.push({
+        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        action: "Inforna adesso."
+    });
+
+    // Fase finale della lievitazione (30% del tempo totale)
+    const finalLievitazioneMs = (totalLievitazione * 0.3) * 60 * 60 * 1000;
+    currentTime = new Date(currentTime.getTime() - finalLievitazioneMs);
+    plan.push({
+        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        action: "Forma i panetti e inizia la lievitazione finale."
+    });
+
+    // Lievitazione combinata biga e poolish (70% del tempo totale)
+    const combinedLievitazioneMs = (totalLievitazione * 0.7) * 60 * 60 * 1000;
+    currentTime = new Date(currentTime.getTime() - combinedLievitazioneMs);
+    plan.push({
+        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        action: "Inizia la lievitazione combinata di biga e poolish."
     });
 
     return plan.reverse();
