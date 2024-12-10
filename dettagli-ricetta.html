@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dettagli Ricetta</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <header>
+        <h1>Dettagli Ricetta</h1>
+    </header>
+    <nav>
+        <div class="nav-container">
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="tipi-di-pizza.html">Tipi di Pizza</a></li>
+                <li><a href="prefermenti_e_farine.html">Prefermenti e Farine</a></li>
+                <li><a href="calcolatore.html">Calcolatore</a></li>
+                <li><a href="assistente.html">Assistente</a></li>
+                <li><a href="contatti.html">Contatti</a></li>
+                <li><a href="https://pizzalab.bettermode.io/" target="_blank">PizzaLab Community</a></li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="form-container">
+            <div class="form-group">
+                <label for="num_pizze">Numero di Pizze:</label>
+                <input type="number" id="num_pizze" value="2" min="1" class="form-control">
+            </div>
+            <button id="genera-ricetta" class="btn">Genera Ricetta</button>
+
+            <div id="risultato-ricetta" class="recipe-box hidden"></div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 PizzaLab - La tua guida alla pizza perfetta</p>
+    </footer>
+
+    <script src="js/dettagli-ricetta.js"></script>
+    <script src="js/main.js" defer></script>
+</body>
+</html>
