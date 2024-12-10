@@ -2,7 +2,7 @@
     {
         "nome": "Pizza Napoletana",
         "tipo": "napoletana",
-        "descrizione": "La pizza Napoletana è un'icona culinaria italiana...",
+        "descrizione": "La pizza Napoletana è un'icona culinaria italiana, originaria di Napoli. Si distingue per un impasto morbido e sottile, con un bordo non troppo alto e soffice chiamato cornicione. La cottura avviene in forno a legna a temperature elevatissime, intorno ai 485°C, per un tempo brevissimo, solitamente tra 60 e 90 secondi. Questa tecnica conferisce alla pizza una consistenza unica: il centro rimane morbido e umido, mentre il cornicione è leggermente croccante all'esterno e soffice all'interno. Gli ingredienti tradizionali includono pomodori San Marzano, mozzarella di bufala campana DOP, basilico fresco e olio extravergine d'oliva. Le varianti più celebri sono la Margherita, con pomodoro, mozzarella e basilico, e la Marinara, con pomodoro, aglio, origano e olio.",
         "caratteristiche": [
             "Impasto morbido e sottile",
             "Bordo alto e soffice",
