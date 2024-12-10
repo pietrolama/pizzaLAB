@@ -597,6 +597,56 @@ footer p:hover {
     top: 0;
 }
 
+/* Stile per il contatore delle pizze */
+.pizza-counter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px; /* Spazio tra i pulsanti e l'input */
+    margin: 20px 0;
+}
+
+/* Stile per i pulsanti "+" e "-" */
+.pizza-counter button {
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--text-color);
+    background: var(--dark-background-color);
+    border: 2px solid var(--primary-color);
+    border-radius: 50%;
+    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+}
+
+.pizza-counter button:hover {
+    background-color: var(--primary-color);
+    color: #fff;
+    transform: scale(1.1);
+    box-shadow: 0 0 10px var(--primary-color);
+}
+
+/* Stile per l'input numerico */
+.pizza-counter input[type="number"] {
+    width: 80px;
+    height: 40px;
+    font-size: 1.2rem;
+    text-align: center;
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    background: var(--background-color);
+    color: var(--text-color);
+    margin: 0 10px;
+}
+
+.pizza-counter input[type="number"]:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 5px var(--primary-color);
+}
+
+
 /* ===== SEZIONE RESPONSIVE ===== */
 @media (max-width: 768px) {
 
