@@ -667,23 +667,23 @@ function generaPianoGenerico() {
     const stepsModulari = {
         biga: [
             { offset: -16, action: 'Preparazione biga' },
-            { offset: 0, action: 'Creazione impasto' },
-            { offset: 3, action: 'Attesa raddoppio' }
+            { offset: -3, action: 'Creazione impasto' },
+            { offset: 0, action: 'Attesa raddoppio' }
         ],
         poolish: [
             { offset: -12, action: 'Preparazione poolish' },
-            { offset: 0, action: 'Creazione impasto' },
-            { offset: 3, action: 'Attesa raddoppio' }
+            { offset: -3, action: 'Creazione impasto' },
+            { offset: 0, action: 'Attesa raddoppio' }
         ],
         lievito_madre: [
             { offset: -8, action: 'Preparazione lievito madre' },
-            { offset: 0, action: 'Creazione impasto' },
-            { offset: 3, action: 'Attesa raddoppio' }
+            { offset: -3, action: 'Creazione impasto' },
+            { offset: 0, action: 'Attesa raddoppio' }
         ],
         biga_poolish: [
             { offset: -14, action: 'Preparazione biga e poolish' },
-            { offset: 0, action: 'Creazione impasto' },
-            { offset: 3, action: 'Attesa raddoppio' }
+            { offset: -3, action: 'Creazione impasto' },
+            { offset: 0, action: 'Attesa raddoppio' }
         ],
         diretto: [
             { offset: -3, action: 'Preparazione impasto diretto' },
@@ -704,6 +704,9 @@ function generaPianoGenerico() {
 
     plan = [...modularPlan, ...plan];
 
+    // Rimuovi eventuali duplicati e ordina i passi cronologicamente
+    plan.sort((a, b) => new Date(`1970-01-01T${a.time}`) - new Date(`1970-01-01T${b.time}`));
+
     // Aggiorna il DOM
     const planBox = document.getElementById('plan-box');
     const planList = document.getElementById('plan-list');
@@ -719,6 +722,7 @@ function generaPianoGenerico() {
     planBox.classList.remove('hidden');
     setTimeout(() => planBox.classList.add('active'), 10); // Ritardo per triggerare l'animazione
 }
+
 
 // Funzione per calcolare il piano di lavoro per il metodo diretto
 function calculatePlanDiretto(infornataTime, totalLievitazione, tempoFrigo) {
