@@ -609,7 +609,7 @@ function generaPianoGenerico() {
     const [hours, minutes] = infornataTimeInput.split(':').map(Number);
     const infornataTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), hours, minutes);
 
-    let plan = [];
+    let plan;
     switch (tipoImpasto) {
         case 'diretto':
             const totalLievitazione = parseFloat(document.getElementById(`tempoLievTotale_${tipoImpasto}`).value);
@@ -666,29 +666,43 @@ function generaPianoGenerico() {
     // Step aggiuntivi modulari in base al metodo di impasto
     const stepsModulari = {
         biga: [
-            { time: '', action: 'Preparazione biga' },
-            { time: '', action: 'Creazione impasto' },
+            { offset: -16, action: 'Preparazione biga' },
+            { offset: 0, action: 'Creazione impasto' },
+            { offset: 3, action: 'Attesa raddoppio' }
         ],
         poolish: [
-            { time: '', action: 'Preparazione poolish' },
-            { time: '', action: 'Creazione impasto' },
+            { offset: -12, action: 'Preparazione poolish' },
+            { offset: 0, action: 'Creazione impasto' },
+            { offset: 3, action: 'Attesa raddoppio' }
         ],
         lievito_madre: [
-            { time: '', action: 'Preparazione lievito madre' },
-            { time: '', action: 'Creazione impasto' },
+            { offset: -8, action: 'Preparazione lievito madre' },
+            { offset: 0, action: 'Creazione impasto' },
+            { offset: 3, action: 'Attesa raddoppio' }
         ],
         biga_poolish: [
-            { time: '', action: 'Preparazione biga e poolish' },
-            { time: '', action: 'Creazione impasto' },
+            { offset: -14, action: 'Preparazione biga e poolish' },
+            { offset: 0, action: 'Creazione impasto' },
+            { offset: 3, action: 'Attesa raddoppio' }
         ],
         diretto: [
-            { time: '', action: 'Preparazione impasto diretto' },
-        ],
+            { offset: -3, action: 'Preparazione impasto diretto' },
+            { offset: 0, action: 'Attesa raddoppio' }
+        ]
     };
 
-    // Aggiungi gli step modulari al piano principale
     const steps = stepsModulari[tipoImpasto] || [];
-    plan = [...steps, ...plan];
+    let modularPlan = [];
+
+    steps.forEach((step, index) => {
+        const stepTime = new Date(infornataTime.getTime() + step.offset * 60 * 60 * 1000);
+        modularPlan.push({
+            time: stepTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            action: step.action
+        });
+    });
+
+    plan = [...modularPlan, ...plan];
 
     // Aggiorna il DOM
     const planBox = document.getElementById('plan-box');
@@ -705,7 +719,6 @@ function generaPianoGenerico() {
     planBox.classList.remove('hidden');
     setTimeout(() => planBox.classList.add('active'), 10); // Ritardo per triggerare l'animazione
 }
-
 
 // Funzione per calcolare il piano di lavoro per il metodo diretto
 function calculatePlanDiretto(infornataTime, totalLievitazione, tempoFrigo) {
