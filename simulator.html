@@ -42,41 +42,53 @@
 
     <main>
         <section>
-            <h2>Lista Ingredienti</h2>
-            <ul id="ingredient-list"></ul>
+            <h2>Seleziona Impasto</h2>
+            <select id="impasto-selezione">
+                <option value="" disabled selected>Seleziona un impasto...</option>
+            </select>
         </section>
 
         <section>
-            <h2>Ingredienti Selezionati</h2>
-            <table id="selected-ingredients">
-                <thead>
-                    <tr>
-                        <th>Ingrediente</th>
-                        <th>Quantità (g/ml)</th>
-                        <th>Calorie</th>
-                        <th>Grassi</th>
-                        <th>Carboidrati</th>
-                        <th>Zuccheri</th>
-                        <th>Fibre</th>
-                        <th>Proteine</th>
-                        <th>Sale</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-            <div id="totals">
-                <p><strong>Totali:</strong></p>
-                <p>Calorie: <span id="total-calories">0</span></p>
-                <p>Grassi: <span id="total-fats">0</span></p>
-                <p>Carboidrati: <span id="total-carbs">0</span></p>
-                <p>Zuccheri: <span id="total-sugars">0</span></p>
-                <p>Fibre: <span id="total-fibers">0</span></p>
-                <p>Proteine: <span id="total-proteins">0</span></p>
-                <p>Sale: <span id="total-salt">0</span></p>
+            <h2>Aggiungi Ingredienti</h2>
+            <select id="ingredienti-selezione">
+                <option value="" disabled selected>Seleziona un ingrediente...</option>
+            </select>
+            <button id="aggiungi-ingrediente">Aggiungi</button>
+        </section>
+
+        <section>
+            <h2>Ingredienti Aggiunti</h2>
+            <ul id="lista-ingredienti"></ul>
+        </section>
+
+        <section>
+            <button id="calcola-valori">Calcola Valori Nutrizionali</button>
+            <div id="valori-nutrizionali">
+                <h3>Valori Nutrizionali Totali</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Calorie</th>
+                            <th>Grassi</th>
+                            <th>Carboidrati</th>
+                            <th>Zuccheri</th>
+                            <th>Fibre</th>
+                            <th>Proteine</th>
+                            <th>Sale</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td id="calorie-totali">0</td>
+                            <td id="grassi-totali">0</td>
+                            <td id="carboidrati-totali">0</td>
+                            <td id="zuccheri-totali">0</td>
+                            <td id="fibre-totali">0</td>
+                            <td id="proteine-totali">0</td>
+                            <td id="sale-totale">0</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </section>
     </main>
-
-    <script src="js/simulator.js"></script>
-</body>
-</html>
