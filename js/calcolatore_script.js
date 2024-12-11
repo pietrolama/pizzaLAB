@@ -595,8 +595,8 @@ function generaPianoGenerico() {
         return;
     }
 
-    const infornataTimeInput = infornataElement.value;
-    const tipoImpasto = tipoImpastoElement.value;
+    let infornataTimeInput = infornataElement.value.trim();
+    let tipoImpasto = tipoImpastoElement.value.trim().toLowerCase();
 
     if (!infornataTimeInput) {
         alert('Inserisci un orario di infornata!');
@@ -611,32 +611,14 @@ function generaPianoGenerico() {
     let plan = [];
     let modularPlan = [];
 
-    // Definizione degli step modulari
+    // Definizione degli step modulari (solo per tipi di impasto generici)
     const stepsModulari = {
-        biga: [
-            { offset: -16, action: 'Preparazione biga' },
-            { offset: -0.5, action: 'Creazione impasto' },
-            { offset: -0.5, action: 'Attesa raddoppio' }
-        ],
-        poolish: [
-            { offset: -12, action: 'Preparazione poolish' },
-            { offset: -0.5, action: 'Creazione impasto' },
-            { offset: -0.5, action: 'Attesa raddoppio' }
-        ],
-        lievito_madre: [
-            { offset: -8, action: 'Preparazione lievito madre' },
-            { offset: -0.5, action: 'Creazione impasto' },
-            { offset: -0.5, action: 'Attesa raddoppio' }
-        ],
-        biga_poolish: [
-            { offset: -14, action: 'Preparazione biga e poolish' },
-            { offset: -0.5, action: 'Creazione impasto' },
-            { offset: -0.5, action: 'Attesa raddoppio' }
-        ],
-        diretto: [
-            { offset: -0.5, action: 'Preparazione impasto diretto' },
-            { offset: -0.5, action: 'Attesa raddoppio' }
-        ]
+        // Definisci qui gli step per tipi di impasto generici, se necessari
+        // Ad esempio:
+        // altro_tipo: [
+        //     { offset: -10, action: 'Preparazione altro tipo' },
+        //     { offset: -1, action: 'Creazione impasto altro tipo' },
+        // ]
     };
 
     // Ottieni gli step modulari per il metodo selezionato
@@ -654,13 +636,13 @@ function generaPianoGenerico() {
     // Calcolo del piano base
     switch (tipoImpasto) {
         case 'diretto':
-            const totalLievitazione = parseFloat(document.getElementById(`tempoLievTotale_${tipoImpasto}`).value);
-            const tempoFrigo = parseFloat(document.getElementById(`tempoFrigo_${tipoImpasto}`).value) || 0;
-            if (isNaN(totalLievitazione) || totalLievitazione <= 0) {
+            const totalLievitazioneDiretto = parseFloat(document.getElementById(`tempoLievTotale_${tipoImpasto}`).value);
+            const tempoFrigoDiretto = parseFloat(document.getElementById(`tempoFrigo_${tipoImpasto}`).value) || 0;
+            if (isNaN(totalLievitazioneDiretto) || totalLievitazioneDiretto <= 0) {
                 alert('Inserisci un tempo di lievitazione valido!');
                 return;
             }
-            plan = calculatePlanDiretto(infornataTime, totalLievitazione, tempoFrigo);
+            plan = calculatePlanDiretto(infornataTime, totalLievitazioneDiretto, tempoFrigoDiretto);
             break;
         case 'biga':
             const percentualeBiga = parseFloat(document.getElementById('percentuale_biga').value);
@@ -696,21 +678,21 @@ function generaPianoGenerico() {
             plan = calculatePlanBigaPoolish(infornataTime, percentualeBigaBp, percentualePoolishBp);
             break;
         default:
-            alert('Metodo di impasto non riconosciuto!');
-            return;
+            // Se il tipo di impasto non è riconosciuto, usa il piano modulare
+            if (stepsModulari[tipoImpasto] && stepsModulari[tipoImpasto].length > 0) {
+                plan = modularPlan;
+            } else {
+                alert('Metodo di impasto non riconosciuto!');
+                return;
+            }
+            break;
     }
 
     console.log('Base Plan:', plan);
 
-    // **Decidi se combinare o meno modularPlan e plan**
-    // Se `tipoImpasto` utilizza già un piano specifico, non combinare
-    // Altrimenti, combina con modularPlan
+    // Combina i piani modulari e di base solo se il tipo di impasto non ha un piano specifico
     if (!['biga', 'poolish', 'lievito_madre', 'biga_poolish', 'diretto'].includes(tipoImpasto)) {
         plan = [...modularPlan, ...plan];
-    } else {
-        // Usa solo il piano specifico
-        // Se vuoi comunque combinare, assicurati che non ci siano duplicazioni
-        // plan = [...modularPlan, ...plan];
     }
 
     console.log('Combined Plan:', plan);
