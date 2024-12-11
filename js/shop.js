@@ -1,39 +1,20 @@
-// Fetch the product data
 fetch('data/products.json')
     .then(response => response.json())
     .then(products => {
-        const productList = document.getElementById('product-list');
+        const productList = document.querySelector('.cards-container');
 
         products.forEach(product => {
-            // Create product card
             const productCard = document.createElement('div');
-            productCard.className = 'product';
+            productCard.className = 'card';
 
-            // Add image
-            const productImage = document.createElement('img');
-            productImage.src = product.image;
-            productImage.alt = product.title;
-            productCard.appendChild(productImage);
+            productCard.innerHTML = `
+                <img src="${product.image}" alt="${product.title}" class="homepage-img">
+                <h3>${product.title}</h3>
+                <p>${product.price}</p>
+                <a href="${product.link}" class="btn" target="_blank" rel="noopener noreferrer">Acquista su Amazon</a>
+            `;
 
-            // Add title
-            const productTitle = document.createElement('h3');
-            productTitle.textContent = product.title;
-            productCard.appendChild(productTitle);
-
-            // Add price
-            const productPrice = document.createElement('p');
-            productPrice.textContent = product.price;
-            productCard.appendChild(productPrice);
-
-            // Add link
-            const productLink = document.createElement('a');
-            productLink.href = product.link;
-            productLink.target = '_blank';
-            productLink.textContent = 'View on Amazon';
-            productCard.appendChild(productLink);
-
-            // Append card to product list
             productList.appendChild(productCard);
         });
     })
-    .catch(error => console.error('Error loading products:', error));
+    .catch(error => console.error('Errore nel caricamento dei prodotti:', error));
