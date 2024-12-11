@@ -702,11 +702,20 @@ function generaPianoGenerico() {
 
     console.log('Base Plan:', plan);
 
-    // Combina i piani modulari e di base
-    plan = [...modularPlan, ...plan];
+    // **Decidi se combinare o meno modularPlan e plan**
+    // Se `tipoImpasto` utilizza già un piano specifico, non combinare
+    // Altrimenti, combina con modularPlan
+    if (!['biga', 'poolish', 'lievito_madre', 'biga_poolish', 'diretto'].includes(tipoImpasto)) {
+        plan = [...modularPlan, ...plan];
+    } else {
+        // Usa solo il piano specifico
+        // Se vuoi comunque combinare, assicurati che non ci siano duplicazioni
+        // plan = [...modularPlan, ...plan];
+    }
+
     console.log('Combined Plan:', plan);
 
-    // Rimuovi i duplicati mantenendo il primo occorrenza
+    // Rimuovi i duplicati mantenendo la prima occorrenza
     const uniquePlanMap = new Map();
     plan.forEach(item => {
         const key = `${item.time}-${item.action}`;
@@ -877,4 +886,3 @@ function calculatePlanBigaPoolish(infornataTime, percentualeBiga, percentualePoo
     ];
     return calculatePlanGeneric(infornataTime, durations, steps);
 }
-
