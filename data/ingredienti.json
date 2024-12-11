@@ -1,15 +1,5 @@
 [
     {
-        "nome": "Farina 00",
-        "calorie": 364,
-        "grassi": 1,
-        "carboidrati": 76,
-        "zuccheri": 0.3,
-        "fibre": 2.7,
-        "proteine": 10,
-        "sale": 0
-    },
-    {
         "nome": "Acqua",
         "calorie": 0,
         "grassi": 0,
@@ -44,7 +34,7 @@
         "calorie": 18,
         "grassi": 0.2,
         "carboidrati": 3.6,
-        "zuccheri": 2.6,
+        "zuccheri": 2.6,S
         "fibre": 1.1,
         "proteine": 0.9,
         "sale": 0.04
@@ -178,16 +168,6 @@
         "fibre": 2,
         "proteine": 2.1,
         "sale": 0.2
-    },
-    {
-        "nome": "Farina integrale",
-        "calorie": 340,
-        "grassi": 2,
-        "carboidrati": 72,
-        "zuccheri": 1,
-        "fibre": 10,
-        "proteine": 12,
-        "sale": 0
     },
     {
         "nome": "Latte intero",
