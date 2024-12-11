@@ -603,10 +603,10 @@ function generaPianoGenerico() {
         return;
     }
 
-    // Converti l'orario di infornata in un oggetto Date
+    // Converti l'orario di infornata in un oggetto Date del giorno successivo
     const today = new Date();
     const [hours, minutes] = infornataTimeInput.split(':').map(Number);
-    const infornataTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), hours, minutes);
+    const infornataTime = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1, hours, minutes);
 
     let plan = [];
     let modularPlan = [];
@@ -626,7 +626,7 @@ function generaPianoGenerico() {
     steps.forEach((step) => {
         const stepTime = new Date(infornataTime.getTime() + step.offset * 60 * 60 * 1000);
         modularPlan.push({
-            time: stepTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            time: stepTime, // Conserva l'oggetto Date
             action: step.action
         });
     });
@@ -700,7 +700,7 @@ function generaPianoGenerico() {
     // Rimuovi i duplicati mantenendo la prima occorrenza
     const uniquePlanMap = new Map();
     plan.forEach(item => {
-        const key = `${item.time}-${item.action}`;
+        const key = `${item.time.getTime()}-${item.action}`;
         if (!uniquePlanMap.has(key)) {
             uniquePlanMap.set(key, item);
         }
@@ -709,12 +709,8 @@ function generaPianoGenerico() {
 
     console.log('Unique Plan:', uniquePlan);
 
-    // Ordina in base all'orario
-    uniquePlan.sort((a, b) => {
-        const [aHours, aMinutes] = a.time.split(':').map(Number);
-        const [bHours, bMinutes] = b.time.split(':').map(Number);
-        return aHours === bHours ? aMinutes - bMinutes : aHours - bHours;
-    });
+    // Ordina in base al timestamp completo (data e ora)
+    uniquePlan.sort((a, b) => a.time - b.time);
 
     console.log('Sorted Unique Plan:', uniquePlan);
 
@@ -725,7 +721,8 @@ function generaPianoGenerico() {
 
     uniquePlan.forEach(step => {
         const li = document.createElement('li');
-        li.textContent = `${step.time} ${step.action}`;
+        // Formatta l'orario in formato 24 ore
+        li.textContent = `${step.time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} ${step.action}`;
         planList.appendChild(li);
     });
 
@@ -737,10 +734,7 @@ function generaPianoGenerico() {
 // Helper per creare gli step del piano
 function createStep(currentTime, duration, action) {
     return {
-        time: new Date(currentTime.getTime() - duration * 60 * 60 * 1000).toLocaleTimeString([], {
-            hour: '2-digit',
-            minute: '2-digit',
-        }),
+        time: new Date(currentTime.getTime() - duration * 60 * 60 * 1000), // Conserva l'oggetto Date
         action,
     };
 }
@@ -752,7 +746,7 @@ function calculatePlanDiretto(infornataTime, totalLievitazione, tempoFrigo) {
 
     // Step finali
     plan.push({ 
-        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), 
+        time: new Date(currentTime), 
         action: "Inforna adesso." 
     });
 
@@ -775,7 +769,7 @@ function calculatePlanDiretto(infornataTime, totalLievitazione, tempoFrigo) {
     // Preparazione impasto
     plan.unshift(createStep(currentTime, 0.5, "Prepara l'impasto."));
 
-    return plan.reverse();
+    return plan;
 }
 
 // Funzione generica per calcolare il piano con modularità
@@ -785,7 +779,7 @@ function calculatePlanGeneric(infornataTime, durations, steps) {
 
     // Step finali
     plan.push({ 
-        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), 
+        time: new Date(currentTime), 
         action: "Inforna adesso." 
     });
 
@@ -793,7 +787,7 @@ function calculatePlanGeneric(infornataTime, durations, steps) {
     for (let i = steps.length - 1; i >= 0; i--) {
         currentTime = new Date(currentTime.getTime() - durations[i] * 60 * 60 * 1000);
         plan.unshift({
-            time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            time: new Date(currentTime),
             action: steps[i]
         });
     }
