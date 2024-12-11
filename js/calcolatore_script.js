@@ -649,6 +649,8 @@ function generaPianoGenerico() {
         });
     });
 
+    console.log('Modular Plan:', modularPlan);
+
     // Calcolo del piano base
     switch (tipoImpasto) {
         case 'diretto':
@@ -698,12 +700,32 @@ function generaPianoGenerico() {
             return;
     }
 
+    console.log('Base Plan:', plan);
+
     // Combina i piani modulari e di base
     plan = [...modularPlan, ...plan];
+    console.log('Combined Plan:', plan);
 
-    // Ordina e rimuovi duplicati
-    const uniquePlan = Array.from(new Map(plan.map(item => [item.time + item.action, item])).values());
-    uniquePlan.sort((a, b) => new Date(`1970-01-01T${a.time}`) - new Date(`1970-01-01T${b.time}`));
+    // Rimuovi i duplicati mantenendo il primo occorrenza
+    const uniquePlanMap = new Map();
+    plan.forEach(item => {
+        const key = `${item.time}-${item.action}`;
+        if (!uniquePlanMap.has(key)) {
+            uniquePlanMap.set(key, item);
+        }
+    });
+    const uniquePlan = Array.from(uniquePlanMap.values());
+
+    console.log('Unique Plan:', uniquePlan);
+
+    // Ordina in base all'orario
+    uniquePlan.sort((a, b) => {
+        const [aHours, aMinutes] = a.time.split(':').map(Number);
+        const [bHours, bMinutes] = b.time.split(':').map(Number);
+        return aHours === bHours ? aMinutes - bMinutes : aHours - bHours;
+    });
+
+    console.log('Sorted Unique Plan:', uniquePlan);
 
     // Aggiorna il DOM
     const planBox = document.getElementById('plan-box');
@@ -738,7 +760,10 @@ function calculatePlanDiretto(infornataTime, totalLievitazione, tempoFrigo) {
     let currentTime = new Date(infornataTime);
 
     // Step finali
-    plan.push({ time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), action: "Inforna adesso." });
+    plan.push({ 
+        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), 
+        action: "Inforna adesso." 
+    });
 
     // Seconda lievitazione
     const secondLievitazione = totalLievitazione * 0.3;
@@ -768,13 +793,19 @@ function calculatePlanGeneric(infornataTime, durations, steps) {
     let currentTime = new Date(infornataTime);
 
     // Step finali
-    plan.push({ time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), action: "Inforna adesso." });
+    plan.push({ 
+        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), 
+        action: "Inforna adesso." 
+    });
 
     // Step modulari
-    steps.reverse().forEach((step, index) => {
-        currentTime = new Date(currentTime.getTime() - durations[index] * 60 * 60 * 1000);
-        plan.unshift(createStep(currentTime, 0, step));
-    });
+    for (let i = steps.length - 1; i >= 0; i--) {
+        currentTime = new Date(currentTime.getTime() - durations[i] * 60 * 60 * 1000);
+        plan.unshift({
+            time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            action: steps[i]
+        });
+    }
 
     return plan;
 }
