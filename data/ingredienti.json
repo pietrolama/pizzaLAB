@@ -178,5 +178,205 @@
         "fibre": 2,
         "proteine": 2.1,
         "sale": 0.2
+    },
+    {
+        "nome": "Farina integrale",
+        "calorie": 340,
+        "grassi": 2,
+        "carboidrati": 72,
+        "zuccheri": 1,
+        "fibre": 10,
+        "proteine": 12,
+        "sale": 0
+    },
+    {
+        "nome": "Latte intero",
+        "calorie": 64,
+        "grassi": 3.6,
+        "carboidrati": 4.8,
+        "zuccheri": 4.8,
+        "fibre": 0,
+        "proteine": 3.2,
+        "sale": 0.1
+    },
+    {
+        "nome": "Latte scremato",
+        "calorie": 35,
+        "grassi": 0.1,
+        "carboidrati": 5,
+        "zuccheri": 5,
+        "fibre": 0,
+        "proteine": 3.4,
+        "sale": 0.1
+    },
+    {
+        "nome": "Crema di latte",
+        "calorie": 340,
+        "grassi": 36,
+        "carboidrati": 3.5,
+        "zuccheri": 3.5,
+        "fibre": 0,
+        "proteine": 2,
+        "sale": 0.1
+    },
+    {
+        "nome": "Provola affumicata",
+        "calorie": 350,
+        "grassi": 29,
+        "carboidrati": 2,
+        "zuccheri": 1,
+        "fibre": 0,
+        "proteine": 24,
+        "sale": 2
+    },
+    {
+        "nome": "Rucola",
+        "calorie": 25,
+        "grassi": 0.7,
+        "carboidrati": 3.6,
+        "zuccheri": 2.1,
+        "fibre": 1.6,
+        "proteine": 2.6,
+        "sale": 0
+    },
+    {
+        "nome": "Melanzane grigliate",
+        "calorie": 25,
+        "grassi": 0.2,
+        "carboidrati": 5.5,
+        "zuccheri": 3,
+        "fibre": 3.4,
+        "proteine": 1,
+        "sale": 0.03
+    },
+    {
+        "nome": "Carciofi sott'olio",
+        "calorie": 250,
+        "grassi": 25,
+        "carboidrati": 5,
+        "zuccheri": 1,
+        "fibre": 3,
+        "proteine": 1.5,
+        "sale": 2
+    },
+    {
+        "nome": "Tonno sott'olio",
+        "calorie": 200,
+        "grassi": 14,
+        "carboidrati": 0,
+        "zuccheri": 0,
+        "fibre": 0,
+        "proteine": 22,
+        "sale": 1.5
+    },
+    {
+        "nome": "Gamberetti",
+        "calorie": 70,
+        "grassi": 1,
+        "carboidrati": 0,
+        "zuccheri": 0,
+        "fibre": 0,
+        "proteine": 15,
+        "sale": 0.4
+    },
+    {
+        "nome": "Acciughe sott'olio",
+        "calorie": 210,
+        "grassi": 11,
+        "carboidrati": 0,
+        "zuccheri": 0,
+        "fibre": 0,
+        "proteine": 29,
+        "sale": 9
+    },
+    {
+        "nome": "Basilico fresco",
+        "calorie": 22,
+        "grassi": 0.6,
+        "carboidrati": 2.7,
+        "zuccheri": 0.3,
+        "fibre": 1.6,
+        "proteine": 3.2,
+        "sale": 0
+    },
+    {
+        "nome": "Aglio",
+        "calorie": 149,
+        "grassi": 0.5,
+        "carboidrati": 33,
+        "zuccheri": 1,
+        "fibre": 2.1,
+        "proteine": 6.4,
+        "sale": 0.03
+    },
+    {
+        "nome": "Spinaci freschi",
+        "calorie": 23,
+        "grassi": 0.4,
+        "carboidrati": 3.6,
+        "zuccheri": 0.4,
+        "fibre": 2.2,
+        "proteine": 2.9,
+        "sale": 0.06
+    },
+    {
+        "nome": "Uova intere",
+        "calorie": 155,
+        "grassi": 11,
+        "carboidrati": 1.1,
+        "zuccheri": 1,
+        "fibre": 0,
+        "proteine": 13,
+        "sale": 0.3
+    },
+    {
+        "nome": "Peperoncino",
+        "calorie": 40,
+        "grassi": 0.4,
+        "carboidrati": 9,
+        "zuccheri": 5,
+        "fibre": 1.5,
+        "proteine": 1.9,
+        "sale": 0
+    },
+    {
+        "nome": "Olive nere",
+        "calorie": 115,
+        "grassi": 11,
+        "carboidrati": 6,
+        "zuccheri": 0,
+        "fibre": 1.6,
+        "proteine": 0.8,
+        "sale": 2
+    },
+    {
+        "nome": "Olive verdi",
+        "calorie": 146,
+        "grassi": 15,
+        "carboidrati": 4,
+        "zuccheri": 0.4,
+        "fibre": 3.3,
+        "proteine": 1.3,
+        "sale": 3.8
+    },
+    {
+        "nome": "Cipolle rosse",
+        "calorie": 40,
+        "grassi": 0.1,
+        "carboidrati": 9,
+        "zuccheri": 4.2,
+        "fibre": 1.7,
+        "proteine": 1.1,
+        "sale": 0.03
+    },
+    {
+        "nome": "Zucca",
+        "calorie": 26,
+        "grassi": 0.1,
+        "carboidrati": 6.5,
+        "zuccheri": 2.8,
+        "fibre": 0.5,
+        "proteine": 1,
+        "sale": 0
     }
 ]
