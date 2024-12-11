@@ -595,18 +595,21 @@ function generaPianoGenerico() {
         return;
     }
 
-    let infornataTimeInput = infornataElement.value.trim();
+    let infornataDateTimeInput = infornataElement.value.trim();
     let tipoImpasto = tipoImpastoElement.value.trim().toLowerCase();
 
-    if (!infornataTimeInput) {
-        alert('Inserisci un orario di infornata!');
+    if (!infornataDateTimeInput) {
+        alert('Inserisci una data e un orario di infornata!');
         return;
     }
 
-    // Converti l'orario di infornata in un oggetto Date del giorno successivo
-    const today = new Date();
-    const [hours, minutes] = infornataTimeInput.split(':').map(Number);
-    const infornataTime = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1, hours, minutes);
+    // Converti l'orario di infornata in un oggetto Date
+    const infornataTime = new Date(infornataDateTimeInput);
+
+    if (isNaN(infornataTime.getTime())) {
+        alert('Inserisci una data e un orario di infornata validi!');
+        return;
+    }
 
     let plan = [];
     let modularPlan = [];
@@ -722,7 +725,13 @@ function generaPianoGenerico() {
     uniquePlan.forEach(step => {
         const li = document.createElement('li');
         // Formatta l'orario in formato 24 ore
-        li.textContent = `${step.time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} ${step.action}`;
+        li.textContent = `${step.time.toLocaleString([], { 
+            year: 'numeric', 
+            month: '2-digit', 
+            day: '2-digit',
+            hour: '2-digit', 
+            minute: '2-digit' 
+        })} - ${step.action}`;
         planList.appendChild(li);
     });
 
