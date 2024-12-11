@@ -764,47 +764,48 @@ function calculatePlanDiretto(infornataTime, totalLievitazione, tempoFrigo) {
     return plan.reverse();
 }
 
+// Funzioni per calcolare i piani di lavoro specifici
 function calculatePlanBiga(infornataTime, percentualeBiga) {
     const plan = [];
     let currentTime = new Date(infornataTime);
 
-    // Inforna adesso
-    plan.push({
-        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        action: "Inforna adesso."
-    });
+    // Durate predefinite per gli step modulari (in ore)
+    const durations = {
+        preparazione: 1, // 1 ora per la preparazione della biga
+        lievitazioneBiga: 16, // 16 ore per la lievitazione della biga
+        creazioneImpasto: 0.5, // 30 minuti per la creazione dell'impasto
+        attesaRaddoppio: percentualeBiga <= 30 ? 6 : percentualeBiga >= 70 ? 3 : 4.5, // Tempo variabile per il raddoppio
+    };
 
-    // Tempo di raddoppio in base alla percentuale di biga
-    let raddoppioHours;
-    if (percentualeBiga <= 30) {
-        raddoppioHours = 6;
-    } else if (percentualeBiga >= 70) {
-        raddoppioHours = 3;
-    } else {
-        raddoppioHours = 4.5; // Media per percentuali intermedie
-    }
-
-    // Aggiungi step modulari specifici
-    plan.unshift(
-        { time: '', action: 'Preparazione biga' },
-        { time: '', action: 'Creazione impasto' }
-    );
-
-    // Raddoppio dell'impasto
-    const raddoppioMs = raddoppioHours * 60 * 60 * 1000;
-    currentTime = new Date(currentTime.getTime() - raddoppioMs);
+    // Step modulari con calcolo degli orari
+    currentTime = new Date(currentTime.getTime() - durations.attesaRaddoppio * 60 * 60 * 1000);
     plan.unshift({
         time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         action: "Attesa raddoppio dell'impasto."
     });
 
-    // Lievitazione della biga
-    const bigaLievitazioneHours = 16; // Tempo tipico per la lievitazione della biga
-    const bigaLievitazioneMs = bigaLievitazioneHours * 60 * 60 * 1000;
-    currentTime = new Date(currentTime.getTime() - bigaLievitazioneMs);
+    currentTime = new Date(currentTime.getTime() - durations.creazioneImpasto * 60 * 60 * 1000);
+    plan.unshift({
+        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        action: "Creazione impasto"
+    });
+
+    currentTime = new Date(currentTime.getTime() - durations.lievitazioneBiga * 60 * 60 * 1000);
     plan.unshift({
         time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         action: "Inizia la lievitazione della biga."
+    });
+
+    currentTime = new Date(currentTime.getTime() - durations.preparazione * 60 * 60 * 1000);
+    plan.unshift({
+        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        action: "Preparazione biga"
+    });
+
+    // Aggiungi step finale
+    plan.push({
+        time: new Date(infornataTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        action: "Inforna adesso."
     });
 
     return plan;
@@ -814,43 +815,43 @@ function calculatePlanPoolish(infornataTime, percentualePoolish) {
     const plan = [];
     let currentTime = new Date(infornataTime);
 
-    // Inforna adesso
-    plan.push({
-        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        action: "Inforna adesso."
-    });
+    // Durate predefinite per gli step modulari (in ore)
+    const durations = {
+        preparazione: 1, // 1 ora per la preparazione del poolish
+        lievitazionePoolish: 12, // 12 ore per la lievitazione del poolish
+        creazioneImpasto: 0.5, // 30 minuti per la creazione dell'impasto
+        attesaRaddoppio: percentualePoolish <= 30 ? 6 : percentualePoolish >= 70 ? 3 : 4.5, // Tempo variabile per il raddoppio
+    };
 
-    // Tempo di raddoppio in base alla percentuale di poolish
-    let raddoppioHours;
-    if (percentualePoolish <= 30) {
-        raddoppioHours = 6;
-    } else if (percentualePoolish >= 70) {
-        raddoppioHours = 3;
-    } else {
-        raddoppioHours = 4.5; // Media per percentuali intermedie
-    }
-
-    // Aggiungi step modulari specifici
-    plan.unshift(
-        { time: '', action: 'Preparazione poolish' },
-        { time: '', action: 'Creazione impasto' }
-    );
-
-    // Raddoppio dell'impasto
-    const raddoppioMs = raddoppioHours * 60 * 60 * 1000;
-    currentTime = new Date(currentTime.getTime() - raddoppioMs);
+    // Step modulari con calcolo degli orari
+    currentTime = new Date(currentTime.getTime() - durations.attesaRaddoppio * 60 * 60 * 1000);
     plan.unshift({
         time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         action: "Attesa raddoppio dell'impasto."
     });
 
-    // Lievitazione del poolish
-    const poolishLievitazioneHours = 12; // Tempo tipico per la lievitazione del poolish
-    const poolishLievitazioneMs = poolishLievitazioneHours * 60 * 60 * 1000;
-    currentTime = new Date(currentTime.getTime() - poolishLievitazioneMs);
+    currentTime = new Date(currentTime.getTime() - durations.creazioneImpasto * 60 * 60 * 1000);
+    plan.unshift({
+        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        action: "Creazione impasto"
+    });
+
+    currentTime = new Date(currentTime.getTime() - durations.lievitazionePoolish * 60 * 60 * 1000);
     plan.unshift({
         time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         action: "Inizia la lievitazione del poolish."
+    });
+
+    currentTime = new Date(currentTime.getTime() - durations.preparazione * 60 * 60 * 1000);
+    plan.unshift({
+        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        action: "Preparazione poolish"
+    });
+
+    // Aggiungi step finale
+    plan.push({
+        time: new Date(infornataTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        action: "Inforna adesso."
     });
 
     return plan;
@@ -860,43 +861,89 @@ function calculatePlanLievitoMadre(infornataTime, percentualeLievitoMadre) {
     const plan = [];
     let currentTime = new Date(infornataTime);
 
-    // Inforna adesso
-    plan.push({
-        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        action: "Inforna adesso."
-    });
+    // Durate predefinite per gli step modulari (in ore)
+    const durations = {
+        preparazione: 1, // 1 ora per la preparazione del lievito madre
+        lievitazioneLievitoMadre: 8, // 8 ore per la lievitazione del lievito madre
+        creazioneImpasto: 0.5, // 30 minuti per la creazione dell'impasto
+        attesaRaddoppio: percentualeLievitoMadre <= 30 ? 7 : percentualeLievitoMadre >= 70 ? 4 : 5.5, // Tempo variabile per il raddoppio
+    };
 
-    // Tempo di raddoppio in base alla percentuale di lievito madre
-    let raddoppioHours;
-    if (percentualeLievitoMadre <= 30) {
-        raddoppioHours = 7;
-    } else if (percentualeLievitoMadre >= 70) {
-        raddoppioHours = 4;
-    } else {
-        raddoppioHours = 5.5; // Media per percentuali intermedie
-    }
-
-    // Aggiungi step modulari specifici
-    plan.unshift(
-        { time: '', action: 'Preparazione lievito madre' },
-        { time: '', action: 'Creazione impasto' }
-    );
-
-    // Raddoppio dell'impasto
-    const raddoppioMs = raddoppioHours * 60 * 60 * 1000;
-    currentTime = new Date(currentTime.getTime() - raddoppioMs);
+    // Step modulari con calcolo degli orari
+    currentTime = new Date(currentTime.getTime() - durations.attesaRaddoppio * 60 * 60 * 1000);
     plan.unshift({
         time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         action: "Attesa raddoppio dell'impasto."
     });
 
-    // Lievitazione del lievito madre
-    const lievitoMadreLievitazioneHours = 8; // Tempo tipico per il lievito madre
-    const lievitoMadreLievitazioneMs = lievitoMadreLievitazioneHours * 60 * 60 * 1000;
-    currentTime = new Date(currentTime.getTime() - lievitoMadreLievitazioneMs);
+    currentTime = new Date(currentTime.getTime() - durations.creazioneImpasto * 60 * 60 * 1000);
+    plan.unshift({
+        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        action: "Creazione impasto"
+    });
+
+    currentTime = new Date(currentTime.getTime() - durations.lievitazioneLievitoMadre * 60 * 60 * 1000);
     plan.unshift({
         time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         action: "Inizia la lievitazione del lievito madre."
+    });
+
+    currentTime = new Date(currentTime.getTime() - durations.preparazione * 60 * 60 * 1000);
+    plan.unshift({
+        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        action: "Preparazione lievito madre"
+    });
+
+    // Aggiungi step finale
+    plan.push({
+        time: new Date(infornataTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        action: "Inforna adesso."
+    });
+
+    return plan;
+}
+
+function calculatePlanBigaPoolish(infornataTime, percentualeBiga, percentualePoolish) {
+    const plan = [];
+    let currentTime = new Date(infornataTime);
+
+    // Durate predefinite per gli step modulari (in ore)
+    const durations = {
+        preparazione: 1, // 1 ora per la preparazione di biga e poolish
+        lievitazioneCombinata: 10, // 10 ore per la lievitazione combinata
+        creazioneImpasto: 0.5, // 30 minuti per la creazione dell'impasto
+        attesaRaddoppio: (percentualeBiga + percentualePoolish) / 2 <= 30 ? 6 : (percentualeBiga + percentualePoolish) / 2 >= 70 ? 3 : 4.5, // Tempo variabile per il raddoppio
+    };
+
+    // Step modulari con calcolo degli orari
+    currentTime = new Date(currentTime.getTime() - durations.attesaRaddoppio * 60 * 60 * 1000);
+    plan.unshift({
+        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        action: "Attesa raddoppio dell'impasto."
+    });
+
+    currentTime = new Date(currentTime.getTime() - durations.creazioneImpasto * 60 * 60 * 1000);
+    plan.unshift({
+        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        action: "Creazione impasto"
+    });
+
+    currentTime = new Date(currentTime.getTime() - durations.lievitazioneCombinata * 60 * 60 * 1000);
+    plan.unshift({
+        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        action: "Inizia la lievitazione combinata di biga e poolish."
+    });
+
+    currentTime = new Date(currentTime.getTime() - durations.preparazione * 60 * 60 * 1000);
+    plan.unshift({
+        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        action: "Preparazione biga e poolish"
+    });
+
+    // Aggiungi step finale
+    plan.push({
+        time: new Date(infornataTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        action: "Inforna adesso."
     });
 
     return plan;
