@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulatore di Ingredienti</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <header>
+        <h1>Simulatore di Ingredienti per Pizza</h1>
+    </header>
+
+    <main>
+        <section>
+            <h2>Lista Ingredienti</h2>
+            <ul id="ingredient-list"></ul>
+        </section>
+
+        <section>
+            <h2>Ingredienti Selezionati</h2>
+            <table id="selected-ingredients">
+                <thead>
+                    <tr>
+                        <th>Ingrediente</th>
+                        <th>Quantità (g/ml)</th>
+                        <th>Calorie</th>
+                        <th>Grassi</th>
+                        <th>Carboidrati</th>
+                        <th>Zuccheri</th>
+                        <th>Fibre</th>
+                        <th>Proteine</th>
+                        <th>Sale</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <div id="totals">
+                <p><strong>Totali:</strong></p>
+                <p>Calorie: <span id="total-calories">0</span></p>
+                <p>Grassi: <span id="total-fats">0</span></p>
+                <p>Carboidrati: <span id="total-carbs">0</span></p>
+                <p>Zuccheri: <span id="total-sugars">0</span></p>
+                <p>Fibre: <span id="total-fibers">0</span></p>
+                <p>Proteine: <span id="total-proteins">0</span></p>
+                <p>Sale: <span id="total-salt">0</span></p>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/simulator.js"></script>
+</body>
+</html>
