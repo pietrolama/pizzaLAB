@@ -663,31 +663,46 @@ function generaPianoGenerico() {
         return;
     }
 
-    // Aggiunta degli step aggiuntivi al piano
-    plan.unshift({
-        time: '',
-        action: "Preparazione biga."
-    });
+    // Step aggiuntivi modulari in base al metodo di impasto
+    const stepsModulari = {
+        biga: [
+            { time: '', action: 'Preparazione biga' },
+            { time: '', action: 'Creazione impasto' },
+            { time: '', action: 'Attesa raddoppio' },
+            { time: '', action: 'Stesura' },
+            { time: '', action: 'Raddoppio' }
+        ],
+        poolish: [
+            { time: '', action: 'Preparazione poolish' },
+            { time: '', action: 'Creazione impasto' },
+            { time: '', action: 'Attesa raddoppio' },
+            { time: '', action: 'Stesura' },
+            { time: '', action: 'Raddoppio' }
+        ],
+        lievito_madre: [
+            { time: '', action: 'Preparazione lievito madre' },
+            { time: '', action: 'Creazione impasto' },
+            { time: '', action: 'Attesa raddoppio' },
+            { time: '', action: 'Stesura' },
+            { time: '', action: 'Raddoppio' }
+        ],
+        biga_poolish: [
+            { time: '', action: 'Preparazione biga e poolish' },
+            { time: '', action: 'Creazione impasto' },
+            { time: '', action: 'Attesa raddoppio' },
+            { time: '', action: 'Stesura' },
+            { time: '', action: 'Raddoppio' }
+        ],
+        diretto: [
+            { time: '', action: 'Preparazione impasto diretto' },
+            { time: '', action: 'Attesa raddoppio' },
+            { time: '', action: 'Stesura' },
+            { time: '', action: 'Raddoppio' }
+        ]
+    };
 
-    plan.splice(plan.length - 2, 0, {
-        time: '',
-        action: "Creazione impasto."
-    });
-
-    plan.push({
-        time: '',
-        action: "Attesa raddoppio."
-    });
-
-    plan.push({
-        time: '',
-        action: "Stesura."
-    });
-
-    plan.push({
-        time: '',
-        action: "Raddoppio."
-    });
+    const steps = stepsModulari[tipoImpasto] || [];
+    plan = [...steps, ...plan];
 
     // Aggiorna il DOM
     const planBox = document.getElementById('plan-box');
@@ -704,6 +719,7 @@ function generaPianoGenerico() {
     planBox.classList.remove('hidden');
     setTimeout(() => planBox.classList.add('active'), 10); // Ritardo per triggerare l'animazione
 }
+
 
 // Funzione per calcolare il piano di lavoro per il metodo diretto
 function calculatePlanDiretto(infornataTime, totalLievitazione, tempoFrigo) {
