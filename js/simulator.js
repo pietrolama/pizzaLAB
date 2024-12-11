@@ -1,84 +1,64 @@
-// Carica i dati dal file JSON
-fetch('data/ingredients.json')
-    .then(response => response.json())
-    .then(ingredients => {
-        const ingredientList = document.getElementById('ingredient-list');
-        const selectedIngredientsTable = document.querySelector('#selected-ingredients tbody');
-        const totals = {
-            calories: 0,
-            fats: 0,
-            carbs: 0,
-            sugars: 0,
-            fibers: 0,
-            proteins: 0,
-            salt: 0,
-        };
+// Simulatore Nutrienti JS
+const impastiPresets = {/* JSON degli impasti */};
+const ingredientiPresets = [/* JSON degli ingredienti */];
 
-        // Funzione per aggiornare i totali
-        function updateTotals() {
-            document.getElementById('total-calories').textContent = totals.calories.toFixed(2);
-            document.getElementById('total-fats').textContent = totals.fats.toFixed(2);
-            document.getElementById('total-carbs').textContent = totals.carbs.toFixed(2);
-            document.getElementById('total-sugars').textContent = totals.sugars.toFixed(2);
-            document.getElementById('total-fibers').textContent = totals.fibers.toFixed(2);
-            document.getElementById('total-proteins').textContent = totals.proteins.toFixed(2);
-            document.getElementById('total-salt').textContent = totals.salt.toFixed(2);
-        }
+// Popola menu a tendina per impasti
+const impastoSelezione = document.getElementById('impasto-selezione');
+Object.keys(impastiPresets).forEach(tipo => {
+    const option = document.createElement('option');
+    option.value = tipo;
+    option.textContent = tipo.charAt(0).toUpperCase() + tipo.slice(1);
+    impastoSelezione.appendChild(option);
+});
 
-        // Aggiunge un ingrediente selezionato alla tabella
-        function addIngredientToTable(ingredient, quantity) {
-            const row = document.createElement('tr');
+// Popola menu a tendina per ingredienti
+const ingredientiSelezione = document.getElementById('ingredienti-selezione');
+ingredientiPresets.forEach(ingrediente => {
+    const option = document.createElement('option');
+    option.value = ingrediente.nome;
+    option.textContent = ingrediente.nome;
+    ingredientiSelezione.appendChild(option);
+});
 
-            const columns = [
-                ingredient.nome,
-                `${quantity} g/ml`,
-                (ingredient.calorie * quantity / 100).toFixed(2),
-                (ingredient.grassi * quantity / 100).toFixed(2),
-                (ingredient.carboidrati * quantity / 100).toFixed(2),
-                (ingredient.zuccheri * quantity / 100).toFixed(2),
-                (ingredient.fibre * quantity / 100).toFixed(2),
-                (ingredient.proteine * quantity / 100).toFixed(2),
-                (ingredient.sale * quantity / 100).toFixed(2),
-            ];
+// Lista degli ingredienti aggiunti
+const listaIngredienti = document.getElementById('lista-ingredienti');
+let ingredientiAggiunti = [];
 
-            columns.forEach(value => {
-                const cell = document.createElement('td');
-                cell.textContent = value;
-                row.appendChild(cell);
-            });
+// Aggiungi ingrediente alla lista
+document.getElementById('aggiungi-ingrediente').addEventListener('click', () => {
+    const ingredienteSelezionato = ingredientiPresets.find(ingrediente => ingrediente.nome === ingredientiSelezione.value);
+    if (ingredienteSelezionato) {
+        ingredientiAggiunti.push(ingredienteSelezionato);
+        const li = document.createElement('li');
+        li.textContent = `${ingredienteSelezionato.nome} (${JSON.stringify(ingredienteSelezionato)})`;
+        listaIngredienti.appendChild(li);
+    }
+});
 
-            selectedIngredientsTable.appendChild(row);
+// Calcola valori nutrizionali totali
+document.getElementById('calcola-valori').addEventListener('click', () => {
+    let totali = {
+        calorie: 0,
+        grassi: 0,
+        carboidrati: 0,
+        zuccheri: 0,
+        fibre: 0,
+        proteine: 0,
+        sale: 0
+    };
 
-            // Aggiorna i totali
-            totals.calories += (ingredient.calorie * quantity / 100);
-            totals.fats += (ingredient.grassi * quantity / 100);
-            totals.carbs += (ingredient.carboidrati * quantity / 100);
-            totals.sugars += (ingredient.zuccheri * quantity / 100);
-            totals.fibers += (ingredient.fibre * quantity / 100);
-            totals.proteins += (ingredient.proteine * quantity / 100);
-            totals.salt += (ingredient.sale * quantity / 100);
-
-            updateTotals();
-        }
-
-        // Popola la lista degli ingredienti
-        ingredients.forEach(ingredient => {
-            const listItem = document.createElement('li');
-            listItem.textContent = ingredient.nome;
-
-            const addButton = document.createElement('button');
-            addButton.textContent = 'Aggiungi';
-            addButton.onclick = () => {
-                const quantity = parseFloat(prompt(`Inserisci la quantità di ${ingredient.nome} in g/ml:`));
-                if (!isNaN(quantity) && quantity > 0) {
-                    addIngredientToTable(ingredient, quantity);
-                } else {
-                    alert('Quantità non valida!');
-                }
-            };
-
-            listItem.appendChild(addButton);
-            ingredientList.appendChild(listItem);
+    ingredientiAggiunti.forEach(ingrediente => {
+        Object.keys(totali).forEach(key => {
+            totali[key] += ingrediente[key] || 0;
         });
-    })
-    .catch(error => console.error('Errore nel caricamento degli ingredienti:', error));
+    });
+
+    // Aggiorna la tabella
+    document.getElementById('calorie-totali').textContent = totali.calorie.toFixed(2);
+    document.getElementById('grassi-totali').textContent = totali.grassi.toFixed(2);
+    document.getElementById('carboidrati-totali').textContent = totali.carboidrati.toFixed(2);
+    document.getElementById('zuccheri-totali').textContent = totali.zuccheri.toFixed(2);
+    document.getElementById('fibre-totali').textContent = totali.fibre.toFixed(2);
+    document.getElementById('proteine-totali').textContent = totali.proteine.toFixed(2);
+    document.getElementById('sale-totale').textContent = totali.sale.toFixed(2);
+});
