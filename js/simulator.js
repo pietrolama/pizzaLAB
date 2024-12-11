@@ -66,6 +66,38 @@ document.addEventListener('DOMContentLoaded', () => {
         aggiornaSimulazione();
     }
 
+        // Gestione della selezione dell'impasto
+    impastoSelezione.addEventListener('change', () => {
+        const tipoImpasto = impastoSelezione.value;
+        const metodo = "diretto"; // Default per ora
+        const numPizze = 2; // Default per ora
+        const ricetta = calcolaRicettaFissa(tipoImpasto, metodo, numPizze);
+    
+        // Aggiungi gli ingredienti base alla lista
+        ingredientiAggiunti = ricetta.ingredienti.map(ing => {
+            const ingredienteBase = ingredienti.find(i => i.nome === ing.nome);
+            return {
+                ...ingredienteBase,
+                quantita: parseFloat(ing.quantita),
+            };
+        });
+    
+        aggiornaListaIngredienti();
+    });
+    
+    // Aggiungi un ingrediente alla lista
+    document.getElementById('aggiungi-ingrediente').addEventListener('click', () => {
+        const ingredienteSelezionato = ingredientiSelezione.value;
+        if (!ingredienteSelezionato) return;
+    
+        const ingrediente = ingredienti.find(ing => ing.nome === ingredienteSelezionato);
+        if (ingrediente) {
+            // Aggiungi l'ingrediente alla lista globale
+            ingredientiAggiunti.push({ ...ingrediente, quantita: 100 }); // Quantità iniziale di 100g
+            aggiornaListaIngredienti();
+        }
+    });
+
     function aggiornaSimulazione() {
         if (!metodo) return;
 
