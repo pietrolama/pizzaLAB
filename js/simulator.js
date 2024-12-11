@@ -15,6 +15,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let ingredientiAggiunti = [];
 
+    // Carica le ricette e gli ingredienti
+    fetch('data/ricette.json')
+        .then(response => response.json())
+        .then(data => {
+            ricette = data;
+            // Popola il menu a tendina degli impasti
+            Object.keys(ricette).forEach(impasto => {
+                const option = document.createElement('option');
+                option.value = impasto;
+                option.textContent = ricette[impasto].diretto.nome;
+                impastoSelezione.appendChild(option);
+            });
+        })
+        .catch(error => console.error('Errore nel caricamento delle ricette:', error));
+    
+    fetch('data/ingredienti.json')
+        .then(response => response.json())
+        .then(data => {
+            ingredienti = data;
+            // Popola il menu a tendina degli ingredienti
+            ingredienti.forEach(ingrediente => {
+                const option = document.createElement('option');
+                option.value = ingrediente.nome;
+                option.textContent = ingrediente.nome;
+                ingredientiSelezione.appendChild(option);
+            });
+        })
+        .catch(error => console.error('Errore nel caricamento degli ingredienti:', error));
+
     // Caricamento delle ricette e degli ingredienti
     const checkRicette = setInterval(() => {
         if (window.loadedRicette && window.loadedIngredienti) {
