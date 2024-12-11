@@ -585,7 +585,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Funzione per calcolare il piano di lavoro per qualsiasi metodo di impasto
 function generaPianoGenerico() {
     const infornataElement = document.getElementById('infornata');
     const tipoImpastoElement = document.getElementById('tipo_impasto');
@@ -609,7 +608,48 @@ function generaPianoGenerico() {
     const [hours, minutes] = infornataTimeInput.split(':').map(Number);
     const infornataTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), hours, minutes);
 
-    let plan;
+    let plan = [];
+    let modularPlan = [];
+
+    // Definizione degli step modulari
+    const stepsModulari = {
+        biga: [
+            { offset: -16, action: 'Preparazione biga' },
+            { offset: -0.5, action: 'Creazione impasto' },
+            { offset: -0.5, action: 'Attesa raddoppio' }
+        ],
+        poolish: [
+            { offset: -12, action: 'Preparazione poolish' },
+            { offset: -0.5, action: 'Creazione impasto' },
+            { offset: -0.5, action: 'Attesa raddoppio' }
+        ],
+        lievito_madre: [
+            { offset: -8, action: 'Preparazione lievito madre' },
+            { offset: -0.5, action: 'Creazione impasto' },
+            { offset: -0.5, action: 'Attesa raddoppio' }
+        ],
+        biga_poolish: [
+            { offset: -14, action: 'Preparazione biga e poolish' },
+            { offset: -0.5, action: 'Creazione impasto' },
+            { offset: -0.5, action: 'Attesa raddoppio' }
+        ],
+        diretto: [
+            { offset: -0.5, action: 'Preparazione impasto diretto' },
+            { offset: -0.5, action: 'Attesa raddoppio' }
+        ]
+    };
+
+    // Ottieni gli step modulari per il metodo selezionato
+    const steps = stepsModulari[tipoImpasto] || [];
+    steps.forEach((step) => {
+        const stepTime = new Date(infornataTime.getTime() + step.offset * 60 * 60 * 1000);
+        modularPlan.push({
+            time: stepTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            action: step.action
+        });
+    });
+
+    // Calcolo del piano base
     switch (tipoImpasto) {
         case 'diretto':
             const totalLievitazione = parseFloat(document.getElementById(`tempoLievTotale_${tipoImpasto}`).value);
@@ -658,57 +698,11 @@ function generaPianoGenerico() {
             return;
     }
 
-    if (!plan) {
-        alert('Errore nella generazione del piano di lavoro!');
-        return;
-    }
-
-    // Step aggiuntivi modulari in base al metodo di impasto
-    const stepsModulari = {
-        biga: [
-            { offset: -16, action: 'Preparazione biga' },
-            { offset: -3, action: 'Creazione impasto' },
-            { offset: -1, action: 'Attesa raddoppio' }
-        ],
-        poolish: [
-            { offset: -12, action: 'Preparazione poolish' },
-            { offset: -3, action: 'Creazione impasto' },
-            { offset: -1, action: 'Attesa raddoppio' }
-        ],
-        lievito_madre: [
-            { offset: -8, action: 'Preparazione lievito madre' },
-            { offset: -3, action: 'Creazione impasto' },
-            { offset: -1, action: 'Attesa raddoppio' }
-        ],
-        biga_poolish: [
-            { offset: -14, action: 'Preparazione biga e poolish' },
-            { offset: -3, action: 'Creazione impasto' },
-            { offset: -1, action: 'Attesa raddoppio' }
-        ],
-        diretto: [
-            { offset: -3, action: 'Preparazione impasto diretto' },
-            { offset: -1, action: 'Attesa raddoppio' }
-        ]
-    };
-
-    const steps = stepsModulari[tipoImpasto] || [];
-    let modularPlan = [];
-
-    steps.forEach((step) => {
-        const stepTime = new Date(infornataTime.getTime() + step.offset * 60 * 60 * 1000);
-        modularPlan.push({
-            time: stepTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-            action: step.action
-        });
-    });
-
+    // Combina i piani modulari e di base
     plan = [...modularPlan, ...plan];
 
-    // Rimuovi eventuali duplicati e ordina i passi cronologicamente
-    const uniquePlan = Array.from(
-        new Map(plan.map(item => [item.time + item.action, item])).values()
-    );
-
+    // Ordina e rimuovi duplicati
+    const uniquePlan = Array.from(new Map(plan.map(item => [item.time + item.action, item])).values());
     uniquePlan.sort((a, b) => new Date(`1970-01-01T${a.time}`) - new Date(`1970-01-01T${b.time}`));
 
     // Aggiorna il DOM
@@ -724,247 +718,132 @@ function generaPianoGenerico() {
 
     // Rimuovi la classe hidden e aggiungi active
     planBox.classList.remove('hidden');
-    setTimeout(() => planBox.classList.add('active'), 10); // Ritardo per triggerare l'animazione
+    setTimeout(() => planBox.classList.add('active'), 10);
 }
 
-// Funzione per calcolare il piano di lavoro per il metodo diretto
+// Helper per creare gli step del piano
+function createStep(currentTime, duration, action) {
+    return {
+        time: new Date(currentTime.getTime() - duration * 60 * 60 * 1000).toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+        }),
+        action,
+    };
+}
+
+// Funzione per calcolare il piano per il metodo diretto
 function calculatePlanDiretto(infornataTime, totalLievitazione, tempoFrigo) {
     const plan = [];
-    let currentTime = new Date(infornataTime); // Partiamo dall'orario di infornata
+    let currentTime = new Date(infornataTime);
 
-    // Aggiungi l'azione "Inforna adesso"
-    plan.push({
-        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        action: "Inforna adesso.",
-    });
+    // Step finali
+    plan.push({ time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), action: "Inforna adesso." });
 
-    // Seconda lievitazione (30% del tempo totale)
-    const secondLievitazioneMs = (totalLievitazione * 0.3) * 60 * 60 * 1000; // 30%
-    currentTime = new Date(currentTime.getTime() - secondLievitazioneMs);
-    plan.push({
-        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        action: "Inizio della seconda lievitazione.",
-    });
+    // Seconda lievitazione
+    const secondLievitazione = totalLievitazione * 0.3;
+    plan.unshift(createStep(currentTime, secondLievitazione, "Inizio della seconda lievitazione."));
+    currentTime = new Date(currentTime.getTime() - secondLievitazione * 60 * 60 * 1000);
 
-    // Prima lievitazione (70% del tempo totale)
-    const firstLievitazioneMs = (totalLievitazione * 0.7) * 60 * 60 * 1000; // 70%
+    // Prima lievitazione
+    const firstLievitazione = totalLievitazione * 0.7;
     if (tempoFrigo > 0) {
-        // Tempo in frigorifero
-        const tempoFrigoMs = tempoFrigo * 60 * 60 * 1000;
-        currentTime = new Date(currentTime.getTime() - tempoFrigoMs);
-        plan.push({
-            time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-            action: "Togli l'impasto dal frigorifero e lascia riposare a temperatura ambiente.",
-        });
-
-        // Tempo rimanente della prima lievitazione a temperatura ambiente
-        const remainingLievitazioneMs = firstLievitazioneMs - tempoFrigoMs;
-        currentTime = new Date(currentTime.getTime() - remainingLievitazioneMs);
-        plan.push({
-            time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-            action: "Metti l'impasto in frigorifero.",
-        });
+        plan.unshift(createStep(currentTime, tempoFrigo, "Togli l'impasto dal frigorifero e lascia riposare a temperatura ambiente."));
+        currentTime = new Date(currentTime.getTime() - tempoFrigo * 60 * 60 * 1000);
+        plan.unshift(createStep(currentTime, firstLievitazione - tempoFrigo, "Metti l'impasto in frigorifero."));
     } else {
-        // Prima lievitazione interamente a temperatura ambiente
-        currentTime = new Date(currentTime.getTime() - firstLievitazioneMs);
-        plan.push({
-            time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-            action: "Inizio della prima lievitazione.",
-        });
+        plan.unshift(createStep(currentTime, firstLievitazione, "Inizio della prima lievitazione."));
     }
+    currentTime = new Date(currentTime.getTime() - firstLievitazione * 60 * 60 * 1000);
 
-    // Preparazione dell'impasto
-    const prepTimeMs = 30 * 60 * 1000; // 30 minuti in ms
-    currentTime = new Date(currentTime.getTime() - prepTimeMs);
-    plan.push({
-        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        action: "Prepara l'impasto.",
-    });
+    // Preparazione impasto
+    plan.unshift(createStep(currentTime, 0.5, "Prepara l'impasto."));
 
     return plan.reverse();
 }
 
-// Funzioni per calcolare i piani di lavoro specifici
+// Funzione generica per calcolare il piano con modularità
+function calculatePlanGeneric(infornataTime, durations, steps) {
+    const plan = [];
+    let currentTime = new Date(infornataTime);
+
+    // Step finali
+    plan.push({ time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), action: "Inforna adesso." });
+
+    // Step modulari
+    steps.reverse().forEach((step, index) => {
+        currentTime = new Date(currentTime.getTime() - durations[index] * 60 * 60 * 1000);
+        plan.unshift(createStep(currentTime, 0, step));
+    });
+
+    return plan;
+}
+
+// Funzione per il metodo biga
 function calculatePlanBiga(infornataTime, percentualeBiga) {
-    const plan = [];
-    let currentTime = new Date(infornataTime);
-
-    // Durate predefinite per gli step modulari (in ore)
-    const durations = {
-        preparazione: 1, // 1 ora per la preparazione della biga
-        lievitazioneBiga: 16, // 16 ore per la lievitazione della biga
-        creazioneImpasto: 0.5, // 30 minuti per la creazione dell'impasto
-        attesaRaddoppio: percentualeBiga <= 30 ? 6 : percentualeBiga >= 70 ? 3 : 4.5, // Tempo variabile per il raddoppio
-    };
-
-    // Step modulari con calcolo degli orari
-    currentTime = new Date(currentTime.getTime() - durations.attesaRaddoppio * 60 * 60 * 1000);
-    plan.unshift({
-        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        action: "Attesa raddoppio dell'impasto."
-    });
-
-    currentTime = new Date(currentTime.getTime() - durations.creazioneImpasto * 60 * 60 * 1000);
-    plan.unshift({
-        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        action: "Creazione impasto"
-    });
-
-    currentTime = new Date(currentTime.getTime() - durations.lievitazioneBiga * 60 * 60 * 1000);
-    plan.unshift({
-        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        action: "Inizia la lievitazione della biga."
-    });
-
-    currentTime = new Date(currentTime.getTime() - durations.preparazione * 60 * 60 * 1000);
-    plan.unshift({
-        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        action: "Preparazione biga"
-    });
-
-    // Aggiungi step finale
-    plan.push({
-        time: new Date(infornataTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        action: "Inforna adesso."
-    });
-
-    return plan;
+    const durations = [
+        1, // Preparazione biga
+        16, // Lievitazione biga
+        0.5, // Creazione impasto
+        percentualeBiga <= 30 ? 6 : percentualeBiga >= 70 ? 3 : 4.5, // Attesa raddoppio
+    ];
+    const steps = [
+        "Preparazione biga",
+        "Inizia la lievitazione della biga.",
+        "Creazione impasto",
+        "Attesa raddoppio dell'impasto.",
+    ];
+    return calculatePlanGeneric(infornataTime, durations, steps);
 }
 
+// Funzione per il metodo poolish
 function calculatePlanPoolish(infornataTime, percentualePoolish) {
-    const plan = [];
-    let currentTime = new Date(infornataTime);
-
-    // Durate predefinite per gli step modulari (in ore)
-    const durations = {
-        preparazione: 1, // 1 ora per la preparazione del poolish
-        lievitazionePoolish: 12, // 12 ore per la lievitazione del poolish
-        creazioneImpasto: 0.5, // 30 minuti per la creazione dell'impasto
-        attesaRaddoppio: percentualePoolish <= 30 ? 6 : percentualePoolish >= 70 ? 3 : 4.5, // Tempo variabile per il raddoppio
-    };
-
-    // Step modulari con calcolo degli orari
-    currentTime = new Date(currentTime.getTime() - durations.attesaRaddoppio * 60 * 60 * 1000);
-    plan.unshift({
-        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        action: "Attesa raddoppio dell'impasto."
-    });
-
-    currentTime = new Date(currentTime.getTime() - durations.creazioneImpasto * 60 * 60 * 1000);
-    plan.unshift({
-        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        action: "Creazione impasto"
-    });
-
-    currentTime = new Date(currentTime.getTime() - durations.lievitazionePoolish * 60 * 60 * 1000);
-    plan.unshift({
-        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        action: "Inizia la lievitazione del poolish."
-    });
-
-    currentTime = new Date(currentTime.getTime() - durations.preparazione * 60 * 60 * 1000);
-    plan.unshift({
-        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        action: "Preparazione poolish"
-    });
-
-    // Aggiungi step finale
-    plan.push({
-        time: new Date(infornataTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        action: "Inforna adesso."
-    });
-
-    return plan;
+    const durations = [
+        1, // Preparazione poolish
+        12, // Lievitazione poolish
+        0.5, // Creazione impasto
+        percentualePoolish <= 30 ? 6 : percentualePoolish >= 70 ? 3 : 4.5, // Attesa raddoppio
+    ];
+    const steps = [
+        "Preparazione poolish",
+        "Inizia la lievitazione del poolish.",
+        "Creazione impasto",
+        "Attesa raddoppio dell'impasto.",
+    ];
+    return calculatePlanGeneric(infornataTime, durations, steps);
 }
 
+// Funzione per il metodo lievito madre
 function calculatePlanLievitoMadre(infornataTime, percentualeLievitoMadre) {
-    const plan = [];
-    let currentTime = new Date(infornataTime);
-
-    // Durate predefinite per gli step modulari (in ore)
-    const durations = {
-        preparazione: 1, // 1 ora per la preparazione del lievito madre
-        lievitazioneLievitoMadre: 8, // 8 ore per la lievitazione del lievito madre
-        creazioneImpasto: 0.5, // 30 minuti per la creazione dell'impasto
-        attesaRaddoppio: percentualeLievitoMadre <= 30 ? 7 : percentualeLievitoMadre >= 70 ? 4 : 5.5, // Tempo variabile per il raddoppio
-    };
-
-    // Step modulari con calcolo degli orari
-    currentTime = new Date(currentTime.getTime() - durations.attesaRaddoppio * 60 * 60 * 1000);
-    plan.unshift({
-        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        action: "Attesa raddoppio dell'impasto."
-    });
-
-    currentTime = new Date(currentTime.getTime() - durations.creazioneImpasto * 60 * 60 * 1000);
-    plan.unshift({
-        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        action: "Creazione impasto"
-    });
-
-    currentTime = new Date(currentTime.getTime() - durations.lievitazioneLievitoMadre * 60 * 60 * 1000);
-    plan.unshift({
-        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        action: "Inizia la lievitazione del lievito madre."
-    });
-
-    currentTime = new Date(currentTime.getTime() - durations.preparazione * 60 * 60 * 1000);
-    plan.unshift({
-        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        action: "Preparazione lievito madre"
-    });
-
-    // Aggiungi step finale
-    plan.push({
-        time: new Date(infornataTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        action: "Inforna adesso."
-    });
-
-    return plan;
+    const durations = [
+        1, // Preparazione lievito madre
+        8, // Lievitazione lievito madre
+        0.5, // Creazione impasto
+        percentualeLievitoMadre <= 30 ? 7 : percentualeLievitoMadre >= 70 ? 4 : 5.5, // Attesa raddoppio
+    ];
+    const steps = [
+        "Preparazione lievito madre",
+        "Inizia la lievitazione del lievito madre.",
+        "Creazione impasto",
+        "Attesa raddoppio dell'impasto.",
+    ];
+    return calculatePlanGeneric(infornataTime, durations, steps);
 }
 
+// Funzione per il metodo biga + poolish
 function calculatePlanBigaPoolish(infornataTime, percentualeBiga, percentualePoolish) {
-    const plan = [];
-    let currentTime = new Date(infornataTime);
-
-    // Durate predefinite per gli step modulari (in ore)
-    const durations = {
-        preparazione: 1, // 1 ora per la preparazione di biga e poolish
-        lievitazioneCombinata: 10, // 10 ore per la lievitazione combinata
-        creazioneImpasto: 0.5, // 30 minuti per la creazione dell'impasto
-        attesaRaddoppio: (percentualeBiga + percentualePoolish) / 2 <= 30 ? 6 : (percentualeBiga + percentualePoolish) / 2 >= 70 ? 3 : 4.5, // Tempo variabile per il raddoppio
-    };
-
-    // Step modulari con calcolo degli orari
-    currentTime = new Date(currentTime.getTime() - durations.attesaRaddoppio * 60 * 60 * 1000);
-    plan.unshift({
-        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        action: "Attesa raddoppio dell'impasto."
-    });
-
-    currentTime = new Date(currentTime.getTime() - durations.creazioneImpasto * 60 * 60 * 1000);
-    plan.unshift({
-        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        action: "Creazione impasto"
-    });
-
-    currentTime = new Date(currentTime.getTime() - durations.lievitazioneCombinata * 60 * 60 * 1000);
-    plan.unshift({
-        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        action: "Inizia la lievitazione combinata di biga e poolish."
-    });
-
-    currentTime = new Date(currentTime.getTime() - durations.preparazione * 60 * 60 * 1000);
-    plan.unshift({
-        time: currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        action: "Preparazione biga e poolish"
-    });
-
-    // Aggiungi step finale
-    plan.push({
-        time: new Date(infornataTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        action: "Inforna adesso."
-    });
-
-    return plan;
+    const durations = [
+        1, // Preparazione biga e poolish
+        10, // Lievitazione combinata
+        0.5, // Creazione impasto
+        (percentualeBiga + percentualePoolish) / 2 <= 30 ? 6 : (percentualeBiga + percentualePoolish) / 2 >= 70 ? 3 : 4.5, // Attesa raddoppio
+    ];
+    const steps = [
+        "Preparazione biga e poolish",
+        "Inizia la lievitazione combinata di biga e poolish.",
+        "Creazione impasto",
+        "Attesa raddoppio dell'impasto.",
+    ];
+    return calculatePlanGeneric(infornataTime, durations, steps);
 }
+
