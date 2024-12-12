@@ -201,14 +201,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Calcoli per gli ingredienti base
         const tipoSelezionato = tipoPizzaSelect.value;
-        if (tipoSelezionato && ricette[tipoSelezionato]) {
-            const ingredientiBase = ricette[tipoSelezionato].ingredienti_base;
-            for (const ingrediente in ingredientiBase) {
-                const quantita = ingredientiBase[ingrediente];
-                // Supponiamo che gli ingredienti base abbiano valori nutrizionali simili a quelli aggiuntivi
-                // In realtà, dovresti avere una mappa degli ingredienti base con i loro valori nutrizionali
-                // Per semplicità, qui aggiungiamo solo le quantità senza nutrienti
-                // Se hai nutrienti per gli ingredienti base, integra qui
+        if (tipoSelezionato && ricette[tipoSelezionato].valori_nutrizionali_base) {
+            const valoriBase = ricette[tipoSelezionato].valori_nutrizionali_base;
+            for (const ingrediente in valoriBase) {
+                const quantita = ricette[tipoSelezionato].ingredienti_base[ingrediente];
+                const nutrienti = valoriBase[ingrediente];
+                const fattore = quantita / 100;
+                totali.calorie += (nutrienti.calorie || 0) * fattore;
+                totali.grassi += (nutrienti.grassi || 0) * fattore;
+                totali.carboidrati += (nutrienti.carboidrati || 0) * fattore;
+                totali.zuccheri += (nutrienti.zuccheri || 0) * fattore;
+                totali.fibre += (nutrienti.fibre || 0) * fattore;
+                totali.proteine += (nutrienti.proteine || 0) * fattore;
+                totali.sale += (nutrienti.sale || 0) * fattore;
             }
         }
 
