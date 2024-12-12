@@ -7,27 +7,36 @@ document.addEventListener('DOMContentLoaded', () => {
     window.calcola = function() {
         // Implementa la logica per 'calcola' qui
         console.log("Funzione 'calcola' eseguita.");
-        // Ad esempio, puoi integrare qui calcoli specifici o aggiornamenti della UI
-        // Esempio: aggiornamento di un grafico, invio dati a un server, ecc.
+        // Esempio di calcolo o aggiornamento della UI
+        // Puoi sostituire questo con la logica reale che desideri
     };
 
     // Funzione 'generaPianoGenerico'
     window.generaPianoGenerico = function() {
         // Implementa la logica per 'generaPianoGenerico' qui
         console.log("Funzione 'generaPianoGenerico' eseguita.");
-        // Ad esempio, puoi generare un piano nutrizionale basato sugli ingredienti aggiunti
+        // Esempio di generazione di un piano nutrizionale
+        // Puoi sostituire questo con la logica reale che desideri
     };
 
     // Funzione 'toggleSections' (se necessaria)
     window.toggleSections = function() {
         // Implementa la logica per 'toggleSections' qui
         console.log("Funzione 'toggleSections' eseguita.");
-        // Ad esempio, mostra o nasconde sezioni della UI in base al tipo di impasto selezionato
+        const tipoImpasto = document.getElementById('tipo_impasto').value;
+        // Logica per mostrare/nascondere sezioni basate sul tipo di impasto
+        // Esempio:
+        // if (tipoImpasto === 'biga') { /* mostra sezioni specifiche */ }
+        // else { /* nascondi sezioni specifiche */ }
     };
 
-    // Gestione delle ricette e degli ingredienti
-    const tipoPizza = getQueryParam('tipo') || 'napoletana';
-    const metodoPizza = getQueryParam('metodo') || 'diretto';
+    // Funzione per recuperare i parametri dalla query string
+    function getQueryParam(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+    }
+
+    // Elementi per i valori nutrizionali
     const valoriNutrizionali = {
         calorie: document.getElementById('calorie-totali'),
         grassi: document.getElementById('grassi-totali'),
@@ -48,6 +57,8 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(([ricette, ingredienti]) => {
         window.loadedRicette = ricette;
         window.loadedIngredienti = ingredienti;
+        const tipoPizza = getQueryParam('tipo') || 'napoletana';
+        const metodoPizza = getQueryParam('metodo') || 'diretto';
         configuraCalcolatore(tipoPizza, metodoPizza);
     })
     .catch(err => console.error("Errore nel caricamento dei dati:", err));
@@ -151,12 +162,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.warn(`Elemento per ${key} non trovato.`);
             }
         });
-    }
-
-    // Recupera i parametri dalla query string
-    function getQueryParam(name) {
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get(name);
     }
 
     // Aggiungi Event Listener per il Bottone "Aggiungi Ingrediente"
