@@ -51,14 +51,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2. Caricamento dei Dati JSON
     async function caricaDati() {
         try {
-            const responseRicette = await fetch('data/ricette.json');
+            const [responseRicette, responseIngredienti] = await Promise.all([
+                fetch('data/ricette.json'),
+                fetch('data/ingredienti.json')
+            ]);
+
             if (!responseRicette.ok) {
                 throw new Error(`Errore nel caricamento di ricette.json: ${responseRicette.status}`);
             }
             ricette = await responseRicette.json();
             console.log("Ricette caricate:", ricette);
 
-            const responseIngredienti = await fetch('data/ingredienti.json');
             if (!responseIngredienti.ok) {
                 throw new Error(`Errore nel caricamento di ingredienti.json: ${responseIngredienti.status}`);
             }
@@ -178,6 +181,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         ricettaCorrente = ricette[tipo];
 
+        // Verifica se la ricetta corrente ha ingredienti_base
+        if (!ricettaCorrente.ingredienti_base) {
+            console.error(`Ricetta per ${tipo} non ha la proprietà 'ingredienti_base'.`);
+            return;
+        }
+
         // Mostra gli ingredienti base
         for (const [ingrediente, quantita] of Object.entries(ricettaCorrente.ingredienti_base)) {
             const li = document.createElement('li');
@@ -199,6 +208,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!ricettaCorrente) {
             console.warn("Ricetta corrente non definita.");
+            return;
+        }
+
+        if (!ricettaCorrente.procedimento) {
+            console.error(`Ricetta per ${ricettaCorrente.nome} non ha la proprietà 'procedimento'.`);
             return;
         }
 
@@ -294,7 +308,7 @@ document.addEventListener('DOMContentLoaded', () => {
             listaIngredienti.appendChild(li);
         });
 
-        // Aggiungi Event Listener per i Bottoni di Modifica e Rimuzione
+        // Aggiungi Event Listener per i Bottoni di Modifica e Rimozione
         document.querySelectorAll('.modifica').forEach(button => {
             button.addEventListener('click', e => {
                 const index = e.target.getAttribute('data-index');
