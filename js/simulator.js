@@ -4,12 +4,23 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. Elementi del DOM
     const tipoPizzaSelect = document.getElementById('tipo-pizza');
     const ricettaBaseList = document.getElementById('ricetta-base');
+    const procedimentoList = document.getElementById('procedimento');
     const ingredientiSelezione = document.getElementById('ingredienti-selezione');
     const quantitaIngredienteInput = document.getElementById('quantita-ingrediente');
     const aggiungiIngredienteButton = document.getElementById('aggiungi-ingrediente');
     const listaIngredienti = document.getElementById('lista-ingredienti');
 
-    const valoriNutrizionali = {
+    const valoriNutrizionaliBase = {
+        calorie: document.getElementById('calorie-base'),
+        grassi: document.getElementById('grassi-base'),
+        carboidrati: document.getElementById('carboidrati-base'),
+        zuccheri: document.getElementById('zuccheri-base'),
+        fibre: document.getElementById('fibre-base'),
+        proteine: document.getElementById('proteine-base'),
+        sale: document.getElementById('sale-base'),
+    };
+
+    const valoriNutrizionaliTotali = {
         calorie: document.getElementById('calorie-totali'),
         grassi: document.getElementById('grassi-totali'),
         carboidrati: document.getElementById('carboidrati-totali'),
@@ -19,9 +30,23 @@ document.addEventListener('DOMContentLoaded', () => {
         sale: document.getElementById('sale-totale'),
     };
 
+    const parametriPlaceholderSection = document.getElementById('parametri-placeholder');
+    const massaInput = document.getElementById('massa');
+    const numPanettiInput = document.getElementById('numPanetti');
+    const pesoPanettoInput = document.getElementById('pesoPanetto');
+    const aprettoInput = document.getElementById('apretto');
+    const applicaParametriButton = document.getElementById('applica-parametri');
+
     let ricette = {};
     let ingredientiDisponibili = [];
     let ingredientiAggiunti = [];
+    let ricettaCorrente = null;
+    let parametri = {
+        massa: 2,
+        numPanetti: 4,
+        pesoPanetto: 250,
+        apretto: 2,
+    };
 
     // 2. Caricamento dei Dati JSON
     async function caricaDati() {
@@ -54,10 +79,13 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        // Pulisce le opzioni esistenti (tranne la prima)
+        tipoPizzaSelect.innerHTML = '<option value="" disabled selected>Seleziona un tipo di pizza...</option>';
+
         for (const tipo in ricette) {
             const option = document.createElement('option');
             option.value = tipo;
-            option.textContent = ricette[tipo].nome;
+            option.textContent = capitalizza(ricette[tipo].nome);
             tipoPizzaSelect.appendChild(option);
         }
 
@@ -71,10 +99,13 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        // Pulisce le opzioni esistenti (tranne la prima)
+        ingredientiSelezione.innerHTML = '<option value="" disabled selected>Seleziona un ingrediente...</option>';
+
         ingredientiDisponibili.forEach(ingrediente => {
             const option = document.createElement('option');
             option.value = ingrediente.nome;
-            option.textContent = ingrediente.nome;
+            option.textContent = capitalizza(ingrediente.nome);
             ingredientiSelezione.appendChild(option);
         });
 
@@ -86,34 +117,109 @@ document.addEventListener('DOMContentLoaded', () => {
         tipoPizzaSelect.addEventListener('change', () => {
             const tipoSelezionato = tipoPizzaSelect.value;
             console.log("Tipo di pizza selezionato:", tipoSelezionato);
-            mostraRicettaBase(tipoSelezionato);
+            mostraRicetta(tipoSelezionato);
+            parametriPlaceholderSection.classList.remove('hidden-element');
             resetIngredientiAggiunti();
-            calcolaValoriNutrizionali();
+            calcolaValoriNutrizionaliBase();
+            resetValoriNutrizionaliTotali();
         });
     } else {
         console.error("Elemento 'tipo-pizza' non trovato nel DOM. Non è possibile aggiungere 'change' event listener.");
     }
 
-    // 6. Mostrare la Ricetta Base dell'Impasto
-    function mostraRicettaBase(tipo) {
+    // 6. Applicare i Parametri per i Placeholder
+    if (applicaParametriButton) {
+        applicaParametriButton.addEventListener('click', () => {
+            const massa = parseFloat(massaInput.value);
+            const numPanetti = parseInt(numPanettiInput.value);
+            const pesoPanetto = parseFloat(pesoPanettoInput.value);
+            const apretto = parseFloat(aprettoInput.value);
+
+            if (isNaN(massa) || massa <= 0) {
+                alert("Inserisci un tempo di riposo valido (ore).");
+                return;
+            }
+            if (isNaN(numPanetti) || numPanetti <= 0) {
+                alert("Inserisci un numero di panetti valido.");
+                return;
+            }
+            if (isNaN(pesoPanetto) || pesoPanetto <= 0) {
+                alert("Inserisci un peso di panetto valido (g).");
+                return;
+            }
+            if (isNaN(apretto) || apretto <= 0) {
+                alert("Inserisci un tempo di lievitazione valido (ore).");
+                return;
+            }
+
+            parametri = { massa, numPanetti, pesoPanetto, apretto };
+            console.log("Parametri aggiornati:", parametri);
+            mostraProcedimento();
+            calcolaValoriNutrizionaliBase();
+            calcolaValoriNutrizionaliTotali();
+        });
+    } else {
+        console.error("Elemento 'applica-parametri' non trovato nel DOM.");
+    }
+
+    // 7. Mostrare la Ricetta Base dell'Impasto
+    function mostraRicetta(tipo) {
         if (!ricettaBaseList) {
             console.error("Elemento 'ricetta-base' non trovato nel DOM.");
             return;
         }
+        if (!procedimentoList) {
+            console.error("Elemento 'procedimento' non trovato nel DOM.");
+            return;
+        }
 
         ricettaBaseList.innerHTML = ''; // Pulisce la lista esistente
+        procedimentoList.innerHTML = ''; // Pulisce la lista esistente
 
-        const ingredientiBase = ricette[tipo].ingredienti_base;
-        for (const ingrediente in ingredientiBase) {
+        ricettaCorrente = ricette[tipo];
+
+        // Mostra gli ingredienti base
+        for (const [ingrediente, quantita] of Object.entries(ricettaCorrente.ingredienti_base)) {
             const li = document.createElement('li');
-            li.textContent = `${capitalizza(ingrediente)}: ${ingredientiBase[ingrediente]} g`;
+            li.textContent = `${capitalizza(ingrediente)}: ${quantita} g`;
             ricettaBaseList.appendChild(li);
         }
 
         console.log("Ricetta base visualizzata.");
     }
 
-    // 7. Aggiungere Ingredienti Extra
+    // 8. Mostrare il Procedimento con Sostituzione dei Placeholder
+    function mostraProcedimento() {
+        if (!procedimentoList) {
+            console.error("Elemento 'procedimento' non trovato nel DOM.");
+            return;
+        }
+
+        procedimentoList.innerHTML = ''; // Pulisce la lista esistente
+
+        if (!ricettaCorrente) {
+            console.warn("Ricetta corrente non definita.");
+            return;
+        }
+
+        ricettaCorrente.procedimento.forEach(passo => {
+            const passoSostituito = sostituisciPlaceholder(passo, parametri);
+            const li = document.createElement('li');
+            li.textContent = passoSostituito;
+            procedimentoList.appendChild(li);
+        });
+
+        console.log("Procedimento visualizzato con i parametri applicati.");
+    }
+
+    // 9. Sostituzione dei Placeholder nel Procedimento
+    function sostituisciPlaceholder(passo, parametri) {
+        return passo.replace(/<(\w+)>/g, (match, p1) => {
+            return parametri[p1] !== undefined ? parametri[p1] : match;
+        });
+    }
+
+    // 10. Aggiungere Ingredienti Extra
     if (aggiungiIngredienteButton) {
         aggiungiIngredienteButton.addEventListener('click', () => {
             const nomeIngrediente = ingredientiSelezione.value;
@@ -138,14 +244,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function aggiungiIngrediente(nome, quantita) {
         // Verifica se l'ingrediente è già stato aggiunto
-        const indice = ingredientiAggiunti.findIndex(ing => ing.nome === nome);
+        const indice = ingredientiAggiunti.findIndex(ing => ing.nome.toLowerCase() === nome.toLowerCase());
         if (indice !== -1) {
             // Aggiorna la quantità
             ingredientiAggiunti[indice].quantita += quantita;
             console.log(`Aggiornata quantità di ${nome} a ${ingredientiAggiunti[indice].quantita} g.`);
         } else {
             // Aggiungi un nuovo ingrediente
-            const ingrediente = ingredientiDisponibili.find(ing => ing.nome === nome);
+            const ingrediente = ingredientiDisponibili.find(ing => ing.nome.toLowerCase() === nome.toLowerCase());
             if (ingrediente) {
                 ingredientiAggiunti.push({
                     nome: ingrediente.nome,
@@ -166,10 +272,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         aggiornaListaIngredienti();
-        calcolaValoriNutrizionali();
+        calcolaValoriNutrizionaliTotali();
     }
 
-    // 8. Aggiornare la Lista degli Ingredienti Aggiunti
+    // 11. Aggiornare la Lista degli Ingredienti Aggiunti
     function aggiornaListaIngredienti() {
         if (!listaIngredienti) {
             console.error("Elemento 'lista-ingredienti' non trovato nel DOM.");
@@ -181,14 +287,14 @@ document.addEventListener('DOMContentLoaded', () => {
         ingredientiAggiunti.forEach((ingrediente, index) => {
             const li = document.createElement('li');
             li.innerHTML = `
-                ${ingrediente.nome} - ${ingrediente.quantita} g
+                ${capitalizza(ingrediente.nome)} - ${ingrediente.quantita} g
                 <button class="modifica" data-index="${index}">Modifica</button>
                 <button class="rimuovi" data-index="${index}">Rimuovi</button>
             `;
             listaIngredienti.appendChild(li);
         });
 
-        // Aggiungi Event Listener per i Bottoni di Modifica e Rimozione
+        // Aggiungi Event Listener per i Bottoni di Modifica e Rimuzione
         document.querySelectorAll('.modifica').forEach(button => {
             button.addEventListener('click', e => {
                 const index = e.target.getAttribute('data-index');
@@ -218,7 +324,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ingredientiAggiunti[index].quantita = quantita;
         console.log(`Modificata quantità di ${ingredientiAggiunti[index].nome} a ${quantita} g.`);
         aggiornaListaIngredienti();
-        calcolaValoriNutrizionali();
+        calcolaValoriNutrizionaliTotali();
     }
 
     function rimuoviIngrediente(index) {
@@ -226,13 +332,18 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(`Rimosso ingrediente: ${ingredientiAggiunti[index].nome}`);
             ingredientiAggiunti.splice(index, 1);
             aggiornaListaIngredienti();
-            calcolaValoriNutrizionali();
+            calcolaValoriNutrizionaliTotali();
         }
     }
 
-    // 9. Calcolare i Valori Nutrizionali Totali
-    function calcolaValoriNutrizionali() {
-        const totali = {
+    // 12. Calcolare i Valori Nutrizionali Base
+    function calcolaValoriNutrizionaliBase() {
+        if (!ricettaCorrente) {
+            console.warn("Ricetta corrente non definita.");
+            return;
+        }
+
+        let totali = {
             calorie: 0,
             grassi: 0,
             carboidrati: 0,
@@ -242,13 +353,9 @@ document.addEventListener('DOMContentLoaded', () => {
             sale: 0,
         };
 
-        // Calcoli per gli ingredienti base
-        const tipoSelezionato = tipoPizzaSelect.value;
-        if (tipoSelezionato && ricette[tipoSelezionato].valori_nutrizionali_base) {
-            const valoriBase = ricette[tipoSelezionato].valori_nutrizionali_base;
-            for (const ingrediente in valoriBase) {
-                const quantita = ricette[tipoSelezionato].ingredienti_base[ingrediente];
-                const nutrienti = valoriBase[ingrediente];
+        for (const [ingrediente, quantita] of Object.entries(ricettaCorrente.ingredienti_base)) {
+            const nutrienti = ingredientiDisponibili.find(ing => ing.nome.toLowerCase() === ingrediente.toLowerCase());
+            if (nutrienti) {
                 const fattore = quantita / 100;
                 totali.calorie += (nutrienti.calorie || 0) * fattore;
                 totali.grassi += (nutrienti.grassi || 0) * fattore;
@@ -257,80 +364,137 @@ document.addEventListener('DOMContentLoaded', () => {
                 totali.fibre += (nutrienti.fibre || 0) * fattore;
                 totali.proteine += (nutrienti.proteine || 0) * fattore;
                 totali.sale += (nutrienti.sale || 0) * fattore;
+            } else {
+                console.warn(`Nutrienti per l'ingrediente "${ingrediente}" non trovati.`);
             }
-            console.log("Valori nutrizionali base calcolati:", totali);
-        } else {
-            console.warn("Tipo di pizza selezionato o valori nutrizionali base mancanti.");
+        }
+
+        // Aggiorna i valori nutrizionali base nel DOM
+        aggiornaValoriNutrizionali(valoriNutrizionaliBase, totali);
+
+        console.log("Valori nutrizionali base calcolati:", totali);
+    }
+
+    // 13. Calcolare i Valori Nutrizionali Totali (Base + Extra)
+    function calcolaValoriNutrizionaliTotali() {
+        let totali = {
+            calorie: 0,
+            grassi: 0,
+            carboidrati: 0,
+            zuccheri: 0,
+            fibre: 0,
+            proteine: 0,
+            sale: 0,
+        };
+
+        // Calcoli per i valori nutrizionali base
+        if (ricettaCorrente) {
+            for (const [ingrediente, quantita] of Object.entries(ricettaCorrente.ingredienti_base)) {
+                const nutrienti = ingredientiDisponibili.find(ing => ing.nome.toLowerCase() === ingrediente.toLowerCase());
+                if (nutrienti) {
+                    const fattore = quantita / 100;
+                    totali.calorie += (nutrienti.calorie || 0) * fattore;
+                    totali.grassi += (nutrienti.grassi || 0) * fattore;
+                    totali.carboidrati += (nutrienti.carboidrati || 0) * fattore;
+                    totali.zuccheri += (nutrienti.zuccheri || 0) * fattore;
+                    totali.fibre += (nutrienti.fibre || 0) * fattore;
+                    totali.proteine += (nutrienti.proteine || 0) * fattore;
+                    totali.sale += (nutrienti.sale || 0) * fattore;
+                }
+            }
         }
 
         // Calcoli per gli ingredienti aggiunti
         ingredientiAggiunti.forEach(ingrediente => {
-            const fattore = ingrediente.quantita / 100;
-            totali.calorie += (ingrediente.calorie || 0) * fattore;
-            totali.grassi += (ingrediente.grassi || 0) * fattore;
-            totali.carboidrati += (ingrediente.carboidrati || 0) * fattore;
-            totali.zuccheri += (ingrediente.zuccheri || 0) * fattore;
-            totali.fibre += (ingrediente.fibre || 0) * fattore;
-            totali.proteine += (ingrediente.proteine || 0) * fattore;
-            totali.sale += (ingrediente.sale || 0) * fattore;
+            const nutrienti = ingredientiDisponibili.find(ing => ing.nome.toLowerCase() === ingrediente.nome.toLowerCase());
+            if (nutrienti) {
+                const fattore = ingrediente.quantita / 100;
+                totali.calorie += (nutrienti.calorie || 0) * fattore;
+                totali.grassi += (nutrienti.grassi || 0) * fattore;
+                totali.carboidrati += (nutrienti.carboidrati || 0) * fattore;
+                totali.zuccheri += (nutrienti.zuccheri || 0) * fattore;
+                totali.fibre += (nutrienti.fibre || 0) * fattore;
+                totali.proteine += (nutrienti.proteine || 0) * fattore;
+                totali.sale += (nutrienti.sale || 0) * fattore;
+            }
         });
 
-        // Aggiorna i valori nel DOM
-        if (valoriNutrizionali.calorie) {
-            valoriNutrizionali.calorie.textContent = totali.calorie.toFixed(1);
-        } else {
-            console.warn("Elemento 'calorie-totali' non trovato nel DOM.");
-        }
+        // Aggiorna i valori nutrizionali totali nel DOM
+        aggiornaValoriNutrizionali(valoriNutrizionaliTotali, totali);
 
-        if (valoriNutrizionali.grassi) {
-            valoriNutrizionali.grassi.textContent = totali.grassi.toFixed(1);
-        } else {
-            console.warn("Elemento 'grassi-totali' non trovato nel DOM.");
-        }
-
-        if (valoriNutrizionali.carboidrati) {
-            valoriNutrizionali.carboidrati.textContent = totali.carboidrati.toFixed(1);
-        } else {
-            console.warn("Elemento 'carboidrati-totali' non trovato nel DOM.");
-        }
-
-        if (valoriNutrizionali.zuccheri) {
-            valoriNutrizionali.zuccheri.textContent = totali.zuccheri.toFixed(1);
-        } else {
-            console.warn("Elemento 'zuccheri-totali' non trovato nel DOM.");
-        }
-
-        if (valoriNutrizionali.fibre) {
-            valoriNutrizionali.fibre.textContent = totali.fibre.toFixed(1);
-        } else {
-            console.warn("Elemento 'fibre-totali' non trovato nel DOM.");
-        }
-
-        if (valoriNutrizionali.proteine) {
-            valoriNutrizionali.proteine.textContent = totali.proteine.toFixed(1);
-        } else {
-            console.warn("Elemento 'proteine-totali' non trovato nel DOM.");
-        }
-
-        if (valoriNutrizionali.sale) {
-            valoriNutrizionali.sale.textContent = totali.sale.toFixed(1);
-        } else {
-            console.warn("Elemento 'sale-totale' non trovato nel DOM.");
-        }
-
-        console.log("Valori nutrizionali totali:", totali);
+        console.log("Valori nutrizionali totali calcolati:", totali);
     }
 
-    // 10. Reset degli Ingredienti Aggiunti Quando Si Cambia Tipo di Pizza
+    // 14. Reset dei Valori Nutrizionali Totali
+    function resetValoriNutrizionaliTotali() {
+        if (valoriNutrizionaliTotali.calorie) {
+            valoriNutrizionaliTotali.calorie.textContent = "0";
+        }
+        if (valoriNutrizionaliTotali.grassi) {
+            valoriNutrizionaliTotali.grassi.textContent = "0";
+        }
+        if (valoriNutrizionaliTotali.carboidrati) {
+            valoriNutrizionaliTotali.carboidrati.textContent = "0";
+        }
+        if (valoriNutrizionaliTotali.zuccheri) {
+            valoriNutrizionaliTotali.zuccheri.textContent = "0";
+        }
+        if (valoriNutrizionaliTotali.fibre) {
+            valoriNutrizionaliTotali.fibre.textContent = "0";
+        }
+        if (valoriNutrizionaliTotali.proteine) {
+            valoriNutrizionaliTotali.proteine.textContent = "0";
+        }
+        if (valoriNutrizionaliTotali.sale) {
+            valoriNutrizionaliTotali.sale.textContent = "0";
+        }
+    }
+
+    // 15. Reset della Ricetta
+    function resetRicetta() {
+        if (ricettaBaseList) {
+            ricettaBaseList.innerHTML = '';
+        }
+        if (procedimentoList) {
+            procedimentoList.innerHTML = '';
+        }
+    }
+
+    // 16. Reset degli Ingredienti Aggiunti
     function resetIngredientiAggiunti() {
         ingredientiAggiunti = [];
         aggiornaListaIngredienti();
         console.log("Ingredienti aggiunti resettati.");
     }
 
-    // 11. Helper per Capitalizzare le Stringhe
+    // 17. Helper per Capitalizzare le Stringhe
     function capitalizza(str) {
         return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    // 18. Funzione per Aggiornare i Valori Nutrizionali nel DOM
+    function aggiornaValoriNutrizionali(valoriNutrizionali, totali) {
+        if (valoriNutrizionali.calorie) {
+            valoriNutrizionali.calorie.textContent = totali.calorie.toFixed(1);
+        }
+        if (valoriNutrizionali.grassi) {
+            valoriNutrizionali.grassi.textContent = totali.grassi.toFixed(1);
+        }
+        if (valoriNutrizionali.carboidrati) {
+            valoriNutrizionali.carboidrati.textContent = totali.carboidrati.toFixed(1);
+        }
+        if (valoriNutrizionali.zuccheri) {
+            valoriNutrizionali.zuccheri.textContent = totali.zuccheri.toFixed(1);
+        }
+        if (valoriNutrizionali.fibre) {
+            valoriNutrizionali.fibre.textContent = totali.fibre.toFixed(1);
+        }
+        if (valoriNutrizionali.proteine) {
+            valoriNutrizionali.proteine.textContent = totali.proteine.toFixed(1);
+        }
+        if (valoriNutrizionali.sale) {
+            valoriNutrizionali.sale.textContent = totali.sale.toFixed(1);
+        }
     }
 
     // Inizializza il Caricamento dei Dati
