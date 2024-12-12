@@ -49,28 +49,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Aggiorna la lista degli ingredienti visibile
     function aggiornaListaIngredienti() {
-        const lista = document.getElementById('ingredienti-container');
-        lista.innerHTML = ''; // Pulisce la lista esistente
+    const lista = document.getElementById('lista-ingredienti'); // ID corretto
+    lista.innerHTML = ''; // Pulisce la lista esistente
 
-        ingredientiAggiunti.forEach((ingrediente, index) => {
-            const li = document.createElement('li');
-            li.innerHTML = `
-                ${ingrediente.nome} - ${ingrediente.quantita} g
-                <button class="modifica" data-index="${index}">Modifica</button>
-                <button class="rimuovi" data-index="${index}">Rimuovi</button>
-            `;
-            lista.appendChild(li);
-        });
+    ingredientiAggiunti.forEach((ingrediente, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+            ${ingrediente.nome} - ${ingrediente.quantita} g
+            <button class="modifica" data-index="${index}">Modifica</button>
+            <button class="rimuovi" data-index="${index}">Rimuovi</button>
+        `;
+        lista.appendChild(li);
+    });
 
-        // Aggiungi eventi per modifica e rimozione
-        document.querySelectorAll('.modifica').forEach(button => {
-            button.addEventListener('click', e => modificaIngrediente(e.target.dataset.index));
-        });
+    // Aggiungi eventi per modifica e rimozione
+    document.querySelectorAll('.modifica').forEach(button => {
+        button.addEventListener('click', e => modificaIngrediente(e.target.dataset.index));
+    });
 
-        document.querySelectorAll('.rimuovi').forEach(button => {
-            button.addEventListener('click', e => rimuoviIngrediente(e.target.dataset.index));
-        });
-    }
+    document.querySelectorAll('.rimuovi').forEach(button => {
+        button.addEventListener('click', e => rimuoviIngrediente(e.target.dataset.index));
+    });
+}
+
 
     // Modifica la quantità di un ingrediente
     function modificaIngrediente(index) {
@@ -124,3 +125,4 @@ document.addEventListener('DOMContentLoaded', () => {
         return urlParams.get(name);
     }
 });
+    
