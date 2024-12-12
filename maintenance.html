@@ -90,19 +90,14 @@
                 </table>
             </div>
         </section>
-
-        <!-- Elementi Fittizi Nascosti per `calcolatore_script.js` -->
-        <button id="calcola-button" class="hidden-element"></button>
-        <button id="genera-piano" class="hidden-element"></button>
-        <select id="tipo_impasto" class="hidden-element"></select>
     </main>
     <footer>
         <p>&copy; 2024 PizzaLab</p>
     </footer>
 
     <!-- Importare simulator.js prima di calcolatore_script.js -->
-    <script src="js/simulator.js" defer></script> <!-- Script per definire 'calcola' e 'generaPianoGenerico' -->
-    <script src="js/calcolatore_script.js" defer></script> <!-- Script che utilizza le funzioni definite -->
+    <script src="js/simulator.js" defer></script> <!-- Definisce 'calcola' e 'generaPianoGenerico' -->
+    <script src="js/calcolatore_script.js" defer></script> <!-- Utilizza le funzioni definite -->
     <script src="js/main.js" defer></script> <!-- Script per il menu hamburger -->
 </body>
 </html>
