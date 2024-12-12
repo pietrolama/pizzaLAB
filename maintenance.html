@@ -6,15 +6,13 @@
     <title>Simulatore di Ingredienti</title>
     <link rel="stylesheet" href="css/main.css">
     <link rel="icon" href="logo.ico" type="image/x-icon">
+    <style>
+        /* Stile per nascondere gli elementi fittizi */
+        .hidden-element {
+            display: none;
+        }
+    </style>
 </head>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1CV0W5QPKV"></script>
-<script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-1CV0W5QPKV');
-</script>
 <body>
     <header> 
         <h1>Simulatore di valori nutrizionali</h1>
@@ -92,9 +90,19 @@
                 </table>
             </div>
         </section>
+
+        <!-- Elementi Fittizi Nascosti per `calcolatore_script.js` -->
+        <div id="calcola-button" class="hidden-element"></div>
+        <div id="genera-piano" class="hidden-element"></div>
+        <div id="tipo_impasto" class="hidden-element"></div>
     </main>
-    <script src="js/main.js" defer></script> <!-- Nuovo script per il menu hamburger -->
-    <script src="js/calcolatore_script.js" defer></script>
-    <script src="js/simulator.js" defer></script>
+    <footer>
+        <p>&copy; 2024 PizzaLab</p>
+    </footer>
+
+    <!-- Importante: caricare prima calcolatore_script.js -->
+    <script src="js/main.js" defer></script> <!-- Script per il menu hamburger -->
+    <script src="js/calcolatore_script.js" defer></script> <!-- Script di calcolo delle ricette -->
+    <script src="js/simulator.js" defer></script> <!-- Script per la simulazione dei nutrienti -->
 </body>
 </html>
