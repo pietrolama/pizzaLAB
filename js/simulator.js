@@ -1,27 +1,31 @@
 // simulator.js
 
-// simulator.js
-
 document.addEventListener('DOMContentLoaded', () => {
-    // Definizione della funzione 'calcola'
+    // Definizione delle funzioni globali necessarie per `calcolatore_script.js`
+    
+    // Funzione 'calcola'
     window.calcola = function() {
         // Implementa la logica per 'calcola' qui
         console.log("Funzione 'calcola' eseguita.");
-        // Ad esempio, potresti voler calcolare qualcosa o aggiornare la UI
+        // Ad esempio, puoi integrare qui calcoli specifici o aggiornamenti della UI
+        // Esempio: aggiornamento di un grafico, invio dati a un server, ecc.
     };
 
-    // Definizione della funzione 'generaPianoGenerico'
+    // Funzione 'generaPianoGenerico'
     window.generaPianoGenerico = function() {
         // Implementa la logica per 'generaPianoGenerico' qui
         console.log("Funzione 'generaPianoGenerico' eseguita.");
-        // Ad esempio, potresti voler generare un piano nutrizionale
+        // Ad esempio, puoi generare un piano nutrizionale basato sugli ingredienti aggiunti
     };
 
-    // Altre funzionalità specifiche per simulator.html
-    // ...
-});
+    // Funzione 'toggleSections' (se necessaria)
+    window.toggleSections = function() {
+        // Implementa la logica per 'toggleSections' qui
+        console.log("Funzione 'toggleSections' eseguita.");
+        // Ad esempio, mostra o nasconde sezioni della UI in base al tipo di impasto selezionato
+    };
 
-document.addEventListener('DOMContentLoaded', () => {
+    // Gestione delle ricette e degli ingredienti
     const tipoPizza = getQueryParam('tipo') || 'napoletana';
     const metodoPizza = getQueryParam('metodo') || 'diretto';
     const valoriNutrizionali = {
