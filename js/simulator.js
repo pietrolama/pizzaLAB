@@ -49,29 +49,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Aggiorna la lista degli ingredienti visibile
     function aggiornaListaIngredienti() {
-    const lista = document.getElementById('lista-ingredienti'); // ID corretto
-    lista.innerHTML = ''; // Pulisce la lista esistente
+        const lista = document.getElementById('lista-ingredienti'); // ID corretto
+        if (!lista) {
+            console.error("Elemento 'lista-ingredienti' non trovato nel DOM.");
+            return;
+        }
+        lista.innerHTML = ''; // Pulisce la lista esistente
 
-    ingredientiAggiunti.forEach((ingrediente, index) => {
-        const li = document.createElement('li');
-        li.innerHTML = `
-            ${ingrediente.nome} - ${ingrediente.quantita} g
-            <button class="modifica" data-index="${index}">Modifica</button>
-            <button class="rimuovi" data-index="${index}">Rimuovi</button>
-        `;
-        lista.appendChild(li);
-    });
+        ingredientiAggiunti.forEach((ingrediente, index) => {
+            const li = document.createElement('li');
+            li.innerHTML = `
+                ${ingrediente.nome} - ${ingrediente.quantita} g
+                <button class="modifica" data-index="${index}">Modifica</button>
+                <button class="rimuovi" data-index="${index}">Rimuovi</button>
+            `;
+            lista.appendChild(li);
+        });
 
-    // Aggiungi eventi per modifica e rimozione
-    document.querySelectorAll('.modifica').forEach(button => {
-        button.addEventListener('click', e => modificaIngrediente(e.target.dataset.index));
-    });
+        // Aggiungi eventi per modifica e rimozione
+        document.querySelectorAll('.modifica').forEach(button => {
+            button.addEventListener('click', e => modificaIngrediente(e.target.dataset.index));
+        });
 
-    document.querySelectorAll('.rimuovi').forEach(button => {
-        button.addEventListener('click', e => rimuoviIngrediente(e.target.dataset.index));
-    });
-}
-
+        document.querySelectorAll('.rimuovi').forEach(button => {
+            button.addEventListener('click', e => rimuoviIngrediente(e.target.dataset.index));
+        });
+    }
 
     // Modifica la quantità di un ingrediente
     function modificaIngrediente(index) {
@@ -115,7 +118,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Aggiorna i valori nella UI
         Object.keys(valoriNutrizionali).forEach(key => {
-            valoriNutrizionali[key].textContent = totali[key].toFixed(1);
+            if (valoriNutrizionali[key]) {
+                valoriNutrizionali[key].textContent = totali[key].toFixed(1);
+            } else {
+                console.warn(`Elemento per ${key} non trovato.`);
+            }
         });
     }
 
@@ -124,5 +131,43 @@ document.addEventListener('DOMContentLoaded', () => {
         const urlParams = new URLSearchParams(window.location.search);
         return urlParams.get(name);
     }
+
+    // Aggiungi Event Listener per il Bottone "Aggiungi Ingrediente"
+    const aggiungiButton = document.getElementById('aggiungi-ingrediente');
+    if (aggiungiButton) {
+        aggiungiButton.addEventListener('click', () => {
+            const select = document.getElementById('ingredienti-selezione');
+            const selectedIngredientName = select.value;
+            
+            if (!selectedIngredientName) {
+                alert('Per favore, seleziona un ingrediente.');
+                return;
+            }
+
+            const ingrediente = window.loadedIngredienti.find(i => i.nome === selectedIngredientName);
+            if (ingrediente) {
+                ingredientiAggiunti.push({
+                    nome: ingrediente.nome,
+                    quantita: 100, // Default quantità, puoi modificare secondo necessità
+                    ...ingrediente
+                });
+                aggiornaListaIngredienti();
+                calcolaValoriNutrizionali();
+            } else {
+                console.error('Ingrediente non trovato:', selectedIngredientName);
+            }
+        });
+    } else {
+        console.error("Elemento 'aggiungi-ingrediente' non trovato nel DOM.");
+    }
+
+    // Aggiungi Event Listener per il Bottone "Calcola Valori Nutrizionali"
+    const calcolaButton = document.getElementById('calcola-valori');
+    if (calcolaButton) {
+        calcolaButton.addEventListener('click', () => {
+            calcolaValoriNutrizionali();
+        });
+    } else {
+        console.error("Elemento 'calcola-valori' non trovato nel DOM.");
+    }
 });
-    
