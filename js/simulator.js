@@ -1,4 +1,25 @@
-// calcolatore_script.js
+// simulator.js
+
+// simulator.js
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Definizione della funzione 'calcola'
+    window.calcola = function() {
+        // Implementa la logica per 'calcola' qui
+        console.log("Funzione 'calcola' eseguita.");
+        // Ad esempio, potresti voler calcolare qualcosa o aggiornare la UI
+    };
+
+    // Definizione della funzione 'generaPianoGenerico'
+    window.generaPianoGenerico = function() {
+        // Implementa la logica per 'generaPianoGenerico' qui
+        console.log("Funzione 'generaPianoGenerico' eseguita.");
+        // Ad esempio, potresti voler generare un piano nutrizionale
+    };
+
+    // Altre funzionalità specifiche per simulator.html
+    // ...
+});
 
 document.addEventListener('DOMContentLoaded', () => {
     const tipoPizza = getQueryParam('tipo') || 'napoletana';
