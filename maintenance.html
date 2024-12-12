@@ -99,9 +99,10 @@
     <footer>
         <p>&copy; 2024 PizzaLab</p>
     </footer>
-    <script src="js/calcolatore_script.js" defer></script> <!-- Script di calcolo delle ricette -->
-    <!-- Importante: caricare prima calcolatore_script.js -->
-    <script src="js/main.js" defer></script> <!-- Script per il menu hamburger -->
+
+    <!-- Importare simulator.js prima di calcolatore_script.js -->
     <script src="js/simulator.js" defer></script> <!-- Script per la simulazione dei nutrienti -->
+    <script src="js/calcolatore_script.js" defer></script>
+    <script src="js/main.js" defer></script> <!-- Script per il menu hamburger -->
 </body>
 </html>
