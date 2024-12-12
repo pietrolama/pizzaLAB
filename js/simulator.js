@@ -1,42 +1,36 @@
 // simulator.js
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Definizione delle funzioni globali necessarie per `calcolatore_script.js`
-    
-    // Funzione 'calcola'
+    // 1. Definizione delle Funzioni Globali Necessarie
     window.calcola = function() {
         // Implementa la logica per 'calcola' qui
         console.log("Funzione 'calcola' eseguita.");
-        // Esempio di calcolo o aggiornamento della UI
-        // Puoi sostituire questo con la logica reale che desideri
+        // Esempio: Puoi integrare qui calcoli specifici o aggiornamenti della UI
     };
 
-    // Funzione 'generaPianoGenerico'
     window.generaPianoGenerico = function() {
         // Implementa la logica per 'generaPianoGenerico' qui
         console.log("Funzione 'generaPianoGenerico' eseguita.");
-        // Esempio di generazione di un piano nutrizionale
-        // Puoi sostituire questo con la logica reale che desideri
+        // Esempio: Puoi generare un piano nutrizionale basato sugli ingredienti aggiunti
     };
 
-    // Funzione 'toggleSections' (se necessaria)
     window.toggleSections = function() {
         // Implementa la logica per 'toggleSections' qui
         console.log("Funzione 'toggleSections' eseguita.");
-        const tipoImpasto = document.getElementById('tipo_impasto').value;
-        // Logica per mostrare/nascondere sezioni basate sul tipo di impasto
-        // Esempio:
-        // if (tipoImpasto === 'biga') { /* mostra sezioni specifiche */ }
-        // else { /* nascondi sezioni specifiche */ }
+        const tipoImpasto = document.getElementById('tipo_impasto')?.value;
+        if (tipoImpasto === 'biga') {
+            // Mostra sezioni specifiche per 'biga'
+            console.log("Tipo impasto: Biga");
+            // Aggiungi qui la logica per mostrare/nascondere sezioni
+        } else if (tipoImpasto === 'poolish') {
+            // Mostra sezioni specifiche per 'poolish'
+            console.log("Tipo impasto: Poolish");
+            // Aggiungi qui la logica per mostrare/nascondere sezioni
+        }
+        // Aggiungi ulteriori condizioni se necessario
     };
 
-    // Funzione per recuperare i parametri dalla query string
-    function getQueryParam(name) {
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get(name);
-    }
-
-    // Elementi per i valori nutrizionali
+    // 2. Riferimenti agli Elementi per i Valori Nutrizionali
     const valoriNutrizionali = {
         calorie: document.getElementById('calorie-totali'),
         grassi: document.getElementById('grassi-totali'),
@@ -49,7 +43,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let ingredientiAggiunti = [];
 
-    // Caricamento dati delle ricette e degli ingredienti
+    // 3. Funzione per Recuperare i Parametri dalla Query String
+    function getQueryParam(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+    }
+
+    // 4. Caricamento dei Dati delle Ricette e degli Ingredienti
     Promise.all([
         fetch('data/ricette.json').then(res => res.json()),
         fetch('data/ingredienti.json').then(res => res.json())
@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     .catch(err => console.error("Errore nel caricamento dei dati:", err));
 
-    // Configura il calcolatore in base alla ricetta
+    // 5. Configura il Calcolatore in Base alla Ricetta
     function configuraCalcolatore(tipoPizza, metodoPizza) {
         const ricetta = window.loadedRicette[tipoPizza]?.[metodoPizza];
         if (!ricetta) {
@@ -85,9 +85,9 @@ document.addEventListener('DOMContentLoaded', () => {
         calcolaValoriNutrizionali();
     }
 
-    // Aggiorna la lista degli ingredienti visibile
+    // 6. Aggiorna la Lista degli Ingredienti Visibile
     function aggiornaListaIngredienti() {
-        const lista = document.getElementById('lista-ingredienti'); // ID corretto
+        const lista = document.getElementById('lista-ingredienti');
         if (!lista) {
             console.error("Elemento 'lista-ingredienti' non trovato nel DOM.");
             return;
@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Modifica la quantità di un ingrediente
+    // 7. Modifica la Quantità di un Ingrediente
     function modificaIngrediente(index) {
         const nuovoPeso = prompt("Inserisci il nuovo peso (g):", ingredientiAggiunti[index].quantita);
         if (nuovoPeso && !isNaN(nuovoPeso)) {
@@ -124,14 +124,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Rimuove un ingrediente
+    // 8. Rimuove un Ingrediente
     function rimuoviIngrediente(index) {
         ingredientiAggiunti.splice(index, 1);
         aggiornaListaIngredienti();
         calcolaValoriNutrizionali();
     }
 
-    // Calcola i valori nutrizionali totali
+    // 9. Calcola i Valori Nutrizionali Totali
     function calcolaValoriNutrizionali() {
         const totali = {
             calorie: 0,
@@ -164,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Aggiungi Event Listener per il Bottone "Aggiungi Ingrediente"
+    // 10. Aggiungi Event Listener per il Bottone "Aggiungi Ingrediente"
     const aggiungiButton = document.getElementById('aggiungi-ingrediente');
     if (aggiungiButton) {
         aggiungiButton.addEventListener('click', () => {
@@ -193,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.warn("Elemento 'aggiungi-ingrediente' non trovato nel DOM.");
     }
 
-    // Aggiungi Event Listener per il Bottone "Calcola Valori Nutrizionali"
+    // 11. Aggiungi Event Listener per il Bottone "Calcola Valori Nutrizionali"
     const calcolaButton = document.getElementById('calcola-valori');
     if (calcolaButton) {
         calcolaButton.addEventListener('click', () => {
@@ -203,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.warn("Elemento 'calcola-valori' non trovato nel DOM.");
     }
 
-    // Event listener per il pulsante 'Calcola e Genera Ricetta' e per Genera Piano
+    // 12. Event Listener per il Pulsante 'Calcola e Genera Ricetta' e per Genera Piano
     const calcolaRicettaButton = document.getElementById('calcola-button');
     if (calcolaRicettaButton) {
         calcolaRicettaButton.addEventListener('click', calcola);
@@ -218,7 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.warn("Elemento 'genera-piano' non trovato nel DOM.");
     }
 
-    // Event listener per il cambiamento del metodo di impasto
+    // 13. Event Listener per il Cambiamento del Metodo di Impasto
     const tipoImpastoElement = document.getElementById('tipo_impasto');
     if (tipoImpastoElement) {
         tipoImpastoElement.addEventListener('change', toggleSections);
