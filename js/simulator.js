@@ -1,91 +1,114 @@
 // simulator.js
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Definizione delle Funzioni Globali Necessarie
-    window.calcola = function() {
-        // Implementa la logica per 'calcola' qui
-        console.log("Funzione 'calcola' eseguita.");
-        // Esempio: Puoi integrare qui calcoli specifici o aggiornamenti della UI
-    };
-
-    window.generaPianoGenerico = function() {
-        // Implementa la logica per 'generaPianoGenerico' qui
-        console.log("Funzione 'generaPianoGenerico' eseguita.");
-        // Esempio: Puoi generare un piano nutrizionale basato sugli ingredienti aggiunti
-    };
-
-    window.toggleSections = function() {
-        // Implementa la logica per 'toggleSections' qui
-        console.log("Funzione 'toggleSections' eseguita.");
-        const tipoImpasto = document.getElementById('tipo_impasto')?.value;
-        if (tipoImpasto === 'biga') {
-            // Mostra sezioni specifiche per 'biga'
-            console.log("Tipo impasto: Biga");
-            // Aggiungi qui la logica per mostrare/nascondere sezioni
-        } else if (tipoImpasto === 'poolish') {
-            // Mostra sezioni specifiche per 'poolish'
-            console.log("Tipo impasto: Poolish");
-            // Aggiungi qui la logica per mostrare/nascondere sezioni
+    // 1. Creazione Dinamica degli Elementi Mancanti
+    function creaElementiMancanti() {
+        // Creazione del Bottone 'calcola-button' se non esiste
+        if (!document.getElementById('calcola-button')) {
+            const calcolaButton = document.createElement('button');
+            calcolaButton.id = 'calcola-button';
+            calcolaButton.style.display = 'none'; // Nascondi l'elemento
+            document.body.appendChild(calcolaButton);
         }
-        // Aggiungi ulteriori condizioni se necessario
-    };
 
-    // 2. Riferimenti agli Elementi per i Valori Nutrizionali
-    const valoriNutrizionali = {
-        calorie: document.getElementById('calorie-totali'),
-        grassi: document.getElementById('grassi-totali'),
-        carboidrati: document.getElementById('carboidrati-totali'),
-        zuccheri: document.getElementById('zuccheri-totali'),
-        fibre: document.getElementById('fibre-totali'),
-        proteine: document.getElementById('proteine-totali'),
-        sale: document.getElementById('sale-totale'),
-    };
+        // Creazione del Bottone 'genera-piano' se non esiste
+        if (!document.getElementById('genera-piano')) {
+            const generaPianoButton = document.createElement('button');
+            generaPianoButton.id = 'genera-piano';
+            generaPianoButton.style.display = 'none'; // Nascondi l'elemento
+            document.body.appendChild(generaPianoButton);
+        }
 
+        // Creazione del Select 'tipo_impasto' se non esiste
+        if (!document.getElementById('tipo_impasto')) {
+            const tipoImpastoSelect = document.createElement('select');
+            tipoImpastoSelect.id = 'tipo_impasto';
+            tipoImpastoSelect.style.display = 'none'; // Nascondi l'elemento
+            document.body.appendChild(tipoImpastoSelect);
+        }
+    }
+
+    // 2. Definizione delle Funzioni Globali
+    function definisciFunzioniGlobali() {
+        // Funzione 'calcola' richiesta da calcolatore_script.js
+        window.calcola = function() {
+            console.log("Funzione 'calcola' eseguita.");
+            // Puoi integrare qui la logica necessaria per 'calcola'
+            // Ad esempio, potrebbe richiamare funzioni di calcolo specifiche
+        };
+
+        // Funzione 'generaPianoGenerico' richiesta da calcolatore_script.js
+        window.generaPianoGenerico = function() {
+            console.log("Funzione 'generaPianoGenerico' eseguita.");
+            // Puoi integrare qui la logica necessaria per 'generaPianoGenerico'
+            // Ad esempio, potrebbe generare un piano nutrizionale basato sugli ingredienti
+        };
+
+        // Funzione 'toggleSections' richiesta da calcolatore_script.js
+        window.toggleSections = function() {
+            console.log("Funzione 'toggleSections' eseguita.");
+            const tipoImpasto = document.getElementById('tipo_impasto')?.value;
+            if (tipoImpasto === 'biga') {
+                // Logica per il metodo 'biga'
+                console.log("Tipo impasto selezionato: Biga");
+                // Implementa qui la logica per mostrare/nascondere sezioni specifiche
+            } else if (tipoImpasto === 'poolish') {
+                // Logica per il metodo 'poolish'
+                console.log("Tipo impasto selezionato: Poolish");
+                // Implementa qui la logica per mostrare/nascondere sezioni specifiche
+            }
+            // Aggiungi ulteriori condizioni se necessario
+        };
+    }
+
+    // 3. Popolamento delle Selezioni
+    async function popolaSelezioni() {
+        try {
+            // Carica gli ingredienti dal JSON
+            const response = await fetch('data/ingredienti.json');
+            if (!response.ok) {
+                throw new Error(`Errore nel caricamento degli ingredienti: ${response.status}`);
+            }
+            const ingredienti = await response.json();
+            window.loadedIngredienti = ingredienti;
+
+            // Popola il select degli impasti (impasto-selezione)
+            const impastoSelect = document.getElementById('impasto-selezione');
+            if (impastoSelect) {
+                // Definisci i tipi di impasto disponibili
+                const tipiImpasto = ["diretto", "biga", "poolish", "lievito_madre", "biga_poolish"]; // Aggiorna secondo necessità
+                tipiImpasto.forEach(impasto => {
+                    const option = document.createElement('option');
+                    option.value = impasto;
+                    option.textContent = capitalizza(impasto.replace('_', ' '));
+                    impastoSelect.appendChild(option);
+                });
+            }
+
+            // Popola il select degli ingredienti (ingredienti-selezione)
+            const ingredientiSelect = document.getElementById('ingredienti-selezione');
+            if (ingredientiSelect) {
+                ingredienti.forEach(ingrediente => {
+                    const option = document.createElement('option');
+                    option.value = ingrediente.nome;
+                    option.textContent = capitalizza(ingrediente.nome);
+                    ingredientiSelect.appendChild(option);
+                });
+            }
+
+        } catch (error) {
+            console.error("Errore durante il popolamento delle selezioni:", error);
+        }
+    }
+
+    // Helper per capitalizzare le stringhe
+    function capitalizza(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    // 4. Gestione degli Ingredienti Aggiunti
     let ingredientiAggiunti = [];
 
-    // 3. Funzione per Recuperare i Parametri dalla Query String
-    function getQueryParam(name) {
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get(name);
-    }
-
-    // 4. Caricamento dei Dati delle Ricette e degli Ingredienti
-    Promise.all([
-        fetch('data/ricette.json').then(res => res.json()),
-        fetch('data/ingredienti.json').then(res => res.json())
-    ])
-    .then(([ricette, ingredienti]) => {
-        window.loadedRicette = ricette;
-        window.loadedIngredienti = ingredienti;
-        const tipoPizza = getQueryParam('tipo') || 'napoletana';
-        const metodoPizza = getQueryParam('metodo') || 'diretto';
-        configuraCalcolatore(tipoPizza, metodoPizza);
-    })
-    .catch(err => console.error("Errore nel caricamento dei dati:", err));
-
-    // 5. Configura il Calcolatore in Base alla Ricetta
-    function configuraCalcolatore(tipoPizza, metodoPizza) {
-        const ricetta = window.loadedRicette[tipoPizza]?.[metodoPizza];
-        if (!ricetta) {
-            console.error("Ricetta non trovata:", tipoPizza, metodoPizza);
-            return;
-        }
-
-        // Configura gli ingredienti
-        ingredientiAggiunti = ricetta.ingredienti.map(ing => {
-            const ingredienteBase = window.loadedIngredienti.find(i => i.nome === ing.nome) || {};
-            return {
-                nome: ing.nome,
-                quantita: parseFloat(ing.quantita) || 0,
-                ...ingredienteBase
-            };
-        });
-
-        aggiornaListaIngredienti();
-        calcolaValoriNutrizionali();
-    }
-
-    // 6. Aggiorna la Lista degli Ingredienti Visibile
     function aggiornaListaIngredienti() {
         const lista = document.getElementById('lista-ingredienti');
         if (!lista) {
@@ -114,24 +137,57 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 7. Modifica la Quantità di un Ingrediente
+    function aggiungiIngrediente(nome, quantita = 100) { // Quantità predefinita: 100g
+        const ingredienteBase = window.loadedIngredienti.find(i => i.nome === nome);
+        if (ingredienteBase) {
+            ingredientiAggiunti.push({
+                nome: ingredienteBase.nome,
+                quantita: quantita,
+                calorie: ingredienteBase.calorie || 0,
+                grassi: ingredienteBase.grassi || 0,
+                carboidrati: ingredienteBase.carboidrati || 0,
+                zuccheri: ingredienteBase.zuccheri || 0,
+                fibre: ingredienteBase.fibre || 0,
+                proteine: ingredienteBase.proteine || 0,
+                sale: ingredienteBase.sale || 0,
+            });
+            aggiornaListaIngredienti();
+            calcolaValoriNutrizionali();
+        } else {
+            console.error(`Ingrediente "${nome}" non trovato.`);
+        }
+    }
+
     function modificaIngrediente(index) {
         const nuovoPeso = prompt("Inserisci il nuovo peso (g):", ingredientiAggiunti[index].quantita);
-        if (nuovoPeso && !isNaN(nuovoPeso)) {
+        if (nuovoPeso && !isNaN(nuovoPeso) && parseFloat(nuovoPeso) > 0) {
             ingredientiAggiunti[index].quantita = parseFloat(nuovoPeso);
+            aggiornaListaIngredienti();
+            calcolaValoriNutrizionali();
+        } else {
+            alert("Peso non valido. Riprova.");
+        }
+    }
+
+    function rimuoviIngrediente(index) {
+        if (confirm(`Sei sicuro di voler rimuovere "${ingredientiAggiunti[index].nome}"?`)) {
+            ingredientiAggiunti.splice(index, 1);
             aggiornaListaIngredienti();
             calcolaValoriNutrizionali();
         }
     }
 
-    // 8. Rimuove un Ingrediente
-    function rimuoviIngrediente(index) {
-        ingredientiAggiunti.splice(index, 1);
-        aggiornaListaIngredienti();
-        calcolaValoriNutrizionali();
-    }
+    // 5. Calcolo dei Valori Nutrizionali Totali
+    const valoriNutrizionali = {
+        calorie: document.getElementById('calorie-totali'),
+        grassi: document.getElementById('grassi-totali'),
+        carboidrati: document.getElementById('carboidrati-totali'),
+        zuccheri: document.getElementById('zuccheri-totali'),
+        fibre: document.getElementById('fibre-totali'),
+        proteine: document.getElementById('proteine-totali'),
+        sale: document.getElementById('sale-totale'),
+    };
 
-    // 9. Calcola i Valori Nutrizionali Totali
     function calcolaValoriNutrizionali() {
         const totali = {
             calorie: 0,
@@ -164,65 +220,76 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 10. Aggiungi Event Listener per il Bottone "Aggiungi Ingrediente"
-    const aggiungiButton = document.getElementById('aggiungi-ingrediente');
-    if (aggiungiButton) {
-        aggiungiButton.addEventListener('click', () => {
-            const select = document.getElementById('ingredienti-selezione');
-            const selectedIngredientName = select.value;
-            
-            if (!selectedIngredientName) {
-                alert('Per favore, seleziona un ingrediente.');
-                return;
-            }
+    // 6. Gestione degli Event Listener per i Bottoni e Selezioni
+    function gestisciEventListener() {
+        // Event listener per il bottone "Aggiungi Ingrediente"
+        const aggiungiButton = document.getElementById('aggiungi-ingrediente');
+        if (aggiungiButton) {
+            aggiungiButton.addEventListener('click', () => {
+                const select = document.getElementById('ingredienti-selezione');
+                const selectedIngredientName = select.value;
 
-            const ingrediente = window.loadedIngredienti.find(i => i.nome === selectedIngredientName);
-            if (ingrediente) {
-                ingredientiAggiunti.push({
-                    nome: ingrediente.nome,
-                    quantita: 100, // Default quantità, puoi modificare secondo necessità
-                    ...ingrediente
-                });
-                aggiornaListaIngredienti();
+                if (!selectedIngredientName) {
+                    alert('Per favore, seleziona un ingrediente.');
+                    return;
+                }
+
+                aggiungiIngrediente(selectedIngredientName);
+            });
+        } else {
+            console.warn("Elemento 'aggiungi-ingrediente' non trovato nel DOM.");
+        }
+
+        // Event listener per il bottone "Calcola Valori Nutrizionali"
+        const calcolaButton = document.getElementById('calcola-valori');
+        if (calcolaButton) {
+            calcolaButton.addEventListener('click', () => {
                 calcolaValoriNutrizionali();
-            } else {
-                console.error('Ingrediente non trovato:', selectedIngredientName);
-            }
-        });
-    } else {
-        console.warn("Elemento 'aggiungi-ingrediente' non trovato nel DOM.");
+            });
+        } else {
+            console.warn("Elemento 'calcola-valori' non trovato nel DOM.");
+        }
+
+        // Event listener per il bottone "Calcola e Genera Ricetta"
+        const calcolaRicettaButton = document.getElementById('calcola-button');
+        if (calcolaRicettaButton) {
+            calcolaRicettaButton.addEventListener('click', () => {
+                window.calcola(); // Richiama la funzione globale 'calcola'
+            });
+        } else {
+            console.warn("Elemento 'calcola-button' non trovato nel DOM.");
+        }
+
+        // Event listener per il bottone "Genera Piano"
+        const generaPianoButton = document.getElementById('genera-piano');
+        if (generaPianoButton) {
+            generaPianoButton.addEventListener('click', () => {
+                window.generaPianoGenerico(); // Richiama la funzione globale 'generaPianoGenerico'
+            });
+        } else {
+            console.warn("Elemento 'genera-piano' non trovato nel DOM.");
+        }
+
+        // Event listener per la selezione dell'impasto
+        const impastoSelezione = document.getElementById('impasto-selezione');
+        if (impastoSelezione) {
+            impastoSelezione.addEventListener('change', () => {
+                console.log("Tipo di impasto selezionato:", impastoSelezione.value);
+                // Puoi integrare qui la logica specifica per il simulatore basata sul tipo di impasto
+                // Ad esempio, filtrare gli ingredienti disponibili o modificare i parametri di calcolo
+            });
+        } else {
+            console.warn("Elemento 'impasto-selezione' non trovato nel DOM.");
+        }
     }
 
-    // 11. Aggiungi Event Listener per il Bottone "Calcola Valori Nutrizionali"
-    const calcolaButton = document.getElementById('calcola-valori');
-    if (calcolaButton) {
-        calcolaButton.addEventListener('click', () => {
-            calcolaValoriNutrizionali();
-        });
-    } else {
-        console.warn("Elemento 'calcola-valori' non trovato nel DOM.");
+    // 7. Inizializzazione del Simulatore
+    async function inizializzaSimulatore() {
+        creaElementiMancanti();
+        definisciFunzioniGlobali();
+        await popolaSelezioni();
+        gestisciEventListener();
     }
 
-    // 12. Event Listener per il Pulsante 'Calcola e Genera Ricetta' e per Genera Piano
-    const calcolaRicettaButton = document.getElementById('calcola-button');
-    if (calcolaRicettaButton) {
-        calcolaRicettaButton.addEventListener('click', calcola);
-    } else {
-        console.warn("Elemento 'calcola-button' non trovato nel DOM.");
-    }
-
-    const generaPianoButton = document.getElementById('genera-piano');
-    if (generaPianoButton) {
-        generaPianoButton.addEventListener('click', generaPianoGenerico);
-    } else {
-        console.warn("Elemento 'genera-piano' non trovato nel DOM.");
-    }
-
-    // 13. Event Listener per il Cambiamento del Metodo di Impasto
-    const tipoImpastoElement = document.getElementById('tipo_impasto');
-    if (tipoImpastoElement) {
-        tipoImpastoElement.addEventListener('change', toggleSections);
-    } else {
-        console.warn("Elemento 'tipo_impasto' non trovato nel DOM.");
-    }
+    inizializzaSimulatore();
 });
