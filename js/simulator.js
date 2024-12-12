@@ -1,6 +1,8 @@
+// calcolatore_script.js
+
 document.addEventListener('DOMContentLoaded', () => {
-    const tipoPizza = getQueryParam('tipo') || 'napoletana'; // Default a "napoletana"
-    const metodoPizza = getQueryParam('metodo') || 'diretto'; // Default a "diretto"
+    const tipoPizza = getQueryParam('tipo') || 'napoletana';
+    const metodoPizza = getQueryParam('metodo') || 'diretto';
     const valoriNutrizionali = {
         calorie: document.getElementById('calorie-totali'),
         grassi: document.getElementById('grassi-totali'),
@@ -158,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     } else {
-        console.error("Elemento 'aggiungi-ingrediente' non trovato nel DOM.");
+        console.warn("Elemento 'aggiungi-ingrediente' non trovato nel DOM.");
     }
 
     // Aggiungi Event Listener per il Bottone "Calcola Valori Nutrizionali"
@@ -168,6 +170,29 @@ document.addEventListener('DOMContentLoaded', () => {
             calcolaValoriNutrizionali();
         });
     } else {
-        console.error("Elemento 'calcola-valori' non trovato nel DOM.");
+        console.warn("Elemento 'calcola-valori' non trovato nel DOM.");
+    }
+
+    // Event listener per il pulsante 'Calcola e Genera Ricetta' e per Genera Piano
+    const calcolaRicettaButton = document.getElementById('calcola-button');
+    if (calcolaRicettaButton) {
+        calcolaRicettaButton.addEventListener('click', calcola);
+    } else {
+        console.warn("Elemento 'calcola-button' non trovato nel DOM.");
+    }
+
+    const generaPianoButton = document.getElementById('genera-piano');
+    if (generaPianoButton) {
+        generaPianoButton.addEventListener('click', generaPianoGenerico);
+    } else {
+        console.warn("Elemento 'genera-piano' non trovato nel DOM.");
+    }
+
+    // Event listener per il cambiamento del metodo di impasto
+    const tipoImpastoElement = document.getElementById('tipo_impasto');
+    if (tipoImpastoElement) {
+        tipoImpastoElement.addEventListener('change', toggleSections);
+    } else {
+        console.warn("Elemento 'tipo_impasto' non trovato nel DOM.");
     }
 });
