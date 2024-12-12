@@ -1,67 +1,67 @@
 // simulator.js
 
+// 1. Creazione Dinamica degli Elementi Mancanti
+(function creaElementiMancanti() {
+    // Creazione del Bottone 'calcola-button' se non esiste
+    if (!document.getElementById('calcola-button')) {
+        const calcolaButton = document.createElement('button');
+        calcolaButton.id = 'calcola-button';
+        calcolaButton.style.display = 'none'; // Nascondi l'elemento
+        document.body.appendChild(calcolaButton);
+    }
+
+    // Creazione del Bottone 'genera-piano' se non esiste
+    if (!document.getElementById('genera-piano')) {
+        const generaPianoButton = document.createElement('button');
+        generaPianoButton.id = 'genera-piano';
+        generaPianoButton.style.display = 'none'; // Nascondi l'elemento
+        document.body.appendChild(generaPianoButton);
+    }
+
+    // Creazione del Select 'tipo_impasto' se non esiste
+    if (!document.getElementById('tipo_impasto')) {
+        const tipoImpastoSelect = document.createElement('select');
+        tipoImpastoSelect.id = 'tipo_impasto';
+        tipoImpastoSelect.style.display = 'none'; // Nascondi l'elemento
+        document.body.appendChild(tipoImpastoSelect);
+    }
+})();
+
+// 2. Definizione delle Funzioni Globali
+(function definisciFunzioniGlobali() {
+    // Funzione 'calcola' richiesta da calcolatore_script.js
+    window.calcola = function() {
+        console.log("Funzione 'calcola' eseguita.");
+        // Puoi integrare qui la logica necessaria per 'calcola'
+        // Ad esempio, potrebbe richiamare funzioni di calcolo specifiche
+    };
+
+    // Funzione 'generaPianoGenerico' richiesta da calcolatore_script.js
+    window.generaPianoGenerico = function() {
+        console.log("Funzione 'generaPianoGenerico' eseguita.");
+        // Puoi integrare qui la logica necessaria per 'generaPianoGenerico'
+        // Ad esempio, potrebbe generare un piano nutrizionale basato sugli ingredienti
+    };
+
+    // Funzione 'toggleSections' richiesta da calcolatore_script.js
+    window.toggleSections = function() {
+        console.log("Funzione 'toggleSections' eseguita.");
+        const tipoImpasto = document.getElementById('tipo_impasto')?.value;
+        if (tipoImpasto === 'biga') {
+            // Logica per il metodo 'biga'
+            console.log("Tipo impasto selezionato: Biga");
+            // Implementa qui la logica per mostrare/nascondere sezioni specifiche
+        } else if (tipoImpasto === 'poolish') {
+            // Logica per il metodo 'poolish'
+            console.log("Tipo impasto selezionato: Poolish");
+            // Implementa qui la logica per mostrare/nascondere sezioni specifiche
+        }
+        // Aggiungi ulteriori condizioni se necessario
+    };
+})();
+
+// 3. Popolamento delle Selezioni e Gestione del Simulatore
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Creazione Dinamica degli Elementi Mancanti
-    function creaElementiMancanti() {
-        // Creazione del Bottone 'calcola-button' se non esiste
-        if (!document.getElementById('calcola-button')) {
-            const calcolaButton = document.createElement('button');
-            calcolaButton.id = 'calcola-button';
-            calcolaButton.style.display = 'none'; // Nascondi l'elemento
-            document.body.appendChild(calcolaButton);
-        }
-
-        // Creazione del Bottone 'genera-piano' se non esiste
-        if (!document.getElementById('genera-piano')) {
-            const generaPianoButton = document.createElement('button');
-            generaPianoButton.id = 'genera-piano';
-            generaPianoButton.style.display = 'none'; // Nascondi l'elemento
-            document.body.appendChild(generaPianoButton);
-        }
-
-        // Creazione del Select 'tipo_impasto' se non esiste
-        if (!document.getElementById('tipo_impasto')) {
-            const tipoImpastoSelect = document.createElement('select');
-            tipoImpastoSelect.id = 'tipo_impasto';
-            tipoImpastoSelect.style.display = 'none'; // Nascondi l'elemento
-            document.body.appendChild(tipoImpastoSelect);
-        }
-    }
-
-    // 2. Definizione delle Funzioni Globali
-    function definisciFunzioniGlobali() {
-        // Funzione 'calcola' richiesta da calcolatore_script.js
-        window.calcola = function() {
-            console.log("Funzione 'calcola' eseguita.");
-            // Puoi integrare qui la logica necessaria per 'calcola'
-            // Ad esempio, potrebbe richiamare funzioni di calcolo specifiche
-        };
-
-        // Funzione 'generaPianoGenerico' richiesta da calcolatore_script.js
-        window.generaPianoGenerico = function() {
-            console.log("Funzione 'generaPianoGenerico' eseguita.");
-            // Puoi integrare qui la logica necessaria per 'generaPianoGenerico'
-            // Ad esempio, potrebbe generare un piano nutrizionale basato sugli ingredienti
-        };
-
-        // Funzione 'toggleSections' richiesta da calcolatore_script.js
-        window.toggleSections = function() {
-            console.log("Funzione 'toggleSections' eseguita.");
-            const tipoImpasto = document.getElementById('tipo_impasto')?.value;
-            if (tipoImpasto === 'biga') {
-                // Logica per il metodo 'biga'
-                console.log("Tipo impasto selezionato: Biga");
-                // Implementa qui la logica per mostrare/nascondere sezioni specifiche
-            } else if (tipoImpasto === 'poolish') {
-                // Logica per il metodo 'poolish'
-                console.log("Tipo impasto selezionato: Poolish");
-                // Implementa qui la logica per mostrare/nascondere sezioni specifiche
-            }
-            // Aggiungi ulteriori condizioni se necessario
-        };
-    }
-
-    // 3. Popolamento delle Selezioni
     async function popolaSelezioni() {
         try {
             // Carica gli ingredienti dal JSON
@@ -105,6 +105,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function capitalizza(str) {
         return str.charAt(0).toUpperCase() + str.slice(1);
     }
+
+    popolaSelezioni();
 
     // 4. Gestione degli Ingredienti Aggiunti
     let ingredientiAggiunti = [];
@@ -283,13 +285,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 7. Inizializzazione del Simulatore
-    async function inizializzaSimulatore() {
-        creaElementiMancanti();
-        definisciFunzioniGlobali();
-        await popolaSelezioni();
-        gestisciEventListener();
-    }
-
-    inizializzaSimulatore();
+    gestisciEventListener();
 });
