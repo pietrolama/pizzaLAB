@@ -1,3 +1,4 @@
+<!-- simulator.html -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -6,12 +7,6 @@
     <title>Simulatore di Ingredienti</title>
     <link rel="stylesheet" href="css/main.css">
     <link rel="icon" href="logo.ico" type="image/x-icon">
-    <style>
-        /* Stile per nascondere gli elementi fittizi */
-        .hidden-element {
-            display: none;
-        }
-    </style>
 </head>
 <body>
     <header> 
@@ -96,8 +91,8 @@
     </footer>
 
     <!-- Importare simulator.js prima di calcolatore_script.js -->
-    <script src="js/simulator.js" defer></script> <!-- Definisce 'calcola' e 'generaPianoGenerico' -->
-    <script src="js/calcolatore_script.js" defer></script> <!-- Utilizza le funzioni definite -->
+    <script src="js/simulator.js" defer></script> <!-- Deve creare elementi prima -->
+    <script src="js/calcolatore_script.js" defer></script> <!-- Script che utilizza gli elementi creati -->
     <script src="js/main.js" defer></script> <!-- Script per il menu hamburger -->
 </body>
 </html>
