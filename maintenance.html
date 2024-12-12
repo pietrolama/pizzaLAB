@@ -6,12 +6,6 @@
     <title>Simulatore di Nutrienti e Calorie</title>
     <link rel="stylesheet" href="css/main.css">
     <link rel="icon" href="logo.ico" type="image/x-icon">
-    <style>
-        /* Stili di base per nascondere elementi non necessari */
-        .hidden-element {
-            display: none;
-        }
-    </style>
 </head>
 <body>
     <header> 
@@ -55,6 +49,43 @@
             <ul id="ricetta-base">
                 <!-- Ingredienti base visualizzati dinamicamente -->
             </ul>
+        </section>
+
+        <!-- Procedimento -->
+        <section>
+            <h2>Procedimento</h2>
+            <ol id="procedimento">
+                <!-- Passi del procedimento visualizzati dinamicamente -->
+            </ol>
+        </section>
+
+        <!-- Valori Nutrizionali Base -->
+        <section>
+            <h2>Valori Nutrizionali Base</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Calorie</th>
+                        <th>Grassi (g)</th>
+                        <th>Carboidrati (g)</th>
+                        <th>Zuccheri (g)</th>
+                        <th>Fibre (g)</th>
+                        <th>Proteine (g)</th>
+                        <th>Sale (g)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td id="calorie-base">0</td>
+                        <td id="grassi-base">0</td>
+                        <td id="carboidrati-base">0</td>
+                        <td id="zuccheri-base">0</td>
+                        <td id="fibre-base">0</td>
+                        <td id="proteine-base">0</td>
+                        <td id="sale-base">0</td>
+                    </tr>
+                </tbody>
+            </table>
         </section>
 
         <!-- Aggiungi Ingredienti Extra -->
