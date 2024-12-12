@@ -1,185 +1,14 @@
 // simulator.js
 
-// 1. Creazione Dinamica degli Elementi Mancanti
-(function creaElementiMancanti() {
-    // Creazione del Bottone 'calcola-button' se non esiste
-    if (!document.getElementById('calcola-button')) {
-        const calcolaButton = document.createElement('button');
-        calcolaButton.id = 'calcola-button';
-        calcolaButton.style.display = 'none'; // Nascondi l'elemento
-        document.body.appendChild(calcolaButton);
-    }
-
-    // Creazione del Bottone 'genera-piano' se non esiste
-    if (!document.getElementById('genera-piano')) {
-        const generaPianoButton = document.createElement('button');
-        generaPianoButton.id = 'genera-piano';
-        generaPianoButton.style.display = 'none'; // Nascondi l'elemento
-        document.body.appendChild(generaPianoButton);
-    }
-
-    // Creazione del Select 'tipo_impasto' se non esiste
-    if (!document.getElementById('tipo_impasto')) {
-        const tipoImpastoSelect = document.createElement('select');
-        tipoImpastoSelect.id = 'tipo_impasto';
-        tipoImpastoSelect.style.display = 'none'; // Nascondi l'elemento
-        document.body.appendChild(tipoImpastoSelect);
-    }
-})();
-
-// 2. Definizione delle Funzioni Globali
-(function definisciFunzioniGlobali() {
-    // Funzione 'calcola' richiesta da calcolatore_script.js
-    window.calcola = function() {
-        console.log("Funzione 'calcola' eseguita.");
-        // Puoi integrare qui la logica necessaria per 'calcola'
-        // Ad esempio, potrebbe richiamare funzioni di calcolo specifiche
-    };
-
-    // Funzione 'generaPianoGenerico' richiesta da calcolatore_script.js
-    window.generaPianoGenerico = function() {
-        console.log("Funzione 'generaPianoGenerico' eseguita.");
-        // Puoi integrare qui la logica necessaria per 'generaPianoGenerico'
-        // Ad esempio, potrebbe generare un piano nutrizionale basato sugli ingredienti
-    };
-
-    // Funzione 'toggleSections' richiesta da calcolatore_script.js
-    window.toggleSections = function() {
-        console.log("Funzione 'toggleSections' eseguita.");
-        const tipoImpasto = document.getElementById('tipo_impasto')?.value;
-        if (tipoImpasto === 'biga') {
-            // Logica per il metodo 'biga'
-            console.log("Tipo impasto selezionato: Biga");
-            // Implementa qui la logica per mostrare/nascondere sezioni specifiche
-        } else if (tipoImpasto === 'poolish') {
-            // Logica per il metodo 'poolish'
-            console.log("Tipo impasto selezionato: Poolish");
-            // Implementa qui la logica per mostrare/nascondere sezioni specifiche
-        }
-        // Aggiungi ulteriori condizioni se necessario
-    };
-})();
-
-// 3. Popolamento delle Selezioni e Gestione del Simulatore
 document.addEventListener('DOMContentLoaded', () => {
-    async function popolaSelezioni() {
-        try {
-            // Carica gli ingredienti dal JSON
-            const response = await fetch('data/ingredienti.json');
-            if (!response.ok) {
-                throw new Error(`Errore nel caricamento degli ingredienti: ${response.status}`);
-            }
-            const ingredienti = await response.json();
-            window.loadedIngredienti = ingredienti;
+    // 1. Elementi del DOM
+    const tipoPizzaSelect = document.getElementById('tipo-pizza');
+    const ricettaBaseList = document.getElementById('ricetta-base');
+    const ingredientiSelezione = document.getElementById('ingredienti-selezione');
+    const quantitaIngredienteInput = document.getElementById('quantita-ingrediente');
+    const aggiungiIngredienteButton = document.getElementById('aggiungi-ingrediente');
+    const listaIngredienti = document.getElementById('lista-ingredienti');
 
-            // Popola il select degli impasti (impasto-selezione)
-            const impastoSelect = document.getElementById('impasto-selezione');
-            if (impastoSelect) {
-                // Definisci i tipi di impasto disponibili
-                const tipiImpasto = ["diretto", "biga", "poolish", "lievito_madre", "biga_poolish"]; // Aggiorna secondo necessità
-                tipiImpasto.forEach(impasto => {
-                    const option = document.createElement('option');
-                    option.value = impasto;
-                    option.textContent = capitalizza(impasto.replace('_', ' '));
-                    impastoSelect.appendChild(option);
-                });
-            }
-
-            // Popola il select degli ingredienti (ingredienti-selezione)
-            const ingredientiSelect = document.getElementById('ingredienti-selezione');
-            if (ingredientiSelect) {
-                ingredienti.forEach(ingrediente => {
-                    const option = document.createElement('option');
-                    option.value = ingrediente.nome;
-                    option.textContent = capitalizza(ingrediente.nome);
-                    ingredientiSelect.appendChild(option);
-                });
-            }
-
-        } catch (error) {
-            console.error("Errore durante il popolamento delle selezioni:", error);
-        }
-    }
-
-    // Helper per capitalizzare le stringhe
-    function capitalizza(str) {
-        return str.charAt(0).toUpperCase() + str.slice(1);
-    }
-
-    popolaSelezioni();
-
-    // 4. Gestione degli Ingredienti Aggiunti
-    let ingredientiAggiunti = [];
-
-    function aggiornaListaIngredienti() {
-        const lista = document.getElementById('lista-ingredienti');
-        if (!lista) {
-            console.error("Elemento 'lista-ingredienti' non trovato nel DOM.");
-            return;
-        }
-        lista.innerHTML = ''; // Pulisce la lista esistente
-
-        ingredientiAggiunti.forEach((ingrediente, index) => {
-            const li = document.createElement('li');
-            li.innerHTML = `
-                ${ingrediente.nome} - ${ingrediente.quantita} g
-                <button class="modifica" data-index="${index}">Modifica</button>
-                <button class="rimuovi" data-index="${index}">Rimuovi</button>
-            `;
-            lista.appendChild(li);
-        });
-
-        // Aggiungi eventi per modifica e rimozione
-        document.querySelectorAll('.modifica').forEach(button => {
-            button.addEventListener('click', e => modificaIngrediente(e.target.dataset.index));
-        });
-
-        document.querySelectorAll('.rimuovi').forEach(button => {
-            button.addEventListener('click', e => rimuoviIngrediente(e.target.dataset.index));
-        });
-    }
-
-    function aggiungiIngrediente(nome, quantita = 100) { // Quantità predefinita: 100g
-        const ingredienteBase = window.loadedIngredienti.find(i => i.nome === nome);
-        if (ingredienteBase) {
-            ingredientiAggiunti.push({
-                nome: ingredienteBase.nome,
-                quantita: quantita,
-                calorie: ingredienteBase.calorie || 0,
-                grassi: ingredienteBase.grassi || 0,
-                carboidrati: ingredienteBase.carboidrati || 0,
-                zuccheri: ingredienteBase.zuccheri || 0,
-                fibre: ingredienteBase.fibre || 0,
-                proteine: ingredienteBase.proteine || 0,
-                sale: ingredienteBase.sale || 0,
-            });
-            aggiornaListaIngredienti();
-            calcolaValoriNutrizionali();
-        } else {
-            console.error(`Ingrediente "${nome}" non trovato.`);
-        }
-    }
-
-    function modificaIngrediente(index) {
-        const nuovoPeso = prompt("Inserisci il nuovo peso (g):", ingredientiAggiunti[index].quantita);
-        if (nuovoPeso && !isNaN(nuovoPeso) && parseFloat(nuovoPeso) > 0) {
-            ingredientiAggiunti[index].quantita = parseFloat(nuovoPeso);
-            aggiornaListaIngredienti();
-            calcolaValoriNutrizionali();
-        } else {
-            alert("Peso non valido. Riprova.");
-        }
-    }
-
-    function rimuoviIngrediente(index) {
-        if (confirm(`Sei sicuro di voler rimuovere "${ingredientiAggiunti[index].nome}"?`)) {
-            ingredientiAggiunti.splice(index, 1);
-            aggiornaListaIngredienti();
-            calcolaValoriNutrizionali();
-        }
-    }
-
-    // 5. Calcolo dei Valori Nutrizionali Totali
     const valoriNutrizionali = {
         calorie: document.getElementById('calorie-totali'),
         grassi: document.getElementById('grassi-totali'),
@@ -190,6 +19,175 @@ document.addEventListener('DOMContentLoaded', () => {
         sale: document.getElementById('sale-totale'),
     };
 
+    let ricette = {};
+    let ingredientiDisponibili = [];
+    let ingredientiAggiunti = [];
+
+    // 2. Caricamento dei Dati JSON
+    async function caricaDati() {
+        try {
+            const responseRicette = await fetch('data/ricette.json');
+            if (!responseRicette.ok) {
+                throw new Error(`Errore nel caricamento di ricette.json: ${responseRicette.status}`);
+            }
+            ricette = await responseRicette.json();
+
+            const responseIngredienti = await fetch('data/ingredienti.json');
+            if (!responseIngredienti.ok) {
+                throw new Error(`Errore nel caricamento di ingredienti.json: ${responseIngredienti.status}`);
+            }
+            ingredientiDisponibili = await responseIngredienti.json();
+
+            popolaTipoPizza();
+            popolaIngredientiSelezione();
+        } catch (error) {
+            console.error("Errore durante il caricamento dei dati:", error);
+        }
+    }
+
+    // 3. Popolare il Select del Tipo di Pizza
+    function popolaTipoPizza() {
+        for (const tipo in ricette) {
+            const option = document.createElement('option');
+            option.value = tipo;
+            option.textContent = ricette[tipo].nome;
+            tipoPizzaSelect.appendChild(option);
+        }
+    }
+
+    // 4. Popolare il Select degli Ingredienti Extra
+    function popolaIngredientiSelezione() {
+        ingredientiDisponibili.forEach(ingrediente => {
+            const option = document.createElement('option');
+            option.value = ingrediente.nome;
+            option.textContent = ingrediente.nome;
+            ingredientiSelezione.appendChild(option);
+        });
+    }
+
+    // 5. Gestire la Selezione del Tipo di Pizza
+    tipoPizzaSelect.addEventListener('change', () => {
+        const tipoSelezionato = tipoPizzaSelect.value;
+        mostraRicettaBase(tipoSelezionato);
+        resetIngredientiAggiunti();
+        calcolaValoriNutrizionali();
+    });
+
+    // 6. Mostrare la Ricetta Base dell'Impasto
+    function mostraRicettaBase(tipo) {
+        ricettaBaseList.innerHTML = ''; // Pulisce la lista esistente
+
+        const ingredientiBase = ricette[tipo].ingredienti_base;
+        for (const ingrediente in ingredientiBase) {
+            const li = document.createElement('li');
+            li.textContent = `${capitalizza(ingrediente)}: ${ingredientiBase[ingrediente]} g`;
+            ricettaBaseList.appendChild(li);
+        }
+    }
+
+    // 7. Aggiungere Ingredienti Extra
+    aggiungiIngredienteButton.addEventListener('click', () => {
+        const nomeIngrediente = ingredientiSelezione.value;
+        const quantita = parseFloat(quantitaIngredienteInput.value);
+
+        if (!nomeIngrediente) {
+            alert('Per favore, seleziona un ingrediente.');
+            return;
+        }
+
+        if (isNaN(quantita) || quantita <= 0) {
+            alert('Inserisci una quantità valida (g).');
+            return;
+        }
+
+        aggiungiIngrediente(nomeIngrediente, quantita);
+        quantitaIngredienteInput.value = ''; // Resetta l'input
+    });
+
+    function aggiungiIngrediente(nome, quantita) {
+        // Verifica se l'ingrediente è già stato aggiunto
+        const indice = ingredientiAggiunti.findIndex(ing => ing.nome === nome);
+        if (indice !== -1) {
+            // Aggiorna la quantità
+            ingredientiAggiunti[indice].quantita += quantita;
+        } else {
+            // Aggiungi un nuovo ingrediente
+            const ingrediente = ingredientiDisponibili.find(ing => ing.nome === nome);
+            if (ingrediente) {
+                ingredientiAggiunti.push({
+                    nome: ingrediente.nome,
+                    quantita: quantita,
+                    calorie: ingrediente.calorie,
+                    grassi: ingrediente.grassi,
+                    carboidrati: ingrediente.carboidrati,
+                    zuccheri: ingrediente.zuccheri,
+                    fibre: ingrediente.fibre,
+                    proteine: ingrediente.proteine,
+                    sale: ingrediente.sale,
+                });
+            } else {
+                console.error(`Ingrediente "${nome}" non trovato.`);
+                return;
+            }
+        }
+
+        aggiornaListaIngredienti();
+        calcolaValoriNutrizionali();
+    }
+
+    // 8. Aggiornare la Lista degli Ingredienti Aggiunti
+    function aggiornaListaIngredienti() {
+        listaIngredienti.innerHTML = ''; // Pulisce la lista esistente
+
+        ingredientiAggiunti.forEach((ingrediente, index) => {
+            const li = document.createElement('li');
+            li.innerHTML = `
+                ${ingrediente.nome} - ${ingrediente.quantita} g
+                <button class="modifica" data-index="${index}">Modifica</button>
+                <button class="rimuovi" data-index="${index}">Rimuovi</button>
+            `;
+            listaIngredienti.appendChild(li);
+        });
+
+        // Aggiungi Event Listener per i Bottoni di Modifica e Rimozione
+        document.querySelectorAll('.modifica').forEach(button => {
+            button.addEventListener('click', e => {
+                const index = e.target.getAttribute('data-index');
+                modificaIngrediente(index);
+            });
+        });
+
+        document.querySelectorAll('.rimuovi').forEach(button => {
+            button.addEventListener('click', e => {
+                const index = e.target.getAttribute('data-index');
+                rimuoviIngrediente(index);
+            });
+        });
+    }
+
+    function modificaIngrediente(index) {
+        const nuovoPeso = prompt("Inserisci il nuovo peso (g):", ingredientiAggiunti[index].quantita);
+        const quantita = parseFloat(nuovoPeso);
+
+        if (isNaN(quantita) || quantita <= 0) {
+            alert("Peso non valido. Riprova.");
+            return;
+        }
+
+        ingredientiAggiunti[index].quantita = quantita;
+        aggiornaListaIngredienti();
+        calcolaValoriNutrizionali();
+    }
+
+    function rimuoviIngrediente(index) {
+        if (confirm(`Sei sicuro di voler rimuovere "${ingredientiAggiunti[index].nome}"?`)) {
+            ingredientiAggiunti.splice(index, 1);
+            aggiornaListaIngredienti();
+            calcolaValoriNutrizionali();
+        }
+    }
+
+    // 9. Calcolare i Valori Nutrizionali Totali
     function calcolaValoriNutrizionali() {
         const totali = {
             calorie: 0,
@@ -201,6 +199,20 @@ document.addEventListener('DOMContentLoaded', () => {
             sale: 0,
         };
 
+        // Calcoli per gli ingredienti base
+        const tipoSelezionato = tipoPizzaSelect.value;
+        if (tipoSelezionato && ricette[tipoSelezionato]) {
+            const ingredientiBase = ricette[tipoSelezionato].ingredienti_base;
+            for (const ingrediente in ingredientiBase) {
+                const quantita = ingredientiBase[ingrediente];
+                // Supponiamo che gli ingredienti base abbiano valori nutrizionali simili a quelli aggiuntivi
+                // In realtà, dovresti avere una mappa degli ingredienti base con i loro valori nutrizionali
+                // Per semplicità, qui aggiungiamo solo le quantità senza nutrienti
+                // Se hai nutrienti per gli ingredienti base, integra qui
+            }
+        }
+
+        // Calcoli per gli ingredienti aggiunti
         ingredientiAggiunti.forEach(ingrediente => {
             const fattore = ingrediente.quantita / 100;
             totali.calorie += (ingrediente.calorie || 0) * fattore;
@@ -212,78 +224,27 @@ document.addEventListener('DOMContentLoaded', () => {
             totali.sale += (ingrediente.sale || 0) * fattore;
         });
 
-        // Aggiorna i valori nella UI
-        Object.keys(valoriNutrizionali).forEach(key => {
-            if (valoriNutrizionali[key]) {
-                valoriNutrizionali[key].textContent = totali[key].toFixed(1);
-            } else {
-                console.warn(`Elemento per ${key} non trovato.`);
-            }
-        });
+        // Aggiorna i valori nel DOM
+        valoriNutrizionali.calorie.textContent = totali.calorie.toFixed(1);
+        valoriNutrizionali.grassi.textContent = totali.grassi.toFixed(1);
+        valoriNutrizionali.carboidrati.textContent = totali.carboidrati.toFixed(1);
+        valoriNutrizionali.zuccheri.textContent = totali.zuccheri.toFixed(1);
+        valoriNutrizionali.fibre.textContent = totali.fibre.toFixed(1);
+        valoriNutrizionali.proteine.textContent = totali.proteine.toFixed(1);
+        valoriNutrizionali.sale.textContent = totali.sale.toFixed(1);
     }
 
-    // 6. Gestione degli Event Listener per i Bottoni e Selezioni
-    function gestisciEventListener() {
-        // Event listener per il bottone "Aggiungi Ingrediente"
-        const aggiungiButton = document.getElementById('aggiungi-ingrediente');
-        if (aggiungiButton) {
-            aggiungiButton.addEventListener('click', () => {
-                const select = document.getElementById('ingredienti-selezione');
-                const selectedIngredientName = select.value;
-
-                if (!selectedIngredientName) {
-                    alert('Per favore, seleziona un ingrediente.');
-                    return;
-                }
-
-                aggiungiIngrediente(selectedIngredientName);
-            });
-        } else {
-            console.warn("Elemento 'aggiungi-ingrediente' non trovato nel DOM.");
-        }
-
-        // Event listener per il bottone "Calcola Valori Nutrizionali"
-        const calcolaButton = document.getElementById('calcola-valori');
-        if (calcolaButton) {
-            calcolaButton.addEventListener('click', () => {
-                calcolaValoriNutrizionali();
-            });
-        } else {
-            console.warn("Elemento 'calcola-valori' non trovato nel DOM.");
-        }
-
-        // Event listener per il bottone "Calcola e Genera Ricetta"
-        const calcolaRicettaButton = document.getElementById('calcola-button');
-        if (calcolaRicettaButton) {
-            calcolaRicettaButton.addEventListener('click', () => {
-                window.calcola(); // Richiama la funzione globale 'calcola'
-            });
-        } else {
-            console.warn("Elemento 'calcola-button' non trovato nel DOM.");
-        }
-
-        // Event listener per il bottone "Genera Piano"
-        const generaPianoButton = document.getElementById('genera-piano');
-        if (generaPianoButton) {
-            generaPianoButton.addEventListener('click', () => {
-                window.generaPianoGenerico(); // Richiama la funzione globale 'generaPianoGenerico'
-            });
-        } else {
-            console.warn("Elemento 'genera-piano' non trovato nel DOM.");
-        }
-
-        // Event listener per la selezione dell'impasto
-        const impastoSelezione = document.getElementById('impasto-selezione');
-        if (impastoSelezione) {
-            impastoSelezione.addEventListener('change', () => {
-                console.log("Tipo di impasto selezionato:", impastoSelezione.value);
-                // Puoi integrare qui la logica specifica per il simulatore basata sul tipo di impasto
-                // Ad esempio, filtrare gli ingredienti disponibili o modificare i parametri di calcolo
-            });
-        } else {
-            console.warn("Elemento 'impasto-selezione' non trovato nel DOM.");
-        }
+    // 10. Reset degli Ingredienti Aggiunti Quando Si Cambia Tipo di Pizza
+    function resetIngredientiAggiunti() {
+        ingredientiAggiunti = [];
+        aggiornaListaIngredienti();
     }
 
-    gestisciEventListener();
+    // 11. Helper per Capitalizzare le Stringhe
+    function capitalizza(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    // Inizializza il Caricamento dei Dati
+    caricaDati();
 });
