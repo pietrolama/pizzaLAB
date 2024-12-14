@@ -1,6 +1,6 @@
 // Configurazione tarteaucitron.js
 tarteaucitron.init({
-    "privacyUrl": "/privacy", // URL della pagina di privacy policy
+    "privacyUrl": "/privacy", // URL della pagina della privacy policy
     "hashtag": "#tarteaucitron", 
     "cookieName": "tarteaucitron", 
     "orientation": "bottom", 
