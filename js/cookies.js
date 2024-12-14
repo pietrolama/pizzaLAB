@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             try {
                 tarteaucitron.init({
-                    "privacyUrl": "/privacy",
+                    "privacyUrl": "/privacy.html",
                     "hashtag": "#tarteaucitron",
                     "cookieName": "tarteaucitron",
                     "orientation": "bottom",
