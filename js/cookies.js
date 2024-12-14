@@ -2,12 +2,12 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log("Caricamento cookies.js avviato...");
 
     const checkTarteaucitron = setInterval(() => {
+        console.log("Controllo disponibilità tarteaucitron...");
         if (typeof tarteaucitron !== 'undefined') {
             clearInterval(checkTarteaucitron);
             console.log("tarteaucitron è ora disponibile!");
 
             try {
-                // Configura tarteaucitron
                 tarteaucitron.init({
                     "privacyUrl": "/privacy",
                     "hashtag": "#tarteaucitron",
@@ -30,7 +30,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             try {
-                // Aggiungi Google Analytics
                 tarteaucitron.services.googleanalytics = {
                     "key": "googleanalytics",
                     "type": "analytic",
@@ -65,5 +64,5 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
             console.log("In attesa di tarteaucitron...");
         }
-    }, 100); // Controlla ogni 100 ms
+    }, 100);
 });
