@@ -5,20 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PizzaLab</title>
     <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/tarteaucitron.css">
     <link rel="stylesheet" href="css/tarteaucitron.min.css">
     <link rel="icon" href="logo.ico" type="image/x-icon">
 </head>
 <body id="index-page">
+    <!-- Contenitore per il banner dei cookie -->
+    <div id="tarteaucitronRoot"></div>
+
     <!-- Header con Logo -->
     <header>
         <img src="img/logo.png" alt="Logo del sito" class="site-logo">
         <h1>Benvenuti al PizzaLab</h1>
     </header>
 
-    <script src="js/tarteaucitron.min.js" defer></script>
-    <script src="js/tarteaucitron.it.min.js" defer></script>
-    <div id="tarteaucitronRoot"></div>
     <!-- Navigazione -->
     <nav>
         <div class="nav-container">
@@ -31,7 +30,7 @@
                 <li><a href="contatti.html">Contatti</a></li>
                 <li><a href="https://pizzalab.bettermode.io/" target="_blank" rel="noopener noreferrer">PizzaLab Community</a></li>
                 <li><a href="simulator.html">Nutrienti e calorie</a></li>
-                <li><a href="shop.html">Shop</a></li>                
+                <li><a href="shop.html">Shop</a></li>
             </ul>
             <div class="hamburger">
                 <span class="bar"></span>
@@ -111,8 +110,9 @@
     </footer>
 
     <!-- Script -->
-    
+    <script src="js/tarteaucitron.min.js"></script>
+    <script src="js/tarteaucitron.it.min.js"></script>
     <script src="js/cookies.js" defer></script>
-    <script src="js/main.js" defer></script> <!-- Nuovo script per il menu hamburger -->
+    <script src="js/main.js" defer></script>
 </body>
 </html>
