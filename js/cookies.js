@@ -3,6 +3,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (typeof tarteaucitron !== 'undefined') {
             clearInterval(checkTarteaucitron);
 
+            console.log("tarteaucitron è ora disponibile!");
+
             // Configurazione tarteaucitron.js
             tarteaucitron.init({
                 "privacyUrl": "/privacy",
