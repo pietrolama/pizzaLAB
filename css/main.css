@@ -51,6 +51,13 @@ body {
     }
 }
 
+#tarteaucitronRoot {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    z-index: 9999 !important;
+}
+
 /* ===== HEADER ===== */
 header {
     background: linear-gradient(90deg, var(--background-color), var(--dark-background-color));
