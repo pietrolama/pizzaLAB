@@ -52,10 +52,17 @@ body {
 }
 
 #tarteaucitronRoot {
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    z-index: 9999 !important;
+    z-index: 99999 !important; /* Assicura che sia sopra ogni altro elemento */
+    position: fixed !important; /* Fissa la posizione in basso */
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #fff; /* Colore di sfondo */
+    box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.2); /* Aggiunge un'ombra */
+}
+
+#tarteaucitronRoot button {
+    z-index: 100000 !important; /* Garantisce che i pulsanti siano cliccabili */
 }
 
 /* ===== HEADER ===== */
