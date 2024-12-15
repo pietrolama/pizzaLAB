@@ -2,44 +2,63 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log("Caricamento cookies.js avviato...");
 
     try {
-        // Inizializzazione di Tarteaucitron
+        // Inizializza Tarteaucitron
         tarteaucitron.init({
-            "privacyUrl": "/privacy.html",
-            "orientation": "bottom",
-            "showAlertSmall": true,
-            "cookieslist": true,
-            "debug": true
+            "privacyUrl": "/privacy.html",      // Pagina della privacy policy
+            "orientation": "bottom",           // Posizionamento del banner
+            "showAlertSmall": true,            // Icona per riaprire il banner
+            "cookieslist": true,               // Mostra l'elenco dei cookie
+            "adblocker": false,                // Non mostra avvisi per Adblocker
+            "AcceptAllCta": true,              // Pulsante "Accetta tutto"
+            "highPrivacy": false,              // Disabilita accettazione implicita
+            "handleBrowserDNTRequest": false,  // Non gestisce "Do Not Track"
+            "removeCredit": true,              // Rimuove il credito dal banner
+            "moreInfoLink": true,              // Link a ulteriori informazioni
+            "debug": true                      // Modalità debug
         });
+
         console.log("Tarteaucitron inizializzato correttamente.");
 
-        // Funzione per loggare lo stato delle checkbox
-        function logCheckboxStatus() {
-            const acceptCheckbox = document.querySelector('#acceptCheckbox');
-            const denyCheckbox = document.querySelector('#denyCheckbox');
+        // Configurazione del servizio Google Analytics
+        tarteaucitron.services.googleanalytics = {
+            "key": "googleanalytics",
+            "type": "analytic",
+            "name": "Google Analytics",
+            "uri": "https://policies.google.com/privacy",
+            "needConsent": true,
+            "cookies": ["_ga", "_gid"],
+            "js": function () {
+                console.log("Attivazione Google Analytics...");
+                (function (i, s, o, g, r, a, m) {
+                    i['GoogleAnalyticsObject'] = r;
+                    i[r] = i[r] || function () {
+                        (i[r].q = i[r].q || []).push(arguments);
+                    }, i[r].l = 1 * new Date();
+                    a = s.createElement(o),
+                        m = s.getElementsByTagName(o)[0];
+                    a.async = 1;
+                    a.src = g;
+                    m.parentNode.insertBefore(a, m);
+                })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+                ga('create', 'G-1CV0W5QPKV', 'auto'); // Sostituisci con il tuo ID GA
+                ga('send', 'pageview');
+            },
+            "fallback": function () {
+                console.log("Google Analytics non attivo.");
+            }
+        };
 
-            console.log("=== Stato delle Checkbox ===");
-            console.log("Accetta:", acceptCheckbox ? acceptCheckbox.checked : "❌ Non trovata");
-            console.log("Rifiuta:", denyCheckbox ? denyCheckbox.checked : "❌ Non trovata");
-        }
-
-        // Verifica DOM e assegna eventi
+        // Attendi il rendering completo e assegna eventi ai pulsanti di Tarteaucitron
         setTimeout(() => {
-            console.log("Verifica DOM dopo 1 secondo...");
-
             const acceptButton = document.querySelector('#tarteaucitronAllAllowed');
             const denyButton = document.querySelector('#tarteaucitronAllDenied');
-            const acceptCheckbox = document.querySelector('#acceptCheckbox');
-            const denyCheckbox = document.querySelector('#denyCheckbox');
 
-            console.log("Pulsanti trovati:", acceptButton, denyButton);
-            console.log("Checkbox trovate:", acceptCheckbox, denyCheckbox);
+            console.log("Verifica pulsanti:", acceptButton, denyButton);
 
-            // Eventi per i pulsanti
             if (acceptButton) {
                 acceptButton.addEventListener('click', () => {
                     tarteaucitron.userInterface.respondAll(true);
-                    console.log("✅ Pulsante 'Accetta' cliccato.");
-                    logCheckboxStatus();
+                    console.log("✅ Tutti i cookie accettati.");
                 });
             } else {
                 console.warn("❌ Pulsante 'Accetta' non trovato.");
@@ -48,31 +67,12 @@ document.addEventListener('DOMContentLoaded', function () {
             if (denyButton) {
                 denyButton.addEventListener('click', () => {
                     tarteaucitron.userInterface.respondAll(false);
-                    console.log("❌ Pulsante 'Rifiuta' cliccato.");
-                    logCheckboxStatus();
+                    console.log("❌ Tutti i cookie rifiutati.");
                 });
             } else {
                 console.warn("❌ Pulsante 'Rifiuta' non trovato.");
             }
 
-            // Eventi per le checkbox
-            if (acceptCheckbox) {
-                acceptCheckbox.addEventListener('change', () => {
-                    console.log("Checkbox 'Accetta' cambiata:", acceptCheckbox.checked);
-                });
-            } else {
-                console.warn("❌ Checkbox 'Accetta' non trovata.");
-            }
-
-            if (denyCheckbox) {
-                denyCheckbox.addEventListener('change', () => {
-                    console.log("Checkbox 'Rifiuta' cambiata:", denyCheckbox.checked);
-                });
-            } else {
-                console.warn("❌ Checkbox 'Rifiuta' non trovata.");
-            }
-
-            logCheckboxStatus(); // Log iniziale
         }, 1000);
 
     } catch (error) {
