@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
     console.log("Caricamento cookies.js avviato...");
 
-    // Inizializza Tarteaucitron
     try {
+        // Inizializza Tarteaucitron
         tarteaucitron.init({
             "privacyUrl": "/privacy.html",
             "orientation": "bottom",
@@ -13,45 +13,37 @@ document.addEventListener('DOMContentLoaded', function () {
 
         console.log("Configurazione completata. Attendo il rendering del banner...");
 
-        // Verifica se il banner è stato generato correttamente
+        // Controlla e associa eventi ai pulsanti del banner
         setTimeout(() => {
-            const tarteaucitronRoot = document.getElementById('tarteaucitronRoot');
-            if (tarteaucitronRoot) {
-                console.log("Elemento tarteaucitronRoot trovato.");
-                checkAndAttachEvents();
-            } else {
-                console.warn("Elemento tarteaucitronRoot non trovato. Forzo il rendering...");
-                tarteaucitron.userInterface.openPanel();
-                checkAndAttachEvents();
-            }
-        }, 1000); // Aspetta 1 secondo per il rendering
-
+            checkAndAttachEvents();
+        }, 1000); // Aspetta 1 secondo per garantire il rendering
     } catch (error) {
         console.error("Errore durante l'inizializzazione di Tarteaucitron:", error);
     }
 
-    // Funzione per verificare e agganciare gli eventi ai pulsanti
     function checkAndAttachEvents() {
-        console.log("Controllo la presenza dei pulsanti nel banner...");
-        
-        // Cerca i pulsanti "Accetta" e "Rifiuta"
-        const acceptButton = document.querySelector("button[data-accept]");
-        const rejectButton = document.querySelector("button[data-reject]");
+        console.log("Cerco i pulsanti 'Accetta' e 'Rifiuta'...");
 
+        // Pulsante 'Accetta'
+        const acceptButton = document.querySelector("#tarteaucitronAllAllowed");
         if (acceptButton) {
             acceptButton.addEventListener("click", function () {
                 tarteaucitron.userInterface.respondAll(true);
                 console.log("Tutti i cookie sono stati accettati.");
             });
+            console.log("Evento 'Accetta' associato.");
         } else {
             console.warn("Pulsante 'Accetta' non trovato.");
         }
 
+        // Pulsante 'Rifiuta'
+        const rejectButton = document.querySelector("#tarteaucitronAllDenied");
         if (rejectButton) {
             rejectButton.addEventListener("click", function () {
                 tarteaucitron.userInterface.respondAll(false);
                 console.log("Tutti i cookie sono stati rifiutati.");
             });
+            console.log("Evento 'Rifiuta' associato.");
         } else {
             console.warn("Pulsante 'Rifiuta' non trovato.");
         }
