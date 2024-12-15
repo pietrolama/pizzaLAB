@@ -52,53 +52,59 @@ body {
 }
 
 /* Stile per i checkbox non selezionati all'interno del banner Tarteaucitron */
+/* Resetta lo stile dei checkbox di Tarteaucitron */
 #tarteaucitronRoot input[type="checkbox"] {
-    appearance: none; /* Rimuove lo stile di default */
+    all: unset; /* Resetta tutti gli stili di default */
+    appearance: none;
     width: 20px;
     height: 20px;
     border: 2px solid #ccc;
     border-radius: 3px;
     background-color: #fff;
-    cursor: pointer;
     display: inline-block;
     vertical-align: middle;
+    cursor: pointer;
 }
 
-/* Stile per i checkbox selezionati */
+/* Checkbox selezionato */
 #tarteaucitronRoot input[type="checkbox"]:checked {
-    background-color: #4CAF50; /* Colore di sfondo verde */
+    background-color: #4CAF50;
     border-color: #4CAF50;
     position: relative;
 }
 
-/* Aggiungiamo un segno di spunta */
+/* Aggiungi segno di spunta */
 #tarteaucitronRoot input[type="checkbox"]:checked::after {
-    content: "\2713"; /* Simbolo di check */
+    content: "\2713"; /* Segno di spunta ✔ */
     color: #fff;
     font-size: 16px;
+    font-weight: bold;
     position: absolute;
     top: 2px;
     left: 5px;
-    font-weight: bold;
 }
 
-/* Stile per i pulsanti all'interno del banner */
+/* Risolvi padding e margine */
+#tarteaucitronRoot label {
+    cursor: pointer;
+    display: inline-block;
+    margin-left: 5px;
+    vertical-align: middle;
+    font-size: 14px;
+}
+
+/* Stile per i pulsanti */
 #tarteaucitronRoot button {
     background-color: #444;
     color: #fff;
     border: none;
-    padding: 10px 20px;
+    padding: 8px 16px;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 14px;
 }
 
 #tarteaucitronRoot button:hover {
     background-color: #555;
-}
-
-#tarteaucitronRoot button:active {
-    background-color: #333;
 }
 
 /* ===== HEADER ===== */
