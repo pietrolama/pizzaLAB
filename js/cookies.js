@@ -4,80 +4,65 @@ document.addEventListener('DOMContentLoaded', function () {
     try {
         // Inizializza Tarteaucitron
         tarteaucitron.init({
-            "privacyUrl": "/privacy.html",      
-            "orientation": "bottom",           
-            "showAlertSmall": true,            
-            "cookieslist": true,               
-            "debug": true                      
+            "privacyUrl": "/privacy.html",
+            "orientation": "bottom",
+            "showAlertSmall": true,
+            "cookieslist": true,
+            "debug": true
         });
 
         console.log("Tarteaucitron inizializzato correttamente.");
 
-        // Funzione per verificare lo stato delle checkbox
+        // Controlla e logga lo stato delle checkbox
         function logCheckboxStatus() {
             const acceptCheckbox = document.querySelector('#acceptCheckbox');
             const denyCheckbox = document.querySelector('#denyCheckbox');
 
             console.log("Stato delle Checkbox:");
-            if (acceptCheckbox) {
-                console.log("✔ Checkbox Accetta - Stato:", acceptCheckbox.checked);
-            } else {
-                console.warn("❌ Checkbox Accetta non trovata.");
-            }
-
-            if (denyCheckbox) {
-                console.log("✔ Checkbox Rifiuta - Stato:", denyCheckbox.checked);
-            } else {
-                console.warn("❌ Checkbox Rifiuta non trovata.");
-            }
+            console.log("Accetta:", acceptCheckbox ? acceptCheckbox.checked : "❌ Non trovata");
+            console.log("Rifiuta:", denyCheckbox ? denyCheckbox.checked : "❌ Non trovata");
         }
 
-        // Debug pulsanti e checkbox
         setTimeout(() => {
             const acceptButton = document.querySelector('#tarteaucitronAllAllowed');
             const denyButton = document.querySelector('#tarteaucitronAllDenied');
 
             console.log("Pulsanti trovati?", acceptButton, denyButton);
 
-            // Aggiungi eventi ai pulsanti
+            // Eventi sui pulsanti
             if (acceptButton) {
                 acceptButton.addEventListener('click', () => {
                     tarteaucitron.userInterface.respondAll(true);
-                    console.log("Pulsante 'Accetta' cliccato: tutti i cookie accettati.");
+                    console.log("Pulsante 'Accetta' cliccato.");
                     logCheckboxStatus();
                 });
-            } else {
-                console.warn("Pulsante 'Accetta' non trovato.");
             }
 
             if (denyButton) {
                 denyButton.addEventListener('click', () => {
                     tarteaucitron.userInterface.respondAll(false);
-                    console.log("Pulsante 'Rifiuta' cliccato: tutti i cookie rifiutati.");
+                    console.log("Pulsante 'Rifiuta' cliccato.");
                     logCheckboxStatus();
                 });
-            } else {
-                console.warn("Pulsante 'Rifiuta' non trovato.");
             }
 
-            // Aggiungi eventi alle checkbox
+            // Eventi sulle checkbox
             const acceptCheckbox = document.querySelector('#acceptCheckbox');
             const denyCheckbox = document.querySelector('#denyCheckbox');
 
             if (acceptCheckbox) {
                 acceptCheckbox.addEventListener('change', () => {
-                    console.log("Checkbox Accetta modificata. Stato:", acceptCheckbox.checked);
+                    console.log("Checkbox Accetta modificata:", acceptCheckbox.checked);
                 });
             }
 
             if (denyCheckbox) {
                 denyCheckbox.addEventListener('change', () => {
-                    console.log("Checkbox Rifiuta modificata. Stato:", denyCheckbox.checked);
+                    console.log("Checkbox Rifiuta modificata:", denyCheckbox.checked);
                 });
             }
 
-            console.log("Eventi assegnati ai pulsanti e checkbox.");
-            logCheckboxStatus(); // Log iniziale
+            logCheckboxStatus(); // Stato iniziale
         }, 1000);
 
     } catch (error) {
