@@ -4,51 +4,47 @@ document.addEventListener('DOMContentLoaded', function () {
     try {
         // Inizializza Tarteaucitron
         tarteaucitron.init({
-            "privacyUrl": "/privacy.html",      // URL della pagina privacy
-            "orientation": "bottom",           // Posizionamento del banner
-            "showAlertSmall": true,            // Mostra un'icona per riaprire il banner
-            "cookieslist": true,               // Mostra l'elenco dei cookie
-            "debug": true                      // Modalità debug
+            "privacyUrl": "/privacy.html",      
+            "orientation": "bottom",           
+            "showAlertSmall": true,            
+            "cookieslist": true,               
+            "debug": true                      
         });
 
         console.log("Tarteaucitron inizializzato correttamente.");
 
-        // Aggiunta del servizio Google Analytics
-        tarteaucitron.services.googleanalytics = {
-            "key": "googleanalytics",
-            "type": "analytic",
-            "name": "Google Analytics",
-            "uri": "https://policies.google.com/privacy",
-            "needConsent": true, // Richiede il consenso
-            "cookies": ['_ga', '_gid'],
-            "js": function () {
-                console.log("Caricamento Google Analytics...");
-                (function (i, s, o, g, r, a, m) {
-                    i['GoogleAnalyticsObject'] = r;
-                    i[r] = i[r] || function () {
-                        (i[r].q = i[r].q || []).push(arguments);
-                    }, i[r].l = 1 * new Date();
-                    a = s.createElement(o), m = s.getElementsByTagName(o)[0];
-                    a.async = 1;
-                    a.src = g;
-                    m.parentNode.insertBefore(a, m);
-                })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-                ga('create', 'UA-XXXXXXX-Y', 'auto'); // Sostituisci con il tuo ID UA
-                ga('send', 'pageview');
+        // Funzione per verificare lo stato delle checkbox
+        function logCheckboxStatus() {
+            const acceptCheckbox = document.querySelector('#acceptCheckbox');
+            const denyCheckbox = document.querySelector('#denyCheckbox');
+
+            console.log("Stato delle Checkbox:");
+            if (acceptCheckbox) {
+                console.log("✔ Checkbox Accetta - Stato:", acceptCheckbox.checked);
+            } else {
+                console.warn("❌ Checkbox Accetta non trovata.");
             }
-        };
 
-        console.log("Google Analytics configurato correttamente.");
+            if (denyCheckbox) {
+                console.log("✔ Checkbox Rifiuta - Stato:", denyCheckbox.checked);
+            } else {
+                console.warn("❌ Checkbox Rifiuta non trovata.");
+            }
+        }
 
-        // Attesa per il rendering completo del banner
+        // Debug pulsanti e checkbox
         setTimeout(() => {
             const acceptButton = document.querySelector('#tarteaucitronAllAllowed');
             const denyButton = document.querySelector('#tarteaucitronAllDenied');
 
+            console.log("Pulsanti trovati?", acceptButton, denyButton);
+
+            // Aggiungi eventi ai pulsanti
             if (acceptButton) {
                 acceptButton.addEventListener('click', () => {
                     tarteaucitron.userInterface.respondAll(true);
                     console.log("Pulsante 'Accetta' cliccato: tutti i cookie accettati.");
+                    logCheckboxStatus();
                 });
             } else {
                 console.warn("Pulsante 'Accetta' non trovato.");
@@ -58,12 +54,30 @@ document.addEventListener('DOMContentLoaded', function () {
                 denyButton.addEventListener('click', () => {
                     tarteaucitron.userInterface.respondAll(false);
                     console.log("Pulsante 'Rifiuta' cliccato: tutti i cookie rifiutati.");
+                    logCheckboxStatus();
                 });
             } else {
                 console.warn("Pulsante 'Rifiuta' non trovato.");
             }
 
-            console.log("Eventi assegnati ai pulsanti.");
+            // Aggiungi eventi alle checkbox
+            const acceptCheckbox = document.querySelector('#acceptCheckbox');
+            const denyCheckbox = document.querySelector('#denyCheckbox');
+
+            if (acceptCheckbox) {
+                acceptCheckbox.addEventListener('change', () => {
+                    console.log("Checkbox Accetta modificata. Stato:", acceptCheckbox.checked);
+                });
+            }
+
+            if (denyCheckbox) {
+                denyCheckbox.addEventListener('change', () => {
+                    console.log("Checkbox Rifiuta modificata. Stato:", denyCheckbox.checked);
+                });
+            }
+
+            console.log("Eventi assegnati ai pulsanti e checkbox.");
+            logCheckboxStatus(); // Log iniziale
         }, 1000);
 
     } catch (error) {
