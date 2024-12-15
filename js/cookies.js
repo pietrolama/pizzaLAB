@@ -1,65 +1,59 @@
 document.addEventListener('DOMContentLoaded', function () {
     console.log("Caricamento cookies.js avviato...");
 
+    // Inizializza Tarteaucitron
     try {
-        // Inizializza tarteaucitron
         tarteaucitron.init({
-            "privacyUrl": "/privacy.html", // URL della Privacy Policy
-            "orientation": "bottom",       // Posizione del banner
-            "showAlertSmall": true,        // Mostra il mini-banner
-            "cookieslist": true,           // Mostra la lista dei cookie
-            "debug": true,                 // Abilita il debug
-            "highPrivacy": false,          // Disabilita l'accettazione automatica
-            "AcceptAllCta": true,          // Aggiungi il pulsante "Accetta tutti i cookie"
-            "removeCredit": true,          // Rimuovi il credit di tarteaucitron
-            "useExternalCss": false        // Usa lo stile CSS locale
+            "privacyUrl": "/privacy.html",
+            "orientation": "bottom",
+            "showAlertSmall": true,
+            "cookieslist": true,
+            "debug": true
         });
 
         console.log("Configurazione completata. Attendo il rendering del banner...");
 
-        // Aggiungi Google Analytics come esempio di servizio
-        tarteaucitron.services.googleanalytics = {
-            "key": "googleanalytics",
-            "type": "analytic",
-            "name": "Google Analytics",
-            "uri": "https://policies.google.com/privacy",
-            "needConsent": true,
-            "cookies": ['_ga', '_gid'],
-            "js": function () {
-                console.log("Google Analytics caricato...");
-                (function (i, s, o, g, r, a, m) {
-                    i['GoogleAnalyticsObject'] = r;
-                    i[r] = i[r] || function () {
-                        (i[r].q = i[r].q || []).push(arguments);
-                    }, i[r].l = 1 * new Date();
-                    a = s.createElement(o),
-                        m = s.getElementsByTagName(o)[0];
-                    a.async = 1;
-                    a.src = g;
-                    m.parentNode.insertBefore(a, m);
-                })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-                ga('create', 'G-1CV0W5QPKV', 'auto');
-                ga('send', 'pageview');
-            },
-            "fallback": function () {
-                console.warn("Google Analytics non attivo.");
-            }
-        };
-
-        console.log("Servizio Google Analytics configurato correttamente.");
-
-        // Forza il rendering del pannello dopo un timeout
+        // Verifica se il banner è stato generato correttamente
         setTimeout(() => {
-            console.log("Tentativo di apertura del pannello...");
-            if (typeof tarteaucitron.userInterface.openPanel === 'function') {
-                tarteaucitron.userInterface.openPanel();
-                console.log("Pannello aperto manualmente.");
+            const tarteaucitronRoot = document.getElementById('tarteaucitronRoot');
+            if (tarteaucitronRoot) {
+                console.log("Elemento tarteaucitronRoot trovato.");
+                checkAndAttachEvents();
             } else {
-                console.warn("Impossibile aprire il pannello: funzione non disponibile.");
+                console.warn("Elemento tarteaucitronRoot non trovato. Forzo il rendering...");
+                tarteaucitron.userInterface.openPanel();
+                checkAndAttachEvents();
             }
-        }, 1000);
+        }, 1000); // Aspetta 1 secondo per il rendering
 
     } catch (error) {
-        console.error("Errore durante l'inizializzazione di tarteaucitron:", error);
+        console.error("Errore durante l'inizializzazione di Tarteaucitron:", error);
+    }
+
+    // Funzione per verificare e agganciare gli eventi ai pulsanti
+    function checkAndAttachEvents() {
+        console.log("Controllo la presenza dei pulsanti nel banner...");
+        
+        // Cerca i pulsanti "Accetta" e "Rifiuta"
+        const acceptButton = document.querySelector("button[data-accept]");
+        const rejectButton = document.querySelector("button[data-reject]");
+
+        if (acceptButton) {
+            acceptButton.addEventListener("click", function () {
+                tarteaucitron.userInterface.respondAll(true);
+                console.log("Tutti i cookie sono stati accettati.");
+            });
+        } else {
+            console.warn("Pulsante 'Accetta' non trovato.");
+        }
+
+        if (rejectButton) {
+            rejectButton.addEventListener("click", function () {
+                tarteaucitron.userInterface.respondAll(false);
+                console.log("Tutti i cookie sono stati rifiutati.");
+            });
+        } else {
+            console.warn("Pulsante 'Rifiuta' non trovato.");
+        }
     }
 });
