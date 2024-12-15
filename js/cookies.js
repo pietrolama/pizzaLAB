@@ -14,7 +14,8 @@ document.addEventListener('DOMContentLoaded', function () {
             "orientation": "bottom",
             "showAlertSmall": true,
             "cookieslist": true,
-            "debug": true
+            "debug": true,
+            "cdn": "js"
         });
         console.log("Configurazione di Tarteaucitron completata.");
     } catch (error) {
