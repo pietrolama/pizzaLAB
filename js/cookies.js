@@ -32,6 +32,8 @@ document.addEventListener('DOMContentLoaded', function () {
         // Controlla preferenze salvate
         function checkSavedPreferences() {
             const savedPreferences = localStorage.getItem('cookie_preferences');
+            console.log("Verifica preferenze salvate:", savedPreferences);
+        
             if (savedPreferences === 'accepted') {
                 console.log("Preferenze salvate: accettate.");
                 tarteaucitron.job.push('googleanalytics');
@@ -39,8 +41,11 @@ document.addEventListener('DOMContentLoaded', function () {
             } else if (savedPreferences === 'denied') {
                 console.log("Preferenze salvate: rifiutate.");
                 tarteaucitron.userInterface.closeAlert();
+            } else {
+                console.log("Nessuna preferenza salvata.");
             }
         }
+
 
         // Assegna eventi ai pulsanti
         setTimeout(() => {
