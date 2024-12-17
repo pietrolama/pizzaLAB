@@ -18,6 +18,27 @@ document.addEventListener('DOMContentLoaded', function () {
 
         console.log("Tarteaucitron inizializzato correttamente.");
 
+         // Aggiungi salvataggio delle preferenze
+        function savePreferences() {
+            tarteaucitron.userInterface.respondAll(false); // Blocca tutti i servizi di default
+            localStorage.setItem('cookie_preferences', 'saved');
+            console.log("Preferenze salvate.");
+        }
+
+        // Controlla se le preferenze sono già state salvate
+        if (localStorage.getItem('cookie_preferences') === 'saved') {
+            console.log("Preferenze già salvate. Nascondo il banner.");
+            tarteaucitron.userInterface.closeAlert(); // Nascondi il banner
+        }
+
+        // Aggiungi evento al pulsante "Salva"
+        setTimeout(() => {
+            const saveButton = document.querySelector('#tarteaucitronSaveButton');
+            if (saveButton) {
+                saveButton.addEventListener('click', savePreferences);
+            }
+        }, 1000);
+
         // Configurazione del servizio Google Analytics
         tarteaucitron.services.googleanalytics = {
             "key": "googleanalytics",
