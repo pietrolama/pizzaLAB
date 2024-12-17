@@ -4,38 +4,67 @@ document.addEventListener('DOMContentLoaded', function () {
     try {
         // Inizializzazione di Tarteaucitron
         tarteaucitron.init({
-            "privacyUrl": "/privacy.html",
-            "orientation": "bottom",
-            "showAlertSmall": false,
-            "cookieslist": true,
-            "highPrivacy": true,
-            "removeCredit": true,
-            "handleBrowserDNTRequest": false,
-            "AcceptAllCta": true,
-            "moreInfoLink": true,
-            "debug": true
+            "privacyUrl": "/privacy.html",        // URL della pagina della privacy
+            "orientation": "bottom",              // Posizionamento del banner
+            "showAlertSmall": false,              // Nasconde l'icona di riapertura
+            "cookieslist": true,                  // Mostra l'elenco dei cookie
+            "highPrivacy": true,                  // Richiede azione esplicita dell'utente
+            "removeCredit": true,                 // Rimuove il credito Tarteaucitron
+            "handleBrowserDNTRequest": false,     // Ignora il "Do Not Track" del browser
+            "AcceptAllCta": true,                 // Mostra pulsante "Accetta tutto"
+            "moreInfoLink": true,                 // Mostra ulteriori informazioni
+            "debug": true                         // Modalità debug
         });
 
         console.log("Tarteaucitron inizializzato correttamente.");
 
-         // Aggiungi salvataggio delle preferenze
+        // Funzione per salvare le preferenze dell'utente
         function savePreferences() {
             tarteaucitron.userInterface.respondAll(false); // Blocca tutti i servizi di default
             localStorage.setItem('cookie_preferences', 'saved');
-            console.log("Preferenze salvate.");
+            console.log("✅ Preferenze salvate.");
+            tarteaucitron.userInterface.closeAlert(); // Chiude il banner
         }
 
         // Controlla se le preferenze sono già state salvate
         if (localStorage.getItem('cookie_preferences') === 'saved') {
-            console.log("Preferenze già salvate. Nascondo il banner.");
-            tarteaucitron.userInterface.closeAlert(); // Nascondi il banner
+            console.log("🛑 Preferenze già salvate. Nascondo il banner.");
+            tarteaucitron.userInterface.closeAlert();
         }
 
-        // Aggiungi evento al pulsante "Salva"
+        // Assegna eventi ai pulsanti dopo il rendering
         setTimeout(() => {
+            const acceptButton = document.querySelector('#tarteaucitronAllAllowed');
+            const denyButton = document.querySelector('#tarteaucitronAllDenied');
             const saveButton = document.querySelector('#tarteaucitronSaveButton');
+
+            // Eventi pulsante "Accetta tutti i cookie"
+            if (acceptButton) {
+                acceptButton.addEventListener('click', () => {
+                    tarteaucitron.userInterface.respondAll(true);
+                    console.log("✅ Tutti i cookie accettati.");
+                    savePreferences();
+                });
+            } else {
+                console.warn("⚠️ Pulsante 'Accetta' non trovato.");
+            }
+
+            // Eventi pulsante "Rifiuta tutti i cookie"
+            if (denyButton) {
+                denyButton.addEventListener('click', () => {
+                    tarteaucitron.userInterface.respondAll(false);
+                    console.log("❌ Tutti i cookie rifiutati.");
+                    savePreferences();
+                });
+            } else {
+                console.warn("⚠️ Pulsante 'Rifiuta' non trovato.");
+            }
+
+            // Evento pulsante "Salva"
             if (saveButton) {
                 saveButton.addEventListener('click', savePreferences);
+            } else {
+                console.warn("⚠️ Pulsante 'Salva' non trovato.");
             }
         }, 1000);
 
@@ -48,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
             "needConsent": true,
             "cookies": ["_ga", "_gid"],
             "js": function () {
-                console.log("Google Analytics attivato.");
+                console.log("✅ Google Analytics attivato.");
                 (function (i, s, o, g, r, a, m) {
                     i['GoogleAnalyticsObject'] = r;
                     i[r] = i[r] || function () {
@@ -60,40 +89,15 @@ document.addEventListener('DOMContentLoaded', function () {
                     a.src = g;
                     m.parentNode.insertBefore(a, m);
                 })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-                ga('create', 'G-1CV0W5QPKV', 'auto'); // Sostituisci con il tuo ID
+                ga('create', 'G-1CV0W5QPKV', 'auto'); // Sostituisci con il tuo ID di tracciamento
                 ga('send', 'pageview');
+            },
+            "fallback": function () {
+                console.warn("❌ Google Analytics non attivato.");
             }
         };
 
-        // Assegna eventi ai pulsanti dopo il rendering
-        setTimeout(() => {
-            const acceptButton = document.querySelector('#tarteaucitronAllAllowed');
-            const denyButton = document.querySelector('#tarteaucitronAllDenied');
-            const saveButton = document.querySelector('#tarteaucitronSaveButton');
-
-            if (acceptButton) {
-                acceptButton.addEventListener('click', () => {
-                    tarteaucitron.userInterface.respondAll(true);
-                    console.log("✅ Tutti i cookie accettati.");
-                });
-            }
-
-            if (denyButton) {
-                denyButton.addEventListener('click', () => {
-                    tarteaucitron.userInterface.respondAll(false);
-                    console.log("❌ Tutti i cookie rifiutati.");
-                });
-            }
-
-            if (saveButton) {
-                saveButton.addEventListener('click', () => {
-                    console.log("Preferenze salvate dall'utente.");
-                });
-            }
-
-        }, 1000);
-
     } catch (error) {
-        console.error("Errore durante l'inizializzazione di Tarteaucitron:", error);
+        console.error("❌ Errore durante l'inizializzazione di Tarteaucitron:", error);
     }
 });
