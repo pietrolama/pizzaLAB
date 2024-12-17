@@ -2,19 +2,18 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log("Caricamento cookies.js avviato...");
 
     try {
-        // Inizializza Tarteaucitron
+        // Inizializzazione di Tarteaucitron
         tarteaucitron.init({
-            "privacyUrl": "/privacy.html",      // Pagina della privacy policy
-            "orientation": "bottom",           // Posizionamento del banner
-            "showAlertSmall": true,            // Icona per riaprire il banner
-            "cookieslist": true,               // Mostra l'elenco dei cookie
-            "adblocker": false,                // Non mostra avvisi per Adblocker
-            "AcceptAllCta": true,              // Pulsante "Accetta tutto"
-            "highPrivacy": false,              // Disabilita accettazione implicita
-            "handleBrowserDNTRequest": false,  // Non gestisce "Do Not Track"
-            "removeCredit": true,              // Rimuove il credito dal banner
-            "moreInfoLink": true,              // Link a ulteriori informazioni
-            "debug": true                      // Modalità debug
+            "privacyUrl": "/privacy.html",
+            "orientation": "bottom",
+            "showAlertSmall": false,
+            "cookieslist": true,
+            "highPrivacy": true,
+            "removeCredit": true,
+            "handleBrowserDNTRequest": false,
+            "AcceptAllCta": true,
+            "moreInfoLink": true,
+            "debug": true
         });
 
         console.log("Tarteaucitron inizializzato correttamente.");
@@ -28,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
             "needConsent": true,
             "cookies": ["_ga", "_gid"],
             "js": function () {
-                console.log("Attivazione Google Analytics...");
+                console.log("Google Analytics attivato.");
                 (function (i, s, o, g, r, a, m) {
                     i['GoogleAnalyticsObject'] = r;
                     i[r] = i[r] || function () {
@@ -40,28 +39,22 @@ document.addEventListener('DOMContentLoaded', function () {
                     a.src = g;
                     m.parentNode.insertBefore(a, m);
                 })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-                ga('create', 'G-1CV0W5QPKV', 'auto'); // Sostituisci con il tuo ID GA
+                ga('create', 'G-1CV0W5QPKV', 'auto'); // Sostituisci con il tuo ID
                 ga('send', 'pageview');
-            },
-            "fallback": function () {
-                console.log("Google Analytics non attivo.");
             }
         };
 
-        // Attendi il rendering completo e assegna eventi ai pulsanti di Tarteaucitron
+        // Assegna eventi ai pulsanti dopo il rendering
         setTimeout(() => {
             const acceptButton = document.querySelector('#tarteaucitronAllAllowed');
             const denyButton = document.querySelector('#tarteaucitronAllDenied');
-
-            console.log("Verifica pulsanti:", acceptButton, denyButton);
+            const saveButton = document.querySelector('#tarteaucitronSaveButton');
 
             if (acceptButton) {
                 acceptButton.addEventListener('click', () => {
                     tarteaucitron.userInterface.respondAll(true);
                     console.log("✅ Tutti i cookie accettati.");
                 });
-            } else {
-                console.warn("❌ Pulsante 'Accetta' non trovato.");
             }
 
             if (denyButton) {
@@ -69,8 +62,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     tarteaucitron.userInterface.respondAll(false);
                     console.log("❌ Tutti i cookie rifiutati.");
                 });
-            } else {
-                console.warn("❌ Pulsante 'Rifiuta' non trovato.");
+            }
+
+            if (saveButton) {
+                saveButton.addEventListener('click', () => {
+                    console.log("Preferenze salvate dall'utente.");
+                });
             }
 
         }, 1000);
