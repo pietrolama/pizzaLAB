@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log("Caricamento cookies.js avviato...");
 
     try {
-        // Inizializzazione Tarteaucitron
+        // Inizializzazione di Tarteaucitron
         tarteaucitron.init({
             "privacyUrl": "/privacy.html",
             "orientation": "bottom",
@@ -13,40 +13,58 @@ document.addEventListener('DOMContentLoaded', function () {
             "handleBrowserDNTRequest": false,
             "AcceptAllCta": true,
             "moreInfoLink": true,
-            "useLocalStorage": true, // Usa localStorage per persistenza
             "debug": true
         });
-
         console.log("Tarteaucitron inizializzato correttamente.");
 
-        // Controllo delle preferenze salvate
-        function checkSavedPreferences() {
-            const preference = localStorage.getItem('cookie_preferences');
-            if (preference === 'accepted') {
-                console.log("Preferenze salvate: accettate.");
-                tarteaucitron.userInterface.respondAll(true); // Accetta tutti i cookie
-                tarteaucitron.userInterface.closeAlert();
-                initializeGoogleAnalytics(); // Inizializza GA
-            } else if (preference === 'denied') {
-                console.log("Preferenze salvate: rifiutate.");
-                tarteaucitron.userInterface.respondAll(false); // Rifiuta tutti i cookie
-                tarteaucitron.userInterface.closeAlert();
-            } else {
-                console.log("Nessuna preferenza trovata. Mostro il banner.");
-            }
-        }
-
-        // Funzione per salvare le preferenze
+        // Salvataggio delle preferenze
         function savePreferences(response) {
             localStorage.setItem('cookie_preferences', response ? 'accepted' : 'denied');
             console.log(`Preferenze salvate: ${response ? 'accettate' : 'rifiutate'}.`);
             tarteaucitron.userInterface.closeAlert();
-            if (response) initializeGoogleAnalytics(); // Inizializza GA se accettato
+
+            // Carica i servizi solo se accettato
+            if (response) {
+                tarteaucitron.job.push('googleanalytics'); // Carica GA solo con consenso
+            }
         }
 
-        // Inizializza Google Analytics
-        function initializeGoogleAnalytics() {
-            if (!tarteaucitron.services.googleanalytics.fallbackTriggered) {
+        // Controlla preferenze salvate
+        function checkSavedPreferences() {
+            const savedPreferences = localStorage.getItem('cookie_preferences');
+            if (savedPreferences === 'accepted') {
+                console.log("Preferenze salvate: accettate.");
+                tarteaucitron.job.push('googleanalytics');
+                tarteaucitron.userInterface.closeAlert();
+            } else if (savedPreferences === 'denied') {
+                console.log("Preferenze salvate: rifiutate.");
+                tarteaucitron.userInterface.closeAlert();
+            }
+        }
+
+        // Assegna eventi ai pulsanti
+        setTimeout(() => {
+            const acceptButton = document.querySelector('#tarteaucitronAllAllowed');
+            const denyButton = document.querySelector('#tarteaucitronAllDenied');
+
+            if (acceptButton) {
+                acceptButton.addEventListener('click', () => savePreferences(true));
+            }
+
+            if (denyButton) {
+                denyButton.addEventListener('click', () => savePreferences(false));
+            }
+        }, 1000);
+
+        // Configurazione del servizio Google Analytics
+        tarteaucitron.services.googleanalytics = {
+            "key": "googleanalytics",
+            "type": "analytic",
+            "name": "Google Analytics",
+            "uri": "https://policies.google.com/privacy",
+            "needConsent": true,
+            "cookies": ["_ga", "_gid"],
+            "js": function () {
                 console.log("✅ Inizializzazione di Google Analytics...");
                 (function (i, s, o, g, r, a, m) {
                     i['GoogleAnalyticsObject'] = r;
@@ -59,54 +77,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     a.src = g;
                     m.parentNode.insertBefore(a, m);
                 })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-
                 ga('create', 'G-1CV0W5QPKV', 'auto'); // Sostituisci con il tuo ID GA
                 ga('send', 'pageview');
                 console.log("✅ Google Analytics attivato.");
             }
-        }
-
-        // Controllo iniziale
-        setTimeout(checkSavedPreferences, 500);
-
-        // Aggiunta eventi ai pulsanti
-        setTimeout(() => {
-            const acceptButton = document.querySelector('#tarteaucitronAllAllowed');
-            const denyButton = document.querySelector('#tarteaucitronAllDenied');
-            const saveButton = document.querySelector('#tarteaucitronSaveButton');
-
-            if (acceptButton) {
-                acceptButton.addEventListener('click', () => savePreferences(true));
-            }
-
-            if (denyButton) {
-                denyButton.addEventListener('click', () => savePreferences(false));
-            }
-
-            if (saveButton) {
-                saveButton.addEventListener('click', () => {
-                    console.log("Preferenze salvate manualmente.");
-                    tarteaucitron.userInterface.closeAlert();
-                });
-            }
-        }, 1000);
-
-        // Definizione del servizio Google Analytics
-        tarteaucitron.services.googleanalytics = {
-            "key": "googleanalytics",
-            "type": "analytic",
-            "name": "Google Analytics",
-            "uri": "https://policies.google.com/privacy",
-            "needConsent": true,
-            "cookies": ["_ga", "_gid"],
-            "js": initializeGoogleAnalytics, // Inizializza GA quando attivato
-            "fallback": function () {
-                console.warn("❌ Google Analytics non attivato.");
-                tarteaucitron.services.googleanalytics.fallbackTriggered = true;
-            }
         };
 
-        console.log("Configurazione Google Analytics completata.");
+        // Controlla preferenze all'avvio
+        setTimeout(checkSavedPreferences, 500);
 
     } catch (error) {
         console.error("Errore durante l'inizializzazione di Tarteaucitron:", error);
