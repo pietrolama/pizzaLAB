@@ -48,12 +48,21 @@ document.addEventListener('DOMContentLoaded', function () {
             const denyButton = document.querySelector('#tarteaucitronAllDenied');
 
             if (acceptButton) {
-                acceptButton.addEventListener('click', () => savePreferences(true));
+                acceptButton.addEventListener('click', () => {
+                    savePreferences(true);
+                    console.log("Pulsante ACCETTA premuto. Preferenze aggiornate.");
+                    console.log("Stato localStorage:", localStorage.getItem('cookie_preferences'));
+                });
+            }
+            
+            if (denyButton) {
+                denyButton.addEventListener('click', () => {
+                    savePreferences(false);
+                    console.log("Pulsante RIFIUTA premuto. Preferenze aggiornate.");
+                    console.log("Stato localStorage:", localStorage.getItem('cookie_preferences'));
+                });
             }
 
-            if (denyButton) {
-                denyButton.addEventListener('click', () => savePreferences(false));
-            }
         }, 1000);
 
         // Configurazione del servizio Google Analytics
