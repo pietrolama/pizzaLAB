@@ -1,1 +1,152 @@
-dsdsdsd
+/* ===== Container principale ===== */
+#tarteaucitronRoot {
+    position: fixed;
+    bottom: 20px; /* Distanza dal basso */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 600px;
+    z-index: 2147483647;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: #333;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* ===== Overlay nero: rimosso ===== */
+#tarteaucitronBack {
+    display: none !important; /* Nascondi l'overlay */
+    visibility: hidden;
+}
+
+/* ===== Banner principale ===== */
+#tarteaucitronAlertBig {
+    padding: 20px;
+    text-align: center;
+    background: #333;
+    color: #fff;
+    border-radius: 8px 8px 0 0;
+}
+
+#tarteaucitronAlertBig strong {
+    font-size: 18px;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 10px;
+}
+
+#tarteaucitronAlertBig a {
+    color: #fff;
+    text-decoration: underline;
+}
+
+#tarteaucitronAlertBig a:hover {
+    text-decoration: none;
+}
+
+/* ===== Pulsanti principali ===== */
+button.tarteaucitronAllow,
+button.tarteaucitronDeny,
+button#tarteaucitronSaveButton {
+    display: inline-block;
+    margin: 10px 5px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+/* Pulsante 'Accetta' */
+button.tarteaucitronAllow {
+    background-color: #1b870b;
+}
+
+button.tarteaucitronAllow:hover {
+    background-color: #149107;
+}
+
+/* Pulsante 'Rifiuta' */
+button.tarteaucitronDeny {
+    background-color: #9c1a1a;
+}
+
+button.tarteaucitronDeny:hover {
+    background-color: #b61f1f;
+}
+
+/* Pulsante 'Salva' */
+button#tarteaucitronSaveButton {
+    background-color: #1e5f9c;
+}
+
+button#tarteaucitronSaveButton:hover {
+    background-color: #154b7c;
+}
+
+/* ===== Lista dei servizi ===== */
+#tarteaucitronServices {
+    padding: 15px;
+    background: #fff;
+    border-top: 1px solid #ddd;
+    text-align: left;
+}
+
+.tarteaucitronLine {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    transition: background 0.3s ease;
+}
+
+.tarteaucitronLine:hover {
+    background: #f9f9f9;
+}
+
+/* Stato consentito */
+.tarteaucitronIsAllowed {
+    border-left: 5px solid #1b870b;
+}
+
+/* Stato rifiutato */
+.tarteaucitronIsDenied {
+    border-left: 5px solid #9c1a1a;
+}
+
+/* Nome del servizio */
+.tarteaucitronName {
+    font-weight: bold;
+    color: #333;
+}
+
+.tarteaucitronDetails {
+    font-size: 12px;
+    color: #555;
+    margin-top: 5px;
+}
+
+/* ===== Media Queries: adattamento mobile ===== */
+@media (max-width: 768px) {
+    #tarteaucitronRoot {
+        width: 95%;
+        bottom: 10px;
+    }
+
+    .tarteaucitronLine {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    button {
+        width: 100%;
+        margin: 5px 0;
+    }
+}
