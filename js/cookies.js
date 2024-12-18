@@ -41,11 +41,11 @@ document.addEventListener('DOMContentLoaded', function () {
             "AcceptAllCta": true,
             "moreInfoLink": true,
             "useExternalCss": true,
-            "customCss": "cookies/css/tarteaucitron.min.css", // Percorso al tuo CSS personalizzato
+            "customCss": "cookies/css/tarteaucitron.min.css",
             "readmoreLink": "/privacy.html",
-            "lang": "it", // Lingua
-            "langPath": "cookies/lang/", // Percorso dove cercare i file di lingua
-            "debug": true
+            "debug": true,
+            "lang": "it",              // Imposta la lingua su "it"
+            "langPath": "cookies/lang/"// Percorso dove trovare tarteaucitron.it.min.js
         });
 
         console.log("Tarteaucitron inizializzato correttamente.");
@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }, 2000);
 
-        // Controlla le preferenze all'avvio con un leggero ritardo, per sicurezza
+        // Controlla le preferenze all'avvio con un leggero ritardo
         setTimeout(checkSavedPreferences, 2000);
 
     } catch (error) {
