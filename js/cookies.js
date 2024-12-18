@@ -2,36 +2,37 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log("Caricamento cookies.js avviato...");
 
     try {
-        // Inizializzazione di Tarteaucitron
+        // Inizializzazione di Tarteaucitron con percorsi aggiornati
         tarteaucitron.init({
             "privacyUrl": "/privacy.html",                    // URL della privacy policy
-            "orientation": "bottom",                         // Banner in basso
+            "orientation": "bottom",                         // Posizione banner
             "showAlertSmall": false,                         // Nessuna icona piccola
-            "cookieslist": true,                             // Mostra lista dei cookie
+            "cookieslist": true,                             // Mostra la lista dei cookie
             "highPrivacy": true,                             // Accettazione esplicita
             "removeCredit": true,                            // Rimuove il credito
             "handleBrowserDNTRequest": false,                // Ignora Do Not Track
-            "AcceptAllCta": true,                            // Mostra il pulsante "Accetta tutto"
+            "AcceptAllCta": true,                            // Pulsante "Accetta tutto"
             "moreInfoLink": true,                            // Link ulteriori informazioni
-            "useExternalCss": false,                         // Utilizzo CSS locale
+            "useExternalCss": true,                          // Usa CSS esterno
             "readmoreLink": "/privacy.html",                 // Link dettagli cookie
-            "debug": true                                    // Debug attivato
+            "debug": true,                                   // Debug attivo
+            "customCss": "cookies/css/tarteaucitron.min.css" // Percorso al CSS
         });
 
         console.log("Tarteaucitron inizializzato correttamente.");
 
-        // Percorsi ai file dei servizi e della lingua
+        // Imposta il percorso ai file lingua e servizi
         tarteaucitron.lang = 'cookies/lang/tarteaucitron.it.min.js';
         tarteaucitron.services = 'cookies/js/tarteaucitron.services.min.js';
 
-        // Funzione per salvare le preferenze utente
+        // Funzione per salvare le preferenze
         function savePreferences(response) {
             localStorage.setItem('cookie_preferences', response ? 'accepted' : 'denied');
             console.log(`Preferenze salvate: ${response ? 'accettate' : 'rifiutate'}.`);
             tarteaucitron.userInterface.closeAlert();
         }
 
-        // Controlla le preferenze salvate
+        // Controllo delle preferenze salvate
         function checkSavedPreferences() {
             const saved = localStorage.getItem('cookie_preferences');
             if (saved === 'accepted') {
@@ -43,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
-        // Assegna eventi ai pulsanti
+        // Assegna eventi ai pulsanti dopo il rendering
         setTimeout(() => {
             const acceptButton = document.querySelector('#tarteaucitronAllAllowed');
             const denyButton = document.querySelector('#tarteaucitronAllDenied');
@@ -65,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }, 1000);
 
-        // Configurazione Google Analytics
+        // Configurazione di Google Analytics
         tarteaucitron.services.googleanalytics = {
             "key": "googleanalytics",
             "type": "analytic",
@@ -86,13 +87,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     a.src = g;
                     m.parentNode.insertBefore(a, m);
                 })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-                ga('create', 'G-1CV0W5QPKV', 'auto'); // Sostituisci con il tuo ID GA
+                ga('create', 'G-1CV0W5QPKV', 'auto'); // Tuo ID GA
                 ga('send', 'pageview');
                 console.log("✅ Google Analytics attivato.");
             }
         };
 
-        // Controlla preferenze all'avvio
+        // Controlla le preferenze all'avvio
         checkSavedPreferences();
 
     } catch (error) {
