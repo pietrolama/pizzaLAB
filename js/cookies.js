@@ -2,7 +2,32 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log("Caricamento cookies.js avviato...");
 
     try {
-        // Definizione del servizio Google Analytics prima dell'inizializzazione
+        // Assicura che tarteaucitron.job esista prima di usarlo
+        tarteaucitron.job = tarteaucitron.job || [];
+        tarteaucitron.job.push('googleanalytics');
+
+        // Inizializzazione di Tarteaucitron
+        tarteaucitron.init({
+            "privacyUrl": "/privacy.html",
+            "orientation": "bottom",
+            "showAlertSmall": false,
+            "cookieslist": true,
+            "highPrivacy": true,
+            "removeCredit": true,
+            "handleBrowserDNTRequest": false,
+            "AcceptAllCta": true,
+            "moreInfoLink": true,
+            "useExternalCss": true,
+            "customCss": "cookies/css/tarteaucitron.min.css",
+            "readmoreLink": "/privacy.html",
+            "debug": true,
+            "lang": "it",
+            "langPath": "/cookies/lang/" // Usa un percorso assoluto dal root del sito
+        });
+
+        console.log("Tarteaucitron inizializzato correttamente.");
+
+        // Configurazione di Google Analytics
         tarteaucitron.services.googleanalytics = {
             "key": "googleanalytics",
             "type": "analytic",
@@ -23,35 +48,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     a.src = g;
                     m.parentNode.insertBefore(a, m);
                 })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-                ga('create', 'G-1CV0W5QPKV', 'auto'); // Inserisci il tuo ID GA
+                ga('create', 'G-1CV0W5QPKV', 'auto'); // Tuo ID GA
                 ga('send', 'pageview');
                 console.log("✅ Google Analytics attivato.");
             }
         };
-
-        // Inizializzazione di Tarteaucitron
-        tarteaucitron.init({
-            "privacyUrl": "/privacy.html",
-            "orientation": "bottom",
-            "showAlertSmall": false,
-            "cookieslist": true,
-            "highPrivacy": true,
-            "removeCredit": true,
-            "handleBrowserDNTRequest": false,
-            "AcceptAllCta": true,
-            "moreInfoLink": true,
-            "useExternalCss": true,
-            "customCss": "cookies/css/tarteaucitron.min.css",
-            "readmoreLink": "/privacy.html",
-            "debug": true,
-            "lang": "it",              // Imposta la lingua su "it"
-            "langPath": "cookies/lang/"// Percorso dove trovare tarteaucitron.it.min.js
-        });
-
-        console.log("Tarteaucitron inizializzato correttamente.");
-
-        // Aggiungo il servizio alla coda dei job
-        tarteaucitron.job.push('googleanalytics');
 
         // Funzione per salvare le preferenze
         function savePreferences(response) {
