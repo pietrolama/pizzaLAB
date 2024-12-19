@@ -36,8 +36,8 @@ document.addEventListener('DOMContentLoaded', function () {
             moreInfoLink: false,
             useExternalCss: false,
             debug: true,
-            cookieDomain: ".pizzalab.pizza"
-            // Nessun langPath, usa la lingua di default (en) o una integrata finché non sistemi la lingua.
+            cookieDomain: ".pizzalab.pizza",
+            cookiePath: "/"
         });
 
         console.log("Tarteaucitron inizializzato correttamente.");
