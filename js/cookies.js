@@ -34,8 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
             moreInfoLink: false,
             useExternalCss: false,
             debug: true,
-            cookieDomain: "", // Imposta il dominio corretto
-            // cookiePath: "/" Rimosso, non necessario
+            cookieDomain: ".pizzalab.pizza" // Gestisce sia www che senza www
         });
 
         console.log("Tarteaucitron inizializzato correttamente.");
