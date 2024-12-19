@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
       AcceptAllCta: true,
       moreInfoLink: false,
       useExternalCss: false,
+      cookieDomain: ".pizzalab.pizza",
       debug: true
       // Nota: Niente lingua custom, niente langPath, niente CSS esterno
     });
