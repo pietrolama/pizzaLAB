@@ -25,22 +25,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Inizializza Tarteaucitron
     tarteaucitron.init({
-        "privacyUrl": "/privacy.html",
-        "orientation": "bottom",
-        "showAlertSmall": false,
-        "cookieslist": true,
-        "highPrivacy": false, // permetti di ricordare la scelta
-        "removeCredit": true,
-        "handleBrowserDNTRequest": false,
-        "AcceptAllCta": true,
-        "moreInfoLink": true,
-        "useExternalCss": true,
-        "customCss": "cookies/css/tarteaucitron.min.css",
-        "readmoreLink": "/privacy.html",
-        "debug": true,
-        "lang": "it",
-        "langPath": "/cookies/lang/"
-    });
+    "privacyUrl": "/privacy.html",
+    "orientation": "bottom",
+    "showAlertSmall": false,
+    "cookieslist": true,
+    "highPrivacy": false,
+    "removeCredit": true,
+    "handleBrowserDNTRequest": false,
+    "AcceptAllCta": true,
+    "moreInfoLink": true,
+    "useExternalCss": true,
+    "customCss": "cookies/css/tarteaucitron.min.css",
+    "readmoreLink": "/privacy.html",
+    "debug": true,
+    "lang": "it",
+    "langPath": "/cookies/lang/",
+    "cookieDomain": ".pizzalab.pizza" // Imposta il dominio a livello radice
+});
+
 
     // Aggiungi i servizi al job
     tarteaucitron.job = tarteaucitron.job || [];
