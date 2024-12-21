@@ -1,5 +1,19 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Inizializza il banner
+    console.log("Caricamento cookies.js avviato...");
+
+    // Funzione per cancellare i cookie duplicati
+    function clearDuplicateCookies() {
+        const domainVariants = ["pizzalab.pizza", "www.pizzalab.pizza"];
+        domainVariants.forEach(domain => {
+            document.cookie = "cookieconsent_status=; path=/; domain=" + domain + "; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+        });
+        console.log("Cookie duplicati rimossi.");
+    }
+
+    // Cancella i cookie duplicati all'avvio
+    clearDuplicateCookies();
+
+    // Inizializza il banner dei cookie
     window.cookieconsent.initialise({
         palette: {
             popup: { background: "#000", text: "#fff" },
@@ -12,34 +26,15 @@ document.addEventListener('DOMContentLoaded', function () {
             href: "/privacy.html"
         },
         onInitialise: function (status) {
-            console.log("onInitialise eseguito. Stato iniziale:", status);
+            console.log("Banner inizializzato. Stato:", status);
             if (status === "allow") {
-                loadGoogleAnalytics();
+                console.log("Cookie accettati dall'utente.");
             }
         },
         onStatusChange: function (status) {
-            console.log("onStatusChange eseguito. Stato aggiornato:", status);
-            if (status === "allow") {
-                loadGoogleAnalytics();
-            }
+            console.log("Stato aggiornato:", status);
+            document.cookie = "cookieconsent_status=" + status + "; path=/; domain=pizzalab.pizza; expires=Fri, 31 Dec 2024 23:59:59 GMT; Secure";
+            console.log("Cookie impostato:", document.cookie);
         }
     });
-
-    // Carica Google Analytics
-    function loadGoogleAnalytics() {
-        (function (i, s, o, g, r, a, m) {
-            i['GoogleAnalyticsObject'] = r;
-            i[r] = i[r] || function () {
-                (i[r].q = i[r].q || []).push(arguments);
-            }, i[r].l = 1 * new Date();
-            a = s.createElement(o),
-                m = s.getElementsByTagName(o)[0];
-            a.async = 1;
-            a.src = 'https://www.google-analytics.com/analytics.js';
-            m.parentNode.insertBefore(a, m);
-        })(window, document, 'script', 0, 'ga');
-        ga('create', 'G-1CV0W5QPKV', 'auto');
-        ga('send', 'pageview');
-        console.log("Google Analytics caricato.");
-    }
 });
