@@ -15,22 +15,24 @@ document.addEventListener('DOMContentLoaded', function () {
         },
         onInitialise: function (status) {
             console.log("Evento onInitialise eseguito. Stato iniziale:", status);
-            if (status === "allow") {
-                console.log("Cookie già accettati.");
-                loadGoogleAnalytics();
-            }
+            handleCookieStatus(status);
         },
         onStatusChange: function (status) {
             console.log("Evento onStatusChange eseguito. Stato cambiato a:", status);
-            if (status === "allow") {
-                console.log("Cookie accettati. Aggiornamento cookie e caricamento GA...");
-                setCookie('cookieconsent_status', 'allow', 365);
-                loadGoogleAnalytics();
-            } else {
-                console.log("Cookie non accettati.");
-            }
+            handleCookieStatus(status);
         }
     });
+
+    // Funzione per gestire lo stato dei cookie
+    function handleCookieStatus(status) {
+        if (status === "allow") {
+            console.log("Cookie accettati. Rimuovendo duplicati e caricando Google Analytics...");
+            clearCookie("cookieconsent_status", "pizzalab.pizza");
+            loadGoogleAnalytics();
+        } else {
+            console.log("Cookie non accettati.");
+        }
+    }
 
     // Funzione per caricare Google Analytics
     function loadGoogleAnalytics() {
@@ -51,13 +53,11 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log("Google Analytics caricato.");
     }
 
-    // Funzione per impostare i cookie manualmente
-    function setCookie(name, value, days) {
-        const date = new Date();
-        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-        const expires = "expires=" + date.toUTCString();
-        document.cookie = `${name}=${value}; path=/; domain=pizzalab.pizza; ${expires}; Secure`;
-        console.log(`Cookie impostato manualmente: ${name}=${value}`);
+    // Funzione per rimuovere cookie duplicati
+    function clearCookie(name, domain) {
+        console.log(`Rimuovendo cookie duplicati: ${name}`);
+        document.cookie = `${name}=; path=/; domain=${domain}; expires=Thu, 01 Jan 1970 00:00:00 UTC; Secure`;
+        document.cookie = `${name}=; path=/; domain=www.${domain}; expires=Thu, 01 Jan 1970 00:00:00 UTC; Secure`;
     }
 
     // Debug per pulsanti
@@ -67,8 +67,8 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log("Pulsante 'Accetta' trovato:", acceptButton);
             acceptButton.addEventListener('click', () => {
                 console.log("Clic sul pulsante 'Accetta' rilevato.");
-                setCookie('cookieconsent_status', 'allow', 365);
-                loadGoogleAnalytics(); // Carica GA al clic
+                document.cookie = "cookieconsent_status=allow; path=/; domain=.pizzalab.pizza; expires=Fri, 31 Dec 2024 23:59:59 GMT; Secure";
+                handleCookieStatus("allow");
             });
         } else {
             console.warn("Pulsante 'Accetta' non trovato.");
