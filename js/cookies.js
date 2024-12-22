@@ -14,12 +14,16 @@ document.addEventListener('DOMContentLoaded', function () {
             href: "/privacy.html"
         },
         onInitialise: function (status) {
-            console.log("Evento onInitialise eseguito. Stato attuale:", status);
+            console.log("Evento onInitialise eseguito. Stato iniziale:", status);
+            if (status === "allow") {
+                console.log("Cookie già accettati.");
+                loadGoogleAnalytics();
+            }
         },
         onStatusChange: function (status) {
             console.log("Evento onStatusChange eseguito. Stato cambiato a:", status);
             if (status === "allow") {
-                console.log("Cookie accettati dall'utente. Aggiornamento cookie...");
+                console.log("Cookie accettati. Aggiornamento cookie e caricamento GA...");
                 setCookie('cookieconsent_status', 'allow', 365);
                 loadGoogleAnalytics();
             } else {
@@ -52,7 +56,20 @@ document.addEventListener('DOMContentLoaded', function () {
         const date = new Date();
         date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
         const expires = "expires=" + date.toUTCString();
-        document.cookie = name + "=" + value + "; path=/; domain=pizzalab.pizza; " + expires + "; Secure";
+        document.cookie = `${name}=${value}; path=/; domain=pizzalab.pizza; ${expires}; Secure`;
         console.log(`Cookie impostato manualmente: ${name}=${value}`);
     }
+
+    // Debug per pulsanti
+    setTimeout(() => {
+        const acceptButton = document.querySelector('.cc-btn.cc-dismiss');
+        if (acceptButton) {
+            console.log("Pulsante 'Accetta' trovato:", acceptButton);
+            acceptButton.addEventListener('click', () => {
+                console.log("Clic sul pulsante 'Accetta' rilevato.");
+            });
+        } else {
+            console.warn("Pulsante 'Accetta' non trovato.");
+        }
+    }, 500);
 });
