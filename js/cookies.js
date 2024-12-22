@@ -2,25 +2,36 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log("Caricamento cookies.js avviato...");
 
     /**
-     * Funzione per eliminare tutti i cookie duplicati legati allo stato del consenso.
+     * Funzione per eliminare tutti i cookie duplicati legati al consenso.
      */
     function removeDuplicateCookies() {
         console.log("Controllo cookie duplicati...");
-        const duplicateDomains = ["pizzalab.pizza", "www.pizzalab.pizza", ".pizzalab.pizza"];
-        duplicateDomains.forEach(domain => {
+        const domains = ["pizzalab.pizza", "www.pizzalab.pizza", ".pizzalab.pizza"];
+        domains.forEach(domain => {
             document.cookie = `cookieconsent_status=; path=/; domain=${domain}; expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
         });
         console.log("Cookie duplicati rimossi.");
     }
 
     /**
-     * Funzione per impostare il cookie correttamente.
-     * @param {string} value - Valore del cookie da impostare (es. 'allow' o 'dismiss').
+     * Funzione per impostare correttamente il cookie.
      */
     function setCookie(value) {
         const cookieString = `cookieconsent_status=${value}; path=/; domain=.pizzalab.pizza; expires=Fri, 31 Dec 2024 23:59:59 GMT; Secure`;
         document.cookie = cookieString;
-        console.log(`Cookie impostato manualmente: ${cookieString}`);
+        console.log(`Cookie impostato: ${cookieString}`);
+    }
+
+    /**
+     * Funzione per verificare lo stato dei cookie.
+     */
+    function checkCookieStatus(status) {
+        if (status === "allow") {
+            console.log("Cookie accettati. Caricamento Google Analytics...");
+            loadGoogleAnalytics();
+        } else {
+            console.log("Cookie non accettati.");
+        }
     }
 
     /**
@@ -39,37 +50,14 @@ document.addEventListener('DOMContentLoaded', function () {
             a.src = 'https://www.google-analytics.com/analytics.js';
             m.parentNode.insertBefore(a, m);
         })(window, document, 'script', 0, 'ga');
-        ga('create', 'G-1CV0W5QPKV', 'auto'); // Usa il tuo ID di Google Analytics
+        ga('create', 'G-1CV0W5QPKV', 'auto'); // Sostituisci con il tuo ID di tracciamento
         ga('send', 'pageview');
         console.log("Google Analytics caricato.");
     }
 
     /**
-     * Funzione per verificare lo stato del consenso ai cookie.
-     * @param {string} status - Stato attuale dei cookie (es. 'allow' o 'dismiss').
+     * Inizializza il banner dei cookie.
      */
-    function checkCookieStatus(status) {
-        if (status === "allow") {
-            console.log("Cookie accettati. Caricando Google Analytics...");
-            loadGoogleAnalytics();
-        } else {
-            console.log("Cookie non accettati.");
-        }
-    }
-
-    /**
-     * Funzione per forzare lo stato del consenso manualmente.
-     * @param {string} value - Valore da forzare (es. 'allow' o 'dismiss').
-     */
-    function forceConsentStatus(value) {
-        setCookie(value); // Imposta il cookie
-        checkCookieStatus(value); // Controlla e agisci di conseguenza
-    }
-
-    // Rimuove cookie duplicati all'avvio
-    removeDuplicateCookies();
-
-    // Inizializza il banner dei cookie
     if (typeof window.cookieconsent !== "undefined") {
         window.cookieconsent.initialise({
             palette: {
@@ -88,19 +76,22 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             onStatusChange: function (status) {
                 console.log("Evento onStatusChange eseguito. Stato cambiato a:", status);
-                checkCookieStatus(status);
+                removeDuplicateCookies(); // Rimuovi duplicati
+                checkCookieStatus(status); // Controlla e carica
             }
         });
     } else {
         console.error("CookieConsent non caricato. Controlla il file.");
     }
 
-    // Gestione manuale del pulsante "Accetta"
+    /**
+     * Aggiunge un listener per il pulsante "Accetta".
+     */
     const acceptButton = document.querySelector('.cc-dismiss');
     if (acceptButton) {
         acceptButton.addEventListener('click', function () {
             console.log("Clic sul pulsante 'Accetta' rilevato.");
-            forceConsentStatus('allow'); // Forza lo stato a 'allow'
+            setCookie('allow'); // Imposta manualmente
         });
     }
 });
