@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function () {
             acceptButton.addEventListener('click', () => {
                 console.log("Clic sul pulsante 'Accetta' rilevato.");
                 setCookie('cookieconsent_status', 'allow', 365);
-                window.cookieconsent.setStatus("allow");
+                loadGoogleAnalytics(); // Carica GA al clic
             });
         } else {
             console.warn("Pulsante 'Accetta' non trovato.");
