@@ -80,7 +80,6 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             onStatusChange: function (status) {
                 console.log("Evento onStatusChange eseguito. Stato cambiato a:", status);
-                removeDuplicateCookies();
                 checkCookieStatus(status);
             }
         });
@@ -94,6 +93,11 @@ document.addEventListener('DOMContentLoaded', function () {
         acceptButton.addEventListener('click', function () {
             console.log("Clic sul pulsante 'Accetta' rilevato.");
             setCookie('allow');
+            // Forza l'aggiornamento dello stato del banner
+            if (typeof window.cookieconsent !== "undefined" && window.cookieconsent.setStatus) {
+                window.cookieconsent.setStatus('allow');
+                console.log("Stato aggiornato manualmente a 'allow'.");
+            }
             loadGoogleAnalytics();
         });
     }
