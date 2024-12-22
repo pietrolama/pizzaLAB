@@ -2,17 +2,15 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log("Caricamento cookies.js avviato...");
 
     /**
-     * Funzione per eliminare cookie duplicati.
+     * Funzione per eliminare tutti i cookie duplicati legati allo stato del consenso.
      */
     function removeDuplicateCookies() {
         console.log("Controllo cookie duplicati...");
-        const cookies = document.cookie.split('; ').filter(cookie => cookie.startsWith('cookieconsent_status'));
-        if (cookies.length > 1) {
-            console.log("Trovati cookie duplicati. Rimuovendo...");
-            document.cookie = "cookieconsent_status=; path=/; domain=pizzalab.pizza; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-            document.cookie = "cookieconsent_status=; path=/; domain=www.pizzalab.pizza; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-            document.cookie = "cookieconsent_status=; path=/; domain=.pizzalab.pizza; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-        }
+        const duplicateCookies = ["pizzalab.pizza", "www.pizzalab.pizza", ".pizzalab.pizza"];
+        duplicateCookies.forEach(domain => {
+            document.cookie = `cookieconsent_status=; path=/; domain=${domain}; expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
+        });
+        console.log("Cookie duplicati rimossi.");
     }
 
     /**
@@ -58,6 +56,18 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    /**
+     * Funzione per forzare l'aggiornamento dello stato del banner.
+     */
+    function forceBannerUpdate(value) {
+        if (typeof window.cookieconsent !== "undefined") {
+            window.cookieconsent.setStatus(value);
+            console.log(`Stato del banner forzato a: ${value}`);
+        } else {
+            console.error("Impossibile aggiornare lo stato del banner. CookieConsent non definito.");
+        }
+    }
+
     // Rimuove cookie duplicati all'avvio
     removeDuplicateCookies();
 
@@ -93,11 +103,8 @@ document.addEventListener('DOMContentLoaded', function () {
         acceptButton.addEventListener('click', function () {
             console.log("Clic sul pulsante 'Accetta' rilevato.");
             setCookie('allow');
-            // Forza l'aggiornamento dello stato del banner
-            if (typeof window.cookieconsent !== "undefined" && window.cookieconsent.setStatus) {
-                window.cookieconsent.setStatus('allow');
-                console.log("Stato aggiornato manualmente a 'allow'.");
-            }
+            removeDuplicateCookies(); // Rimuove eventuali conflitti
+            forceBannerUpdate('allow'); // Aggiorna il banner
             loadGoogleAnalytics();
         });
     }
