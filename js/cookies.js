@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log("Caricamento cookies.js avviato...");
 
     /**
-     * Funzione per eliminare tutti i cookie duplicati legati al consenso.
+     * Funzione per eliminare i cookie duplicati legati al consenso.
      */
     function removeDuplicateCookies() {
         console.log("Controllo cookie duplicati...");
@@ -72,11 +72,14 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             onInitialise: function (status) {
                 console.log("Banner inizializzato con stato:", status);
+                removeDuplicateCookies(); // Elimina cookie duplicati all'avvio
+                setCookie(status); // Sincronizza il cookie con lo stato interno
                 checkCookieStatus(status);
             },
             onStatusChange: function (status) {
                 console.log("Evento onStatusChange eseguito. Stato cambiato a:", status);
-                removeDuplicateCookies(); // Rimuovi duplicati
+                removeDuplicateCookies(); // Elimina cookie duplicati
+                setCookie(status); // Sincronizza il cookie con lo stato interno
                 checkCookieStatus(status); // Controlla e carica
             }
         });
@@ -91,7 +94,9 @@ document.addEventListener('DOMContentLoaded', function () {
     if (acceptButton) {
         acceptButton.addEventListener('click', function () {
             console.log("Clic sul pulsante 'Accetta' rilevato.");
-            setCookie('allow'); // Imposta manualmente
+            removeDuplicateCookies();
+            setCookie('allow');
+            window.cookieconsent.setStatus('allow'); // Sincronizza con lo stato interno della libreria
         });
     }
 });
