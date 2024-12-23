@@ -89,6 +89,70 @@ header h1:hover {
     }
 }
 
+/* Stile generale del banner */
+#cookie-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #000;
+    color: #fff;
+    padding: 15px;
+    font-size: 14px;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.cookie-text {
+    flex: 1;
+    margin-right: 15px;
+    line-height: 1.5;
+}
+
+/* Contenitore dei pulsanti */
+.cookie-buttons {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    height: 40px;
+}
+
+/* Stile per i pulsanti */
+.cookie-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    color: #bbb;
+    border: 1px solid #555;
+    padding: 10px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+    height: 100%;
+    transition: all 0.3s ease;
+}
+
+.cookie-btn:hover {
+    color: #fff;
+    border-color: #fff;
+}
+
+.cookie-btn:first-child {
+    background: #f1d600;
+    color: #000;
+    border: none;
+    font-weight: bold;
+}
+
+.cookie-btn:first-child:hover {
+    background: #ffc700;
+}
+
+
 /* ===== NAVIGAZIONE ===== */
 nav {
     position: fixed;
