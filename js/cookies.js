@@ -63,19 +63,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 " onmouseover="this.style.color='#fff';this.style.borderColor='#fff';" 
                   onmouseout="this.style.color='#bbb';this.style.borderColor='#555';">Rifiuta</button>
                 <a href="/privacy.html" id="privacy-link" style="
-                    background: transparent;
+                     background: transparent;
                     color: #bbb;
-                    text-decoration: none;
+                    border: 1px solid #555;
                     padding: 10px 15px;
                     font-size: 14px;
-                    border: 1px solid #555;
+                    cursor: pointer;
                     border-radius: 5px;
                     display: inline-flex;
                     align-items: center;
                     justify-content: center;
                     height: 100%;
                     transition: all 0.3s ease;
-                    cursor: pointer;
                 " onmouseover="this.style.color='#fff';this.style.borderColor='#fff';" 
                   onmouseout="this.style.color='#bbb';this.style.borderColor='#555';">Privacy</a>
             </div>
