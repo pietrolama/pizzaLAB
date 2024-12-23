@@ -1,43 +1,60 @@
 document.addEventListener('DOMContentLoaded', function () {
     console.log("Caricamento cookies.js avviato...");
 
-    /**
-     * Rimuove cookie duplicati su pizzalab.pizza e .pizzalab.pizza.
-     */
-    function removeDuplicateCookies() {
-        console.log("Controllo cookie duplicati...");
-        const cookieName = "cookieconsent_status";
-        const domains = ["pizzalab.pizza", ".pizzalab.pizza"];
-        const paths = ["/"];
+    // Crea il banner dinamicamente
+    function createCookieBanner() {
+        const banner = document.createElement('div');
+        banner.id = 'cookie-banner';
+        banner.style.cssText = `
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #000;
+            color: #fff;
+            padding: 15px;
+            font-size: 14px;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        `;
 
-        domains.forEach(domain => {
-            paths.forEach(path => {
-                document.cookie = `${cookieName}=; path=${path}; domain=${domain}; expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
-            });
-        });
+        banner.innerHTML = `
+            <span>Questo sito utilizza cookie per migliorare la tua esperienza. Continuando accetti l'uso dei cookie.</span>
+            <button id="accept-cookies" style="
+                background: #f1d600;
+                color: #000;
+                border: none;
+                padding: 10px 20px;
+                font-size: 14px;
+                cursor: pointer;
+            ">Accetta</button>
+        `;
 
-        console.log("Cookie duplicati rimossi.");
+        document.body.appendChild(banner);
     }
 
-    /**
-     * Verifica lo stato del cookie `cookieconsent_status` e carica Google Analytics se necessario.
-     */
-    function checkCookieStatus() {
-        const status = document.cookie.split('; ').find(row => row.startsWith('cookieconsent_status='));
-        const value = status ? status.split('=')[1] : null;
+    // Funzione per impostare un cookie
+    function setCookie(name, value, days) {
+        const expires = new Date();
+        expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+        document.cookie = `${name}=${value}; path=/; domain=.pizzalab.pizza; expires=${expires.toUTCString()}; Secure; SameSite=Lax`;
+    }
 
-        if (value === 'allow') {
-            console.log("Cookie accettati. Caricamento Google Analytics...");
-            loadGoogleAnalytics();
-        } else {
-            console.log("Cookie non accettati.");
+    // Funzione per ottenere un cookie
+    function getCookie(name) {
+        const cookies = document.cookie.split('; ');
+        for (let i = 0; i < cookies.length; i++) {
+            const [key, value] = cookies[i].split('=');
+            if (key === name) return value;
         }
+        return null;
     }
 
-    /**
-     * Carica Google Analytics.
-     */
+    // Funzione per caricare Google Analytics
     function loadGoogleAnalytics() {
+        console.log("Caricamento Google Analytics...");
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
             i[r] = i[r] || function () {
@@ -54,50 +71,31 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log("Google Analytics caricato.");
     }
 
-    /**
-     * Inizializza la libreria CookieConsent con configurazione corretta.
-     */
-    if (typeof window.cookieconsent !== "undefined") {
-        window.cookieconsent.initialise({
-            cookie: {
-                domain: '.pizzalab.pizza',
-                path: '/',
-            },
-            palette: {
-                popup: { background: "#000", text: "#fff" },
-                button: { background: "#f1d600", text: "#000" }
-            },
-            content: {
-                message: "Questo sito utilizza cookie per garantire la migliore esperienza di navigazione.",
-                dismiss: "Accetta",
-                link: "Maggiori informazioni",
-                href: "/privacy.html"
-            },
-            onInitialise: function (status) {
-                console.log("Banner inizializzato con stato:", status);
-                removeDuplicateCookies(); // Rimuove cookie duplicati all'avvio
-                checkCookieStatus(); // Controlla lo stato attuale
-            },
-            onStatusChange: function (status) {
-                console.log("Evento onStatusChange eseguito. Stato cambiato a:", status);
-                removeDuplicateCookies(); // Elimina eventuali cookie duplicati
-                checkCookieStatus(); // Verifica il nuovo stato
-            }
-        });
-    } else {
-        console.error("CookieConsent non caricato. Controlla il file.");
+    // Funzione principale per la gestione dei cookie
+    function manageCookies() {
+        const consent = getCookie('cookieconsent_status');
+
+        if (consent === 'allow') {
+            console.log("Cookie accettati. Caricamento servizi...");
+            loadGoogleAnalytics();
+        } else {
+            console.log("Cookie non accettati. Mostra il banner.");
+            createCookieBanner();
+        }
     }
 
-    /**
-     * Listener per il pulsante "Accetta".
-     */
+    // Gestione del clic sul pulsante "Accetta"
     document.addEventListener('click', function (event) {
-        if (event.target.classList.contains('cc-dismiss')) {
-            console.log("Clic sul pulsante 'Accetta' rilevato.");
-            removeDuplicateCookies(); // Rimuove cookie duplicati
-            checkCookieStatus(); // Verifica e aggiorna lo stato
+        if (event.target.id === 'accept-cookies') {
+            console.log("Clic su 'Accetta' rilevato.");
+            setCookie('cookieconsent_status', 'allow', 365); // Imposta il consenso
+            document.getElementById('cookie-banner').remove(); // Rimuovi il banner
+            loadGoogleAnalytics(); // Carica i servizi
         }
     });
+
+    // Esegui la gestione dei cookie all'avvio
+    manageCookies();
 
     console.log("Caricamento cookies.js completato.");
 });
