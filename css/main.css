@@ -110,6 +110,7 @@ nav {
     width: 100%; /* Assicura che utilizzi tutta la larghezza disponibile */
     margin: 0 auto;
     padding: 0 20px;
+    box-sizing: border-box; /* Assicura che padding e border siano inclusi nella larghezza totale */
 }
 
 /* Stili per le link di navigazione */
