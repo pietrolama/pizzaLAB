@@ -106,7 +106,8 @@ nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 1200px;
+    max-width: 1200px; /* Puoi aumentare questa larghezza se necessario */
+    width: 100%; /* Assicura che utilizzi tutta la larghezza disponibile */
     margin: 0 auto;
     padding: 0 20px;
 }
@@ -115,20 +116,26 @@ nav {
 .nav-links {
     display: flex;
     list-style: none;
+    flex-wrap: nowrap; /* Impedisce il wrapping */
+    align-items: center; /* Allinea verticalmente i link */
+    justify-content: space-between; /* Distribuisce meglio gli elementi */
 }
 
 .nav-links li {
-    margin: 0 15px;
+    margin: 0 10px;
 }
 
 .nav-links li a {
     color: var(--text-color);
     text-decoration: none;
-    padding: 10px 20px;
+    padding: 8px 15px;
     border-radius: 5px;
     position: relative;
     overflow: hidden;
     transition: background-color 0.3s, color 0.3s, transform 0.3s;
+    white-space: nowrap; /* Impedisce al testo di andare a capo */
+    font-size: 1em; /* Assicurati che la dimensione del font sia appropriata */
+    line-height: 1.2; /* Migliora l'allineamento verticale */
 }
 
 .nav-links li a::after {
