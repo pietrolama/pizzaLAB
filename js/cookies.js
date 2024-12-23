@@ -3,92 +3,26 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Crea il banner dinamicamente
     function createCookieBanner() {
-        const banner = document.createElement('div');
-        banner.id = 'cookie-banner';
-        banner.style.cssText = `
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: #000;
-            color: #fff;
-            padding: 15px;
-            font-size: 14px;
-            z-index: 1000;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: nowrap;
-        `;
-    
-        banner.innerHTML = `
-            <span style="
-                flex: 1;
-                margin-right: 15px;
-                line-height: 1.5;
-            ">Questo sito utilizza cookie per migliorare la tua esperienza. Continuando accetti l'uso dei cookie.</span>
-            <div style="
-                display: flex;
-                gap: 10px;
-                align-items: center;
-                height: 40px;
-            ">
-                <button id="accept-cookies" style="
-                    background: #f1d600;
-                    color: #000;
-                    border: none;
-                    padding: 10px 20px;
-                    font-size: 14px;
-                    font-weight: bold;
-                    cursor: pointer;
-                    border-radius: 5px;
-                    display: inline-flex;
-                    align-items: center;
-                    justify-content: center;
-                    height: 100%;
-                ">Accetta</button>
-                <button id="reject-cookies" style="
-                    background: transparent;
-                    color: #bbb;
-                    border: 1px solid #555;
-                    padding: 10px 15px;
-                    font-size: 14px;
-                    cursor: pointer;
-                    border-radius: 5px;
-                    display: inline-flex;
-                    align-items: center;
-                    justify-content: center;
-                    height: 100%;
-                    transition: all 0.3s ease;
-                " onmouseover="this.style.color='#fff';this.style.borderColor='#fff';" 
-                  onmouseout="this.style.color='#bbb';this.style.borderColor='#555';">
-                  Rifiuta</button>
-                <button id="privacy-link" style="
-                    background: transparent;
-                    color: #bbb;
-                    border: 1px solid #555;
-                    padding: 10px 15px;
-                    font-size: 14px;
-                    cursor: pointer;
-                    border-radius: 5px;
-                    display: inline-flex;
-                    align-items: center;
-                    justify-content: center;
-                    height: 100%;
-                    transition: all 0.3s ease;
-                " onmouseover="this.style.color='#fff';this.style.borderColor='#fff';" 
-                  onmouseout="this.style.color='#bbb';this.style.borderColor='#555';">
-                  Privacy</button>
-            </div>
-        `;
-    
-        document.body.appendChild(banner);
-    
-        // Aggiungi un listener per il pulsante Privacy
-        document.getElementById('privacy-link').addEventListener('click', function () {
-            window.location.href = '/privacy.html';
-        });
-    }
+    const banner = document.createElement('div');
+    banner.id = 'cookie-banner';
+
+    banner.innerHTML = `
+        <span class="cookie-text">Questo sito utilizza cookie per migliorare la tua esperienza. Continuando accetti l'uso dei cookie.</span>
+        <div class="cookie-buttons">
+            <button id="accept-cookies" class="cookie-btn">Accetta</button>
+            <button id="reject-cookies" class="cookie-btn">Rifiuta</button>
+            <button id="privacy-link" class="cookie-btn">Privacy</button>
+        </div>
+    `;
+
+    document.body.appendChild(banner);
+
+    // Aggiungi un listener per il pulsante Privacy
+    document.getElementById('privacy-link').addEventListener('click', function () {
+        window.location.href = '/privacy.html';
+    });
+}
+
 
     // Funzione per impostare un cookie
     function setCookie(name, value, days) {
