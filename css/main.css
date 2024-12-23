@@ -102,19 +102,18 @@ nav {
     box-sizing: border-box;
 }
 
-/* Container per il menu e l'hamburger */
 .nav-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%; /* Utilizza tutta la larghezza disponibile */
+    width: 90%; /* Riduci leggermente per evitare overflow */
     max-width: 1200px; /* Limita la larghezza massima */
     margin: 0 auto;
     padding: 0 20px; /* Spaziatura laterale */
     box-sizing: border-box;
 }
 
-/* Logo */
+/* ===== LOGO ===== */
 .site-logo img {
     width: 100%;
     max-width: 150px; /* Regola la dimensione del logo */
@@ -124,7 +123,7 @@ nav {
     animation: float 3s ease-in-out infinite;
 }
 
-/* Link di Navigazione */
+/* ===== LINK DI NAVIGAZIONE ===== */
 .nav-links {
     display: flex;
     list-style: none;
@@ -132,11 +131,10 @@ nav {
     align-items: center;
     transition: max-height 0.3s ease-in-out;
     overflow: hidden;
-    max-height: none; /* Nascondi se non in mobile */
 }
 
 .nav-links li {
-    margin: 0 10px; /* Riduci il margine */
+    margin: 0 10px; /* Riduci i margini per evitare overflow */
 }
 
 .nav-links li a {
@@ -173,6 +171,7 @@ nav {
     width: 100%;
     left: 0;
 }
+
 /* ===== MENU HAMBURGER ===== */
 .hamburger {
     display: none; /* Nascondi di default */
