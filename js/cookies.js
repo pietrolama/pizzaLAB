@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
             align-items: center;
             flex-wrap: nowrap;
         `;
-
+    
         banner.innerHTML = `
             <span style="
                 flex: 1;
@@ -60,10 +60,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     justify-content: center;
                     height: 100%;
                     transition: all 0.3s ease;
-                    " onmouseover="this.style.color='#fff';this.style.borderColor='#fff';" 
-                    onmouseout="this.style.color='#bbb';this.style.borderColor='#555';
-                ">Rifiuta</button>
-                <a href="/privacy.html" id="privacy-link" style="
+                " onmouseover="this.style.color='#fff';this.style.borderColor='#fff';" 
+                  onmouseout="this.style.color='#bbb';this.style.borderColor='#555';">
+                  Rifiuta</button>
+                <button id="privacy-link" style="
                     background: transparent;
                     color: #bbb;
                     border: 1px solid #555;
@@ -77,12 +77,17 @@ document.addEventListener('DOMContentLoaded', function () {
                     height: 100%;
                     transition: all 0.3s ease;
                 " onmouseover="this.style.color='#fff';this.style.borderColor='#fff';" 
-                  onmouseout="this.style.color='#bbb';this.style.borderColor='#555';">Privacy</a>
+                  onmouseout="this.style.color='#bbb';this.style.borderColor='#555';">
+                  Privacy</button>
             </div>
         `;
-
-
+    
         document.body.appendChild(banner);
+    
+        // Aggiungi un listener per il pulsante Privacy
+        document.getElementById('privacy-link').addEventListener('click', function () {
+            window.location.href = '/privacy.html';
+        });
     }
 
     // Funzione per impostare un cookie
