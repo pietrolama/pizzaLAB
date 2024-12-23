@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
         `;
 
         banner.innerHTML = `
@@ -48,12 +48,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 <a href="/privacy.html" id="privacy-link" style="
                     background: transparent;
                     color: #bbb;
-                    border: 1px solid #555;
+                    text-decoration: none;
                     padding: 8px 15px;
                     font-size: 12px;
-                    cursor: pointer;
+                    text-align: center;
+                    border: 1px solid #555;
                     border-radius: 5px;
                     transition: all 0.3s ease;
+                    cursor: pointer;
                 " onmouseover="this.style.color='#fff';this.style.borderColor='#fff';" 
                   onmouseout="this.style.color='#bbb';this.style.borderColor='#555';">Privacy</a>
             </div>
