@@ -106,7 +106,6 @@ nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 1920px; /* Puoi aumentare questa larghezza se necessario */
     width: 100%; /* Assicura che utilizzi tutta la larghezza disponibile */
     margin: 0 auto;
     padding: 0 20px;
