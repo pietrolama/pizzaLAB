@@ -106,10 +106,10 @@ nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 90%; /* Riduci leggermente per evitare overflow */
+    width: 100%; /* Riduci leggermente per evitare overflow */
     max-width: 1000px; /* Limita la larghezza massima */
     margin: 0 auto;
-    padding: 0 15px; /* Spaziatura laterale */
+    padding: 0 10px; /* Spaziatura laterale */
     box-sizing: border-box;
 }
 
@@ -127,7 +127,7 @@ nav {
 .nav-links {
     display: flex;
     list-style: none;
-    flex-wrap: wrap; /* Consenti ai link di andare a capo */
+    flex-wrap: nowrap;
     align-items: center;
     transition: max-height 0.3s ease-in-out;
     overflow: hidden;
@@ -148,6 +148,7 @@ nav {
     white-space: nowrap; /* Impedisce al testo di andare a capo */
     font-size: 0.95em;
     line-height: 1.2;
+    flex-shrink: 1; /* Permetti ai link di ridursi */
 }
 
 .nav-links li a::after {
