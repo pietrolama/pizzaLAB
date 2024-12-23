@@ -95,47 +95,54 @@ nav {
     top: 0;
     width: 100%;
     background: #111;
-    z-index: 1000;
+    z-index: 9999;
     padding: 10px 0;
     border-top: 1px solid var(--border-color);
     border-bottom: 1px solid var(--border-color);
+    box-sizing: border-box;
 }
 
-/* Container per il menu e l'hamburger */
 .nav-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%; /* Assicura che utilizzi tutta la larghezza disponibile */
+    width: 90%; /* Riduci leggermente per evitare overflow */
+    max-width: 1200px; /* Puoi regolare secondo le tue esigenze */
     margin: 0 auto;
-    padding: 0 20px;
-    box-sizing: border-box; /* Assicura che padding e border siano inclusi nella larghezza totale */
+    padding: 0 10px; /* Riduci il padding per adattarsi meglio */
 }
 
-/* Stili per le link di navigazione */
+.site-logo img {
+    width: 100%;
+    max-width: 150px; /* Puoi regolare la dimensione del logo */
+    height: auto;
+    filter: drop-shadow(0 0 10px var(--primary-color));
+    transition: transform 0.5s, filter 0.5s;
+    animation: float 3s ease-in-out infinite;
+}
+
 .nav-links {
     display: flex;
     list-style: none;
     flex-wrap: nowrap; /* Impedisce il wrapping */
-    align-items: center; /* Allinea verticalmente i link */
-    justify-content: space-between; /* Distribuisce meglio gli elementi */
+    align-items: center;
 }
 
 .nav-links li {
-    margin: 0 10px;
+    margin: 0 10px; /* Ridotto da 15px a 10px */
 }
 
 .nav-links li a {
     color: var(--text-color);
     text-decoration: none;
-    padding: 8px 15px;
+    padding: 8px 12px; /* Ridotto da 10px 20px a 8px 12px */
     border-radius: 5px;
     position: relative;
     overflow: hidden;
     transition: background-color 0.3s, color 0.3s, transform 0.3s;
     white-space: nowrap; /* Impedisce al testo di andare a capo */
-    font-size: 1em; /* Assicurati che la dimensione del font sia appropriata */
-    line-height: 1.2; /* Migliora l'allineamento verticale */
+    font-size: 1em;
+    line-height: 1.2;
 }
 
 .nav-links li a::after {
