@@ -102,40 +102,47 @@ nav {
     box-sizing: border-box;
 }
 
+/* Container per il menu e l'hamburger */
 .nav-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 90%; /* Riduci leggermente per evitare overflow */
-    max-width: 1200px; /* Puoi regolare secondo le tue esigenze */
+    width: 100%; /* Utilizza tutta la larghezza disponibile */
+    max-width: 1200px; /* Limita la larghezza massima */
     margin: 0 auto;
-    padding: 0 10px; /* Riduci il padding per adattarsi meglio */
+    padding: 0 20px; /* Spaziatura laterale */
+    box-sizing: border-box;
 }
 
+/* Logo */
 .site-logo img {
     width: 100%;
-    max-width: 150px; /* Puoi regolare la dimensione del logo */
+    max-width: 150px; /* Regola la dimensione del logo */
     height: auto;
     filter: drop-shadow(0 0 10px var(--primary-color));
     transition: transform 0.5s, filter 0.5s;
     animation: float 3s ease-in-out infinite;
 }
 
+/* Link di Navigazione */
 .nav-links {
     display: flex;
     list-style: none;
     flex-wrap: nowrap; /* Impedisce il wrapping */
     align-items: center;
+    transition: max-height 0.3s ease-in-out;
+    overflow: hidden;
+    max-height: none; /* Nascondi se non in mobile */
 }
 
 .nav-links li {
-    margin: 0 10px; /* Ridotto da 15px a 10px */
+    margin: 0 10px; /* Riduci il margine */
 }
 
 .nav-links li a {
     color: var(--text-color);
     text-decoration: none;
-    padding: 8px 12px; /* Ridotto da 10px 20px a 8px 12px */
+    padding: 8px 12px; /* Riduci il padding */
     border-radius: 5px;
     position: relative;
     overflow: hidden;
@@ -166,7 +173,6 @@ nav {
     width: 100%;
     left: 0;
 }
-
 /* ===== MENU HAMBURGER ===== */
 .hamburger {
     display: none; /* Nascondi di default */
