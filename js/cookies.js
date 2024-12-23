@@ -22,52 +22,63 @@ document.addEventListener('DOMContentLoaded', function () {
         `;
 
         banner.innerHTML = `
-            <span style="flex: 1; margin-right: 15px; line-height: 1.5;">Questo sito utilizza cookie per migliorare la tua esperienza. Continuando accetti l'uso dei cookie.</span>
-            <div style="display: flex; gap: 12px; align-items: center; height: 100%;">
+            <span style="
+                flex: 1;
+                margin-right: 15px;
+                line-height: 1.5;
+            ">Questo sito utilizza cookie per migliorare la tua esperienza. Continuando accetti l'uso dei cookie.</span>
+            <div style="
+                display: flex;
+                gap: 10px;
+                align-items: center;
+            ">
                 <button id="accept-cookies" style="
                     background: #f1d600;
                     color: #000;
                     border: none;
-                    padding: 12px 24px;
-                    font-size: 16px;
+                    padding: 12px 20px;
+                    font-size: 14px;
                     font-weight: bold;
                     cursor: pointer;
                     border-radius: 5px;
-                    transition: all 0.3s ease;
-                    display: flex;
+                    height: 40px;
+                    display: inline-flex;
                     align-items: center;
+                    justify-content: center;
                 ">Accetta</button>
                 <button id="reject-cookies" style="
                     background: transparent;
                     color: #bbb;
                     border: 1px solid #555;
-                    padding: 10px 18px;
-                    font-size: 14px;
+                    padding: 10px 15px;
+                    font-size: 12px;
                     cursor: pointer;
                     border-radius: 5px;
-                    transition: all 0.3s ease;
-                    display: flex;
+                    height: 40px;
+                    display: inline-flex;
                     align-items: center;
+                    justify-content: center;
+                    transition: all 0.3s ease;
                 " onmouseover="this.style.color='#fff';this.style.borderColor='#fff';" 
                   onmouseout="this.style.color='#bbb';this.style.borderColor='#555';">Rifiuta</button>
                 <a href="/privacy.html" id="privacy-link" style="
                     background: transparent;
                     color: #bbb;
                     text-decoration: none;
-                    padding: 10px 18px;
-                    font-size: 14px;
-                    text-align: center;
+                    padding: 10px 15px;
+                    font-size: 12px;
                     border: 1px solid #555;
                     border-radius: 5px;
-                    transition: all 0.3s ease;
-                    display: flex;
+                    height: 40px;
+                    display: inline-flex;
                     align-items: center;
                     justify-content: center;
+                    transition: all 0.3s ease;
+                    cursor: pointer;
                 " onmouseover="this.style.color='#fff';this.style.borderColor='#fff';" 
                   onmouseout="this.style.color='#bbb';this.style.borderColor='#555';">Privacy</a>
             </div>
         `;
-
 
         document.body.appendChild(banner);
     }
