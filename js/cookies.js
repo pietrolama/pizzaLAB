@@ -48,14 +48,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 <a href="/privacy.html" id="privacy-link" style="
                     background: transparent;
                     color: #bbb;
-                    text-decoration: none;
+                    border: 1px solid #555;
                     padding: 8px 15px;
                     font-size: 12px;
-                    text-align: center;
-                    border: 1px solid #555;
+                    cursor: pointer;
                     border-radius: 5px;
                     transition: all 0.3s ease;
-                    cursor: pointer;
                 " onmouseover="this.style.color='#fff';this.style.borderColor='#fff';" 
                   onmouseout="this.style.color='#bbb';this.style.borderColor='#555';">Privacy</a>
             </div>
