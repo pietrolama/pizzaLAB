@@ -127,28 +127,31 @@ nav {
 .nav-links {
     display: flex;
     list-style: none;
-    flex-wrap: nowrap;
+    flex-wrap: nowrap; /* Mantiene i link su una singola riga */
     align-items: center;
     transition: max-height 0.3s ease-in-out;
     overflow: hidden;
+    flex-grow: 1; /* Permette ai link di crescere per riempire lo spazio */
+    justify-content: flex-end; /* Allinea i link a destra */
 }
 
 .nav-links li {
-    margin: 0 8px; /* Riduci i margini per evitare overflow */
+    margin: 0 8px; /* Riduci i margini per risparmiare spazio */
+    flex-shrink: 1; /* Permette ai link di ridursi se necessario */
 }
 
 .nav-links li a {
     color: var(--text-color);
     text-decoration: none;
-    padding: 6px 10px; /* Riduci il padding */
+    padding: 6px 10px; /* Riduci il padding per risparmiare spazio */
     border-radius: 5px;
     position: relative;
     overflow: hidden;
     transition: background-color 0.3s, color 0.3s, transform 0.3s;
     white-space: nowrap; /* Impedisce al testo di andare a capo */
-    font-size: 0.95em;
+    font-size: 0.95em; /* Riduci leggermente la dimensione del font */
     line-height: 1.2;
-    flex-shrink: 1; /* Permetti ai link di ridursi */
+    flex-shrink: 1; /* Permette ai link di ridursi */
 }
 
 .nav-links li a::after {
