@@ -60,10 +60,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     justify-content: center;
                     height: 100%;
                     transition: all 0.3s ease;
-                " onmouseover="this.style.color='#fff';this.style.borderColor='#fff';" 
-                  onmouseout="this.style.color='#bbb';this.style.borderColor='#555';">Rifiuta</button>
+                    " onmouseover="this.style.color='#fff';this.style.borderColor='#fff';" 
+                    onmouseout="this.style.color='#bbb';this.style.borderColor='#555';
+                ">Rifiuta</button>
                 <a href="/privacy.html" id="privacy-link" style="
-                     background: transparent;
+                    background: transparent;
                     color: #bbb;
                     border: 1px solid #555;
                     padding: 10px 15px;
