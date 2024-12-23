@@ -31,33 +31,34 @@ document.addEventListener('DOMContentLoaded', function () {
                 display: flex;
                 gap: 10px;
                 align-items: center;
+                height: 40px;
             ">
                 <button id="accept-cookies" style="
                     background: #f1d600;
                     color: #000;
                     border: none;
-                    padding: 12px 20px;
+                    padding: 10px 20px;
                     font-size: 14px;
                     font-weight: bold;
                     cursor: pointer;
                     border-radius: 5px;
-                    height: 40px;
                     display: inline-flex;
                     align-items: center;
                     justify-content: center;
+                    height: 100%;
                 ">Accetta</button>
                 <button id="reject-cookies" style="
                     background: transparent;
                     color: #bbb;
                     border: 1px solid #555;
                     padding: 10px 15px;
-                    font-size: 12px;
+                    font-size: 14px;
                     cursor: pointer;
                     border-radius: 5px;
-                    height: 40px;
                     display: inline-flex;
                     align-items: center;
                     justify-content: center;
+                    height: 100%;
                     transition: all 0.3s ease;
                 " onmouseover="this.style.color='#fff';this.style.borderColor='#fff';" 
                   onmouseout="this.style.color='#bbb';this.style.borderColor='#555';">Rifiuta</button>
@@ -66,19 +67,20 @@ document.addEventListener('DOMContentLoaded', function () {
                     color: #bbb;
                     text-decoration: none;
                     padding: 10px 15px;
-                    font-size: 12px;
+                    font-size: 14px;
                     border: 1px solid #555;
                     border-radius: 5px;
-                    height: 40px;
                     display: inline-flex;
                     align-items: center;
                     justify-content: center;
+                    height: 100%;
                     transition: all 0.3s ease;
                     cursor: pointer;
                 " onmouseover="this.style.color='#fff';this.style.borderColor='#fff';" 
                   onmouseout="this.style.color='#bbb';this.style.borderColor='#555';">Privacy</a>
             </div>
         `;
+
 
         document.body.appendChild(banner);
     }
