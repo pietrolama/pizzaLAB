@@ -2,8 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log("Caricamento cookies.js avviato...");
 
     /**
-     * Rimuove tutti i cookie duplicati con nome `cookieconsent_status`
-     * su pizzalab.pizza e .pizzalab.pizza, per evitare conflitti.
+     * Rimuove cookie duplicati su pizzalab.pizza e .pizzalab.pizza.
      */
     function removeDuplicateCookies() {
         console.log("Controllo cookie duplicati...");
@@ -21,18 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     /**
-     * Imposta un cookie su `.pizzalab.pizza`.
-     */
-    function setCookie(name, value, days) {
-        const expires = new Date();
-        expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
-        const cookieValue = `${name}=${value}; path=/; domain=.pizzalab.pizza; expires=${expires.toUTCString()}; Secure`;
-        document.cookie = cookieValue;
-        console.log(`Cookie impostato: ${cookieValue}`);
-    }
-
-    /**
-     * Controlla lo stato del cookie `cookieconsent_status`.
+     * Verifica lo stato del cookie `cookieconsent_status` e carica Google Analytics se necessario.
      */
     function checkCookieStatus() {
         const status = document.cookie.split('; ').find(row => row.startsWith('cookieconsent_status='));
@@ -47,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     /**
-     * Carica Google Analytics se i cookie sono accettati.
+     * Carica Google Analytics.
      */
     function loadGoogleAnalytics() {
         (function (i, s, o, g, r, a, m) {
@@ -67,10 +55,14 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     /**
-     * Inizializza il banner CookieConsent.
+     * Inizializza la libreria CookieConsent con configurazione corretta.
      */
     if (typeof window.cookieconsent !== "undefined") {
         window.cookieconsent.initialise({
+            cookie: {
+                domain: '.pizzalab.pizza',
+                path: '/',
+            },
             palette: {
                 popup: { background: "#000", text: "#fff" },
                 button: { background: "#f1d600", text: "#000" }
@@ -83,18 +75,13 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             onInitialise: function (status) {
                 console.log("Banner inizializzato con stato:", status);
-                removeDuplicateCookies(); // Elimina eventuali cookie duplicati all'avvio
-                checkCookieStatus();
+                removeDuplicateCookies(); // Rimuove cookie duplicati all'avvio
+                checkCookieStatus(); // Controlla lo stato attuale
             },
             onStatusChange: function (status) {
                 console.log("Evento onStatusChange eseguito. Stato cambiato a:", status);
-                removeDuplicateCookies(); // Elimina eventuali duplicati prima di impostare il nuovo valore
-                if (status === "allow") {
-                    setCookie("cookieconsent_status", "allow", 365);
-                } else {
-                    setCookie("cookieconsent_status", "dismiss", 365);
-                }
-                checkCookieStatus();
+                removeDuplicateCookies(); // Elimina eventuali cookie duplicati
+                checkCookieStatus(); // Verifica il nuovo stato
             }
         });
     } else {
@@ -107,9 +94,8 @@ document.addEventListener('DOMContentLoaded', function () {
     document.addEventListener('click', function (event) {
         if (event.target.classList.contains('cc-dismiss')) {
             console.log("Clic sul pulsante 'Accetta' rilevato.");
-            removeDuplicateCookies(); // Elimina eventuali cookie duplicati
-            setCookie("cookieconsent_status", "allow", 365); // Imposta il nuovo valore
-            checkCookieStatus();
+            removeDuplicateCookies(); // Rimuove cookie duplicati
+            checkCookieStatus(); // Verifica e aggiorna lo stato
         }
     });
 
