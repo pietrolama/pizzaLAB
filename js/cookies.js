@@ -22,44 +22,52 @@ document.addEventListener('DOMContentLoaded', function () {
         `;
 
         banner.innerHTML = `
-            <span style="flex: 1; margin-right: 10px;">Questo sito utilizza cookie per migliorare la tua esperienza. Continuando accetti l'uso dei cookie.</span>
-            <div style="display: flex; gap: 10px; align-items: center;">
+            <span style="flex: 1; margin-right: 15px; line-height: 1.5;">Questo sito utilizza cookie per migliorare la tua esperienza. Continuando accetti l'uso dei cookie.</span>
+            <div style="display: flex; gap: 12px; align-items: center; height: 100%;">
                 <button id="accept-cookies" style="
                     background: #f1d600;
                     color: #000;
                     border: none;
-                    padding: 10px 20px;
-                    font-size: 14px;
+                    padding: 12px 24px;
+                    font-size: 16px;
                     font-weight: bold;
                     cursor: pointer;
                     border-radius: 5px;
+                    transition: all 0.3s ease;
+                    display: flex;
+                    align-items: center;
                 ">Accetta</button>
                 <button id="reject-cookies" style="
                     background: transparent;
                     color: #bbb;
                     border: 1px solid #555;
-                    padding: 8px 15px;
-                    font-size: 12px;
+                    padding: 10px 18px;
+                    font-size: 14px;
                     cursor: pointer;
                     border-radius: 5px;
                     transition: all 0.3s ease;
+                    display: flex;
+                    align-items: center;
                 " onmouseover="this.style.color='#fff';this.style.borderColor='#fff';" 
                   onmouseout="this.style.color='#bbb';this.style.borderColor='#555';">Rifiuta</button>
                 <a href="/privacy.html" id="privacy-link" style="
                     background: transparent;
                     color: #bbb;
                     text-decoration: none;
-                    padding: 8px 15px;
-                    font-size: 12px;
+                    padding: 10px 18px;
+                    font-size: 14px;
                     text-align: center;
                     border: 1px solid #555;
                     border-radius: 5px;
                     transition: all 0.3s ease;
-                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
                 " onmouseover="this.style.color='#fff';this.style.borderColor='#fff';" 
                   onmouseout="this.style.color='#bbb';this.style.borderColor='#555';">Privacy</a>
             </div>
         `;
+
 
         document.body.appendChild(banner);
     }
