@@ -801,3 +801,19 @@ footer p:hover {
         font-size: 0.9em; /* Riduce la dimensione del testo */
     }
 }
+
+/* Media Query per Tablet e Desktop Medio */
+@media (max-width: 1200px) {
+    .nav-links li a {
+        padding: 7px 10px; /* Ulteriore riduzione del padding */
+        font-size: 0.95em; /* Riduci leggermente la dimensione del font */
+    }
+}
+
+/* Media Query per Tablet Piccolo */
+@media (max-width: 992px) {
+    .nav-links li a {
+        padding: 6px 8px; /* Ulteriore riduzione del padding */
+        font-size: 0.9em; /* Riduci ulteriormente la dimensione del font */
+    }
+}
