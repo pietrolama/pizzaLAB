@@ -18,18 +18,39 @@ document.addEventListener('DOMContentLoaded', function () {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
         `;
 
         banner.innerHTML = `
-            <span>Questo sito utilizza cookie per migliorare la tua esperienza. Continuando accetti l'uso dei cookie.</span>
-            <button id="accept-cookies" style="
-                background: #f1d600;
-                color: #000;
-                border: none;
-                padding: 10px 20px;
-                font-size: 14px;
-                cursor: pointer;
-            ">Accetta</button>
+            <span style="flex: 1; margin-right: 10px;">Questo sito utilizza cookie per migliorare la tua esperienza. Continuando accetti l'uso dei cookie.</span>
+            <div style="display: flex; gap: 10px;">
+                <button id="accept-cookies" style="
+                    background: #f1d600;
+                    color: #000;
+                    border: none;
+                    padding: 10px 20px;
+                    font-size: 14px;
+                    cursor: pointer;
+                ">Accetta</button>
+                <button id="reject-cookies" style="
+                    background: #555;
+                    color: #fff;
+                    border: none;
+                    padding: 8px 15px;
+                    font-size: 12px;
+                    cursor: pointer;
+                ">Rifiuta</button>
+                <a href="/privacy.html" id="privacy-link" style="
+                    background: #555;
+                    color: #fff;
+                    text-decoration: none;
+                    padding: 8px 15px;
+                    font-size: 12px;
+                    text-align: center;
+                    display: inline-block;
+                    cursor: pointer;
+                ">Privacy</a>
+            </div>
         `;
 
         document.body.appendChild(banner);
@@ -84,13 +105,19 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Gestione del clic sul pulsante "Accetta"
+    // Gestione dei clic sui pulsanti
     document.addEventListener('click', function (event) {
         if (event.target.id === 'accept-cookies') {
             console.log("Clic su 'Accetta' rilevato.");
             setCookie('cookieconsent_status', 'allow', 365); // Imposta il consenso
             document.getElementById('cookie-banner').remove(); // Rimuovi il banner
             loadGoogleAnalytics(); // Carica i servizi
+        }
+
+        if (event.target.id === 'reject-cookies') {
+            console.log("Clic su 'Rifiuta' rilevato.");
+            setCookie('cookieconsent_status', 'dismiss', 365); // Registra il rifiuto
+            document.getElementById('cookie-banner').remove(); // Rimuovi il banner
         }
     });
 
