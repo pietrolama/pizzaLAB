@@ -107,9 +107,9 @@ nav {
     justify-content: space-between;
     align-items: center;
     width: 90%; /* Riduci leggermente per evitare overflow */
-    max-width: 1200px; /* Limita la larghezza massima */
+    max-width: 1000px; /* Limita la larghezza massima */
     margin: 0 auto;
-    padding: 0 20px; /* Spaziatura laterale */
+    padding: 0 15px; /* Spaziatura laterale */
     box-sizing: border-box;
 }
 
@@ -127,26 +127,26 @@ nav {
 .nav-links {
     display: flex;
     list-style: none;
-    flex-wrap: nowrap; /* Impedisce il wrapping */
+    flex-wrap: wrap; /* Consenti ai link di andare a capo */
     align-items: center;
     transition: max-height 0.3s ease-in-out;
     overflow: hidden;
 }
 
 .nav-links li {
-    margin: 0 10px; /* Riduci i margini per evitare overflow */
+    margin: 0 8px; /* Riduci i margini per evitare overflow */
 }
 
 .nav-links li a {
     color: var(--text-color);
     text-decoration: none;
-    padding: 8px 12px; /* Riduci il padding */
+    padding: 6px 10px; /* Riduci il padding */
     border-radius: 5px;
     position: relative;
     overflow: hidden;
     transition: background-color 0.3s, color 0.3s, transform 0.3s;
     white-space: nowrap; /* Impedisce al testo di andare a capo */
-    font-size: 1em;
+    font-size: 0.95em;
     line-height: 1.2;
 }
 
