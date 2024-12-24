@@ -1,74 +1,51 @@
-// Importa Firebase
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
 import { getFirestore, doc, setDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
 
-// Configurazione Firebase
-const firebaseConfig = {
-      apiKey: "AIzaSyDx2udaOvFXoQP-H2lldGXD268yrZHM0aI",
-      authDomain: "pizzalab-4b769.firebaseapp.com",
-      projectId: "pizzalab-4b769",
-      storageBucket: "pizzalab-4b769.firebasestorage.app",
-      messagingSenderId: "1051118488916",
-      appId: "1:1051118488916:web:b7aeb04695886b1b764cc1",
-      measurementId: "G-2VE5X45NER"
-};
+const auth = getAuth();
+const db = getFirestore();
 
-// Inizializzazione Firebase
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-// Elementi DOM
-const form = document.getElementById("fermentazione-form");
-const list = document.getElementById("fermentazioni-list");
-
-// Funzione per aggiungere una nuova fermentazione
-form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    onAuthStateChanged(auth, async (user) => {
-        if (!user) {
-            alert("Devi essere autenticato per aggiungere fermentazioni!");
-            return;
-        }
-
-        const userId = user.uid;
-        const nome = document.getElementById("nome").value;
-        const data = document.getElementById("data").value;
-        const idratazione = document.getElementById("idratazione").value;
-        const lievito = document.getElementById("lievito").value;
-        const tempo = document.getElementById("tempo").value;
-
-        try {
-            const docRef = doc(collection(db, "fermentazioni", userId, "entries"));
-            await setDoc(docRef, {
-                nome,
-                data,
-                idratazione: parseInt(idratazione),
-                lievito,
-                tempo: parseInt(tempo)
-            });
-
-            alert("Fermentazione aggiunta con successo!");
-            form.reset();
-            caricaFermentazioni();
-        } catch (error) {
-            console.error("Errore durante l'aggiunta della fermentazione:", error);
-        }
-    });
+// Controlla se l'utente è autenticato
+onAuthStateChanged(auth, (user) => {
+    if (!user) {
+        alert("Devi essere autenticato per accedere al diario.");
+        window.location.href = "login.html";
+    } else {
+        console.log("Utente autenticato:", user.displayName);
+        caricaFermentazioni(user.uid);
+    }
 });
 
-// Funzione per caricare le fermentazioni esistenti
-async function caricaFermentazioni() {
-    const user = auth.currentUser;
-    if (!user) return;
+// Aggiungi una nuova fermentazione
+document.getElementById("fermentazione-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-    const userId = user.uid;
+    const userId = auth.currentUser.uid;
+    const nome = document.getElementById("nome").value;
+    const data = document.getElementById("data").value;
+    const idratazione = document.getElementById("idratazione").value;
+    const lievito = document.getElementById("lievito").value;
+    const tempo = document.getElementById("tempo").value;
+
+    try {
+        const docRef = doc(collection(db, "fermentazioni", userId, "entries"));
+        await setDoc(docRef, { nome, data, idratazione: parseInt(idratazione), lievito, tempo: parseInt(tempo) });
+
+        alert("Fermentazione aggiunta con successo!");
+        e.target.reset();
+        caricaFermentazioni(userId);
+    } catch (error) {
+        console.error("Errore durante l'aggiunta:", error);
+    }
+});
+
+// Carica fermentazioni
+async function caricaFermentazioni(userId) {
     const fermentazioniRef = collection(db, "fermentazioni", userId, "entries");
     const fermentazioniSnapshot = await getDocs(fermentazioniRef);
 
+    const list = document.getElementById("fermentazioni-list");
     list.innerHTML = "";
+
     fermentazioniSnapshot.forEach((doc) => {
         const data = doc.data();
         const li = document.createElement("li");
@@ -76,12 +53,3 @@ async function caricaFermentazioni() {
         list.appendChild(li);
     });
 }
-
-// Controlla lo stato dell'utente e carica le fermentazioni
-onAuthStateChanged(auth, (user) => {
-    if (user) {
-        caricaFermentazioni();
-    } else {
-        list.innerHTML = "<li>Devi accedere per vedere le tue fermentazioni.</li>";
-    }
-});
