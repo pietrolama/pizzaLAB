@@ -5,13 +5,13 @@ import { getFirestore, doc, setDoc, collection, getDocs } from "https://www.gsta
 
 // Configurazione Firebase
 const firebaseConfig = {
-    apiKey: "TUA_API_KEY",
-    authDomain: "TUA_AUTH_DOMAIN",
-    projectId: "TUA_PROJECT_ID",
-    storageBucket: "TUA_STORAGE_BUCKET",
-    messagingSenderId: "TUA_MESSAGING_ID",
-    appId: "TUA_APP_ID",
-    measurementId: "TUA_MEASUREMENT_ID"
+    apiKey: "AIzaSyDx2udaOvFXoQP-H2lldGXD268yrZHM0aI",
+    authDomain: "pizzalab-4b769.firebaseapp.com",
+    projectId: "pizzalab-4b769",
+    storageBucket: "pizzalab-4b769.firebasestorage.app",
+    messagingSenderId: "1051118488916",
+    appId: "1:1051118488916:web:b7aeb04695886b1b764cc1",
+    measurementId: "G-2VE5X45NER"
 };
 
 // Inizializza Firebase
