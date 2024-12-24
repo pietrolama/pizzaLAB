@@ -23,14 +23,16 @@ const db = getFirestore(app);
 
 // Controlla se l'utente è autenticato
 onAuthStateChanged(auth, (user) => {
-    if (!user) {
+    if (user) {
+        console.log("Utente autenticato:", user.displayName, user.email, user.uid);
+        caricaFermentazioni(user.uid);
+    } else {
+        console.error("Nessun utente autenticato. Reindirizzamento al login...");
         alert("Devi essere autenticato per accedere al diario.");
         window.location.href = "login.html";
-    } else {
-        console.log("Utente autenticato:", user.displayName);
-        caricaFermentazioni(user.uid);
     }
 });
+
 
 // Aggiungi una nuova fermentazione
 document.getElementById("fermentazione-form").addEventListener("submit", async (e) => {
