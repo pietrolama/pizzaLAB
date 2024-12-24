@@ -1,8 +1,25 @@
-import { getFirestore, doc, setDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
+// Importa Firebase
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
+import { getFirestore, doc, setDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
 
-const auth = getAuth();
-const db = getFirestore();
+// Configurazione Firebase
+const firebaseConfig = {
+    apiKey: "TUA_API_KEY",
+    authDomain: "TUA_AUTH_DOMAIN",
+    projectId: "TUA_PROJECT_ID",
+    storageBucket: "TUA_STORAGE_BUCKET",
+    messagingSenderId: "TUA_MESSAGING_ID",
+    appId: "TUA_APP_ID",
+    measurementId: "TUA_MEASUREMENT_ID"
+};
+
+// Inizializza Firebase
+const app = initializeApp(firebaseConfig);
+
+// Inizializza Firebase Auth e Firestore
+const auth = getAuth(app);
+const db = getFirestore(app);
 
 // Controlla se l'utente è autenticato
 onAuthStateChanged(auth, (user) => {
