@@ -11,28 +11,6 @@
         <h1>Diario di Fermentazione</h1>
     </header>
 
-    <!-- Navigazione -->
-    <nav>
-        <div class="nav-container">
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="tipi-di-pizza.html">Tipi di Pizza</a></li>
-                <li><a href="prefermenti_e_farine.html">Prefermenti e Farine</a></li>
-                <li><a href="calcolatore.html">Calcolatore</a></li>
-                <li><a href="assistente.html">Assistente</a></li>
-                <li><a href="contatti.html">Contatti</a></li>
-                <li><a href="https://pizzalab.bettermode.io/" target="_blank" rel="noopener noreferrer">PizzaLab Community</a></li>
-                <li><a href="simulator.html">Nutrienti e calorie</a></li>
-                <li><a href="shop.html">Shop</a></li>
-            </ul>
-            <div class="hamburger">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
-            </div>
-        </div>
-    </nav>
-
     <main>
         <section>
             <h2>Aggiungi una Fermentazione</h2>
@@ -59,91 +37,7 @@
         </section>
     </main>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDocs, collection } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "TUA_API_KEY",
-            authDomain: "TUA_AUTH_DOMAIN",
-            projectId: "TUA_PROJECT_ID",
-            storageBucket: "TUA_STORAGE_BUCKET",
-            messagingSenderId: "TUA_MESSAGING_ID",
-            appId: "TUA_APP_ID",
-            measurementId: "TUA_MEASUREMENT_ID"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        const form = document.getElementById("fermentazione-form");
-        const list = document.getElementById("fermentazioni-list");
-
-        // Aggiungi una nuova fermentazione
-        form.addEventListener("submit", async (e) => {
-            e.preventDefault();
-
-            const user = auth.currentUser;
-            if (!user) {
-                alert("Devi essere autenticato per aggiungere fermentazioni!");
-                return;
-            }
-
-            const userId = user.uid;
-            const nome = document.getElementById("nome").value;
-            const data = document.getElementById("data").value;
-            const idratazione = document.getElementById("idratazione").value;
-            const lievito = document.getElementById("lievito").value;
-            const tempo = document.getElementById("tempo").value;
-
-            try {
-                const docRef = doc(collection(db, "fermentazioni", userId, "entries"));
-                await setDoc(docRef, {
-                    nome,
-                    data,
-                    idratazione: parseInt(idratazione),
-                    lievito,
-                    tempo: parseInt(tempo)
-                });
-
-                alert("Fermentazione aggiunta con successo!");
-                form.reset();
-                caricaFermentazioni();
-            } catch (error) {
-                console.error("Errore durante l'aggiunta della fermentazione:", error);
-            }
-        });
-
-        // Carica fermentazioni
-        async function caricaFermentazioni() {
-            const user = auth.currentUser;
-            if (!user) return;
-
-            const userId = user.uid;
-            const fermentazioniRef = collection(db, "fermentazioni", userId, "entries");
-            const fermentazioniSnapshot = await getDocs(fermentazioniRef);
-
-            list.innerHTML = "";
-            fermentazioniSnapshot.forEach((doc) => {
-                const data = doc.data();
-                const li = document.createElement("li");
-                li.textContent = `${data.nome} - ${data.data} - ${data.idratazione}% - ${data.lievito} - ${data.tempo} ore`;
-                list.appendChild(li);
-            });
-        }
-
-        // Controlla se l'utente è loggato
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                caricaFermentazioni();
-            } else {
-                list.innerHTML = "<li>Devi accedere per vedere le tue fermentazioni.</li>";
-            }
-        });
-    </script>
-    <script src="js/cookies.js" defer></script>
-    <script src="js/main.js" defer></script>
+    <!-- Include il file JS -->
+    <script type="module" src="js/diario.js"></script>
 </body>
 </html>
