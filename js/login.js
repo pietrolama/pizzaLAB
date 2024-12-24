@@ -2,13 +2,13 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebas
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
 
 const firebaseConfig = {
-    apiKey: "TUA_API_KEY",
-    authDomain: "TUA_AUTH_DOMAIN",
-    projectId: "TUA_PROJECT_ID",
-    storageBucket: "TUA_STORAGE_BUCKET",
-    messagingSenderId: "TUA_MESSAGING_ID",
-    appId: "TUA_APP_ID",
-    measurementId: "TUA_MEASUREMENT_ID"
+    apiKey: "AIzaSyDx2udaOvFXoQP-H2lldGXD268yrZHM0aI",
+    authDomain: "pizzalab-4b769.firebaseapp.com",
+    projectId: "pizzalab-4b769",
+    storageBucket: "pizzalab-4b769.firebasestorage.app",
+    messagingSenderId: "1051118488916",
+    appId: "1:1051118488916:web:b7aeb04695886b1b764cc1",
+    measurementId: "G-2VE5X45NER"
 };
 
 const app = initializeApp(firebaseConfig);
