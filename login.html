@@ -43,63 +43,7 @@
             </div>
         </section>
     </main>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
-
-        const firebaseConfig = {
-        apiKey: "AIzaSyDx2udaOvFXoQP-H2lldGXD268yrZHM0aI",
-        authDomain: "pizzalab-4b769.firebaseapp.com",
-        projectId: "pizzalab-4b769",
-        storageBucket: "pizzalab-4b769.firebasestorage.app",
-        messagingSenderId: "1051118488916",
-        appId: "1:1051118488916:web:b7aeb04695886b1b764cc1",
-        measurementId: "G-2VE5X45NER"
-    };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const provider = new GoogleAuthProvider();
-
-        // Login
-        document.getElementById("login-btn").addEventListener("click", () => {
-            signInWithPopup(auth, provider)
-                .then((result) => {
-                    const user = result.user;
-                    document.getElementById("username").textContent = user.displayName;
-                    document.getElementById("user-info").style.display = "block";
-                    document.getElementById("logout-btn").style.display = "block";
-                    document.getElementById("login-btn").style.display = "none";
-                })
-                .catch((error) => console.error("Errore di login:", error));
-        });
-
-        // Logout
-        document.getElementById("logout-btn").addEventListener("click", () => {
-            signOut(auth)
-                .then(() => {
-                    document.getElementById("user-info").style.display = "none";
-                    document.getElementById("logout-btn").style.display = "none";
-                    document.getElementById("login-btn").style.display = "block";
-                })
-                .catch((error) => console.error("Errore di logout:", error));
-        });
-
-        // Stato di autenticazione
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                document.getElementById("username").textContent = user.displayName;
-                document.getElementById("user-info").style.display = "block";
-                document.getElementById("logout-btn").style.display = "block";
-                document.getElementById("login-btn").style.display = "none";
-            } else {
-                document.getElementById("user-info").style.display = "none";
-                document.getElementById("logout-btn").style.display = "none";
-                document.getElementById("login-btn").style.display = "block";
-            }
-        });
-    </script>
+    <script type="module" src="js/login.js"></script>
     <script src="js/cookies.js" defer></script>
     <script src="js/main.js" defer></script>
 </body>
