@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - PizzaLab</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="icon" href="logo.ico" type="image/x-icon">
+</head>
+<body>
+    <header>
+        <h1>Accedi al PizzaLab</h1>
+    </header>
+
+    <main>
+        <section>
+            <div id="auth-section">
+                <button id="login-btn" class="btn">Accedi con Google</button>
+                <button id="logout-btn" style="display:none;" class="btn">Esci</button>
+                <p id="user-info" style="display:none;">Bentornato, <span id="username"></span>!</p>
+            </div>
+        </section>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "TUO_API_KEY",
+            authDomain: "TUO_AUTH_DOMAIN",
+            projectId: "TUO_PROJECT_ID",
+            storageBucket: "TUO_STORAGE_BUCKET",
+            messagingSenderId: "TUO_MESSAGING_ID",
+            appId: "TUO_APP_ID",
+            measurementId: "TUO_MEASUREMENT_ID"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        // Login
+        document.getElementById("login-btn").addEventListener("click", () => {
+            signInWithPopup(auth, provider)
+                .then((result) => {
+                    const user = result.user;
+                    document.getElementById("username").textContent = user.displayName;
+                    document.getElementById("user-info").style.display = "block";
+                    document.getElementById("logout-btn").style.display = "block";
+                    document.getElementById("login-btn").style.display = "none";
+                })
+                .catch((error) => console.error("Errore di login:", error));
+        });
+
+        // Logout
+        document.getElementById("logout-btn").addEventListener("click", () => {
+            signOut(auth)
+                .then(() => {
+                    document.getElementById("user-info").style.display = "none";
+                    document.getElementById("logout-btn").style.display = "none";
+                    document.getElementById("login-btn").style.display = "block";
+                })
+                .catch((error) => console.error("Errore di logout:", error));
+        });
+
+        // Stato di autenticazione
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                document.getElementById("username").textContent = user.displayName;
+                document.getElementById("user-info").style.display = "block";
+                document.getElementById("logout-btn").style.display = "block";
+                document.getElementById("login-btn").style.display = "none";
+            } else {
+                document.getElementById("user-info").style.display = "none";
+                document.getElementById("logout-btn").style.display = "none";
+                document.getElementById("login-btn").style.display = "block";
+            }
+        });
+    </script>
+</body>
+</html>
