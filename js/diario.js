@@ -1,5 +1,6 @@
 import { app, auth } from "./login.js";
-import { getFirestore, collection, doc, getDocs, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { getFirestore, collection, doc, getDocs, setDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
 const db = getFirestore(app);
 
@@ -26,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             const docRef = doc(collection(db, "fermentazioni", userId, "entries"));
             await setDoc(docRef, { idratazione, lievito, tempo, data, note });
-            alert("Fermentazione aggiunta o aggiornata con successo!");
+            alert("Fermentazione aggiunta con successo!");
             form.reset();
             caricaFermentazioni(userId);
         } catch (error) {
