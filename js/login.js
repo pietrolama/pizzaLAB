@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+import { getAuth, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDx2udaOvFXoQP-H2lldGXD268yrZHM0aI",
@@ -15,7 +15,8 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-export { app, auth };
+// Esporta l'istanza di app e auth
+export { app, auth, provider };
 
 document.addEventListener("DOMContentLoaded", () => {
     const loginBtn = document.getElementById("login-btn");
