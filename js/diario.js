@@ -199,34 +199,6 @@ function generaGrafico(data) {
     });
 }
 
-async function caricaFermentazioni(userId) {
-    const fermentazioniRef = collection(db, "fermentazioni", userId, "entries");
-    const fermentazioniSnapshot = await getDocs(fermentazioniRef);
-
-    const list = document.getElementById("fermentazioni-list");
-    list.innerHTML = "";
-
-    const data = [];
-
-    fermentazioniSnapshot.forEach((doc) => {
-        const fermentazione = doc.data();
-        data.push(fermentazione);
-
-        const li = document.createElement("li");
-        li.innerHTML = `
-            <strong>Attesa:</strong> ${fermentazione.idratazione_attesa}% - ${fermentazione.lievito_atteso} - ${fermentazione.tempo_atteso} ore - ${fermentazione.temperatura_attesa}°C<br>
-            <strong>Reale:</strong> ${fermentazione.idratazione_reale}% - ${fermentazione.lievito_reale} - ${fermentazione.tempo_reale} ore - ${fermentazione.temperatura_reale}°C<br>
-            <strong>Note:</strong> ${fermentazione.note}<br>
-            <button onclick="modificaFermentazione('${doc.id}')">Modifica</button>
-            <button onclick="eliminaFermentazione('${doc.id}')">Elimina</button>
-        `;
-        list.appendChild(li);
-    });
-
-    // Genera il grafico con i dati
-    generaGrafico(data);
-}
-
 function generaGraficoLieviti(data) {
     const ctx = document.getElementById("fermentazioni-chart").getContext("2d");
 
