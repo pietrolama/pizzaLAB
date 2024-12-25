@@ -22,27 +22,27 @@ document.getElementById("fermentazione-form").addEventListener("submit", async (
     e.preventDefault();
 
     const userId = auth.currentUser.uid;
-    const nome = document.getElementById("nome").value; // Nome è già precompilato con il nome utente
-    const data = document.getElementById("data").value;
-    const idratazione = document.getElementById("idratazione").value;
-    const lievito = document.getElementById("lievito").value;
-    const tempo = document.getElementById("tempo").value;
+    const nome = document.getElementById("nome").value || "Utente sconosciuto"; // Campo obbligatorio
+    const data = document.getElementById("data").value || "Data non specificata"; // Campo obbligatorio
+    const idratazione = document.getElementById("idratazione").value || 0; // Campo obbligatorio
+    const lievito = document.getElementById("lievito").value || "Nessun lievito"; // Campo obbligatorio
+    const tempo = document.getElementById("tempo").value || 0; // Campo obbligatorio
 
     try {
-        const docRef = doc(collection(db, "fermentazioni", userId, "entries")); // Path specifico per ogni utente
-        await setDoc(docRef, { 
-            nome, 
-            data, 
-            idratazione: parseInt(idratazione), 
-            lievito, 
-            tempo: parseInt(tempo) 
+        const docRef = doc(collection(db, "fermentazioni", userId, "entries"));
+        await setDoc(docRef, {
+            nome,
+            data,
+            idratazione: parseInt(idratazione),
+            lievito,
+            tempo: parseInt(tempo)
         });
 
         alert("Fermentazione aggiunta con successo!");
-        e.target.reset();
-        caricaFermentazioni(userId);
+        e.target.reset(); // Resetta il modulo dopo il salvataggio
+        caricaFermentazioni(userId); // Ricarica le fermentazioni per aggiornare la lista
     } catch (error) {
-        console.error("Errore durante l'aggiunta:", error);
+        console.error("Errore durante l'aggiunta della fermentazione:", error);
     }
 });
 
