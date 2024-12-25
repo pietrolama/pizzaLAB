@@ -21,26 +21,33 @@ onAuthStateChanged(auth, (user) => {
 document.getElementById("fermentazione-form").addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const nome = document.getElementById("nome")?.value || "Utente sconosciuto";
-    const data = document.getElementById("data")?.value || "Data non specificata";
-    const idratazione = document.getElementById("idratazione")?.value || 0;
-    const lievito = document.getElementById("lievito")?.value || "Nessun lievito";
-    const tempo = document.getElementById("tempo")?.value || 0;
+    // Controlla che l'utente sia autenticato
+    const user = auth.currentUser;
+    if (!user) {
+        alert("Devi essere autenticato per aggiungere una fermentazione!");
+        return;
+    }
 
+    const userId = user.uid; // Prendi l'UID dell'utente autenticato
+    const nome = document.getElementById("nome").value || "Utente sconosciuto";
+    const data = document.getElementById("data").value || "Data non specificata";
+    const idratazione = document.getElementById("idratazione").value || 0;
+    const lievito = document.getElementById("lievito").value || "Nessun lievito";
+    const tempo = document.getElementById("tempo").value || 0;
 
     try {
         const docRef = doc(collection(db, "fermentazioni", userId, "entries"));
-        await setDoc(docRef, {
-            nome,
-            data,
-            idratazione: parseInt(idratazione),
-            lievito,
-            tempo: parseInt(tempo)
+        await setDoc(docRef, { 
+            nome, 
+            data, 
+            idratazione: parseInt(idratazione), 
+            lievito, 
+            tempo: parseInt(tempo) 
         });
 
         alert("Fermentazione aggiunta con successo!");
-        e.target.reset(); // Resetta il modulo dopo il salvataggio
-        caricaFermentazioni(userId); // Ricarica le fermentazioni per aggiornare la lista
+        e.target.reset();
+        caricaFermentazioni(userId);
     } catch (error) {
         console.error("Errore durante l'aggiunta della fermentazione:", error);
     }
