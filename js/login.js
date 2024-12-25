@@ -15,6 +15,8 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
+export { app, auth };
+
 // Aspetta che il DOM sia pronto
 document.addEventListener("DOMContentLoaded", () => {
     const loginButton = document.getElementById("login-btn");
