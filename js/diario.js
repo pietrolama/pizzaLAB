@@ -21,12 +21,12 @@ onAuthStateChanged(auth, (user) => {
 document.getElementById("fermentazione-form").addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const userId = auth.currentUser.uid;
-    const nome = document.getElementById("nome").value || "Utente sconosciuto"; // Campo obbligatorio
-    const data = document.getElementById("data").value || "Data non specificata"; // Campo obbligatorio
-    const idratazione = document.getElementById("idratazione").value || 0; // Campo obbligatorio
-    const lievito = document.getElementById("lievito").value || "Nessun lievito"; // Campo obbligatorio
-    const tempo = document.getElementById("tempo").value || 0; // Campo obbligatorio
+    const nome = document.getElementById("nome")?.value || "Utente sconosciuto";
+    const data = document.getElementById("data")?.value || "Data non specificata";
+    const idratazione = document.getElementById("idratazione")?.value || 0;
+    const lievito = document.getElementById("lievito")?.value || "Nessun lievito";
+    const tempo = document.getElementById("tempo")?.value || 0;
+
 
     try {
         const docRef = doc(collection(db, "fermentazioni", userId, "entries"));
