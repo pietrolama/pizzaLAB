@@ -19,20 +19,23 @@ const provider = new GoogleAuthProvider();
 export { app, auth };
 
 // Login con Google
-document.getElementById("login-btn").addEventListener("click", async () => {
-    try {
-        await signInWithPopup(auth, provider);
-        alert("Login effettuato con successo!");
-        window.location.href = "diario.html";
-    } catch (error) {
-        console.error("Errore durante il login:", error);
-    }
-});
+document.addEventListener("DOMContentLoaded", () => {
+    // Login con Google
+    document.getElementById("login-btn").addEventListener("click", async () => {
+        try {
+            await signInWithPopup(auth, provider);
+            alert("Login effettuato con successo!");
+            window.location.href = "diario.html";
+        } catch (error) {
+            console.error("Errore durante il login:", error);
+        }
+    });
 
-// Controlla se l'utente è già autenticato
-onAuthStateChanged(auth, (user) => {
-    if (user) {
-        console.log("Utente autenticato:", user.displayName);
-        window.location.href = "diario.html";
-    }
+    // Controlla se l'utente è già autenticato
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            console.log("Utente autenticato:", user.displayName);
+            window.location.href = "diario.html";
+        }
+    });
 });
