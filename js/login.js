@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDx2udaOvFXoQP-H2lldGXD268yrZHM0aI",
@@ -15,13 +15,20 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-// Esporta app e auth per usarli in altri file
-export { app, auth };
-
-// Login con Google
+// Aspetta che il DOM sia pronto
 document.addEventListener("DOMContentLoaded", () => {
+    const loginButton = document.getElementById("login-btn");
+    const logoutButton = document.getElementById("logout-btn");
+    const userInfo = document.getElementById("user-info");
+    const usernameSpan = document.getElementById("username");
+
+    if (!loginButton) {
+        console.error("Elemento con id 'login-btn' non trovato nel DOM!");
+        return;
+    }
+
     // Login con Google
-    document.getElementById("login-btn").addEventListener("click", async () => {
+    loginButton.addEventListener("click", async () => {
         try {
             await signInWithPopup(auth, provider);
             alert("Login effettuato con successo!");
@@ -31,11 +38,32 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Controlla se l'utente è già autenticato
+    // Logout
+    logoutButton.addEventListener("click", async () => {
+        try {
+            await signOut(auth);
+            alert("Logout effettuato con successo!");
+            loginButton.style.display = "block";
+            logoutButton.style.display = "none";
+            userInfo.style.display = "none";
+        } catch (error) {
+            console.error("Errore durante il logout:", error);
+        }
+    });
+
+    // Controlla lo stato dell'utente
     onAuthStateChanged(auth, (user) => {
         if (user) {
             console.log("Utente autenticato:", user.displayName);
-            window.location.href = "diario.html";
+            loginButton.style.display = "none";
+            logoutButton.style.display = "block";
+            userInfo.style.display = "block";
+            usernameSpan.textContent = user.displayName || "Utente";
+        } else {
+            console.log("Nessun utente autenticato.");
+            loginButton.style.display = "block";
+            logoutButton.style.display = "none";
+            userInfo.style.display = "none";
         }
     });
 });
