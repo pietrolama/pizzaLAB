@@ -66,21 +66,28 @@ async function caricaFermentazioni(userId) {
     const list = document.getElementById("fermentazioni-list");
     list.innerHTML = "";
 
-    fermentazioniSnapshot.forEach((doc) => {
-        const data = doc.data();
-        const li = document.createElement("li");
+    const data = []; // Array per salvare tutte le fermentazioni
 
+    fermentazioniSnapshot.forEach((doc) => {
+        const fermentazione = doc.data();
+        data.push(fermentazione); // Aggiungi fermentazione all'array
+
+        const li = document.createElement("li");
         li.innerHTML = `
-            <strong>Attesa:</strong> ${data.idratazione_attesa}% - ${data.lievito_atteso} - ${data.tempo_atteso} ore - ${data.temperatura_attesa}°C<br>
-            <strong>Reale:</strong> ${data.idratazione_reale}% - ${data.lievito_reale} - ${data.tempo_reale} ore - ${data.temperatura_reale}°C<br>
-            <strong>Note:</strong> ${data.note}<br>
+            <strong>Attesa:</strong> ${fermentazione.idratazione_attesa}% - ${fermentazione.lievito_atteso} - ${fermentazione.tempo_atteso} ore - ${fermentazione.temperatura_attesa}°C<br>
+            <strong>Reale:</strong> ${fermentazione.idratazione_reale}% - ${fermentazione.lievito_reale} - ${fermentazione.tempo_reale} ore - ${fermentazione.temperatura_reale}°C<br>
+            <strong>Note:</strong> ${fermentazione.note}<br>
             <button onclick="modificaFermentazione('${doc.id}')">Modifica</button>
             <button onclick="eliminaFermentazione('${doc.id}')">Elimina</button>
         `;
-
         list.appendChild(li);
     });
+
+    // Genera i grafici
+    generaGrafico(data); // Grafico a barre per idratazione attesa e reale
+    generaGraficoLieviti(data); // Grafico a torta per distribuzione dei lieviti
 }
+
 
 // Funzione per modificare una fermentazione
 window.modificaFermentazione = async function (docId) {
