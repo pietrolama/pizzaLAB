@@ -871,3 +871,66 @@ function calculatePlanBigaPoolish(infornataTime, percentualeBiga, percentualePoo
     ];
     return calculatePlanGeneric(infornataTime, durations, steps);
 }
+
+import { app, auth } from "./login.js";
+import { getFirestore, collection, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+import { calcolaDiretto, calcolaBiga, calcolaPoolish, calcolaLievitoMadre, calcolaBigaPoolish } from "./calcolatore_script.js";
+
+const db = getFirestore(app);
+
+// Funzione per salvare una ricetta nel diario
+async function salvaRicettaNelDiario(tipoPizza, metodoImpasto, datiTeorici) {
+    const user = auth.currentUser;
+    if (!user) {
+        alert("Devi essere autenticato per salvare una ricetta!");
+        return;
+    }
+
+    const userId = user.uid;
+
+    try {
+        const docRef = doc(collection(db, "fermentazioni", userId, "entries"));
+        await setDoc(docRef, {
+            tipoPizza,
+            metodoImpasto,
+            datiTeorici,
+            idratazioneReale: null, // Sarà aggiunto nel diario
+            tempoReale: null,       // Sarà aggiunto nel diario
+            note: null,             // Sarà aggiunto nel diario
+        });
+        alert("Ricetta salvata nel diario!");
+    } catch (error) {
+        console.error("Errore durante il salvataggio della ricetta:", error);
+    }
+}
+
+// Aggiungi un pulsante "Salva nel Diario" per ogni ricetta generata
+document.getElementById("salva-diario-btn").addEventListener("click", () => {
+    const tipoPizza = document.getElementById("tipo_pizza").value;
+    const metodoImpasto = document.getElementById("tipo_impasto").value;
+
+    let datiTeorici;
+    switch (metodoImpasto) {
+        case "diretto":
+            datiTeorici = calcolaDiretto();
+            break;
+        case "biga":
+            datiTeorici = calcolaBiga();
+            break;
+        case "poolish":
+            datiTeorici = calcolaPoolish();
+            break;
+        case "lievito_madre":
+            datiTeorici = calcolaLievitoMadre();
+            break;
+        case "biga_poolish":
+            datiTeorici = calcolaBigaPoolish();
+            break;
+        default:
+            alert("Metodo di impasto non riconosciuto.");
+            return;
+    }
+
+    salvaRicettaNelDiario(tipoPizza, metodoImpasto, datiTeorici);
+});
+
