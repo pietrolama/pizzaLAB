@@ -208,7 +208,7 @@ function generaGrafico(dataTeorici, dataReali) {
 }
 
 // Funzione per salvare una ricetta nel diario
-async function salvaRicettaNelDiario(tipoPizza, metodoImpasto, datiTeorici) {
+export async function salvaRicettaNelDiario(tipoPizza, metodoImpasto, datiTeorici) {
     const user = auth.currentUser;
     if (!user) {
         alert("Devi essere autenticato per salvare una ricetta!");
