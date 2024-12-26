@@ -223,13 +223,14 @@ async function salvaRicettaNelDiario(tipoPizza, metodoImpasto, datiTeorici) {
             tipoPizza,
             metodoImpasto,
             datiTeorici,
-            idratazioneReale: null,
-            tempoReale: null,
-            note: null,
+            idratazioneReale: null, // Puoi aggiungere valori reali se necessario
+            tempoReale: null,       // Puoi aggiungere valori reali se necessario
+            note: null,             // Puoi aggiungere valori reali se necessario
         });
         alert("Ricetta salvata nel diario!");
     } catch (error) {
         console.error("Errore durante il salvataggio della ricetta:", error);
+        alert("Errore durante il salvataggio della ricetta. Riprova.");
     }
 }
 
