@@ -235,29 +235,29 @@ async function salvaRicettaNelDiario(tipoPizza, metodoImpasto, datiTeorici) {
 }
 
 // Evento per salvare nel diario
-document.getElementById("salva-diario-btn").addEventListener("click", () => {
-    const tipoPizza = document.getElementById("tipo_pizza").value;
-    const metodoImpasto = document.getElementById("tipo_impasto").value;
+document.getElementById('salva-diario-btn').addEventListener('click', () => {
+    const tipoPizza = document.getElementById('tipo_pizza').value;
+    const metodoImpasto = document.getElementById('tipo_impasto').value;
 
     let datiTeorici;
     switch (metodoImpasto) {
-        case "diretto":
+        case 'diretto':
             datiTeorici = calcolaDiretto();
             break;
-        case "biga":
+        case 'biga':
             datiTeorici = calcolaBiga();
             break;
-        case "poolish":
+        case 'poolish':
             datiTeorici = calcolaPoolish();
             break;
-        case "lievito_madre":
+        case 'lievito_madre':
             datiTeorici = calcolaLievitoMadre();
             break;
-        case "biga_poolish":
+        case 'biga_poolish':
             datiTeorici = calcolaBigaPoolish();
             break;
         default:
-            alert("Metodo di impasto non riconosciuto.");
+            alert('Metodo di impasto non riconosciuto.');
             return;
     }
 
