@@ -909,3 +909,6 @@ document.getElementById("salva-diario-btn").addEventListener("click", () => {
     });
 });
 
+export { calcolaDiretto, calcolaBiga, calcolaPoolish, calcolaLievitoMadre, calcolaBigaPoolish };
+
+
