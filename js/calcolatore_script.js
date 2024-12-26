@@ -902,7 +902,7 @@ document.getElementById("salva-diario-btn").addEventListener("click", async () =
         }
 
         // Importa dinamicamente il modulo js/diario.js
-        const module = await import('js/diario.js');
+        const module = await import('./diario.js');
         if (module.salvaRicettaNelDiario) {
             // Chiama la funzione per salvare nel diario
             module.salvaRicettaNelDiario(tipoPizza, metodoImpasto, datiTeorici);
