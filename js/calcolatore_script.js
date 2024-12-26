@@ -35,7 +35,7 @@ async function caricaRicette() {
 })();
 
 // Funzione per mostrare/nascondere le sezioni in base al metodo di impasto selezionato
-function toggleSections() {
+export function toggleSections() {
     const metodoImpasto = document.getElementById('tipo_impasto').value;
     console.log('Metodo impasto in toggleSections:', metodoImpasto);
 
