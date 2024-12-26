@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
 document.getElementById('tipo_impasto').addEventListener('change', toggleSections);
 
 // Funzione per calcolare e mostrare la ricetta personalizzata
-function calcola() {
+export function calcola() {
     const tipoPizza = document.getElementById('tipo_pizza').value;
     const tipoImpasto = document.getElementById('tipo_impasto').value;
 
@@ -159,7 +159,7 @@ export function calcolaLievito(numPanetti, pesoPaniello, idratazione, sale, gras
     return lievitoNecessarioImpasto;
 }
 
-function calcolaDiretto() {
+export function calcolaDiretto() {
     const pesoPanetto = parseFloat(document.getElementById('peso_panetto_diretto').value);
     const idratazioneTotale = parseFloat(document.getElementById('idratazione_totale_diretto').value);
     const numPanetti = parseInt(document.getElementById('num_panetti_diretto').value);
@@ -222,7 +222,7 @@ function calcolaDiretto() {
     };
 }
 
-function calcolaBiga() {
+export function calcolaBiga() {
     var pesoPanetto = parseFloat(document.getElementById('peso_panetto_biga').value);
     var idratazioneTotale = parseFloat(document.getElementById('idratazione_totale_biga').value);
     var percentualeBiga = parseFloat(document.getElementById('percentuale_biga').value);
@@ -255,7 +255,7 @@ function calcolaBiga() {
     };
 }
 
-function calcolaPoolish() {
+export function calcolaPoolish() {
     var pesoPanetto = parseFloat(document.getElementById('peso_panetto_poolish').value);
     var idratazioneTotale = parseFloat(document.getElementById('idratazione_totale_poolish').value);
     var percentualePoolish = parseFloat(document.getElementById('percentuale_poolish').value);
@@ -287,7 +287,7 @@ function calcolaPoolish() {
     };
 }
 
-function calcolaLievitoMadre() {
+export function calcolaLievitoMadre() {
     var pesoPanetto = parseFloat(document.getElementById('peso_panetto_lievito').value);
     var idratazioneTotale = parseFloat(document.getElementById('idratazione_totale_lievito').value);
     var percentualePastaMadre = parseFloat(document.getElementById('percentuale_lievito').value);
@@ -335,7 +335,7 @@ function calcolaLievitoMadre() {
     };
 }
 
-function calcolaBigaPoolish() {
+export function calcolaBigaPoolish() {
     var percentualeBiga = parseFloat(document.getElementById('percentuale_biga_bp').value);
     var percentualePoolish = parseFloat(document.getElementById('percentuale_poolish_bp').value);
     var pesoPanetto = parseFloat(document.getElementById('peso_panetto_biga_poolish').value);
@@ -373,7 +373,7 @@ function calcolaBigaPoolish() {
 }
 
 // Funzione per mostrare la ricetta nel DOM
-function mostraRicetta(tipoPizza, metodo) {
+export function mostraRicetta(tipoPizza, metodo) {
     const ricette = window.loadedRicette;
     if (!ricette) {
         alert("Impossibile caricare le ricette.");
@@ -585,7 +585,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-function generaPianoGenerico() {
+export function generaPianoGenerico() {
     const infornataElement = document.getElementById('infornata');
     const tipoImpastoElement = document.getElementById('tipo_impasto');
 
@@ -741,7 +741,7 @@ function generaPianoGenerico() {
 }
 
 // Helper per creare gli step del piano
-function createStep(currentTime, duration, action) {
+export function createStep(currentTime, duration, action) {
     return {
         time: new Date(currentTime.getTime() - duration * 60 * 60 * 1000), // Conserva l'oggetto Date
         action,
@@ -749,7 +749,7 @@ function createStep(currentTime, duration, action) {
 }
 
 // Funzione per calcolare il piano per il metodo diretto
-function calculatePlanDiretto(infornataTime, totalLievitazione, tempoFrigo) {
+export function calculatePlanDiretto(infornataTime, totalLievitazione, tempoFrigo) {
     const plan = [];
     let currentTime = new Date(infornataTime);
 
@@ -782,7 +782,7 @@ function calculatePlanDiretto(infornataTime, totalLievitazione, tempoFrigo) {
 }
 
 // Funzione generica per calcolare il piano con modularità
-function calculatePlanGeneric(infornataTime, durations, steps) {
+export function calculatePlanGeneric(infornataTime, durations, steps) {
     const plan = [];
     let currentTime = new Date(infornataTime);
 
@@ -805,7 +805,7 @@ function calculatePlanGeneric(infornataTime, durations, steps) {
 }
 
 // Funzione per il metodo biga
-function calculatePlanBiga(infornataTime, percentualeBiga) {
+export function calculatePlanBiga(infornataTime, percentualeBiga) {
     const durations = [
         1, // Preparazione biga
         16, // Lievitazione biga
@@ -822,7 +822,7 @@ function calculatePlanBiga(infornataTime, percentualeBiga) {
 }
 
 // Funzione per il metodo poolish
-function calculatePlanPoolish(infornataTime, percentualePoolish) {
+export function calculatePlanPoolish(infornataTime, percentualePoolish) {
     const durations = [
         1, // Preparazione poolish
         12, // Lievitazione poolish
@@ -839,7 +839,7 @@ function calculatePlanPoolish(infornataTime, percentualePoolish) {
 }
 
 // Funzione per il metodo lievito madre
-function calculatePlanLievitoMadre(infornataTime, percentualeLievitoMadre) {
+export function calculatePlanLievitoMadre(infornataTime, percentualeLievitoMadre) {
     const durations = [
         1, // Preparazione lievito madre
         8, // Lievitazione lievito madre
@@ -856,7 +856,7 @@ function calculatePlanLievitoMadre(infornataTime, percentualeLievitoMadre) {
 }
 
 // Funzione per il metodo biga + poolish
-function calculatePlanBigaPoolish(infornataTime, percentualeBiga, percentualePoolish) {
+export function calculatePlanBigaPoolish(infornataTime, percentualeBiga, percentualePoolish) {
     const durations = [
         1, // Preparazione biga e poolish
         10, // Lievitazione combinata
@@ -915,8 +915,5 @@ document.getElementById("salva-diario-btn").addEventListener("click", async () =
         alert("Errore durante il salvataggio della ricetta.");
     }
 });
-
-
-export { calcolaDiretto, calcolaBiga, calcolaPoolish, calcolaLievitoMadre, calcolaBigaPoolish };
 
 
