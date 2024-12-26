@@ -139,7 +139,7 @@ function calcola() {
 
 
 // Funzioni di calcolo per diversi metodi di impasto
-function calcolaLievito(numPanetti, pesoPaniello, idratazione, sale, grassi, tempoLievitazione, oreFrigo, temperaturaAmbiente, usa_teglia) {
+export function calcolaLievito(numPanetti, pesoPaniello, idratazione, sale, grassi, tempoLievitazione, oreFrigo, temperaturaAmbiente, usa_teglia) {
     // Calcoli della funzione
     var tempCorretta = temperaturaAmbiente * (1 - 0.25 * usa_teglia);
     var fattoreCrescitaLievito = 0.005;
