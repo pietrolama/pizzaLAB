@@ -9,7 +9,7 @@ import {
     getDoc 
 } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-import { calcolaImpasto } from "./calcolatore_script.js";
+import { calcolaDiretto, calcolaBiga, calcolaPoolish, calcolaLievitoMadre, calcolaBigaPoolish } from "./calcolatore_script.js";
 
 const db = getFirestore(app);
 
@@ -33,28 +33,43 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const userId = user.uid;
 
-        // Recupera i dati teorici e reali dal modulo
-        const idratazioneTeorica = parseInt(document.getElementById("idratazione-teorica").value) || 0;
-        const lievitoTeorico = document.getElementById("lievito-teorico").value || "N/A";
-        const tempoTeorico = parseInt(document.getElementById("tempo-teorico").value) || 0;
+        const tipoPizza = document.getElementById("tipo_pizza").value;
+        const metodoImpasto = document.getElementById("tipo_impasto").value;
 
-        const idratazioneReale = parseInt(document.getElementById("idratazione-reale").value) || 0;
-        const lievitoReale = document.getElementById("lievito-reale").value || "N/A";
-        const tempoReale = parseInt(document.getElementById("tempo-reale").value) || 0;
+        let datiTeorici;
+        switch (metodoImpasto) {
+            case "diretto":
+                datiTeorici = calcolaDiretto();
+                break;
+            case "biga":
+                datiTeorici = calcolaBiga();
+                break;
+            case "poolish":
+                datiTeorici = calcolaPoolish();
+                break;
+            case "lievito_madre":
+                datiTeorici = calcolaLievitoMadre();
+                break;
+            case "biga_poolish":
+                datiTeorici = calcolaBigaPoolish();
+                break;
+            default:
+                alert("Metodo di impasto non riconosciuto.");
+                return;
+        }
 
-        const nome = document.getElementById("nome").value || "Ricetta Sconosciuta";
+        const idratazioneReale = parseFloat(document.getElementById("idratazione-reale").value) || 0;
+        const tempoReale = parseFloat(document.getElementById("tempo-reale").value) || 0;
         const note = document.getElementById("note").value || "";
 
         try {
             const docRef = doc(collection(db, "fermentazioni", userId, "entries"));
             await setDoc(docRef, {
-                nome,
-                idratazione_teorica: idratazioneTeorica,
-                lievito_teorico: lievitoTeorico,
-                tempo_teorico: tempoTeorico,
-                idratazione_reale: idratazioneReale,
-                lievito_reale: lievitoReale,
-                tempo_reale: tempoReale,
+                tipoPizza,
+                metodoImpasto,
+                datiTeorici,
+                idratazioneReale,
+                tempoReale,
                 note,
             });
             alert("Fermentazione aggiunta o aggiornata con successo!");
@@ -75,7 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-// Funzione per caricare fermentazioni
+// Carica le fermentazioni salvate
 async function caricaFermentazioni(userId) {
     try {
         const fermentazioniRef = collection(db, "fermentazioni", userId, "entries");
@@ -83,44 +98,32 @@ async function caricaFermentazioni(userId) {
 
         const list = document.getElementById("fermentazioni-list");
         if (!list) {
-            console.error("Elemento con id 'fermentazioni-list' non trovato nel DOM.");
+            console.error("Elemento con id 'fermentazioni-list' non trovato.");
             return;
         }
 
-        list.innerHTML = ""; // Pulisci la lista
-        const dataTeorici = [];
-        const dataReali = [];
+        list.innerHTML = ""; // Pulisci la lista precedente
 
         fermentazioniSnapshot.forEach((doc) => {
             const fermentazione = doc.data();
-            dataTeorici.push({
-                idratazione: fermentazione.idratazione_teorica,
-                tempo: fermentazione.tempo_teorico,
-            });
-            dataReali.push({
-                idratazione: fermentazione.idratazione_reale,
-                tempo: fermentazione.tempo_reale,
-            });
 
             const li = document.createElement("li");
             li.innerHTML = `
-                <strong>${fermentazione.nome}</strong><br>
-                <strong>Teorico:</strong> ${fermentazione.idratazione_teorica}% - ${fermentazione.lievito_teorico} - ${fermentazione.tempo_teorico} ore<br>
-                <strong>Reale:</strong> ${fermentazione.idratazione_reale}% - ${fermentazione.lievito_reale} - ${fermentazione.tempo_reale} ore<br>
+                <strong>${fermentazione.tipoPizza}</strong> - ${fermentazione.metodoImpasto}<br>
+                <strong>Teorico:</strong> ${JSON.stringify(fermentazione.datiTeorici)}<br>
+                <strong>Reale:</strong> ${fermentazione.idratazioneReale || "N/A"}%, ${fermentazione.tempoReale || "N/A"} ore<br>
                 Note: ${fermentazione.note || "Nessuna"}<br>
                 <button onclick="modificaFermentazione('${doc.id}')">Modifica</button>
                 <button onclick="eliminaFermentazione('${doc.id}')">Elimina</button>
             `;
             list.appendChild(li);
         });
-
-        generaGrafico(dataTeorici, dataReali);
     } catch (error) {
         console.error("Errore durante il caricamento delle fermentazioni:", error);
     }
 }
 
-// Funzione per modificare una fermentazione
+// Modifica una fermentazione
 window.modificaFermentazione = async function (docId) {
     const user = auth.currentUser;
     if (!user) {
@@ -134,22 +137,17 @@ window.modificaFermentazione = async function (docId) {
 
     if (fermentazioneSnapshot.exists()) {
         const data = fermentazioneSnapshot.data();
-        document.getElementById("idratazione-teorica").value = data.idratazione_teorica;
-        document.getElementById("lievito-teorico").value = data.lievito_teorico;
-        document.getElementById("tempo-teorico").value = data.tempo_teorico;
 
-        document.getElementById("idratazione-reale").value = data.idratazione_reale;
-        document.getElementById("lievito-reale").value = data.lievito_reale;
-        document.getElementById("tempo-reale").value = data.tempo_reale;
-
-        document.getElementById("nome").value = data.nome;
-        document.getElementById("note").value = data.note;
+        // Popola i campi del modulo
+        document.getElementById("idratazione-reale").value = data.idratazioneReale || "";
+        document.getElementById("tempo-reale").value = data.tempoReale || "";
+        document.getElementById("note").value = data.note || "";
     } else {
         alert("Errore: fermentazione non trovata.");
     }
 };
 
-// Funzione per eliminare una fermentazione
+// Elimina una fermentazione
 window.eliminaFermentazione = async function (docId) {
     const user = auth.currentUser;
     if (!user) {
@@ -169,7 +167,7 @@ window.eliminaFermentazione = async function (docId) {
     }
 };
 
-// Funzione per generare un grafico teorico vs reale
+// Grafico teorico vs reale
 function generaGrafico(dataTeorici, dataReali) {
     const ctx = document.getElementById("grafico-teorico-reale").getContext("2d");
 
