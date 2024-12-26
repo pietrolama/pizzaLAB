@@ -45,10 +45,7 @@
         </div>
     </nav>
 
-    <button id="salva-diario-btn">Salva nel Diario</button>
-
     <main class="container">
-        <!-- Contenitore per gli input -->
         <div class="form-container">
             <!-- Selezione del tipo di pizza -->
             <div class="form-group">
@@ -66,7 +63,7 @@
             <!-- Selezione del metodo di impasto -->
             <div class="form-group">
                 <label for="tipo_impasto">Seleziona Metodo di Impasto:</label>
-                <select id="tipo_impasto" class="form-control" onchange="toggleSections()">
+                <select id="tipo_impasto" class="form-control">
                     <option value="">-- Seleziona un metodo --</option>
                     <option value="diretto">Diretto</option>
                     <option value="biga">Biga</option>
@@ -76,147 +73,93 @@
                 </select>
             </div>
 
-            <!-- Sezione Diretto -->
+            <!-- Sezioni per i metodi di impasto -->
             <div id="sezione_diretto" class="form-group hidden">
                 <label for="peso_panetto_diretto">Peso Panetto (g):</label>
-                <input type="number" id="peso_panetto_diretto" class="form-control"
-                    placeholder="Inserisci il peso del panetto">
-
+                <input type="number" id="peso_panetto_diretto" class="form-control" placeholder="Inserisci il peso del panetto">
                 <label for="idratazione_totale_diretto">Idratazione Totale (%):</label>
-                <input type="number" id="idratazione_totale_diretto" class="form-control"
-                    placeholder="Inserisci la percentuale di idratazione">
-
+                <input type="number" id="idratazione_totale_diretto" class="form-control" placeholder="Inserisci la percentuale di idratazione">
                 <label for="num_panetti_diretto">Numero di Panetti:</label>
-                <input type="number" id="num_panetti_diretto" class="form-control"
-                    placeholder="Inserisci il numero di panetti">
-
+                <input type="number" id="num_panetti_diretto" class="form-control" placeholder="Inserisci il numero di panetti">
                 <label for="tempoLievTotale_diretto">Tempo Totale di Lievitazione (ore):</label>
-                <input type="number" id="tempoLievTotale_diretto" class="form-control"
-                    placeholder="Inserisci le ore totali di lievitazione">
-
+                <input type="number" id="tempoLievTotale_diretto" class="form-control" placeholder="Inserisci le ore totali di lievitazione">
                 <label for="tempoFrigo_diretto">Tempo in Frigo (ore):</label>
-                <input type="number" id="tempoFrigo_diretto" class="form-control"
-                    placeholder="Inserisci le ore in frigo">
-
+                <input type="number" id="tempoFrigo_diretto" class="form-control" placeholder="Inserisci le ore in frigo">
                 <label for="temperatura_ambiente_diretto">Temperatura Ambiente (°C):</label>
-                <input type="number" id="temperatura_ambiente_diretto" class="form-control"
-                    placeholder="Inserisci la temperatura ambiente">
-
+                <input type="number" id="temperatura_ambiente_diretto" class="form-control" placeholder="Inserisci la temperatura ambiente">
                 <div class="checkbox-group">
                     <input type="checkbox" id="usa_teglia_diretto">
                     <label for="usa_teglia_diretto">Usa Teglia</label>
                 </div>
             </div>
 
-            <!-- Sezione Biga -->
             <div id="sezione_biga" class="form-group hidden">
-                <div class="form-group">
-
-                    <label for="peso_panetto_biga">Peso Panetto (g):</label>
-                    <input type="number" id="peso_panetto_biga" class="form-control"
-                        placeholder="Inserisci il peso del panetto">
-
-
-                    <label for="idratazione_totale_biga">Idratazione Totale (%):</label>
-                    <input type="number" id="idratazione_totale_biga" class="form-control"
-                        placeholder="Inserisci la percentuale di idratazione">
-
-
-                    <label for="percentuale_biga">Percentuale Biga (%):</label>
-                    <input type="number" id="percentuale_biga" class="form-control"
-                        placeholder="Inserisci la percentuale di biga">
-
-
-                    <label for="num_panetti_biga">Numero di Panetti:</label>
-                    <input type="number" id="num_panetti_biga" class="form-control"
-                        placeholder="Inserisci il numero di panetti">
-
-                </div>
+                <label for="peso_panetto_biga">Peso Panetto (g):</label>
+                <input type="number" id="peso_panetto_biga" class="form-control" placeholder="Inserisci il peso del panetto">
+                <label for="idratazione_totale_biga">Idratazione Totale (%):</label>
+                <input type="number" id="idratazione_totale_biga" class="form-control" placeholder="Inserisci la percentuale di idratazione">
+                <label for="percentuale_biga">Percentuale Biga (%):</label>
+                <input type="number" id="percentuale_biga" class="form-control" placeholder="Inserisci la percentuale di biga">
+                <label for="num_panetti_biga">Numero di Panetti:</label>
+                <input type="number" id="num_panetti_biga" class="form-control" placeholder="Inserisci il numero di panetti">
             </div>
 
-            <!-- Sezione Poolish -->
             <div id="sezione_poolish" class="form-group hidden">
-                <div class="form-group">
-                    <label for="peso_panetto_poolish">Peso Panetto (g):</label>
-                    <input type="number" id="peso_panetto_poolish" class="form-control"
-                        placeholder="Inserisci il peso del panetto">
-                    <label for="idratazione_totale_poolish">Idratazione Totale (%):</label>
-                    <input type="number" id="idratazione_totale_poolish" class="form-control"
-                        placeholder="Inserisci la percentuale di idratazione">
-                    <label for="percentuale_poolish">Percentuale Poolish (%):</label>
-                    <input type="number" id="percentuale_poolish" class="form-control"
-                        placeholder="Inserisci la percentuale di poolish">
-                    <label for="num_panetti_poolish">Numero di Panetti:</label>
-                    <input type="number" id="num_panetti_poolish" class="form-control"
-                        placeholder="Inserisci il numero di panetti">
-                </div>
+                <label for="peso_panetto_poolish">Peso Panetto (g):</label>
+                <input type="number" id="peso_panetto_poolish" class="form-control" placeholder="Inserisci il peso del panetto">
+                <label for="idratazione_totale_poolish">Idratazione Totale (%):</label>
+                <input type="number" id="idratazione_totale_poolish" class="form-control" placeholder="Inserisci la percentuale di idratazione">
+                <label for="percentuale_poolish">Percentuale Poolish (%):</label>
+                <input type="number" id="percentuale_poolish" class="form-control" placeholder="Inserisci la percentuale di poolish">
+                <label for="num_panetti_poolish">Numero di Panetti:</label>
+                <input type="number" id="num_panetti_poolish" class="form-control" placeholder="Inserisci il numero di panetti">
             </div>
 
-            <!-- Sezione Lievito Madre -->
             <div id="sezione_lievito_madre" class="form-group hidden">
-                <div class="form-group">
-                    <label for="peso_panetto_lievito">Peso Panetto (g):</label>
-                    <input type="number" id="peso_panetto_lievito" class="form-control"
-                        placeholder="Inserisci il peso del panetto">
-                    <label for="idratazione_totale_lievito">Idratazione Totale (%):</label>
-                    <input type="number" id="idratazione_totale_lievito" class="form-control"
-                        placeholder="Inserisci la percentuale di idratazione">
-                    <label for="percentuale_lievito">Percentuale Lievito Madre (%):</label>
-                    <input type="number" id="percentuale_lievito" class="form-control"
-                        placeholder="Inserisci la percentuale di lievito madre">
-                    <label for="num_panetti_lievito">Numero di Panetti:</label>
-                    <input type="number" id="num_panetti_lievito" class="form-control"
-                        placeholder="Inserisci il numero di panetti">
-                </div>
+                <label for="peso_panetto_lievito">Peso Panetto (g):</label>
+                <input type="number" id="peso_panetto_lievito" class="form-control" placeholder="Inserisci il peso del panetto">
+            
+                <label for="idratazione_totale_lievito">Idratazione Totale (%):</label>
+                <input type="number" id="idratazione_totale_lievito" class="form-control" placeholder="Inserisci la percentuale di idratazione">
+            
+                <label for="percentuale_lievito">Percentuale Lievito Madre (%):</label>
+                <input type="number" id="percentuale_lievito" class="form-control" placeholder="Inserisci la percentuale di lievito madre">
+            
+                <label for="num_panetti_lievito">Numero di Panetti:</label>
+                <input type="number" id="num_panetti_lievito" class="form-control" placeholder="Inserisci il numero di panetti">
             </div>
 
-            <!-- Sezione Biga + Poolish -->
             <div id="sezione_biga_poolish" class="form-group hidden">
-                <div class="form-group">
-                    <label for="peso_panetto_biga_poolish">Peso Panetto (g):</label>
-                    <input type="number" id="peso_panetto_biga_poolish" class="form-control"
-                        placeholder="Inserisci il peso del panetto">
-                    <label for="idratazione_totale_biga_poolish">Idratazione Totale (%):</label>
-                    <input type="number" id="idratazione_totale_biga_poolish" class="form-control"
-                        placeholder="Inserisci la percentuale di idratazione">
-                    <label for="percentuale_biga_bp">Percentuale Biga (%):</label>
-                    <input type="number" id="percentuale_biga_bp" class="form-control"
-                        placeholder="Inserisci la percentuale di biga">
-                    <label for="percentuale_poolish_bp">Percentuale Poolish (%):</label>
-                    <input type="number" id="percentuale_poolish_bp" class="form-control"
-                        placeholder="Inserisci la percentuale di poolish">
-                    <label for="num_panetti_biga_poolish">Numero di Panetti:</label>
-                    <input type="number" id="num_panetti_biga_poolish" class="form-control"
-                        placeholder="Inserisci il numero di panetti">
-                </div>
+                <label for="peso_panetto_biga_poolish">Peso Panetto (g):</label>
+                <input type="number" id="peso_panetto_biga_poolish" class="form-control" placeholder="Inserisci il peso del panetto">
+            
+                <label for="idratazione_totale_biga_poolish">Idratazione Totale (%):</label>
+                <input type="number" id="idratazione_totale_biga_poolish" class="form-control" placeholder="Inserisci la percentuale di idratazione">
+            
+                <label for="percentuale_biga_bp">Percentuale Biga (%):</label>
+                <input type="number" id="percentuale_biga_bp" class="form-control" placeholder="Inserisci la percentuale di biga">
+            
+                <label for="percentuale_poolish_bp">Percentuale Poolish (%):</label>
+                <input type="number" id="percentuale_poolish_bp" class="form-control" placeholder="Inserisci la percentuale di poolish">
+            
+                <label for="num_panetti_biga_poolish">Numero di Panetti:</label>
+                <input type="number" id="num_panetti_biga_poolish" class="form-control" placeholder="Inserisci il numero di panetti">
             </div>
 
-            <!-- Sezione Risultati -->
+            <!-- Risultati e Pianificazione -->
             <div id="risultato" class="recipe-box hidden">
                 <h2>La tua Ricetta Personalizzata</h2>
                 <p>Calcola l'impasto per visualizzare la ricetta completa.</p>
             </div>
-
-            <!-- Planificazione -->
-            <div class="form-group">
-                <label for="infornata">Quando vuoi infornare?</label>
-                <input type="datetime-local" id="infornata" class="form-control" required>
-            </div>
-
-            <!-- Sezione Pianificatore -->
             <div id="plan-box" class="plan-box hidden">
                 <h2>Piano di Lavoro</h2>
                 <ul id="plan-list"></ul>
             </div>
 
-        </div>
-
-        <div class="form-group">
             <!-- Pulsanti -->
-            <div>
+            <div class="form-group">
                 <button id="calcola-button" class="btn">Calcola e Genera Ricetta</button>
-            </div>
-            <div>
+                <button id="salva-diario-btn" class="btn">Salva nel Diario</button>
                 <button id="genera-piano" class="btn">Genera Piano</button>
             </div>
         </div>
@@ -225,9 +168,18 @@
     <footer>
         <p>&copy; 2024 PizzaLab - La tua guida alla pizza perfetta</p>
     </footer>
+
+    <script type="module">
+        import { toggleSections } from './js/calcolatore_script.js';
+
+        document.getElementById('tipo_impasto').addEventListener('change', toggleSections);
+
+        document.getElementById('salva-diario-btn').addEventListener('click', () => {
+            alert('Funzione Salva nel Diario non è ancora implementata!');
+        });
+    </script>
     <script src="js/cookies.js" defer></script>
-    <script type="module" src="js/calcolatore_script.js"></script>
-    <script src="js/main.js" defer></script> <!-- Nuovo script per il menu hamburger -->
+    <script src="js/main.js" defer></script>
 </body>
 
 </html>
