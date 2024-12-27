@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
         fermentazioniList.appendChild(card);
     }
 
-    export function salvaRicettaNelDiario(tipoPizza, metodoImpasto, risultatoRicetta) {
+    export async function salvaRicettaNelDiario(tipoPizza, metodoImpasto, risultatoRicetta) {
         const user = auth.currentUser;
         if (!user) {
             alert("Devi essere autenticato per salvare una ricetta!");
