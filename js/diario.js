@@ -24,7 +24,7 @@ export async function salvaRicettaNelDiario(tipoPizza, metodoImpasto, risultatoR
         await setDoc(docRef, {
             tipoPizza,
             metodoImpasto,
-            risultatoRicetta,
+            risultatoRicetta: typeof risultatoRicetta === "object" ? JSON.stringify(risultatoRicetta) : risultatoRicetta,
             dataSalvataggio: new Date().toISOString(),
         });
         alert("Ricetta salvata nel diario!");
