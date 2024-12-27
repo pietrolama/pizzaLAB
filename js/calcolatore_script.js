@@ -75,43 +75,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const tipoPizzaElement = document.getElementById('tipo_pizza');
     const metodoSelect = document.getElementById('tipo_impasto');
 
-    // Verifica se gli elementi esistono nel DOM
-    if (tipoPizzaElement) {
-        tipoPizzaElement.addEventListener('change', (e) => {
-            const tipoPizza = e.target.value || "napoletana";
+    // Funzione per aggiornare le opzioni del metodo di impasto
+    const aggiornaMetodiImpasto = (tipoPizza) => {
+        if (!metodoSelect) {
+            console.warn('Elemento con id "tipo_impasto" non trovato nel DOM.');
+            return;
+        }
 
-            console.log("Tipo di pizza selezionato:", tipoPizza);
+        console.log("Tipo di pizza selezionato:", tipoPizza);
 
-            const metodiDisponibili = metodiPerPizza[tipoPizza] || [];
-            metodoSelect.innerHTML = ''; // Rimuove tutte le opzioni esistenti
-
-            // Aggiunge le opzioni disponibili
-            metodiDisponibili.forEach(metodo => {
-                const option = document.createElement('option');
-                option.value = metodo;
-                option.textContent = metodo.charAt(0).toUpperCase() + metodo.slice(1).replace('_', ' ');
-                metodoSelect.appendChild(option);
-            });
-
-            // Imposta il valore al primo metodo disponibile
-            metodoSelect.value = metodiDisponibili[0] || '';
-            metodoSelect.dispatchEvent(new Event('change'));
-        });
-    } else {
-        console.warn('Elemento con id "tipo_pizza" non trovato nel DOM.');
-    }
-
-    if (metodoSelect) {
-        metodoSelect.addEventListener('change', toggleSections);
-    } else {
-        console.warn('Elemento con id "tipo_impasto" non trovato nel DOM.');
-    }
-
-    // Configura i valori iniziali dopo il caricamento della pagina
-    if (tipoPizzaElement && metodoSelect) {
-        const tipoPizzaIniziale = tipoPizzaElement.value || 'napoletana';
-        const metodiDisponibili = metodiPerPizza[tipoPizzaIniziale] || [];
-
+        const metodiDisponibili = metodiPerPizza[tipoPizza] || [];
         metodoSelect.innerHTML = ''; // Rimuove tutte le opzioni esistenti
 
         // Aggiunge le opzioni disponibili
@@ -122,8 +95,32 @@ document.addEventListener('DOMContentLoaded', () => {
             metodoSelect.appendChild(option);
         });
 
-        metodoSelect.value = metodiDisponibili[0] || '';
-        metodoSelect.dispatchEvent(new Event('change'));
+        // Imposta il valore al primo metodo disponibile
+        if (metodiDisponibili.length > 0) {
+            metodoSelect.value = metodiDisponibili[0];
+            metodoSelect.dispatchEvent(new Event('change')); // Notifica il cambiamento
+        }
+    };
+
+    // Configura i valori iniziali dopo il caricamento della pagina
+    if (tipoPizzaElement) {
+        const tipoPizzaIniziale = tipoPizzaElement.value || 'napoletana';
+        aggiornaMetodiImpasto(tipoPizzaIniziale);
+
+        // Aggiunge l'event listener per il cambio del tipo di pizza
+        tipoPizzaElement.addEventListener('change', (e) => {
+            const tipoPizza = e.target.value || 'napoletana';
+            aggiornaMetodiImpasto(tipoPizza);
+        });
+    } else {
+        console.warn('Elemento con id "tipo_pizza" non trovato nel DOM.');
+    }
+
+    // Aggiunge l'event listener per il cambiamento del metodo di impasto
+    if (metodoSelect) {
+        metodoSelect.addEventListener('change', toggleSections);
+    } else {
+        console.warn('Elemento con id "tipo_impasto" non trovato nel DOM.');
     }
 });
 
