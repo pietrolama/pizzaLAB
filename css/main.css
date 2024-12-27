@@ -775,8 +775,8 @@ footer p:hover {
     border-radius: 5px;
 }
 
-#fermentazioni-list .card {
-    display: block;
+/* ===== CARD DELLE FERMENTAZIONI ===== */
+.fermentazione-card {
     background-color: var(--dark-background-color);
     border: 1px solid var(--border-color);
     border-radius: 10px;
@@ -785,8 +785,52 @@ footer p:hover {
     box-shadow: 5px 5px 15px #111, -5px -5px 15px #444;
     transition: transform 0.3s, box-shadow 0.3s;
     cursor: pointer;
+    color: var(--text-color);
 }
 
+.fermentazione-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px var(--hover-shadow-color);
+}
+
+.fermentazione-card h3 {
+    font-size: 1.5em;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.fermentazione-card p {
+    font-size: 1em;
+    color: #ccc;
+    line-height: 1.6;
+}
+
+.fermentazione-card .details {
+    display: none;
+    margin-top: 10px;
+    color: var(--text-color);
+}
+
+.fermentazione-card.expanded .details {
+    display: block;
+}
+
+.fermentazione-card .btn {
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    display: block;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+}
+
+.fermentazione-card .btn:hover {
+    background-color: var(--secondary-color);
+}
 
 /* ===== SEZIONE RESPONSIVE ===== */
 @media (max-width: 768px) {
