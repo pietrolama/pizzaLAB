@@ -198,15 +198,28 @@ window.modificaFermentazione = async function (docId) {
     if (fermentazioneSnapshot.exists()) {
         const data = fermentazioneSnapshot.data();
 
-        document.getElementById("nome").value = data.nome || "";
-        document.getElementById("data").value = data.data || "";
-        document.getElementById("idratazione").value = data.idratazione || "";
-        document.getElementById("lievito").value = data.lievito || "";
-        document.getElementById("tempo").value = data.tempo || "";
+        // Verifica l'esistenza degli elementi nel DOM prima di impostarne i valori
+        const nomeField = document.getElementById("nome");
+        const dataField = document.getElementById("data");
+        const idratazioneField = document.getElementById("idratazione");
+        const lievitoField = document.getElementById("lievito");
+        const tempoField = document.getElementById("tempo");
+
+        if (nomeField && dataField && idratazioneField && lievitoField && tempoField) {
+            nomeField.value = data.nome || "";
+            dataField.value = data.data || "";
+            idratazioneField.value = data.idratazione || "";
+            lievitoField.value = data.lievito || "";
+            tempoField.value = data.tempo || "";
+        } else {
+            console.error("Alcuni elementi del modulo non sono stati trovati nel DOM.");
+            alert("Errore: Impossibile modificare la fermentazione. Verifica il modulo.");
+        }
     } else {
         alert("Errore: fermentazione non trovata.");
     }
 };
+
 
 // Elimina una fermentazione
 window.eliminaFermentazione = async function (docId) {
