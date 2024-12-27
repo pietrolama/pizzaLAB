@@ -35,6 +35,33 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+export async function salvaRicettaNelDiario(tipoPizza, metodoImpasto, datiTeorici) {
+    const user = auth.currentUser;
+    if (!user) {
+        alert("Devi essere autenticato per salvare una ricetta!");
+        return;
+    }
+
+    const userId = user.uid;
+
+    try {
+        const docRef = doc(collection(db, "fermentazioni", userId, "entries"));
+        await setDoc(docRef, {
+            tipoPizza,
+            metodoImpasto,
+            datiTeorici,
+            idratazioneReale: null, // Valori reali opzionali
+            tempoReale: null,       // Valori reali opzionali
+            note: null,             // Valori reali opzionali
+        });
+        alert("Ricetta salvata nel diario!");
+    } catch (error) {
+        console.error("Errore durante il salvataggio della ricetta:", error);
+        alert("Errore durante il salvataggio della ricetta. Riprova.");
+    }
+}
+
+
 // Aggiungi una fermentazione
 async function aggiungiFermentazione(e) {
     e.preventDefault();
