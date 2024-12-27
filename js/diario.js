@@ -61,6 +61,29 @@ document.addEventListener("DOMContentLoaded", () => {
         fermentazioniList.appendChild(card);
     }
 
+    export function salvaRicettaNelDiario(tipoPizza, metodoImpasto, risultatoRicetta) {
+        const user = auth.currentUser;
+        if (!user) {
+            alert("Devi essere autenticato per salvare una ricetta!");
+            return;
+        }
+    
+        try {
+            const docRef = doc(collection(db, "fermentazioni", user.uid, "entries"));
+            await setDoc(docRef, {
+                tipoPizza,
+                metodoImpasto,
+                risultatoRicetta: typeof risultatoRicetta === "object" ? JSON.stringify(risultatoRicetta) : risultatoRicetta,
+                dataSalvataggio: new Date().toISOString(),
+            });
+            alert("Ricetta salvata nel diario!");
+        } catch (error) {
+            console.error("Errore durante il salvataggio della ricetta:", error);
+            alert("Errore durante il salvataggio. Riprova.");
+        }
+    }
+
+
     // Funzione per caricare le fermentazioni da Firebase
     async function caricaFermentazioni(userId) {
         if (!fermentazioniList) {
