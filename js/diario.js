@@ -52,10 +52,16 @@ async function caricaFermentazioni(userId) {
         fermentazioniSnapshot.forEach((doc) => {
             const fermentazione = doc.data();
 
+            // Convertiamo il risultatoRicetta in HTML leggibile
+            let risultatoHTML = fermentazione.risultatoRicetta;
+            if (typeof risultatoHTML === "string" && risultatoHTML.startsWith("{")) {
+                risultatoHTML = JSON.parse(risultatoHTML);
+            }
+
             const li = document.createElement("li");
             li.innerHTML = `
                 <strong>${fermentazione.tipoPizza}</strong> - ${fermentazione.metodoImpasto}<br>
-                <pre>${fermentazione.risultatoRicetta}</pre>
+                <div>${risultatoHTML}</div>
                 <button onclick="eliminaFermentazione('${doc.id}')">Elimina</button>
             `;
             list.appendChild(li);
