@@ -1,3 +1,6 @@
+import { calcolaLievito } from './calcolatore_script.js';
+
+
 document.addEventListener('DOMContentLoaded', () => {
     const tipoPizza = getQueryParam('tipo') || 'napoletana';
     let metodo = getQueryParam('metodo') || null;
