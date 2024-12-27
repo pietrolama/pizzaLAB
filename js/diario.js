@@ -16,10 +16,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Funzione per creare una card
     function creaCardFermentazione(fermentazione, docId = null) {
+        if (!fermentazione || (!fermentazione.nome && !fermentazione.tipoPizza)) {
+            console.error("Dati fermentazione non validi:", fermentazione);
+            return;
+        }
         const card = document.createElement("div");
-        card.className = "fermentazione-card"; // Stile personalizzato per le card del diario
-
-        // Genera il contenuto della card
+        card.className = "fermentazione-card";
         card.innerHTML = `
             <h3>${fermentazione.tipoPizza || fermentazione.nome}</h3>
             <p>Metodo: ${fermentazione.metodoImpasto || fermentazione.metodo}</p>
@@ -34,30 +36,22 @@ document.addEventListener("DOMContentLoaded", () => {
                 <h4>Procedura:</h4>
                 <p>${fermentazione.procedura || "N/A"}</p>
             </div>
-            ${
-                docId
-                    ? `<button class="btn delete-btn" data-id="${docId}">Elimina</button>`
-                    : ""
-            }
+            ${docId ? `<button class="btn delete-btn" data-id="${docId}">Elimina</button>` : ""}
         `;
-
-        // Mostra/Nasconde i dettagli al clic
         card.querySelector(".btn").addEventListener("click", () => {
             const details = card.querySelector(".details");
             const isVisible = details.style.display === "block";
             details.style.display = isVisible ? "none" : "block";
             card.classList.toggle("expanded", !isVisible);
         });
-
-        // Gestione pulsante "Elimina"
         if (docId) {
             card.querySelector(".delete-btn").addEventListener("click", () => {
                 eliminaFermentazione(docId);
             });
         }
-
         fermentazioniList.appendChild(card);
     }
+
 
     // Funzione per caricare le fermentazioni da Firebase
     async function caricaFermentazioni(userId) {
