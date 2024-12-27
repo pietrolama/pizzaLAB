@@ -63,12 +63,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Funzione per caricare le fermentazioni da Firebase
     async function caricaFermentazioni(userId) {
+        if (!fermentazioniList) {
+            console.error("Elemento con ID 'fermentazioni-list' non trovato nel DOM.");
+            return;
+        }
+    
         try {
             const fermentazioniRef = collection(db, "fermentazioni", userId, "entries");
             const fermentazioniSnapshot = await getDocs(fermentazioniRef);
-
+    
             fermentazioniList.innerHTML = ""; // Svuota la lista prima di ricaricarla
-
+    
             fermentazioniSnapshot.forEach((doc) => {
                 const fermentazione = doc.data();
                 try {
@@ -78,13 +83,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 } catch (e) {
                     console.error("Errore nel parsing dei risultati:", e);
                 }
-
+    
                 creaCardFermentazione(fermentazione, doc.id);
             });
         } catch (error) {
             console.error("Errore durante il caricamento delle fermentazioni:", error);
         }
     }
+
 
     // Elimina una fermentazione
     async function eliminaFermentazione(docId) {
