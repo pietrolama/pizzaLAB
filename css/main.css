@@ -775,6 +775,18 @@ footer p:hover {
     border-radius: 5px;
 }
 
+#fermentazioni-list .card {
+    display: block;
+    background-color: var(--dark-background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 20px;
+    width: 300px;
+    box-shadow: 5px 5px 15px #111, -5px -5px 15px #444;
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+}
+
 
 /* ===== SEZIONE RESPONSIVE ===== */
 @media (max-width: 768px) {
