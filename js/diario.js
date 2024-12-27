@@ -1,40 +1,18 @@
 import { app, auth } from "./login.js";
-import { 
-    getFirestore, 
-    collection, 
-    doc, 
-    getDocs, 
-    setDoc, 
-    deleteDoc, 
-    getDoc 
+import {
+    getFirestore,
+    collection,
+    doc,
+    getDocs,
+    setDoc,
+    deleteDoc,
+    getDoc,
 } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
-import { calcolaDiretto, calcolaBiga, calcolaPoolish, calcolaLievitoMadre, calcolaBigaPoolish } from "./calcolatore_script.js";
 
 const db = getFirestore(app);
 
-document.addEventListener("DOMContentLoaded", () => {
-    const fermentazioneForm = document.getElementById("fermentazione-form");
-    const confrontaButton = document.getElementById("confronta-button");
-
-    if (fermentazioneForm) {
-        fermentazioneForm.addEventListener("submit", aggiungiFermentazione);
-    }
-
-    if (confrontaButton) {
-        confrontaButton.addEventListener("click", confrontaFermentazioni);
-    }
-
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            caricaFermentazioni(user.uid);
-        } else {
-            alert("Devi essere autenticato per accedere al diario!");
-            window.location.href = "login.html";
-        }
-    });
-});
-
+// Salva una ricetta nel diario
 export async function salvaRicettaNelDiario(tipoPizza, metodoImpasto, datiTeorici) {
     const user = auth.currentUser;
     if (!user) {
@@ -42,62 +20,23 @@ export async function salvaRicettaNelDiario(tipoPizza, metodoImpasto, datiTeoric
         return;
     }
 
-    const userId = user.uid;
-
     try {
-        const docRef = doc(collection(db, "fermentazioni", userId, "entries"));
+        const docRef = doc(collection(db, "fermentazioni", user.uid, "entries"));
         await setDoc(docRef, {
             tipoPizza,
             metodoImpasto,
-            datiTeorici,
-            idratazioneReale: null, // Valori reali opzionali
-            tempoReale: null,       // Valori reali opzionali
-            note: null,             // Valori reali opzionali
+            ...datiTeorici,
+            dataSalvataggio: new Date().toISOString(),
         });
         alert("Ricetta salvata nel diario!");
     } catch (error) {
         console.error("Errore durante il salvataggio della ricetta:", error);
-        alert("Errore durante il salvataggio della ricetta. Riprova.");
+        alert("Errore durante il salvataggio. Riprova.");
     }
 }
 
-
-// Aggiungi una fermentazione
-async function aggiungiFermentazione(e) {
-    e.preventDefault();
-
-    const user = auth.currentUser;
-    if (!user) {
-        alert("Devi essere autenticato per aggiungere una fermentazione!");
-        return;
-    }
-
-    const userId = user.uid;
-    const nome = document.getElementById("nome").value;
-    const data = document.getElementById("data").value;
-    const idratazione = parseFloat(document.getElementById("idratazione").value);
-    const lievito = document.getElementById("lievito").value;
-    const tempo = parseFloat(document.getElementById("tempo").value);
-
-    try {
-        const docRef = doc(collection(db, "fermentazioni", userId, "entries"));
-        await setDoc(docRef, {
-            nome,
-            data,
-            idratazione,
-            lievito,
-            tempo,
-        });
-        alert("Fermentazione aggiunta con successo!");
-        e.target.reset();
-        caricaFermentazioni(userId);
-    } catch (error) {
-        console.error("Errore durante l'aggiunta della fermentazione:", error);
-    }
-}
-
-// Carica fermentazioni salvate
-async function caricaFermentazioni(userId) {
+// Carica tutte le fermentazioni salvate dall'utente
+export async function caricaFermentazioni(userId) {
     try {
         const fermentazioniRef = collection(db, "fermentazioni", userId, "entries");
         const fermentazioniSnapshot = await getDocs(fermentazioniRef);
@@ -119,9 +58,8 @@ async function caricaFermentazioni(userId) {
             // Aggiungi fermentazione alla lista
             const li = document.createElement("li");
             li.innerHTML = `
-                <strong>${fermentazione.nome}</strong> - ${fermentazione.data}<br>
-                Idratazione: ${fermentazione.idratazione}% - Lievito: ${fermentazione.lievito}<br>
-                Tempo: ${fermentazione.tempo} ore
+                <strong>${fermentazione.tipoPizza}</strong> - ${fermentazione.metodoImpasto}<br>
+                Farina: ${fermentazione.pesoFarina}g, Acqua: ${fermentazione.pesoAcqua}g<br>
                 <button onclick="modificaFermentazione('${doc.id}')">Modifica</button>
                 <button onclick="eliminaFermentazione('${doc.id}')">Elimina</button>
             `;
@@ -130,7 +68,7 @@ async function caricaFermentazioni(userId) {
             // Aggiungi fermentazione al selettore
             const option = document.createElement("option");
             option.value = doc.id;
-            option.textContent = `${fermentazione.nome} - ${fermentazione.data}`;
+            option.textContent = `${fermentazione.tipoPizza} - ${fermentazione.metodoImpasto}`;
             select.appendChild(option);
         });
     } catch (error) {
@@ -138,10 +76,58 @@ async function caricaFermentazioni(userId) {
     }
 }
 
-// Confronta fermentazioni
-async function confrontaFermentazioni() {
+// Modifica una fermentazione salvata
+window.modificaFermentazione = async function (docId) {
+    const user = auth.currentUser;
+    if (!user) {
+        alert("Devi essere autenticato per modificare una fermentazione!");
+        return;
+    }
+
+    try {
+        const docRef = doc(db, "fermentazioni", user.uid, "entries", docId);
+        const fermentazioneSnapshot = await getDoc(docRef);
+
+        if (fermentazioneSnapshot.exists()) {
+            const data = fermentazioneSnapshot.data();
+
+            document.getElementById("nome").value = data.nome || "";
+            document.getElementById("data").value = data.data || "";
+            document.getElementById("idratazione").value = data.idratazione || "";
+            document.getElementById("lievito").value = data.lievito || "";
+            document.getElementById("tempo").value = data.tempo || "";
+        } else {
+            alert("Errore: fermentazione non trovata.");
+        }
+    } catch (error) {
+        console.error("Errore durante la modifica della fermentazione:", error);
+        alert("Errore durante la modifica della fermentazione.");
+    }
+};
+
+// Elimina una fermentazione salvata
+window.eliminaFermentazione = async function (docId) {
+    const user = auth.currentUser;
+    if (!user) {
+        alert("Devi essere autenticato per eliminare una fermentazione!");
+        return;
+    }
+
+    try {
+        const docRef = doc(db, "fermentazioni", user.uid, "entries", docId);
+        await deleteDoc(docRef);
+        alert("Fermentazione eliminata con successo!");
+        caricaFermentazioni(user.uid);
+    } catch (error) {
+        console.error("Errore durante l'eliminazione della fermentazione:", error);
+        alert("Errore durante l'eliminazione della fermentazione.");
+    }
+};
+
+// Confronta fermentazioni selezionate
+window.confrontaFermentazioni = async function () {
     const select = document.getElementById("seleziona-fermentazioni");
-    const selectedIds = Array.from(select.selectedOptions).map(option => option.value);
+    const selectedIds = Array.from(select.selectedOptions).map((option) => option.value);
 
     if (selectedIds.length < 2) {
         alert("Seleziona almeno due fermentazioni per confrontare.");
@@ -149,8 +135,8 @@ async function confrontaFermentazioni() {
     }
 
     try {
-        const userId = auth.currentUser.uid;
-        const fermentazioniRef = collection(db, "fermentazioni", userId, "entries");
+        const user = auth.currentUser;
+        const fermentazioniRef = collection(db, "fermentazioni", user.uid, "entries");
 
         const datiTeorici = [];
         const datiReali = [];
@@ -161,8 +147,8 @@ async function confrontaFermentazioni() {
 
             if (snapshot.exists()) {
                 const data = snapshot.data();
-                datiTeorici.push(data.idratazione);
-                datiReali.push(data.tempo);
+                datiTeorici.push(data.pesoFarina);
+                datiReali.push(data.pesoAcqua);
             }
         }
 
@@ -170,9 +156,9 @@ async function confrontaFermentazioni() {
     } catch (error) {
         console.error("Errore durante il confronto delle fermentazioni:", error);
     }
-}
+};
 
-// Genera il grafico
+// Genera un grafico per confrontare le fermentazioni
 function generaGrafico(datiTeorici, datiReali) {
     const ctx = document.getElementById("grafico-teorico-reale").getContext("2d");
 
@@ -188,12 +174,12 @@ function generaGrafico(datiTeorici, datiReali) {
             labels,
             datasets: [
                 {
-                    label: "Idratazione (%)",
+                    label: "Peso Farina (g)",
                     data: datiTeorici,
                     backgroundColor: "rgba(54, 162, 235, 0.6)",
                 },
                 {
-                    label: "Tempo (ore)",
+                    label: "Peso Acqua (g)",
                     data: datiReali,
                     backgroundColor: "rgba(255, 99, 132, 0.6)",
                 },
@@ -210,60 +196,13 @@ function generaGrafico(datiTeorici, datiReali) {
     });
 }
 
-// Modifica una fermentazione
-window.modificaFermentazione = async function (docId) {
-    const user = auth.currentUser;
-    if (!user) {
-        alert("Devi essere autenticato per modificare una fermentazione!");
-        return;
-    }
-
-    const userId = user.uid;
-    const docRef = doc(db, "fermentazioni", userId, "entries", docId);
-    const fermentazioneSnapshot = await getDoc(docRef);
-
-    if (fermentazioneSnapshot.exists()) {
-        const data = fermentazioneSnapshot.data();
-
-        // Verifica l'esistenza degli elementi nel DOM prima di impostarne i valori
-        const nomeField = document.getElementById("nome");
-        const dataField = document.getElementById("data");
-        const idratazioneField = document.getElementById("idratazione");
-        const lievitoField = document.getElementById("lievito");
-        const tempoField = document.getElementById("tempo");
-
-        if (nomeField && dataField && idratazioneField && lievitoField && tempoField) {
-            nomeField.value = data.nome || "";
-            dataField.value = data.data || "";
-            idratazioneField.value = data.idratazione || "";
-            lievitoField.value = data.lievito || "";
-            tempoField.value = data.tempo || "";
+// Event listener per caricare le fermentazioni all'accesso
+document.addEventListener("DOMContentLoaded", () => {
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            caricaFermentazioni(user.uid);
         } else {
-            console.error("Alcuni elementi del modulo non sono stati trovati nel DOM.");
-            alert("Errore: Impossibile modificare la fermentazione. Verifica il modulo.");
+            alert("Devi essere autenticato per accedere al diario!");
         }
-    } else {
-        alert("Errore: fermentazione non trovata.");
-    }
-};
-
-
-// Elimina una fermentazione
-window.eliminaFermentazione = async function (docId) {
-    const user = auth.currentUser;
-    if (!user) {
-        alert("Devi essere autenticato per eliminare una fermentazione!");
-        return;
-    }
-
-    const userId = user.uid;
-
-    try {
-        const docRef = doc(db, "fermentazioni", userId, "entries", docId);
-        await deleteDoc(docRef);
-        alert("Fermentazione eliminata con successo!");
-        caricaFermentazioni(userId);
-    } catch (error) {
-        console.error("Errore durante l'eliminazione della fermentazione:", error);
-    }
-};
+    });
+});
