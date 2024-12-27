@@ -457,8 +457,26 @@ export function mostraRicetta(tipoPizza, metodo) {
 }
 
 // Event listener per il pulsante 'Calcola e Genera Ricetta' e per Genera Piano
-document.getElementById('calcola-button').addEventListener('click', calcola);
-document.getElementById('genera-piano').addEventListener('click', generaPianoGenerico);
+document.addEventListener('DOMContentLoaded', () => {
+    // Pulsante 'Calcola e Genera Ricetta'
+    const calcolaButton = document.getElementById('calcola-button');
+    if (calcolaButton) {
+        calcolaButton.addEventListener('click', calcola);
+    } else {
+        console.warn('Elemento con id "calcola-button" non trovato nel DOM.');
+    }
+
+    // Pulsante 'Genera Piano'
+    const generaPianoButton = document.getElementById('genera-piano');
+    if (generaPianoButton) {
+        generaPianoButton.addEventListener('click', generaPianoGenerico);
+    } else {
+        console.warn('Elemento con id "genera-piano" non trovato nel DOM.');
+    }
+
+    // Eventuali altri listener o configurazioni iniziali
+});
+
 
 // Funzione per recuperare la configurazione dal localStorage
 document.addEventListener('DOMContentLoaded', () => {
