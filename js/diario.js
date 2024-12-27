@@ -107,3 +107,64 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const fermentazioniList = document.getElementById('fermentazioni-list');
+
+    // Esempio di dati ricetta
+    const fermentazioni = [
+        {
+            nome: "Pizza Napoletana",
+            metodo: "Diretto",
+            ingredienti: {
+                Farina: "311.11 g",
+                Acqua: "248.89 g",
+                Lievito: "0.49 g",
+                Sale: "6.22 g",
+                Zucchero: "4.04 g",
+                Olio: "9.96 g"
+            },
+            procedura: `Sciogliere il sale nell'acqua e aggiungere metà della farina...`
+        },
+        {
+            nome: "Contemporanea Biga",
+            metodo: "Biga",
+            ingredienti: {
+                Farina: "186.67 g",
+                Acqua: "194.13 g",
+                Sale: "6.22 g",
+                Olio: "9.33 g"
+            },
+            procedura: `Preparare la biga con il 50% della farina e il 50% dell'acqua...`
+        }
+    ];
+
+    // Genera le card dinamicamente
+    fermentazioni.forEach(fermentazione => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+            <h3>${fermentazione.nome}</h3>
+            <p>Metodo: ${fermentazione.metodo}</p>
+            <button class="btn">Mostra Dettagli</button>
+            <div class="details" style="display: none;">
+                <h4>Ingredienti:</h4>
+                <ul>
+                    ${Object.entries(fermentazione.ingredienti)
+                        .map(([key, value]) => `<li>${key}: ${value}</li>`)
+                        .join('')}
+                </ul>
+                <h4>Procedura:</h4>
+                <p>${fermentazione.procedura}</p>
+            </div>
+        `;
+        card.querySelector('.btn').addEventListener('click', () => {
+            const details = card.querySelector('.details');
+            const isVisible = details.style.display === 'block';
+            details.style.display = isVisible ? 'none' : 'block';
+            card.classList.toggle('expanded', !isVisible);
+        });
+        fermentazioniList.appendChild(card);
+    });
+});
+
