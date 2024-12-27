@@ -7,7 +7,7 @@
     <title>Diario di Fermentazione</title>
     <link rel="stylesheet" href="css/main.css">
 </head>
-<body>
+<body id="diario-page">
     <header>
         <h1>Diario di Fermentazione</h1>
     </header>
@@ -35,30 +35,46 @@
     </nav>
 
     <main>
-        <section>
+        <!-- Sezione per aggiungere una fermentazione -->
+        <section class="diary-section">
             <h2>Aggiungi una Fermentazione</h2>
-            <form id="fermentazione-form">
-                <label for="nome">Nome:</label>
-                <input type="text" id="nome" required>
-                <label for="data">Data:</label>
-                <input type="date" id="data" required>
-                <label for="idratazione">Idratazione (%):</label>
-                <input type="number" id="idratazione" required>
-                <label for="lievito">Tipo di Lievito:</label>
-                <input type="text" id="lievito" required>
-                <label for="tempo">Tempo (ore):</label>
-                <input type="number" id="tempo" required>
-                <button type="submit">Aggiungi</button>
+            <form id="fermentazione-form" class="form-container">
+                <div class="form-group">
+                    <label for="nome">Nome:</label>
+                    <input type="text" id="nome" required>
+                </div>
+                <div class="form-group">
+                    <label for="data">Data:</label>
+                    <input type="date" id="data" required>
+                </div>
+                <div class="form-group">
+                    <label for="idratazione">Idratazione (%):</label>
+                    <input type="number" id="idratazione" required>
+                </div>
+                <div class="form-group">
+                    <label for="lievito">Tipo di Lievito:</label>
+                    <input type="text" id="lievito" required>
+                </div>
+                <div class="form-group">
+                    <label for="tempo">Tempo (ore):</label>
+                    <input type="number" id="tempo" required>
+                </div>
+                <button type="submit" class="btn">Aggiungi</button>
             </form>
         </section>
 
-        <section>
+        <!-- Sezione per visualizzare le fermentazioni -->
+        <section class="diary-section">
             <h2>Le Tue Fermentazioni</h2>
-            <ul id="fermentazioni-list">
+            <ul id="fermentazioni-list" class="list-group">
                 <!-- Qui verranno elencate le fermentazioni -->
             </ul>
         </section>
     </main>
+
+    <footer>
+        <p>&copy; 2024 PizzaLab - Diario di esperimenti e progressi</p>
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="js/main.js" defer></script>
