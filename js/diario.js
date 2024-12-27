@@ -24,7 +24,7 @@ export async function salvaRicettaNelDiario(tipoPizza, metodoImpasto, risultatoR
         await setDoc(docRef, {
             tipoPizza,
             metodoImpasto,
-            risultatoRicetta: typeof risultatoRicetta === "object" ? JSON.stringify(risultatoRicetta) : risultatoRicetta,
+            risultatoRicetta: JSON.stringify(risultatoRicetta, null, 2), // Converte in JSON formattato
             dataSalvataggio: new Date().toISOString(),
         });
         alert("Ricetta salvata nel diario!");
@@ -52,10 +52,15 @@ async function caricaFermentazioni(userId) {
         fermentazioniSnapshot.forEach((doc) => {
             const fermentazione = doc.data();
 
-            // Convertiamo il risultatoRicetta in HTML leggibile
+            // Parsea il risultatoRicetta da JSON
             let risultatoHTML = fermentazione.risultatoRicetta;
-            if (typeof risultatoHTML === "string" && risultatoHTML.startsWith("{")) {
-                risultatoHTML = JSON.parse(risultatoHTML);
+            try {
+                risultatoHTML = JSON.parse(risultatoHTML); // Converte da JSON a oggetto
+                risultatoHTML = Object.entries(risultatoHTML)
+                    .map(([key, value]) => `<strong>${key}</strong>: ${value}`)
+                    .join("<br>");
+            } catch (e) {
+                console.error("Errore durante il parsing di risultatoRicetta:", e);
             }
 
             const li = document.createElement("li");
@@ -70,6 +75,7 @@ async function caricaFermentazioni(userId) {
         console.error("Errore durante il caricamento delle fermentazioni:", error);
     }
 }
+
 
 // Elimina una fermentazione salvata
 window.eliminaFermentazione = async function (docId) {
