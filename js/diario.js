@@ -20,6 +20,12 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error("Dati fermentazione non validi:", fermentazione);
             return;
         }
+    
+        if (!fermentazioniList) {
+            console.error("Elemento 'fermentazioni-list' non trovato nel DOM.");
+            return;
+        }
+    
         const card = document.createElement("div");
         card.className = "fermentazione-card";
         card.innerHTML = `
@@ -38,20 +44,22 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
             ${docId ? `<button class="btn delete-btn" data-id="${docId}">Elimina</button>` : ""}
         `;
+    
         card.querySelector(".btn").addEventListener("click", () => {
             const details = card.querySelector(".details");
             const isVisible = details.style.display === "block";
             details.style.display = isVisible ? "none" : "block";
             card.classList.toggle("expanded", !isVisible);
         });
+    
         if (docId) {
             card.querySelector(".delete-btn").addEventListener("click", () => {
                 eliminaFermentazione(docId);
             });
         }
+    
         fermentazioniList.appendChild(card);
     }
-
 
     // Funzione per caricare le fermentazioni da Firebase
     async function caricaFermentazioni(userId) {
