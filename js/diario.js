@@ -15,70 +15,76 @@ const db = getFirestore(app);
 
 // Attendere il caricamento del DOM
 document.addEventListener("DOMContentLoaded", () => {
-    const form = document.getElementById("fermentazione-form");
-
-    if (!form) {
-        console.error("Modulo con id 'fermentazione-form' non trovato nel DOM.");
-        return;
+    // Verifica se login-btn esiste prima di aggiungere un event listener
+    const loginButton = document.getElementById("login-btn");
+    if (loginButton) {
+        loginButton.addEventListener("click", handleLogin);
+    } else {
+        console.warn('Elemento con id "login-btn" non trovato nel DOM.');
     }
 
-    form.addEventListener("submit", async (e) => {
-        e.preventDefault();
+    // Verifica se fermentazione-form esiste prima di lavorarci
+    const fermentazioneForm = document.getElementById("fermentazione-form");
+    if (fermentazioneForm) {
+        fermentazioneForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
 
-        const user = auth.currentUser;
-        if (!user) {
-            alert("Devi essere autenticato per aggiungere una fermentazione!");
-            return;
-        }
-
-        const userId = user.uid;
-
-        const tipoPizza = document.getElementById("tipo_pizza").value;
-        const metodoImpasto = document.getElementById("tipo_impasto").value;
-
-        let datiTeorici;
-        switch (metodoImpasto) {
-            case "diretto":
-                datiTeorici = calcolaDiretto();
-                break;
-            case "biga":
-                datiTeorici = calcolaBiga();
-                break;
-            case "poolish":
-                datiTeorici = calcolaPoolish();
-                break;
-            case "lievito_madre":
-                datiTeorici = calcolaLievitoMadre();
-                break;
-            case "biga_poolish":
-                datiTeorici = calcolaBigaPoolish();
-                break;
-            default:
-                alert("Metodo di impasto non riconosciuto.");
+            const user = auth.currentUser;
+            if (!user) {
+                alert("Devi essere autenticato per aggiungere una fermentazione!");
                 return;
-        }
+            }
 
-        const idratazioneReale = parseFloat(document.getElementById("idratazione-reale").value) || 0;
-        const tempoReale = parseFloat(document.getElementById("tempo-reale").value) || 0;
-        const note = document.getElementById("note").value || "";
+            const userId = user.uid;
+            const tipoPizza = document.getElementById("tipo_pizza").value;
+            const metodoImpasto = document.getElementById("tipo_impasto").value;
 
-        try {
-            const docRef = doc(collection(db, "fermentazioni", userId, "entries"));
-            await setDoc(docRef, {
-                tipoPizza,
-                metodoImpasto,
-                datiTeorici,
-                idratazioneReale,
-                tempoReale,
-                note,
-            });
-            alert("Fermentazione aggiunta o aggiornata con successo!");
-            form.reset();
-            caricaFermentazioni(userId);
-        } catch (error) {
-            console.error("Errore durante l'aggiunta della fermentazione:", error);
-        }
-    });
+            let datiTeorici;
+            switch (metodoImpasto) {
+                case "diretto":
+                    datiTeorici = calcolaDiretto();
+                    break;
+                case "biga":
+                    datiTeorici = calcolaBiga();
+                    break;
+                case "poolish":
+                    datiTeorici = calcolaPoolish();
+                    break;
+                case "lievito_madre":
+                    datiTeorici = calcolaLievitoMadre();
+                    break;
+                case "biga_poolish":
+                    datiTeorici = calcolaBigaPoolish();
+                    break;
+                default:
+                    alert("Metodo di impasto non riconosciuto.");
+                    return;
+            }
+
+            const idratazioneReale = parseFloat(document.getElementById("idratazione-reale").value) || 0;
+            const tempoReale = parseFloat(document.getElementById("tempo-reale").value) || 0;
+            const note = document.getElementById("note").value || "";
+
+            try {
+                const docRef = doc(collection(db, "fermentazioni", userId, "entries"));
+                await setDoc(docRef, {
+                    tipoPizza,
+                    metodoImpasto,
+                    datiTeorici,
+                    idratazioneReale,
+                    tempoReale,
+                    note,
+                });
+                alert("Fermentazione aggiunta o aggiornata con successo!");
+                fermentazioneForm.reset();
+                caricaFermentazioni(userId);
+            } catch (error) {
+                console.error("Errore durante l'aggiunta della fermentazione:", error);
+            }
+        });
+    } else {
+        console.warn('Modulo con id "fermentazione-form" non trovato nel DOM.');
+    }
 
     onAuthStateChanged(auth, (user) => {
         if (user) {
@@ -89,6 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
+
 
 // Carica le fermentazioni salvate
 async function caricaFermentazioni(userId) {
