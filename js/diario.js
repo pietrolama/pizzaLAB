@@ -77,6 +77,7 @@ async function caricaFermentazioni(userId) {
 }
 
 
+
 // Elimina una fermentazione salvata
 window.eliminaFermentazione = async function (docId) {
     const user = auth.currentUser;
