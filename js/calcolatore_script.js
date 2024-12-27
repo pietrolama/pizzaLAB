@@ -934,7 +934,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             // Importa dinamicamente il modulo js/diario.js
-            const module = await import('./diario.js');
+            const module = await import('/js/diario.js');
             if (module.salvaRicettaNelDiario) {
                 // Chiama la funzione per salvare nel diario
                 module.salvaRicettaNelDiario(tipoPizza, metodoImpasto, datiTeorici);
