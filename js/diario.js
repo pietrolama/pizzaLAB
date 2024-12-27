@@ -11,93 +11,98 @@ import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/fir
 
 const db = getFirestore(app);
 
-// Salva il risultato della ricetta nel diario
-export async function salvaRicettaNelDiario(tipoPizza, metodoImpasto, risultatoRicetta) {
-    const user = auth.currentUser;
-    if (!user) {
-        alert("Devi essere autenticato per salvare una ricetta!");
-        return;
-    }
+document.addEventListener("DOMContentLoaded", () => {
+    const fermentazioniList = document.getElementById("fermentazioni-list");
 
-    try {
-        const docRef = doc(collection(db, "fermentazioni", user.uid, "entries"));
-        await setDoc(docRef, {
-            tipoPizza,
-            metodoImpasto,
-            risultatoRicetta: JSON.stringify(risultatoRicetta, null, 2), // Converte in JSON formattato
-            dataSalvataggio: new Date().toISOString(),
+    // Funzione per creare una card
+    function creaCardFermentazione(fermentazione, docId = null) {
+        const card = document.createElement("div");
+        card.className = "fermentazione-card"; // Stile personalizzato per le card del diario
+
+        // Genera il contenuto della card
+        card.innerHTML = `
+            <h3>${fermentazione.tipoPizza || fermentazione.nome}</h3>
+            <p>Metodo: ${fermentazione.metodoImpasto || fermentazione.metodo}</p>
+            <button class="btn">Mostra Dettagli</button>
+            <div class="details" style="display: none;">
+                <h4>Ingredienti:</h4>
+                <ul>
+                    ${Object.entries(fermentazione.risultatoRicetta || fermentazione.ingredienti)
+                        .map(([key, value]) => `<li>${key}: ${value}</li>`)
+                        .join("")}
+                </ul>
+                <h4>Procedura:</h4>
+                <p>${fermentazione.procedura || "N/A"}</p>
+            </div>
+            ${
+                docId
+                    ? `<button class="btn delete-btn" data-id="${docId}">Elimina</button>`
+                    : ""
+            }
+        `;
+
+        // Mostra/Nasconde i dettagli al clic
+        card.querySelector(".btn").addEventListener("click", () => {
+            const details = card.querySelector(".details");
+            const isVisible = details.style.display === "block";
+            details.style.display = isVisible ? "none" : "block";
+            card.classList.toggle("expanded", !isVisible);
         });
-        alert("Ricetta salvata nel diario!");
-    } catch (error) {
-        console.error("Errore durante il salvataggio della ricetta:", error);
-        alert("Errore durante il salvataggio. Riprova.");
+
+        // Gestione pulsante "Elimina"
+        if (docId) {
+            card.querySelector(".delete-btn").addEventListener("click", () => {
+                eliminaFermentazione(docId);
+            });
+        }
+
+        fermentazioniList.appendChild(card);
     }
-}
 
-// Carica tutte le fermentazioni salvate dall'utente
-async function caricaFermentazioni(userId) {
-    try {
-        const fermentazioniRef = collection(db, "fermentazioni", userId, "entries");
-        const fermentazioniSnapshot = await getDocs(fermentazioniRef);
+    // Funzione per caricare le fermentazioni da Firebase
+    async function caricaFermentazioni(userId) {
+        try {
+            const fermentazioniRef = collection(db, "fermentazioni", userId, "entries");
+            const fermentazioniSnapshot = await getDocs(fermentazioniRef);
 
-        const list = document.getElementById("fermentazioni-list");
+            fermentazioniList.innerHTML = ""; // Svuota la lista prima di ricaricarla
 
-        if (!list) {
-            console.error("Elemento 'fermentazioni-list' non trovato.");
+            fermentazioniSnapshot.forEach((doc) => {
+                const fermentazione = doc.data();
+                try {
+                    fermentazione.risultatoRicetta = JSON.parse(
+                        fermentazione.risultatoRicetta
+                    ); // Parsea il JSON
+                } catch (e) {
+                    console.error("Errore nel parsing dei risultati:", e);
+                }
+
+                creaCardFermentazione(fermentazione, doc.id);
+            });
+        } catch (error) {
+            console.error("Errore durante il caricamento delle fermentazioni:", error);
+        }
+    }
+
+    // Elimina una fermentazione
+    async function eliminaFermentazione(docId) {
+        const user = auth.currentUser;
+        if (!user) {
+            alert("Devi essere autenticato per eliminare una fermentazione!");
             return;
         }
 
-        list.innerHTML = ""; // Svuota la lista prima di ricaricarla
-
-        fermentazioniSnapshot.forEach((doc) => {
-            const fermentazione = doc.data();
-
-            // Parsea il risultatoRicetta da JSON
-            let risultatoHTML = fermentazione.risultatoRicetta;
-            try {
-                risultatoHTML = JSON.parse(risultatoHTML); // Converte da JSON a oggetto
-                risultatoHTML = Object.entries(risultatoHTML)
-                    .map(([key, value]) => `<strong>${key}</strong>: ${value}`)
-                    .join("<br>");
-            } catch (e) {
-                console.error("Errore durante il parsing di risultatoRicetta:", e);
-            }
-
-            const li = document.createElement("li");
-            li.innerHTML = `
-                <strong>${fermentazione.tipoPizza}</strong> - ${fermentazione.metodoImpasto}<br>
-                <div>${risultatoHTML}</div>
-                <button onclick="eliminaFermentazione('${doc.id}')">Elimina</button>
-            `;
-            list.appendChild(li);
-        });
-    } catch (error) {
-        console.error("Errore durante il caricamento delle fermentazioni:", error);
-    }
-}
-
-
-
-// Elimina una fermentazione salvata
-window.eliminaFermentazione = async function (docId) {
-    const user = auth.currentUser;
-    if (!user) {
-        alert("Devi essere autenticato per eliminare una fermentazione!");
-        return;
+        try {
+            const docRef = doc(db, "fermentazioni", user.uid, "entries", docId);
+            await deleteDoc(docRef);
+            alert("Fermentazione eliminata con successo!");
+            caricaFermentazioni(user.uid); // Ricarica la lista aggiornata
+        } catch (error) {
+            console.error("Errore durante l'eliminazione della fermentazione:", error);
+        }
     }
 
-    try {
-        const docRef = doc(db, "fermentazioni", user.uid, "entries", docId);
-        await deleteDoc(docRef);
-        alert("Fermentazione eliminata con successo!");
-        caricaFermentazioni(user.uid); // Ricarica la lista aggiornata
-    } catch (error) {
-        console.error("Errore durante l'eliminazione della fermentazione:", error);
-    }
-};
-
-// Avvio del caricamento fermentazioni all'accesso
-document.addEventListener("DOMContentLoaded", () => {
+    // Verifica l'utente autenticato e carica le fermentazioni
     onAuthStateChanged(auth, (user) => {
         if (user) {
             caricaFermentazioni(user.uid);
@@ -106,13 +111,9 @@ document.addEventListener("DOMContentLoaded", () => {
             window.location.href = "login.html";
         }
     });
-});
 
-document.addEventListener('DOMContentLoaded', () => {
-    const fermentazioniList = document.getElementById('fermentazioni-list');
-
-    // Esempio di dati ricetta
-    const fermentazioni = [
+    // Esempio di dati statici
+    const fermentazioniStatiche = [
         {
             nome: "Pizza Napoletana",
             metodo: "Diretto",
@@ -122,9 +123,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 Lievito: "0.49 g",
                 Sale: "6.22 g",
                 Zucchero: "4.04 g",
-                Olio: "9.96 g"
+                Olio: "9.96 g",
             },
-            procedura: `Sciogliere il sale nell'acqua e aggiungere metà della farina...`
+            procedura: `Sciogliere il sale nell'acqua e aggiungere metà della farina...`,
         },
         {
             nome: "Contemporanea Biga",
@@ -133,38 +134,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 Farina: "186.67 g",
                 Acqua: "194.13 g",
                 Sale: "6.22 g",
-                Olio: "9.33 g"
+                Olio: "9.33 g",
             },
-            procedura: `Preparare la biga con il 50% della farina e il 50% dell'acqua...`
-        }
+            procedura: `Preparare la biga con il 50% della farina e il 50% dell'acqua...`,
+        },
     ];
 
-    // Genera le card dinamicamente
-    fermentazioni.forEach(fermentazione => {
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.innerHTML = `
-            <h3>${fermentazione.nome}</h3>
-            <p>Metodo: ${fermentazione.metodo}</p>
-            <button class="btn">Mostra Dettagli</button>
-            <div class="details" style="display: none;">
-                <h4>Ingredienti:</h4>
-                <ul>
-                    ${Object.entries(fermentazione.ingredienti)
-                        .map(([key, value]) => `<li>${key}: ${value}</li>`)
-                        .join('')}
-                </ul>
-                <h4>Procedura:</h4>
-                <p>${fermentazione.procedura}</p>
-            </div>
-        `;
-        card.querySelector('.btn').addEventListener('click', () => {
-            const details = card.querySelector('.details');
-            const isVisible = details.style.display === 'block';
-            details.style.display = isVisible ? 'none' : 'block';
-            card.classList.toggle('expanded', !isVisible);
-        });
-        fermentazioniList.appendChild(card);
-    });
+    // Genera le card per i dati statici
+    fermentazioniStatiche.forEach((fermentazione) => creaCardFermentazione(fermentazione));
 });
-
