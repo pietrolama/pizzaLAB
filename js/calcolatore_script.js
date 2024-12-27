@@ -891,3 +891,44 @@ export function calculatePlanBigaPoolish(infornataTime, percentualeBiga, percent
     ];
     return calculatePlanGeneric(infornataTime, durations, steps);
 }
+
+import { salvaRicettaNelDiario } from "./diario.js";
+
+// Associa l'evento al pulsante "Salva nel Diario"
+document.addEventListener("DOMContentLoaded", () => {
+    const salvaDiarioBtn = document.getElementById("salva-diario-btn");
+    if (salvaDiarioBtn) {
+        salvaDiarioBtn.addEventListener("click", () => {
+            const tipoPizza = document.getElementById("tipo_pizza").value;
+            const metodoImpasto = document.getElementById("tipo_impasto").value;
+
+            let datiTeorici;
+            switch (metodoImpasto) {
+                case "diretto":
+                    datiTeorici = calcolaDiretto();
+                    break;
+                case "biga":
+                    datiTeorici = calcolaBiga();
+                    break;
+                case "poolish":
+                    datiTeorici = calcolaPoolish();
+                    break;
+                case "lievito_madre":
+                    datiTeorici = calcolaLievitoMadre();
+                    break;
+                case "biga_poolish":
+                    datiTeorici = calcolaBigaPoolish();
+                    break;
+                default:
+                    alert("Metodo di impasto non riconosciuto.");
+                    return;
+            }
+
+            // Chiamata alla funzione per salvare nel diario
+            salvaRicettaNelDiario(tipoPizza, metodoImpasto, datiTeorici);
+        });
+    } else {
+        console.warn("Pulsante 'Salva nel Diario' non trovato nel DOM.");
+    }
+});
+
