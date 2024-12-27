@@ -8,7 +8,7 @@ const metodiPerPizza = {
 };
 
 // Funzione per caricare le ricette dal file JSON
-async function caricaRicette() {
+export async function caricaRicette() {
     try {
         const response = await fetch('data/ricette.json');
         if (!response.ok) {
