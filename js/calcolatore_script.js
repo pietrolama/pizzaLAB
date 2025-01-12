@@ -892,7 +892,7 @@ export function calculatePlanBigaPoolish(infornataTime, percentualeBiga, percent
     return calculatePlanGeneric(infornataTime, durations, steps);
 }
 
-import { salvaRicettaNelDiario } from "./diario.js";
+import { salvaRicettaNelDiario } from "/js/diario.js";
 
 // Associa l'evento al pulsante "Salva nel Diario"
 document.addEventListener("DOMContentLoaded", () => {
