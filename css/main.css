@@ -836,24 +836,54 @@ footer p:hover {
 
 /* Stile per il logo di login */
 /* Stile aggiornato per il logo di login */
-.login-logo {
-    width: 150px; /* Regola ulteriormente la dimensione */
-    height: auto;
-    cursor: pointer;
-    display: block;
-    margin: 20px auto; /* Centra l'immagine */
-    border-radius: 10px; /* Aggiunge un arrotondamento ai bordi */
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2); /* Ombra chiara per il blending */
-    background: var(--dark-background-color); /* Sfondo compatibile con il tema */
-    padding: 10px; /* Padding per separare l'immagine dal bordo */
-    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+.auth-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
 }
 
-.login-logo:hover {
-    transform: scale(1.1);
-    box-shadow: 0 0 20px var(--primary-color);
-    background: var(--primary-color); /* Cambia colore di sfondo al passaggio del mouse */
+.login-button, .logout-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
+
+/* Stile per il bottone di login */
+.login-button {
+    background-color: #4285F4;
+    color: white;
+    font-weight: bold;
+}
+
+.login-button:hover {
+    background-color: #357ae8;
+}
+
+/* Logo Google nel bottone */
+.google-logo {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+/* Stile per il bottone di logout */
+.logout-button {
+    background-color: #d9534f;
+    color: white;
+    font-weight: bold;
+}
+
+.logout-button:hover {
+    background-color: #c9302c;
+}
+
 /* ===== SEZIONE RESPONSIVE ===== */
 @media (max-width: 768px) {
 
