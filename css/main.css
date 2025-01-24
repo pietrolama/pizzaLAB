@@ -834,6 +834,21 @@ footer p:hover {
     background-color: var(--secondary-color);
 }
 
+/* Stile per il logo di login */
+.login-logo {
+    width: 200px; /* Regola la dimensione del logo */
+    height: auto;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: block;
+    margin: 20px auto; /* Centra l'immagine */
+}
+
+.login-logo:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px var(--primary-color);
+}
+
 /* ===== SEZIONE RESPONSIVE ===== */
 @media (max-width: 768px) {
 
