@@ -857,14 +857,13 @@ footer p:hover {
 
 /* Stile per il bottone di login */
 .login-button {
-.login-button {
-    background-color: #4285F4; /* Blu Google */
+    background-color: #4285F4;
     color: white;
     font-weight: bold;
 }
 
 .login-button:hover {
-    background-color: #357AE8; /* Colore più scuro al passaggio del mouse */
+    background-color: #357ae8;
 }
 
 /* Logo Google nel bottone */
