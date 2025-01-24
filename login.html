@@ -36,15 +36,18 @@
 
     <main>
         <section>
-            <div id="auth-section">
-                <img id="login-btn" src="img/google.png" alt="Accedi con Google" class="login-logo">
-                <button id="logout-btn" style="display:none;" class="btn">Esci</button>
-                <p id="user-info" style="display:none;">Bentornato, <span id="username"></span>!</p>
-            </div><div id="auth-section">
-                <img id="login-btn" src="img/google.png" alt="Accedi con Google" class="login-logo">
-                <button id="logout-btn" style="display:none;" class="btn">Esci</button>
-                <p id="user-info" style="display:none;">Bentornato, <span id="username"></span>!</p>
-            </div>
+            <div class="auth-buttons">
+    <!-- Bottone di accesso con logo Google -->
+    <button class="login-button">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" alt="Google Logo" class="google-logo">
+        Accedi con Google
+    </button>
+
+    <!-- Bottone di logout -->
+    <button class="logout-button">
+        Logout
+    </button>
+</div>
         </section>
     </main>
     <script type="module" src="js/login.js"></script>
