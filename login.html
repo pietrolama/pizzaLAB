@@ -37,19 +37,26 @@
     <main>
         <section>
             <div class="auth-buttons">
-    <!-- Bottone di accesso con logo Google -->
-    <button class="login-button">
-        <img src="img/logo.png" alt="Google Logo" class="google-logo">
-        Accedi con Google
-    </button>
+                <!-- Bottone di accesso con logo Google -->
+                <button id="login-btn" class="login-button">
+                    <img src="img/google.png" alt="Google Logo" class="google-logo">
+                    Accedi con Google
+                </button>
 
-    <!-- Bottone di logout -->
-    <button class="logout-button">
-        Logout
-    </button>
-</div>
+                <!-- Bottone di logout -->
+                <button id="logout-btn" class="logout-button" style="display: none;">
+                    Logout
+                </button>
+
+                <!-- Informazioni utente -->
+                <div id="user-info" style="display: none;">
+                    <p>Benvenuto, <span id="username"></span>!</p>
+                </div>
+            </div>
         </section>
     </main>
+
+    <!-- Script di gestione del login -->
     <script type="module" src="js/login.js"></script>
     <script src="js/cookies.js" defer></script>
     <script src="js/main.js" defer></script>
