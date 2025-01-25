@@ -1,64 +1,84 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - PizzaLab</title>
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="icon" href="logo.ico" type="image/x-icon">
-</head>
-<body>
-    <header>
-        <h1>Accedi al PizzaLab</h1>
-    </header>
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+import {
+    getAuth,
+    GoogleAuthProvider,
+    signInWithPopup,
+    signOut,
+    onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
-    <!-- Navigazione -->
-    <nav>
-        <div class="nav-container">
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="tipi-di-pizza.html">Tipi di Pizza</a></li>
-                <li><a href="prefermenti_e_farine.html">Prefermenti e Farine</a></li>
-                <li><a href="calcolatore.html">Calcolatore</a></li>
-                <li><a href="assistente.html">Assistente</a></li>
-                <li><a href="contatti.html">Contatti</a></li>
-                <li><a href="https://pizzalab.bettermode.io/" target="_blank" rel="noopener noreferrer">PizzaLab Community</a></li>
-                <li><a href="simulator.html">Nutrienti e calorie</a></li>
-                <li><a href="shop.html">Shop</a></li>
-            </ul>
-            <div class="hamburger">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
-            </div>
-        </div>
-    </nav>
+const firebaseConfig = {
+    apiKey: "AIzaSyDx2udaOvFXoQP-H2lldGXD268yrZHM0aI",
+    authDomain: "pizzalab-4b769.firebaseapp.com",
+    projectId: "pizzalab-4b769",
+    storageBucket: "pizzalab-4b769.firebasestorage.app",
+    messagingSenderId: "1051118488916",
+    appId: "1:1051118488916:web:b7aeb04695886b1b764cc1",
+    measurementId: "G-2VE5X45NER",
+};
 
-    <main>
-        <section>
-            <div class="auth-buttons">
-                <!-- Bottone di accesso con logo Google -->
-                <button id="login-btn" class="login-button">
-                    <img src="img/google.png" alt="Google Logo" class="google-logo">
-                    Accedi con Google
-                </button>
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
 
-                <!-- Bottone di logout -->
-                <button id="logout-btn" class="logout-button" style="display: none;">
-                    Logout
-                </button>
+// Esporta l'istanza di app, auth e provider
+export { app, auth, provider };
 
-                <!-- Informazioni utente -->
-                <div id="user-info" style="display: none;">
-                    <p>Benvenuto, <span id="username"></span>!</p>
-                </div>
-            </div>
-        </section>
-    </main>
+document.addEventListener("DOMContentLoaded", () => {
+    const loginBtn = document.getElementById("login-btn");
+    const logoutBtn = document.getElementById("logout-btn");
+    const userInfo = document.getElementById("user-info");
+    const username = document.getElementById("username");
 
-    <!-- Script di login -->
-    <script type="module" src="js/login.js"></script>
-    <script src="js/cookies.js" defer></script>
-    <script src="js/main.js" defer></script>
-</body>
-</html>
+    // Assicurati che gli elementi siano presenti nel DOM
+    if (!loginBtn || !logoutBtn || !userInfo || !username) {
+        console.error("Uno o più elementi mancanti nel DOM!");
+        return;
+    }
+
+    // Login
+    loginBtn.addEventListener("click", async () => {
+        try {
+            const result = await signInWithPopup(auth, provider);
+            const user = result.user;
+            alert(`Login effettuato con successo! Bentornato, ${user.displayName}`);
+            username.textContent = user.displayName;
+            userInfo.style.display = "block";
+            loginBtn.style.display = "none";
+            logoutBtn.style.display = "inline-block";
+        } catch (error) {
+            console.error("Errore durante il login:", error);
+            alert("Si è verificato un errore durante il login. Riprova.");
+        }
+    });
+
+    // Logout
+    logoutBtn.addEventListener("click", async () => {
+        try {
+            await signOut(auth);
+            alert("Logout effettuato con successo!");
+            userInfo.style.display = "none";
+            loginBtn.style.display = "inline-block";
+            logoutBtn.style.display = "none";
+        } catch (error) {
+            console.error("Errore durante il logout:", error);
+            alert("Si è verificato un errore durante il logout. Riprova.");
+        }
+    });
+
+    // Controllo dello stato di autenticazione
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            username.textContent = user.displayName;
+            userInfo.style.display = "block";
+            loginBtn.style.display = "none";
+            logoutBtn.style.display = "inline-block";
+            console.log("Utente autenticato:", user.displayName);
+        } else {
+            userInfo.style.display = "none";
+            loginBtn.style.display = "inline-block";
+            logoutBtn.style.display = "none";
+            console.log("Nessun utente autenticato.");
+        }
+    });
+});
