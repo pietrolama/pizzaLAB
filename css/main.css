@@ -834,8 +834,9 @@ footer p:hover {
     background-color: var(--secondary-color);
 }
 
-/* Stile per il logo di login */
-/* Stile aggiornato per il logo di login */
+/* ===== STILE DEI PULSANTI DI LOGIN E LOGOUT ===== */
+
+/* Contenitore dei pulsanti */
 .auth-buttons {
     display: flex;
     flex-direction: column;
@@ -843,45 +844,55 @@ footer p:hover {
     gap: 10px;
 }
 
-.login-button, .logout-button {
+/* Stile per il pulsante di login */
+.login-button {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 16px;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-/* Stile per il bottone di login */
-.login-button {
-    background-color: #4285F4;
-    color: white;
+    font-size: 1rem;
     font-weight: bold;
+    padding: 12px 20px;
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
 }
 
 .login-button:hover {
-    background-color: #357ae8;
+    background-color: var(--secondary-color);
+    color: #fff;
+    box-shadow: 0 0 15px var(--primary-color);
 }
 
-/* Logo Google nel bottone */
+/* Stile per il logo Google */
 .google-logo {
-    width: 40px;
+    width: 25px;
     height: auto;
     margin-right: 10px;
 }
 
-/* Stile per il bottone di logout */
+/* Stile per il pulsante di logout */
 .logout-button {
-    background-color: #d9534f;
-    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
     font-weight: bold;
+    padding: 12px 20px;
+    background-color: var(--dark-background-color);
+    color: var(--text-color);
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
 }
 
 .logout-button:hover {
-    background-color: #c9302c;
+    background-color: var(--primary-color);
+    color: #fff;
+    box-shadow: 0 0 15px var(--primary-color);
 }
 
 /* ===== SEZIONE RESPONSIVE ===== */
