@@ -138,19 +138,18 @@ export function calcola() {
 }
 
 // Resto delle funzioni rimangono inalterate...
-
-
-// Funzioni di calcolo per diversi metodi di impasto
-export function calcolaLievito(numPanetti, pesoPaniello, idratazione, sale, grassi, tempoLievitazione, oreFrigo, temperaturaAmbiente, usa_teglia) {
+// Funzione di calcolo del lievito con correzione del tempo di lievitazione già applicata
+export function calcolaLievito(numPanetti, pesoPaniello, idratazione, sale, grassi, tempoLievitazioneCorretto, temperaturaAmbiente, usa_teglia) {
     // Calcoli della funzione
     var tempCorretta = temperaturaAmbiente * (1 - 0.25 * usa_teglia);
     var fattoreCrescitaLievito = 0.005;
 
-    var tempoLievitazioneCorretto = tempoLievitazione - (9 * oreFrigo / 10),
-        forzaLievitoSpecifica = 2250 * (1 + sale / 200) * (1 + grassi / 300) / ((4.2 * idratazione - 80 - 0.0305 * idratazione * idratazione) * Math.pow(tempCorretta, 2.5) * Math.pow(tempoLievitazioneCorretto, 1.2)),
-        pesoImpasto = numPanetti * pesoPaniello,
-        quantitaFarinaImpasto = 100000 * (pesoImpasto) / (idratazione * (sale + grassi) + 1000 * (idratazione + 100)),
-        lievitoNecessarioImpasto = (quantitaFarinaImpasto * forzaLievitoSpecifica - fattoreCrescitaLievito);
+    var forzaLievitoSpecifica = 2250 * (1 + sale / 200) * (1 + grassi / 300) / 
+        ((4.2 * idratazione - 80 - 0.0305 * idratazione * idratazione) * Math.pow(tempCorretta, 2.5) * Math.pow(tempoLievitazioneCorretto, 1.2));
+    
+    var pesoImpasto = numPanetti * pesoPaniello;
+    var quantitaFarinaImpasto = 100000 * (pesoImpasto) / (idratazione * (sale + grassi) + 1000 * (idratazione + 100));
+    var lievitoNecessarioImpasto = (quantitaFarinaImpasto * forzaLievitoSpecifica - fattoreCrescitaLievito);
 
     // Controlla se il risultato è un numero
     if (isNaN(lievitoNecessarioImpasto) || lievitoNecessarioImpasto < 0) {
@@ -175,13 +174,11 @@ export function calcolaDiretto() {
         return;
     }
 
-    // Calcolo del tempo di lievitazione effettivo
-    var tempoLievitazioneEffettivo = tempoLievitazioneTotale;
-    if (oreFrigo > 0) {
-        tempoLievitazioneEffettivo = tempoLievitazioneTotale - (9 * oreFrigo / 10);
-    }
-    var massa = tempoLievitazioneEffettivo*10/100;
-    var apretto = tempoLievitazioneEffettivo-massa;
+    // **Correzione del tempo di lievitazione**
+    var tempoLievitazioneCorretto = tempoLievitazioneTotale - (9 * oreFrigo / 10);
+    var massa = tempoLievitazioneCorretto * 10 / 100;
+    var apretto = tempoLievitazioneCorretto - massa;
+
     // Calcolo delle quantità di impasto
     var pesoFarina = (100 * pesoPanetto) / (100 + idratazioneTotale) * numPanetti;
     var pesoAcqua = idratazioneTotale * pesoFarina / 100;
@@ -189,15 +186,14 @@ export function calcolaDiretto() {
     var pesoZucchero = 0.013 * pesoFarina;
     var pesoOlio = 0.032 * pesoFarina;
 
-    // Calcolo del lievito
+    // Chiamata alla funzione di calcolo del lievito con tempo già corretto
     var lievito = calcolaLievito(
         numPanetti,
         pesoPanetto,
         idratazioneTotale,
         pesoSale,
         pesoOlio,
-        tempoLievitazioneEffettivo,
-        oreFrigo,
+        tempoLievitazioneCorretto, // Passiamo già il valore corretto
         temperaturaAmbiente,
         inTeglia
     );
@@ -214,7 +210,7 @@ export function calcolaDiretto() {
         pesoPanetto: pesoPanetto.toFixed(0),
         massa: massa.toFixed(0),
         apretto: apretto.toFixed(0),
-        tempoLievitazioneEffettivo: tempoLievitazioneEffettivo.toFixed(0),
+        tempoLievitazioneEffettivo: tempoLievitazioneCorretto.toFixed(0),
         pesoFarina: pesoFarina.toFixed(2),
         pesoAcqua: pesoAcqua.toFixed(2),
         pesoSale: pesoSale.toFixed(2),
