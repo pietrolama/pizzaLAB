@@ -1,1 +1,15 @@
-[]
+[
+    {
+        "id": "studio-sourdough-digeribilita-2024",
+        "titolo": "Studio CREA sulle proprietà nutrizionali e digestive del pane a lievitazione naturale",
+        "sintesi": "Ricerca del CREA su come la fermentazione con lievito naturale modifichi il profilo nutrizionale e la digeribilità del pane rispetto al lievito di birra.",
+        "corpo": "Il Consiglio per la Ricerca in Agricoltura e l’Analisi dell’Economia Agraria (CREA) ha recentemente approfondito gli effetti della fermentazione spontanea sulle caratteristiche nutrizionali del pane. Lo studio evidenzia che l’uso di pasta madre favorisce la degradazione degli acidi fitici presenti nelle farine, migliorando la biodisponibilità di minerali come ferro, zinco e magnesio. Inoltre, la presenza di batteri lattici contribuisce a ridurre il carico glicemico del prodotto finale e a generare peptidi bioattivi con potenziali effetti benefici sulla salute intestinale. La ricerca conferma che tempi di fermentazione prolungati, tipici della panificazione tradizionale a lievito naturale, aumentano il contenuto di fibra solubile e di composti aromatici derivati dal metabolismo microbico.",
+        "data_pubblicazione": "2024-11-15",
+        "fonti": [
+            {
+                "titolo": "CREA - Alimenti e Nutrizione",
+                "url": "https://www.crea.gov.it/alimenti-e-nutrizione"
+            }
+        ]
+    }
+]
