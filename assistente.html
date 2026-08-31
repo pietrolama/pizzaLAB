@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assistente Virtuale | PizzaLab</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="icon" href="logo.ico" type="image/x-icon">
+</head>
+<body>
+    <nav class="site-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <img src="img/logo.png" alt="PizzaLab">
+                PizzaLab
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="tipi-di-pizza.html">Tipi di Pizza</a></li>
+                <li><a href="prefermenti_e_farine.html">Prefermenti e Farine</a></li>
+                <li><a href="calcolatore.html">Calcolatore</a></li>
+                <li><a href="assistente.html" class="active">Assistente</a></li>
+                <li><a href="diario.html">Diario</a></li>
+                <li><a href="simulator.html">Nutrienti</a></li>
+                <li><a href="scienza.html">Scienza</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="contatti.html">Contatti</a></li>
+            </ul>
+            <div class="hamburger" aria-label="Toggle navigation" role="button" tabindex="0">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <h1>Assistente Interattivo</h1>
+        <p>Rispondi a poche domande: configuriamo noi il calcolatore con i parametri ideali per te.</p>
+    </header>
+
+    <main class="page-container">
+        <section class="calculator-card">
+            <h2 id="question" style="text-align: center; color: var(--primary-color); font-size: 1.3rem; margin-bottom: 24px;"></h2>
+            <div id="options-container" style="display: grid; gap: 12px; max-width: 420px; margin: 0 auto;"></div>
+            <div style="text-align: center; margin-top: 24px;">
+                <button id="back-button" class="btn-secondary">Indietro</button>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 PizzaLab — La tua guida alla pizza perfetta</p>
+    </footer>
+
+    <script src="js/nav.js" defer></script>
+    <script src="js/assistente-page.js"></script>
+</body>
+</html>

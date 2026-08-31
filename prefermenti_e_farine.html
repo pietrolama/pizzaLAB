@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prefermenti e Farine | PizzaLab</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="icon" href="logo.ico" type="image/x-icon">
+</head>
+<body>
+    <nav class="site-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <img src="img/logo.png" alt="PizzaLab">
+                PizzaLab
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="tipi-di-pizza.html">Tipi di Pizza</a></li>
+                <li><a href="prefermenti_e_farine.html" class="active">Prefermenti e Farine</a></li>
+                <li><a href="calcolatore.html">Calcolatore</a></li>
+                <li><a href="assistente.html">Assistente</a></li>
+                <li><a href="diario.html">Diario</a></li>
+                <li><a href="simulator.html">Nutrienti</a></li>
+                <li><a href="scienza.html">Scienza</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="contatti.html">Contatti</a></li>
+            </ul>
+            <div class="hamburger" aria-label="Toggle navigation" role="button" tabindex="0">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <h1>Prefermenti e Farine</h1>
+        <p>Biga, Poolish e Lievito Madre spiegati: idratazione e tempi di fermentazione. Più la forza (W) delle farine, per capire quale usare a ogni idratazione.</p>
+    </header>
+
+    <main class="page-container" style="max-width: 1200px;">
+        <section class="listing-section">
+            <h2>Prefermenti</h2>
+            <div class="listing-grid" id="prefermenti-container"></div>
+        </section>
+
+        <section class="listing-section">
+            <h2>Farine e Forza (W)</h2>
+            <div class="listing-grid" id="farine-container"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 PizzaLab — La tua guida alla pizza perfetta</p>
+    </footer>
+
+    <script src="js/nav.js" defer></script>
+    <script type="module">
+        import { renderListing } from './js/listing.js';
+
+        renderListing({
+            containerSelector: '#prefermenti-container',
+            jsonPath: 'data/prefermenti.json',
+            renderItem: (p) => `
+                <article class="listing-card">
+                    <img src="${p.immagine}" alt="${p.titolo}" loading="lazy">
+                    <div class="listing-card__body">
+                        <h3>${p.titolo}</h3>
+                        <p class="listing-card__meta">Origine: ${p.inventore} · Idratazione ${p.idratazione} · Fermentazione ${p.temperatura_fermentazione}</p>
+                        <p>${p.descrizione}</p>
+                        <ul class="listing-card__tags">
+                            ${p.caratteristiche.map((c) => `<li>${c}</li>`).join('')}
+                        </ul>
+                    </div>
+                </article>
+            `,
+        });
+
+        renderListing({
+            containerSelector: '#farine-container',
+            jsonPath: 'data/farine.json',
+            renderItem: (f) => `
+                <article class="listing-card">
+                    <img src="${f.immagine}" alt="${f.titolo}" loading="lazy">
+                    <div class="listing-card__body">
+                        <h3>${f.titolo}</h3>
+                        <p class="listing-card__meta">Contenuto glutine: ${f.contenuto_glutine}</p>
+                        <p>${f.descrizione}</p>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;"><strong>Uso:</strong> ${f.uso}</p>
+                    </div>
+                </article>
+            `,
+        });
+    </script>
+</body>
+</html>

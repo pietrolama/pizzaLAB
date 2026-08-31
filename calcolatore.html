@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcolatore Impasto | PizzaLab</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="icon" href="logo.ico" type="image/x-icon">
+</head>
+<body>
+    <nav class="site-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <img src="img/logo.png" alt="PizzaLab">
+                PizzaLab
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="tipi-di-pizza.html">Tipi di Pizza</a></li>
+                <li><a href="prefermenti_e_farine.html">Prefermenti e Farine</a></li>
+                <li><a href="calcolatore.html" class="active">Calcolatore</a></li>
+                <li><a href="assistente.html">Assistente</a></li>
+                <li><a href="diario.html">Diario</a></li>
+                <li><a href="simulator.html">Nutrienti</a></li>
+                <li><a href="scienza.html">Scienza</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="contatti.html">Contatti</a></li>
+            </ul>
+            <div class="hamburger" aria-label="Toggle navigation" role="button" tabindex="0">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <h1>Calcolatore Impasto</h1>
+        <p>Dosi al grammo e procedimento generato in base ai tuoi parametri reali — non un testo fisso per pizza.</p>
+    </header>
+
+    <main class="page-container">
+        <section class="calculator-card">
+            <div class="form-row" id="selezione_base">
+                <div class="form-group">
+                    <label for="tipo_pizza">Tipo di pizza</label>
+                    <select id="tipo_pizza" class="form-control">
+                        <option value="napoletana" selected>Napoletana STG</option>
+                        <option value="romana">Romana (Tonda Scrocchiarella)</option>
+                        <option value="contemporanea">Contemporanea (Cornicione Alto)</option>
+                        <option value="pala">Pizza in Pala</option>
+                        <option value="padellino">Pizza al Padellino</option>
+                        <option value="teglia">Pizza in Teglia</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="tipo_impasto">Metodo di impasto</label>
+                    <select id="tipo_impasto" class="form-control">
+                        <option value="diretto">Impasto Diretto</option>
+                        <option value="biga">Prefermento Biga</option>
+                        <option value="poolish">Prefermento Poolish</option>
+                        <option value="lievito_madre">Lievito Madre</option>
+                        <option value="biga_poolish">Biga + Poolish</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="forza_farina">Forza farina (W)</label>
+                    <input type="number" id="forza_farina" class="form-control" value="260" min="90" placeholder="es. 260">
+                </div>
+            </div>
+
+            <div id="sezione_teglia" class="form-row hidden">
+                <div class="form-group">
+                    <label for="teglia_base">Base teglia (cm)</label>
+                    <input type="number" id="teglia_base" class="form-control" value="40">
+                </div>
+                <div class="form-group">
+                    <label for="teglia_altezza">Altezza teglia (cm)</label>
+                    <input type="number" id="teglia_altezza" class="form-control" value="60">
+                </div>
+                <div class="form-group">
+                    <label for="teglia_spessore">Spessore</label>
+                    <select id="teglia_spessore" class="form-control">
+                        <option value="sottile">Sottile</option>
+                        <option value="media" selected>Media</option>
+                        <option value="alta">Alta</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="teglia_numero">Numero teglie</label>
+                    <input type="number" id="teglia_numero" class="form-control" value="1" min="1">
+                </div>
+            </div>
+            <p class="form-hint hidden" id="teglia_hint">Il peso dell'impasto viene calcolato dalle dimensioni della teglia e sostituisce Peso Panetto / Numero Panetti qui sotto.</p>
+
+            <div id="sezione_diretto" class="form-row">
+                <div class="form-group">
+                    <label for="peso_panetto_diretto">Peso panetto (g)</label>
+                    <input type="number" id="peso_panetto_diretto" class="form-control" value="250">
+                </div>
+                <div class="form-group">
+                    <label for="num_panetti_diretto">Numero panetti</label>
+                    <input type="number" id="num_panetti_diretto" class="form-control" value="4">
+                </div>
+                <div class="form-group">
+                    <label for="idratazione_totale_diretto">Idratazione totale (%)</label>
+                    <input type="number" id="idratazione_totale_diretto" class="form-control" value="65">
+                </div>
+                <div class="form-group">
+                    <label for="temperatura_ambiente_diretto">T° ambiente (°C)</label>
+                    <input type="number" id="temperatura_ambiente_diretto" class="form-control" value="22">
+                </div>
+                <div class="form-group">
+                    <label for="tempoLievTotale_diretto">Tempo totale (ore)</label>
+                    <input type="number" id="tempoLievTotale_diretto" class="form-control" value="24">
+                </div>
+                <div class="form-group">
+                    <label for="tempoFrigo_diretto">Tempo in frigo (ore)</label>
+                    <input type="number" id="tempoFrigo_diretto" class="form-control" value="18">
+                </div>
+            </div>
+
+            <div id="sezione_biga" class="form-row hidden">
+                <div class="form-group">
+                    <label for="peso_panetto_biga">Peso panetto (g)</label>
+                    <input type="number" id="peso_panetto_biga" class="form-control" value="250">
+                </div>
+                <div class="form-group">
+                    <label for="num_panetti_biga">Numero panetti</label>
+                    <input type="number" id="num_panetti_biga" class="form-control" value="4">
+                </div>
+                <div class="form-group">
+                    <label for="idratazione_totale_biga">Idratazione totale (%)</label>
+                    <input type="number" id="idratazione_totale_biga" class="form-control" value="70">
+                </div>
+                <div class="form-group">
+                    <label for="percentuale_biga">Percentuale biga (%)</label>
+                    <input type="number" id="percentuale_biga" class="form-control" value="100">
+                </div>
+            </div>
+
+            <div id="sezione_poolish" class="form-row hidden">
+                <div class="form-group">
+                    <label for="peso_panetto_poolish">Peso panetto (g)</label>
+                    <input type="number" id="peso_panetto_poolish" class="form-control" value="250">
+                </div>
+                <div class="form-group">
+                    <label for="num_panetti_poolish">Numero panetti</label>
+                    <input type="number" id="num_panetti_poolish" class="form-control" value="4">
+                </div>
+                <div class="form-group">
+                    <label for="idratazione_totale_poolish">Idratazione totale (%)</label>
+                    <input type="number" id="idratazione_totale_poolish" class="form-control" value="70">
+                </div>
+                <div class="form-group">
+                    <label for="percentuale_poolish">Percentuale poolish (%)</label>
+                    <input type="number" id="percentuale_poolish" class="form-control" value="50">
+                </div>
+            </div>
+
+            <div id="sezione_lievito_madre" class="form-row hidden">
+                <div class="form-group">
+                    <label for="peso_panetto_lievito">Peso panetto (g)</label>
+                    <input type="number" id="peso_panetto_lievito" class="form-control" value="250">
+                </div>
+                <div class="form-group">
+                    <label for="num_panetti_lievito">Numero panetti</label>
+                    <input type="number" id="num_panetti_lievito" class="form-control" value="4">
+                </div>
+                <div class="form-group">
+                    <label for="idratazione_totale_lievito">Idratazione totale (%)</label>
+                    <input type="number" id="idratazione_totale_lievito" class="form-control" value="68">
+                </div>
+                <div class="form-group">
+                    <label for="percentuale_lievito">Percentuale lievito madre (%)</label>
+                    <input type="number" id="percentuale_lievito" class="form-control" value="20">
+                </div>
+            </div>
+
+            <div id="sezione_biga_poolish" class="form-row hidden">
+                <div class="form-group">
+                    <label for="peso_panetto_biga_poolish">Peso panetto (g)</label>
+                    <input type="number" id="peso_panetto_biga_poolish" class="form-control" value="250">
+                </div>
+                <div class="form-group">
+                    <label for="num_panetti_biga_poolish">Numero panetti</label>
+                    <input type="number" id="num_panetti_biga_poolish" class="form-control" value="4">
+                </div>
+                <div class="form-group">
+                    <label for="idratazione_totale_biga_poolish">Idratazione totale (%)</label>
+                    <input type="number" id="idratazione_totale_biga_poolish" class="form-control" value="75">
+                </div>
+                <div class="form-group">
+                    <label for="percentuale_biga_bp">Percentuale biga (%)</label>
+                    <input type="number" id="percentuale_biga_bp" class="form-control" value="30">
+                </div>
+                <div class="form-group">
+                    <label for="percentuale_poolish_bp">Percentuale poolish (%)</label>
+                    <input type="number" id="percentuale_poolish_bp" class="form-control" value="20">
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 8px; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+                <button id="calcola-button" class="btn">Calcola e genera ricetta</button>
+                <button id="nutrienti-button" class="btn-secondary">Valori Nutrizionali</button>
+            </div>
+
+            <div id="risultato" class="recipe-box hidden">
+                <h2 id="risultato-titolo">La tua scheda impasto</h2>
+                <div class="recipe-grid" id="risultato-grid"></div>
+                <h3>Procedimento</h3>
+                <ol class="recipe-steps" id="risultato-steps"></ol>
+                <div class="recipe-warnings" id="risultato-avvisi"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 PizzaLab — La tua guida alla pizza perfetta</p>
+    </footer>
+
+    <script src="js/nav.js" defer></script>
+    <script type="module" src="js/calcolatore-page.js"></script>
+</body>
+</html>

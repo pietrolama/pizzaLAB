@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop & Strumenti | PizzaLab</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="icon" href="logo.ico" type="image/x-icon">
+</head>
+<body>
+    <nav class="site-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <img src="img/logo.png" alt="PizzaLab">
+                PizzaLab
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="tipi-di-pizza.html">Tipi di Pizza</a></li>
+                <li><a href="prefermenti_e_farine.html">Prefermenti e Farine</a></li>
+                <li><a href="calcolatore.html">Calcolatore</a></li>
+                <li><a href="assistente.html">Assistente</a></li>
+                <li><a href="diario.html">Diario</a></li>
+                <li><a href="simulator.html">Nutrienti</a></li>
+                <li><a href="scienza.html">Scienza</a></li>
+                <li><a href="shop.html" class="active">Shop</a></li>
+                <li><a href="contatti.html">Contatti</a></li>
+            </ul>
+            <div class="hamburger" aria-label="Toggle navigation" role="button" tabindex="0">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <h1>Shop & Strumenti</h1>
+        <p>Gli strumenti che fanno davvero la differenza: pale, pietre refrattarie, contenitori per lievitazione e termometri.</p>
+    </header>
+
+    <main class="page-container" style="max-width: 1200px;">
+        <div class="listing-grid" id="shop-container"></div>
+        <p style="color: var(--text-dim); font-size: 0.8rem; text-align: center; margin-top: 32px;">Link di affiliazione: acquistando tramite questi link potresti contribuire a sostenere PizzaLab, senza costi aggiuntivi per te.</p>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 PizzaLab — La tua guida alla pizza perfetta</p>
+    </footer>
+
+    <script src="js/nav.js" defer></script>
+    <script type="module">
+        import { renderListing } from './js/listing.js';
+
+        renderListing({
+            containerSelector: '#shop-container',
+            jsonPath: 'data/products.json',
+            renderItem: (p) => `
+                <a class="listing-card" href="${p.link}" target="_blank" rel="noopener noreferrer sponsored" style="text-decoration:none; color:inherit;">
+                    <img src="${p.image}" alt="${p.title}" loading="lazy">
+                    <div class="listing-card__body">
+                        <h3>${p.title}</h3>
+                        <span class="listing-card__price">${p.price}</span>
+                    </div>
+                </a>
+            `,
+        });
+    </script>
+</body>
+</html>

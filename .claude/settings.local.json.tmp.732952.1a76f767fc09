@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(perl -pi -e 's/shop\\\\.html\"\\\\\\)>/shop.html\">/' *.html)",
+      "Bash(pkill -f \"http.server 8935\")",
+      "Skill(schedule)",
+      "Bash(git ls-remote *)",
+      "Bash(git init *)",
+      "Bash(git remote *)",
+      "Bash(git fetch *)",
+      "Bash(git ls-tree *)",
+      "Bash(echo \"exit:$?\")",
+      "Bash(git config *)",
+      "Read(//home/neuron/.ssh/**)",
+      "Bash(gh auth *)",
+      "Bash(git add *)",
+      "Bash(git commit *)"
+    ]
+  }
+}

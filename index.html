@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PizzaLab — Il Laboratorio della Pizza Perfetta</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="icon" href="logo.ico" type="image/x-icon">
+</head>
+<body>
+    <nav class="site-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <img src="img/logo.png" alt="PizzaLab">
+                PizzaLab
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="tipi-di-pizza.html">Tipi di Pizza</a></li>
+                <li><a href="prefermenti_e_farine.html">Prefermenti e Farine</a></li>
+                <li><a href="calcolatore.html">Calcolatore</a></li>
+                <li><a href="assistente.html">Assistente</a></li>
+                <li><a href="diario.html">Diario</a></li>
+                <li><a href="simulator.html">Nutrienti</a></li>
+                <li><a href="scienza.html">Scienza</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="contatti.html">Contatti</a></li>
+            </ul>
+            <div class="hamburger" aria-label="Toggle navigation" role="button" tabindex="0">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <nav class="progress-rail" aria-hidden="true">
+        <button data-target="hero" aria-label="Home"></button>
+        <button data-target="mini-calcolatore" aria-label="Mini calcolatore"></button>
+        <button data-target="sec-calcolatore" aria-label="Calcolatore"></button>
+        <button data-target="sec-tipi" aria-label="Tipi di Pizza"></button>
+        <button data-target="sec-prefermenti" aria-label="Prefermenti"></button>
+        <button data-target="sec-assistente" aria-label="Assistente"></button>
+        <button data-target="sec-nutrienti" aria-label="Nutrienti"></button>
+        <button data-target="sec-community" aria-label="Community"></button>
+        <button data-target="sec-shop" aria-label="Shop"></button>
+    </nav>
+
+    <main>
+        <header class="hero" id="hero">
+            <p class="hero-eyebrow">Il laboratorio digitale della pizza</p>
+            <h1>La scienza <em>esatta</em><br>di un impasto perfetto.</h1>
+            <p>Farina, idratazione, lievito, temperatura: ogni numero calcolato, ogni fase spiegata. Non ricette a caso — un metodo.</p>
+            <div class="hero-actions">
+                <a href="#sec-calcolatore" class="btn">Apri il Calcolatore</a>
+                <a href="#sec-tipi" class="btn-ghost">Esplora le Pizze</a>
+            </div>
+        </header>
+
+        <section class="stagionale-banner reveal" id="stagionale-banner" hidden></section>
+
+        <section class="mini-calc reveal" id="mini-calcolatore">
+            <div class="mini-calc__intro">
+                <p class="lab-section__eyebrow">Prova subito</p>
+                <h2>Quanto impasto ti serve?</h2>
+                <p>Un assaggio del calcolatore vero: cambia i numeri e guarda la ricetta aggiornarsi all'istante (metodo diretto, 24h a temperatura ambiente).</p>
+            </div>
+            <div class="mini-calc__panel">
+                <div class="mini-calc__fields">
+                    <div class="mini-calc__field">
+                        <label for="mc-tipo">Tipo di pizza</label>
+                        <select id="mc-tipo" class="mini-calc__input">
+                            <option value="napoletana">Napoletana</option>
+                            <option value="romana">Romana</option>
+                            <option value="contemporanea">Contemporanea</option>
+                            <option value="pala">Pala</option>
+                            <option value="padellino">Padellino</option>
+                        </select>
+                    </div>
+                    <div class="mini-calc__field">
+                        <label for="mc-numero">Numero panetti</label>
+                        <input type="number" id="mc-numero" class="mini-calc__input" value="4" min="1">
+                    </div>
+                    <div class="mini-calc__field">
+                        <label for="mc-peso">Peso panetto (g)</label>
+                        <input type="number" id="mc-peso" class="mini-calc__input" value="250" min="50">
+                    </div>
+                    <div class="mini-calc__field">
+                        <label for="mc-idro">Idratazione (%)</label>
+                        <input type="number" id="mc-idro" class="mini-calc__input" value="62" min="40" max="100">
+                    </div>
+                </div>
+
+                <div class="mini-calc__result" id="mc-result">
+                    <div><strong id="mc-farina">0</strong><span>g farina</span></div>
+                    <div><strong id="mc-acqua">0</strong><span>g acqua</span></div>
+                    <div><strong id="mc-sale">0</strong><span>g sale</span></div>
+                    <div><strong id="mc-lievito">0.00</strong><span>g lievito</span></div>
+                </div>
+                <a href="calcolatore.html" class="btn">Calcolo completo, tutti i metodi →</a>
+            </div>
+        </section>
+
+        <section class="lab-section reveal" id="sec-calcolatore">
+            <div class="lab-section__media">
+                <img src="img/calcolatore.jpg" alt="Calcolatore Impasto" data-parallax>
+            </div>
+            <div>
+                <p class="lab-section__eyebrow">01 — Il motore</p>
+                <h2>Calcolatore Impasto</h2>
+                <p>Dosi di farina, idratazione, lievito e temperatura calcolate scientificamente per ogni stile di pizza, teglia compresa.</p>
+                <a href="calcolatore.html" class="btn">Apri Calcolatore</a>
+            </div>
+        </section>
+
+        <section class="lab-section reveal" id="sec-tipi">
+            <div class="lab-section__media">
+                <img src="img/napoletana.jpg" alt="Tipi di Pizza" data-parallax>
+            </div>
+            <div>
+                <p class="lab-section__eyebrow">02 — Gli stili</p>
+                <h2>Tipi di Pizza</h2>
+                <p>Napoletana, Romana, Contemporanea, Pala, Padellino: caratteristiche, idratazioni e metodi di ciascuna.</p>
+                <a href="tipi-di-pizza.html" class="btn-ghost">Scopri di più</a>
+            </div>
+        </section>
+
+        <section class="lab-section reveal" id="sec-prefermenti">
+            <div class="lab-section__media">
+                <img src="img/biga.jpg" alt="Prefermenti e Farine" data-parallax>
+            </div>
+            <div>
+                <p class="lab-section__eyebrow">03 — Le basi</p>
+                <h2>Prefermenti e Farine</h2>
+                <p>Biga, Poolish, Lievito Madre e la forza delle farine (W): la teoria dietro ogni impasto ad alta idratazione.</p>
+                <a href="prefermenti_e_farine.html" class="btn-ghost">Approfondisci</a>
+            </div>
+        </section>
+
+        <section class="lab-section reveal" id="sec-assistente">
+            <div class="lab-section__media">
+                <img src="img/assistente.jpg" alt="Assistente Virtuale" data-parallax>
+            </div>
+            <div>
+                <p class="lab-section__eyebrow">04 — La guida</p>
+                <h2>Assistente Virtuale</h2>
+                <p>Fatti guidare passo-passo durante staglio, appretto, stesura e cottura, con i tempi calcolati per te.</p>
+                <a href="assistente.html" class="btn-ghost">Avvia Guida</a>
+            </div>
+        </section>
+
+        <section class="lab-section reveal" id="sec-nutrienti">
+            <div class="lab-section__media">
+                <img src="img/nutrienti.jpg" alt="Nutrienti e Calorie" data-parallax>
+            </div>
+            <div>
+                <p class="lab-section__eyebrow">05 — I numeri</p>
+                <h2>Nutrienti e Calorie</h2>
+                <p>Apporto calorico e macronutrienti per panetto e per singola porzione, calcolati sulla tua ricetta.</p>
+                <a href="simulator.html" class="btn-ghost">Calcola Nutrienti</a>
+            </div>
+        </section>
+
+        <section class="lab-section reveal" id="sec-community">
+            <div class="lab-section__media">
+                <img src="img/pizzalab_community.jpg" alt="Community PizzaLab" data-parallax>
+            </div>
+            <div>
+                <p class="lab-section__eyebrow">06 — La community</p>
+                <h2>Community PizzaLab</h2>
+                <p>Condividi foto, ricette, consigli e trucchi da pizzaiolo con altri appassionati.</p>
+                <a href="https://pizzalab.bettermode.io/" class="btn-ghost" target="_blank" rel="noopener noreferrer">Unisciti Ora</a>
+            </div>
+        </section>
+
+        <section class="lab-section reveal" id="sec-shop">
+            <div class="lab-section__media">
+                <img src="img/shop.jpg" alt="Shop e Strumenti" data-parallax>
+            </div>
+            <div>
+                <p class="lab-section__eyebrow">07 — Gli strumenti</p>
+                <h2>Shop & Strumenti</h2>
+                <p>Pale, pietre refrattarie, contenitori per lievitazione e termometri: l'attrezzatura consigliata.</p>
+                <a href="shop.html" class="btn-ghost">Vai allo Shop</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 PizzaLab — La tua guida alla pizza perfetta</p>
+    </footer>
+
+    <script src="js/nav.js" defer></script>
+    <script src="js/home.js" defer></script>
+    <script src="js/stagionale.js" defer></script>
+    <script type="module" src="js/mini-calc.js"></script>
+</body>
+</html>

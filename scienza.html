@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scienza della Pizza | PizzaLab</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="icon" href="logo.ico" type="image/x-icon">
+</head>
+<body>
+    <nav class="site-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <img src="img/logo.png" alt="PizzaLab">
+                PizzaLab
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="tipi-di-pizza.html">Tipi di Pizza</a></li>
+                <li><a href="prefermenti_e_farine.html">Prefermenti e Farine</a></li>
+                <li><a href="calcolatore.html">Calcolatore</a></li>
+                <li><a href="assistente.html">Assistente</a></li>
+                <li><a href="diario.html">Diario</a></li>
+                <li><a href="simulator.html">Nutrienti</a></li>
+                <li><a href="scienza.html" class="active">Scienza</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="contatti.html">Contatti</a></li>
+            </ul>
+            <div class="hamburger" aria-label="Toggle navigation" role="button" tabindex="0">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <h1>Scienza della Pizza</h1>
+        <p>Approfondimenti aggiornati periodicamente da fonti verificate — ricerca alimentare, fermentazione, nutrizione. Ogni voce cita la fonte originale.</p>
+    </header>
+
+    <main class="page-container" style="max-width: 1200px;">
+        <div class="listing-grid" id="scienza-container"></div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 PizzaLab — La tua guida alla pizza perfetta</p>
+    </footer>
+
+    <script src="js/nav.js" defer></script>
+    <script type="module">
+        import { renderListing } from './js/listing.js';
+
+        renderListing({
+            containerSelector: '#scienza-container',
+            jsonPath: 'data/scienza.json',
+            renderItem: (voce) => `
+                <article class="listing-card">
+                    <div class="listing-card__body">
+                        <h3>${voce.titolo}</h3>
+                        <p>${voce.sintesi}</p>
+                        <p>${voce.corpo}</p>
+                        <ul class="listing-card__tags">
+                            ${(voce.fonti || []).map((f) => `<li><a href="${f.url}" target="_blank" rel="noopener noreferrer">${f.titolo}</a></li>`).join('')}
+                        </ul>
+                    </div>
+                </article>
+            `,
+        }).then(() => {
+            const container = document.querySelector('#scienza-container');
+            if (container && !container.children.length) {
+                container.innerHTML = '<p class="listing-error">Nessun approfondimento pubblicato al momento: la sezione si aggiorna periodicamente con contenuti verificati da fonti scientifiche.</p>';
+            }
+        });
+    </script>
+</body>
+</html>

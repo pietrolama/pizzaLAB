@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diario di Fermentazione | PizzaLab</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="icon" href="logo.ico" type="image/x-icon">
+</head>
+<body>
+    <nav class="site-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <img src="img/logo.png" alt="PizzaLab">
+                PizzaLab
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="tipi-di-pizza.html">Tipi di Pizza</a></li>
+                <li><a href="prefermenti_e_farine.html">Prefermenti e Farine</a></li>
+                <li><a href="calcolatore.html">Calcolatore</a></li>
+                <li><a href="assistente.html">Assistente</a></li>
+                <li><a href="diario.html" class="active">Diario</a></li>
+                <li><a href="simulator.html">Nutrienti</a></li>
+                <li><a href="scienza.html">Scienza</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="contatti.html">Contatti</a></li>
+            </ul>
+            <div class="hamburger" aria-label="Toggle navigation" role="button" tabindex="0">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <h1>Diario di Fermentazione</h1>
+        <p>Registra i tuoi esperimenti e tieni traccia dei progressi. Salvato solo su questo dispositivo/browser.</p>
+    </header>
+
+    <main class="page-container">
+        <section class="calculator-card" style="margin-bottom: 24px;">
+            <h2 style="margin-bottom: 20px;">Aggiungi una fermentazione</h2>
+            <form id="fermentazione-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nome">Nome impasto / descrizione</label>
+                        <input type="text" id="nome" class="form-control" placeholder="es. Napoletana 24h Biga" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="data">Data inizio</label>
+                        <input type="date" id="data" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="idratazione">Idratazione (%)</label>
+                        <input type="number" id="idratazione" class="form-control" placeholder="es. 68" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lievito">Tipo di lievito</label>
+                        <input type="text" id="lievito" class="form-control" placeholder="es. Birra fresco / Lievito madre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="tempo">Tempo lievitazione (ore)</label>
+                        <input type="number" id="tempo" class="form-control" placeholder="es. 24" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="note">Note</label>
+                        <input type="text" id="note" class="form-control" placeholder="es. Risultato, aggiustamenti...">
+                    </div>
+                </div>
+                <div style="text-align: center;">
+                    <button type="submit" class="btn">Salva nel Diario</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="calculator-card">
+            <h2 style="margin-bottom: 20px;">I tuoi impasti registrati</h2>
+            <div id="fermentazioni-list" class="listing-grid"></div>
+            <p id="fermentazioni-vuoto" style="color: var(--text-muted); text-align: center;">Non hai ancora registrato nessuna fermentazione.</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 PizzaLab — Diario di esperimenti e progressi</p>
+    </footer>
+
+    <script src="js/nav.js" defer></script>
+    <script src="js/diario-page.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contatti | PizzaLab</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="icon" href="logo.ico" type="image/x-icon">
+</head>
+<body>
+    <nav class="site-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <img src="img/logo.png" alt="PizzaLab">
+                PizzaLab
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="tipi-di-pizza.html">Tipi di Pizza</a></li>
+                <li><a href="prefermenti_e_farine.html">Prefermenti e Farine</a></li>
+                <li><a href="calcolatore.html">Calcolatore</a></li>
+                <li><a href="assistente.html">Assistente</a></li>
+                <li><a href="diario.html">Diario</a></li>
+                <li><a href="simulator.html">Nutrienti</a></li>
+                <li><a href="scienza.html">Scienza</a></li>
+                <li><a href="shop.html">Shop</a></li>
+                <li><a href="contatti.html" class="active">Contatti</a></li>
+            </ul>
+            <div class="hamburger" aria-label="Toggle navigation" role="button" tabindex="0">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <header class="page-header">
+        <h1>Contattami</h1>
+        <p>Domande, feedback o suggerimenti sulle ricette? Scrivimi pure.</p>
+    </header>
+
+    <main class="page-container">
+        <section class="calculator-card" style="margin-bottom: 24px;">
+            <h2 style="margin-bottom: 16px;">Informazioni di contatto</h2>
+            <ul style="list-style: none; padding: 0; display: grid; gap: 12px; color: var(--text-muted);">
+                <li><strong style="color: var(--text-main);">Nome:</strong> Pietro Lama</li>
+                <li><strong style="color: var(--text-main);">Email:</strong> <a href="mailto:pizzalab@gmail.com" style="color: var(--primary-color);">pizzalab@gmail.com</a></li>
+                <li><strong style="color: var(--text-main);">Località:</strong> Napoli, Italia</li>
+            </ul>
+        </section>
+
+        <section class="calculator-card">
+            <h2 style="margin-bottom: 20px;">Scrivimi un messaggio</h2>
+            <form action="mailto:pizzalab@gmail.com" method="post" enctype="text/plain">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">Nome completo</label>
+                        <input type="text" id="name" name="name" class="form-control" placeholder="Il tuo nome" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Indirizzo email</label>
+                        <input type="email" id="email" name="email" class="form-control" placeholder="La tua email" required>
+                    </div>
+                </div>
+                <div class="form-group" style="margin-bottom: 24px;">
+                    <label for="message">Messaggio</label>
+                    <textarea id="message" name="message" class="form-control" rows="5" placeholder="Scrivi qui..." required></textarea>
+                </div>
+                <button type="submit" class="btn">Invia messaggio</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 PizzaLab — La tua guida alla pizza perfetta</p>
+    </footer>
+
+    <script src="js/nav.js" defer></script>
+</body>
+</html>
