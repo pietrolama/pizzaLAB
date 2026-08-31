@@ -37,7 +37,6 @@ async function chiamaKimi(messages) {
                 model: MODEL,
                 messages: storia,
                 tools,
-                temperature: 0.3,
             }),
         });
         if (!res.ok) {
