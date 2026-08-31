@@ -12,7 +12,7 @@
 import { readFile, writeFile } from 'node:fs/promises';
 
 const API_BASE = process.env.KIMI_BASE_URL || 'https://api.moonshot.ai/v1';
-const MODEL = process.env.KIMI_MODEL || 'kimi-k3';
+const MODEL = process.env.KIMI_MODEL || 'kimi-k2.6';
 const API_KEY = process.env.KIMI_API_KEY;
 
 if (!API_KEY) {
