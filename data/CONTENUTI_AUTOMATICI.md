@@ -1,22 +1,36 @@
 # Contenuti auto-aggiornati: schema e flusso di revisione
 
-Due sezioni del sito sono alimentate da un agente pianificato che fa ricerca
-periodica e propone aggiornamenti. Il flusso è sempre lo stesso:
+Due sezioni del sito sono alimentate da una **GitHub Action pianificata**
+(`.github/workflows/contenuti-automatici.yml`, ogni lunedì alle 06:00 UTC,
+oppure lanciabile a mano da Actions → "Aggiorna contenuti automatici (Kimi)"
+→ Run workflow) che esegue `scripts/aggiorna-contenuti.mjs`. Lo script
+interroga il modello **Kimi** (Moonshot AI), che ha una funzione di ricerca
+web integrata (`$web_search`), e scrive le proposte nei file `*_bozza.json`.
+Il flusso è sempre lo stesso:
 
 ```
-agente pianificato → ricerca (fonti affidabili) → scrive nel file *_bozza.json
+GitHub Action (cron) → script chiama Kimi → Kimi cerca sul web (fonti affidabili)
                                                           |
-                                                   notifica a Pietro
+                                          scrive in data/*_bozza.json
                                                           |
-                                          revisione + eventuale copia manuale
+                                    la Action apre una Pull Request di revisione
                                                           |
-                                              file pubblicato (senza _bozza)
+                                    Pietro rilegge, verifica le fonti, decide
+                                                          |
+                                  copia le voci approvate nel file pubblicato
+                                              (stagionale.json / scienza.json)
                                                           |
                                                 sito legge il file pubblicato
 ```
 
 I file `*_bozza.json` non sono mai letti dal sito: servono solo come area di
-lavoro dell'agente, in attesa di approvazione.
+lavoro dell'automazione, in attesa di approvazione. Lo script NON scrive mai
+direttamente nei file pubblicati.
+
+**Setup richiesto (una tantum):** aggiungere un secret `KIMI_API_KEY` nel
+repo GitHub (Settings → Secrets and variables → Actions → New repository
+secret) con la chiave API Kimi/Moonshot. Senza questo secret la Action fallisce
+subito con un errore esplicito, non scrive nulla di sbagliato.
 
 ## stagionale.json / stagionale_bozza.json
 

@@ -71,8 +71,18 @@ a { color: inherit; }
     top: 0; left: 0; width: 100%;
     z-index: 999;
     padding: 20px 0;
-    background: rgba(8, 9, 12, 0.92);
+    background: rgba(8, 9, 12, 0.75);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
     border-bottom: 1px solid var(--border-color);
+    transition: padding 0.3s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.site-nav.nav-scrolled {
+    padding: 12px 0;
+    background: rgba(8, 9, 12, 0.92);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .nav-container {
@@ -92,6 +102,11 @@ a { color: inherit; }
     font-family: var(--font-heading);
     font-weight: 800;
     font-size: 1.3rem;
+    transition: transform 0.2s ease;
+}
+
+.nav-brand:hover {
+    transform: scale(1.03);
 }
 
 .nav-brand img { height: 34px; }
@@ -110,8 +125,13 @@ a { color: inherit; }
     border-radius: 999px;
     font-size: 0.9rem;
     font-weight: 500;
-    transition: background 0.2s ease, color 0.2s ease;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
     white-space: nowrap;
+}
+
+.nav-links li a:hover {
+    color: #fff;
+    transform: translateY(-1px);
 }
 
 .nav-links li a:hover,
@@ -713,12 +733,24 @@ footer {
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.listing-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(255, 82, 38, 0.4);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4), 0 0 20px rgba(255, 82, 38, 0.15);
 }
 
 .listing-card img {
     width: 100%;
     aspect-ratio: 16 / 10;
     object-fit: cover;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.listing-card:hover img {
+    transform: scale(1.05);
 }
 
 .listing-card__body {
@@ -794,10 +826,48 @@ footer {
     border: 1px solid var(--border-color);
     border-radius: 12px;
     cursor: pointer;
-    transition: border-color 0.2s ease, background 0.2s ease;
+    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
 }
 
 #options-container button:hover {
     border-color: var(--primary-color);
     background: rgba(255, 82, 38, 0.08);
+    transform: translateY(-2px);
+}
+
+#options-container button:active {
+    transform: scale(0.98);
+}
+
+/* ===== ANIMAZIONI DI SCHEDA E RISULTATI ===== */
+.animate-reveal {
+    animation: fadeSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.recipe-steps li {
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeSlideStep 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeSlideStep {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

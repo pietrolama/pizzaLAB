@@ -1,0 +1,60 @@
+name: Aggiorna contenuti automatici (Kimi)
+
+on:
+  schedule:
+    # ogni lunedì alle 06:00 UTC
+    - cron: "0 6 * * 1"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  genera-bozze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Genera bozze con Kimi
+        id: genera
+        env:
+          KIMI_API_KEY: ${{ secrets.KIMI_API_KEY }}
+        run: |
+          set -o pipefail
+          node scripts/aggiorna-contenuti.mjs | tee /tmp/output.log
+
+      - name: Verifica se ci sono novità
+        id: check
+        run: |
+          if grep -q "HA_NOVITA=true" /tmp/output.log; then
+            echo "novita=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "novita=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Apri Pull Request di revisione
+        if: steps.check.outputs.novita == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "Bozza contenuti automatici (Kimi) - ${{ github.run_id }}"
+          branch: bozza-contenuti-automatici
+          delete-branch: true
+          title: "Bozza contenuti automatici: revisiona prima di pubblicare"
+          body: |
+            Bozze generate automaticamente da Kimi (ricerca web su fonti
+            affidabili). Non sono ancora pubblicate sul sito: i file letti
+            dal sito sono `data/stagionale.json` e `data/scienza.json`,
+            questa PR tocca solo `data/stagionale_bozza.json` e
+            `data/scienza_bozza.json`.
+
+            Per pubblicare una voce: copiala manualmente nel file senza
+            `_bozza` (dopo averla riletta e verificata la fonte), poi fai
+            merge di questa PR per tenere puliti i file di lavoro.
+          add-paths: |
+            data/stagionale_bozza.json
+            data/scienza_bozza.json
