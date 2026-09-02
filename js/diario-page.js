@@ -61,8 +61,55 @@ document.getElementById('fermentazione-form').addEventListener('submit', (e) => 
         note: document.getElementById('note').value,
     });
     salvaFermentazioni(lista);
-    e.target.reset();
+    document.getElementById('fermentazione-form').reset();
+    document.getElementById('data').value = new Date().toISOString().split('T')[0];
     renderLista();
 });
 
+// --- Backup Export ---
+document.getElementById('btn-export-backup')?.addEventListener('click', () => {
+    const lista = leggiFermentazioni();
+    if (lista.length === 0) {
+        alert('Nessun impasto registrato da esportare.');
+        return;
+    }
+    const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(lista, null, 2));
+    const downloadAnchor = document.createElement('a');
+    downloadAnchor.setAttribute('href', dataStr);
+    downloadAnchor.setAttribute('download', `pizzalab-diario-${new Date().toISOString().split('T')[0]}.json`);
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+});
+
+// --- Backup Import ---
+document.getElementById('input-import-backup')?.addEventListener('change', (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+        try {
+            const data = JSON.parse(event.target.result);
+            if (!Array.isArray(data)) {
+                throw new Error('Il file di backup non contiene una lista valida.');
+            }
+            const attuali = leggiFermentazioni();
+            // Unione intelligente o sostituzione confermata
+            if (confirm(`Trovati ${data.length} impasti nel backup. Vuoi aggiungerli al tuo diario attuale?`)) {
+                const uniti = [...data, ...attuali];
+                salvaFermentazioni(uniti);
+                renderLista();
+                alert('Backup ripristinato con successo!');
+            }
+        } catch (err) {
+            alert('Errore nella lettura del file di backup: ' + err.message);
+        }
+        e.target.value = ''; // reset input
+    };
+    reader.readAsText(file);
+});
+
+// Inizializza data odierna e render
+document.getElementById('data').value = new Date().toISOString().split('T')[0];
 renderLista();

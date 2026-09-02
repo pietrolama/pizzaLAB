@@ -50,4 +50,17 @@ document.addEventListener('DOMContentLoaded', () => {
             observer.observe(el);
         });
     }
+
+    // --- PWA Service Worker Registration ---
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js')
+                .then((registration) => {
+                    console.log('PizzaLab ServiceWorker attivo con scope:', registration.scope);
+                })
+                .catch((error) => {
+                    console.warn('Registrazione ServiceWorker non riuscita:', error);
+                });
+        });
+    }
 });

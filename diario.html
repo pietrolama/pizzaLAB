@@ -3,9 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Diario di Fermentazione | PizzaLab</title>
+    <title>Diario degli Impasti | PizzaLab</title>
     <link rel="stylesheet" href="css/main.css">
     <link rel="icon" href="logo.ico" type="image/x-icon">
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="theme-color" content="#08090c">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="img/logo.png">
 </head>
 <body>
     <nav class="site-nav">
@@ -76,7 +81,16 @@
         </section>
 
         <section class="calculator-card">
-            <h2 style="margin-bottom: 20px;">I tuoi impasti registrati</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
+                <h2>I tuoi impasti registrati</h2>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                    <button id="btn-export-backup" class="btn-chip" style="font-size: 0.85rem; padding: 6px 12px;">📥 Esporta Backup (JSON)</button>
+                    <label class="btn-chip" style="font-size: 0.85rem; padding: 6px 12px; cursor: pointer; display: inline-flex; align-items: center;">
+                        📤 Importa Backup
+                        <input type="file" id="input-import-backup" accept=".json" style="display: none;">
+                    </label>
+                </div>
+            </div>
             <div id="fermentazioni-list" class="listing-grid"></div>
             <p id="fermentazioni-vuoto" style="color: var(--text-muted); text-align: center;">Non hai ancora registrato nessuna fermentazione.</p>
         </section>

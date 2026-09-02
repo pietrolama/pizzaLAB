@@ -1,0 +1,20 @@
+{
+  "name": "PizzaLab — Calcolatore & Laboratorio Pizza",
+  "short_name": "PizzaLab",
+  "description": "Calcolatore scientifico per impasti di pizza, gestione blend farine, maturazione, prefermenti e diario.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#08090c",
+  "theme_color": "#08090c",
+  "orientation": "portrait-primary",
+  "categories": ["food", "utilities", "lifestyle"],
+  "icons": [
+    {
+      "src": "img/logo.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
