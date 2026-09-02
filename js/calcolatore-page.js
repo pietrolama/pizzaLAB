@@ -521,6 +521,227 @@ el('btn-share-card')?.addEventListener('click', async () => {
     }
 });
 
+// =========================================================================
+// PIANO OPERATIVO INTERATTIVO A SCORRIMENTO (MODALITÀ IN CUCINA)
+// =========================================================================
+let pianoPassi = [];
+let pianoIndex = 0;
+let wakeLock = null;
+
+async function attivaWakeLock() {
+    if ('wakeLock' in navigator) {
+        try {
+            wakeLock = await navigator.wakeLock.request('screen');
+            const btn = el('btn-wakelock-toggle');
+            if (btn) {
+                btn.textContent = '💡 Schermo Attivo: ON';
+                btn.style.borderColor = 'var(--primary-color)';
+                btn.style.color = 'var(--primary-color)';
+            }
+        } catch (err) {
+            console.warn('Wake Lock error:', err);
+        }
+    }
+}
+
+function disattivaWakeLock() {
+    if (wakeLock) {
+        wakeLock.release().then(() => { wakeLock = null; });
+        const btn = el('btn-wakelock-toggle');
+        if (btn) {
+            btn.textContent = '💡 Schermo Attivo';
+            btn.style.borderColor = '';
+            btn.style.color = '';
+        }
+    }
+}
+
+el('btn-wakelock-toggle')?.addEventListener('click', () => {
+    if (wakeLock) {
+        disattivaWakeLock();
+    } else {
+        attivaWakeLock();
+    }
+});
+
+function assegnaFase(idx, totale, testo) {
+    if (/miscela|farina/i.test(testo)) return 'Fase: Preparazione Farine';
+    if (/biga|poolish|lievito madre/i.test(testo) && idx === 0) return 'Fase: Prefermento';
+    if (/autolisi/i.test(testo)) return 'Fase: Autolisi';
+    if (/impasta|incordatura|planetaria|lavora/i.test(testo)) return 'Fase: Impasto & Incordatura';
+    if (/pieghe|rinforzo/i.test(testo)) return 'Fase: Pieghe di Struttura';
+    if (/massa|puntata|riposare/i.test(testo)) return 'Fase: Prima Lievitazione (Puntata)';
+    if (/staglio|panetti|pirlando/i.test(testo)) return 'Fase: Staglio & Formatura';
+    if (/appretto/i.test(testo)) return 'Fase: Seconda Lievitazione (Appretto)';
+    if (/stesura/i.test(testo)) return 'Fase: Stesura';
+    if (/cottura|inforna/i.test(testo)) return 'Fase: Cottura';
+    return `Passo ${idx + 1}`;
+}
+
+function apriPianoOperativo() {
+    const stepItems = el('risultato-steps')?.querySelectorAll('li');
+    if (!stepItems || stepItems.length === 0) return;
+
+    pianoPassi = Array.from(stepItems).map((li, idx) => {
+        const text = li.childNodes[0]?.textContent?.trim() || li.textContent?.trim();
+        const minuti = estraiMinutiTimer(text);
+        return {
+            index: idx,
+            fase: assegnaFase(idx, stepItems.length, text),
+            text: text,
+            minuti: minuti
+        };
+    });
+
+    pianoIndex = 0;
+    const modal = el('piano-operativo-modal');
+    if (modal) {
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+
+    if (el('piano-pizza-label') && ultimoStatoRicetta) {
+        el('piano-pizza-label').textContent = `${ultimoStatoRicetta.tipoPizza.toUpperCase()} · ${ultimoStatoRicetta.idratazione}% idr.`;
+    }
+
+    attivaWakeLock();
+    renderPianoCard(0);
+}
+
+function chiudiPianoOperativo() {
+    const modal = el('piano-operativo-modal');
+    if (modal) {
+        modal.classList.add('hidden');
+        document.body.style.overflow = '';
+    }
+    disattivaWakeLock();
+}
+
+function renderPianoCard(idx) {
+    if (!pianoPassi[idx]) return;
+    const passo = pianoPassi[idx];
+    pianoIndex = idx;
+
+    // Aggiorna contatore e progress bar
+    el('piano-counter').textContent = `Passo ${idx + 1} di ${pianoPassi.length}`;
+    const perc = Math.round(((idx + 1) / pianoPassi.length) * 100);
+    el('piano-progress-fill').style.width = `${perc}%`;
+
+    // Aggiorna card
+    el('piano-phase-badge').textContent = passo.fase;
+    el('piano-step-text').textContent = passo.text;
+
+    // Reset card animation
+    const card = el('piano-current-card');
+    card.classList.remove('animate-reveal');
+    void card.offsetWidth;
+    card.classList.add('animate-reveal');
+
+    // Gestione Timer Card
+    const timerBox = el('piano-timer-container');
+    if (passo.minuti) {
+        timerBox.classList.remove('hidden');
+        el('piano-timer-label').textContent = `Timer consigliato per questa fase: ${passo.minuti} minuti`;
+        el('piano-modal-timer-digits').textContent = `${passo.minuti.toString().padStart(2, '0')}:00`;
+        el('btn-modal-timer-start').classList.remove('hidden');
+        el('btn-modal-timer-start').textContent = `⏱️ Avvia Timer (${passo.minuti} min)`;
+        el('btn-modal-timer-pause').classList.add('hidden');
+        el('btn-modal-timer-stop').classList.add('hidden');
+    } else {
+        timerBox.classList.add('hidden');
+    }
+
+    // Bottoni Footer
+    const prevBtn = el('btn-piano-prev');
+    const nextBtn = el('btn-piano-next');
+
+    if (prevBtn) {
+        prevBtn.disabled = idx === 0;
+        prevBtn.style.opacity = idx === 0 ? '0.4' : '1';
+    }
+
+    if (nextBtn) {
+        if (idx === pianoPassi.length - 1) {
+            nextBtn.textContent = '🎉 Completa Piano';
+            nextBtn.classList.add('btn');
+        } else {
+            nextBtn.textContent = 'Successivo →';
+        }
+    }
+}
+
+// Timer Controls all'interno del Modal
+el('btn-modal-timer-start')?.addEventListener('click', () => {
+    const passo = pianoPassi[pianoIndex];
+    if (!passo || !passo.minuti) return;
+
+    el('btn-modal-timer-start').classList.add('hidden');
+    el('btn-modal-timer-pause').classList.remove('hidden');
+    el('btn-modal-timer-stop').classList.remove('hidden');
+
+    kitchenTimer.start(passo.minuti, passo.fase, {
+        onTick: (rem) => {
+            el('piano-modal-timer-digits').textContent = kitchenTimer.constructor.formatTime(rem);
+            el('floating-timer-digits').textContent = kitchenTimer.constructor.formatTime(rem);
+        },
+        onComplete: () => {
+            el('piano-modal-timer-digits').textContent = '00:00';
+            el('btn-modal-timer-pause').classList.add('hidden');
+            el('btn-modal-timer-start').classList.remove('hidden');
+            el('btn-modal-timer-start').textContent = '✅ Fase Completata!';
+        }
+    });
+});
+
+el('btn-modal-timer-pause')?.addEventListener('click', () => {
+    kitchenTimer.pause();
+    el('btn-modal-timer-pause').textContent = kitchenTimer.isPaused ? '▶️ Riprendi' : '⏸️ Pausa';
+});
+
+el('btn-modal-timer-stop')?.addEventListener('click', () => {
+    kitchenTimer.stop();
+    const passo = pianoPassi[pianoIndex];
+    if (passo && passo.minuti) {
+        el('piano-modal-timer-digits').textContent = `${passo.minuti.toString().padStart(2, '0')}:00`;
+    }
+    el('btn-modal-timer-start').classList.remove('hidden');
+    el('btn-modal-timer-start').textContent = `⏱️ Avvia Timer (${passo?.minuti || 0} min)`;
+    el('btn-modal-timer-pause').classList.add('hidden');
+    el('btn-modal-timer-stop').classList.add('hidden');
+});
+
+// Navigazione Footer
+el('btn-piano-prev')?.addEventListener('click', () => {
+    if (pianoIndex > 0) renderPianoCard(pianoIndex - 1);
+});
+
+el('btn-piano-next')?.addEventListener('click', () => {
+    if (pianoIndex < pianoPassi.length - 1) {
+        renderPianoCard(pianoIndex + 1);
+    } else {
+        alert('🎉 Congratulazioni! Hai completato tutte le fasi del piano operativo.');
+        chiudiPianoOperativo();
+    }
+});
+
+el('btn-avvia-piano-operativo')?.addEventListener('click', apriPianoOperativo);
+el('btn-chiudi-piano')?.addEventListener('click', chiudiPianoOperativo);
+
+// Tasti freccia da tastiera per cambiare card
+window.addEventListener('keydown', (e) => {
+    const modal = el('piano-operativo-modal');
+    if (!modal || modal.classList.contains('hidden')) return;
+
+    if (e.key === 'ArrowRight' || e.key === ' ') {
+        if (pianoIndex < pianoPassi.length - 1) renderPianoCard(pianoIndex + 1);
+    } else if (e.key === 'ArrowLeft') {
+        if (pianoIndex > 0) renderPianoCard(pianoIndex - 1);
+    } else if (e.key === 'Escape') {
+        chiudiPianoOperativo();
+    }
+});
+
+
 // Event Listeners Base
 el('tipo_pizza').addEventListener('change', aggiornaMetodiDisponibili);
 el('tipo_impasto').addEventListener('change', () => {
