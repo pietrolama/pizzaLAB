@@ -1063,3 +1063,130 @@ footer {
     margin-top: 8px;
 }
 
+/* ===== FLOATING KITCHEN TIMER ===== */
+.floating-timer-bar {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 1000;
+    background: rgba(18, 20, 32, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 82, 38, 0.4);
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6), 0 0 20px var(--primary-glow);
+    border-radius: 16px;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+    min-width: 290px;
+}
+
+.floating-timer-bar.hidden {
+    transform: translateY(120%);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.timer-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.timer-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.timer-digits {
+    font-family: var(--font-heading);
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.1;
+    letter-spacing: 0.02em;
+}
+
+.timer-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.timer-btn {
+    border: none;
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-main);
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+.timer-btn:hover {
+    background: rgba(255, 82, 38, 0.2);
+    color: var(--primary-color);
+}
+
+.timer-btn.danger:hover {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+}
+
+.step-timer-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 82, 38, 0.12);
+    border: 1px solid rgba(255, 82, 38, 0.3);
+    color: #ff7a50;
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-left: 6px;
+    vertical-align: middle;
+    transition: all 0.2s ease;
+}
+
+.step-timer-btn:hover {
+    background: var(--primary-color);
+    color: #fff;
+    box-shadow: 0 2px 8px var(--primary-glow);
+    transform: translateY(-1px);
+}
+
+.recipe-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 640px) {
+    .floating-timer-bar {
+        left: 16px;
+        right: 16px;
+        bottom: 16px;
+        min-width: auto;
+    }
+}
+
+

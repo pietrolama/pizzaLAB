@@ -20,8 +20,12 @@ import {
     wToProteine,
     suggerisciWPerRicetta,
 } from './flour-blend-engine.js';
+import { kitchenTimer } from './timer-engine.js';
+import { generaPizzaCardBlob } from './pizza-card-engine.js';
 
 const el = (id) => document.getElementById(id);
+
+let ultimoStatoRicetta = null;
 
 const SEZIONI_METODO = {
     diretto: 'sezione_diretto',
@@ -332,6 +336,18 @@ function animateNumber(element, targetValue, decimals = 0, duration = 400) {
     requestAnimationFrame(update);
 }
 
+function estraiMinutiTimer(testo) {
+    // Riconosce es: "20-30 minuti", "30-45 minuti", "15-20 minuti", "45-60 minuti", "10-15 minuti", "20 minuti"
+    const matchMin = testo.match(/(\d+)(?:-(\d+))?\s+minuti/i);
+    if (matchMin) {
+        // Se c'è un intervallo (es. 20-30), prendiamo il valore medio o superiore
+        const val1 = parseInt(matchMin[1], 10);
+        const val2 = matchMin[2] ? parseInt(matchMin[2], 10) : val1;
+        return val2 || val1;
+    }
+    return null;
+}
+
 function renderRisultato(dati, tipoImpasto) {
     const { tipoPizza, forzaFarina } = leggiComune();
     const idratazioneTotale = idratazioneTotaleAttuale(tipoImpasto);
@@ -343,6 +359,25 @@ function renderRisultato(dati, tipoImpasto) {
     if (isBlendMode) {
         blendInfo = aggiornaCalcoloBlend(pesoFarinaTot);
     }
+
+    const [pesoId, numId] = CAMPI_PESO_NUMERO[tipoImpasto] || [];
+    const numPanetti = parseInt(el(numId)?.value, 10) || dati.numPanetti || 4;
+    const pesoPanetto = parseFloat(el(pesoId)?.value) || dati.pesoPanetto || 250;
+
+    // Salva stato per generazione Pizza Card
+    ultimoStatoRicetta = {
+        tipoPizza,
+        tipoImpasto,
+        idratazione: idratazioneTotale,
+        numPanetti,
+        pesoPanetto,
+        totali,
+        forzaFarina: isBlendMode && blendInfo ? blendInfo.wEffettivo : (forzaFarina || 260),
+        blend: isBlendMode ? blendInfo : null,
+        tempAmbiente: parseFloat(el('temperatura_ambiente_diretto')?.value) || 22,
+        oreTotali: parseFloat(el('tempoLievTotale_diretto')?.value) || 24,
+        oreFrigo: parseFloat(el('tempoFrigo_diretto')?.value) || 18,
+    };
 
     const grid = el('risultato-grid');
     grid.innerHTML = `
@@ -379,8 +414,22 @@ function renderRisultato(dati, tipoImpasto) {
         blend: isBlendMode ? blendInfo : null
     });
 
-    el('risultato-steps').innerHTML = passi.map((p, idx) => `<li style="animation-delay: ${idx * 60}ms">${p}</li>`).join('');
+    el('risultato-steps').innerHTML = passi.map((p, idx) => {
+        const minuti = estraiMinutiTimer(p);
+        const timerButton = minuti ? ` <button type="button" class="step-timer-btn" data-minutes="${minuti}" data-label="Passo ${idx + 1}">⏱️ Avvia ${minuti} min</button>` : '';
+        return `<li style="animation-delay: ${idx * 60}ms">${p}${timerButton}</li>`;
+    }).join('');
+
     el('risultato-avvisi').innerHTML = avvisi.map((a) => `<p>${a}</p>`).join('');
+
+    // Collega i pulsanti timer generati dinamicamente
+    el('risultato-steps').querySelectorAll('.step-timer-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const min = parseFloat(btn.dataset.minutes) || 10;
+            const label = btn.dataset.label || 'Timer Impasto';
+            avviaTimerCucina(min, label);
+        });
+    });
 
     const resBox = el('risultato');
     resBox.classList.remove('hidden');
@@ -389,6 +438,88 @@ function renderRisultato(dati, tipoImpasto) {
     resBox.classList.add('animate-reveal');
     resBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
+
+// --- GESTIONE TIMER CUCINA ---
+function avviaTimerCucina(minuti, label) {
+    const floating = el('floating-timer');
+    const digits = el('floating-timer-digits');
+    const labelEl = el('floating-timer-label');
+    const pauseBtn = el('btn-timer-pause');
+
+    if (floating) floating.classList.remove('hidden');
+    if (labelEl) labelEl.textContent = label;
+    if (pauseBtn) pauseBtn.textContent = '⏸️';
+
+    kitchenTimer.start(minuti, label, {
+        onTick: (remaining, total, lbl) => {
+            if (digits) digits.textContent = kitchenTimer.constructor.formatTime(remaining);
+        },
+        onComplete: (lbl) => {
+            if (digits) digits.textContent = '00:00';
+            if (labelEl) labelEl.textContent = '🎉 Pronto!';
+            setTimeout(() => {
+                if (!kitchenTimer.isRunning && floating) {
+                    floating.classList.add('hidden');
+                }
+            }, 6000);
+        }
+    });
+}
+
+el('btn-timer-pause')?.addEventListener('click', () => {
+    kitchenTimer.pause();
+    const btn = el('btn-timer-pause');
+    if (btn) btn.textContent = kitchenTimer.isPaused ? '▶️' : '⏸️';
+});
+
+el('btn-timer-stop')?.addEventListener('click', () => {
+    kitchenTimer.stop();
+    const floating = el('floating-timer');
+    if (floating) floating.classList.add('hidden');
+});
+
+// --- GESTIONE CONDIVISIONE PIZZA CARD ---
+el('btn-share-card')?.addEventListener('click', async () => {
+    if (!ultimoStatoRicetta) return;
+
+    const btn = el('btn-share-card');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<span>⏳</span> Generazione in corso...';
+    btn.disabled = true;
+
+    try {
+        const blob = await generaPizzaCardBlob(ultimoStatoRicetta);
+        if (!blob) throw new Error('Impossibile generare l\'immagine.');
+
+        const file = new File([blob], `pizzalab-${ultimoStatoRicetta.tipoPizza}.png`, { type: 'image/png' });
+
+        // Se il browser supporta Web Share API con file (mobile Android/iOS)
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            await navigator.share({
+                title: `Scheda PizzaLab - ${ultimoStatoRicetta.tipoPizza}`,
+                text: `Ecco la ricetta calcolata su PizzaLab per ${ultimoStatoRicetta.tipoPizza} (${ultimoStatoRicetta.idratazione}% idratazione)!`,
+                files: [file],
+            });
+        } else {
+            // Fallback download istantaneo
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `pizzalab-${ultimoStatoRicetta.tipoPizza}.png`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+        }
+    } catch (e) {
+        if (e.name !== 'AbortError') {
+            alert('Errore nella condivisione della Pizza Card: ' + e.message);
+        }
+    } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+    }
+});
 
 // Event Listeners Base
 el('tipo_pizza').addEventListener('change', aggiornaMetodiDisponibili);
