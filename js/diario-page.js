@@ -21,6 +21,16 @@ function formattaData(iso) {
     return d.toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit', year: 'numeric' });
 }
 
+function escapeHtml(valore) {
+    return String(valore ?? '').replace(/[&<>"']/g, (c) => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;',
+    }[c]));
+}
+
 function renderLista() {
     const lista = leggiFermentazioni();
     const container = document.getElementById('fermentazioni-list');
@@ -30,10 +40,10 @@ function renderLista() {
     container.innerHTML = lista.map((f, i) => `
         <article class="listing-card">
             <div class="listing-card__body">
-                <h3>${f.nome}</h3>
-                <p class="listing-card__meta">${formattaData(f.data)} · ${f.idratazione}% idratazione · ${f.tempo}h</p>
-                <p>Lievito: ${f.lievito}</p>
-                ${f.note ? `<p style="color: var(--text-dim);">${f.note}</p>` : ''}
+                <h3>${escapeHtml(f.nome)}</h3>
+                <p class="listing-card__meta">${escapeHtml(formattaData(f.data))} · ${escapeHtml(f.idratazione)}% idratazione · ${escapeHtml(f.tempo)}h</p>
+                <p>Lievito: ${escapeHtml(f.lievito)}</p>
+                ${f.note ? `<p style="color: var(--text-dim);">${escapeHtml(f.note)}</p>` : ''}
                 <button data-index="${i}" class="btn-secondary elimina-fermentazione" style="margin-top: 8px;">Elimina</button>
             </div>
         </article>
