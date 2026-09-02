@@ -32,10 +32,17 @@ function trovaFasciaIdratazione(idratazioneTotale) {
     return FASCE_IDRATAZIONE.find((f) => idratazioneTotale < f.max).id;
 }
 
-export function generaProcedura({ tipoPizza, tipoImpasto, idratazioneTotale, forzaFarina, dati = {} }) {
+export function generaProcedura({ tipoPizza, tipoImpasto, idratazioneTotale, forzaFarina, dati = {}, blend = null }) {
     const fascia = trovaFasciaIdratazione(idratazioneTotale);
     const passi = [];
     const avvisi = [];
+
+    // --- 0. PREPARAZIONE MISCELA FARINE (se attiva) ---
+    if (blend && blend.possibile && blend.pesoForte > 0 && blend.pesoDebole > 0) {
+        const wF = blend.dettagli?.wForte || blend.wForte || 350;
+        const wD = blend.dettagli?.wDebole || blend.wDebole || 180;
+        passi.push(`Preparazione miscela farine: unisci e setaccia insieme ${blend.pesoForte} g di Farina Forte (${wF} W) e ${blend.pesoDebole} g di Farina Debole (${wD} W) per ottenere una base perfettamente omogenea a ${blend.wEffettivo} W.`);
+    }
 
     const numPanetti = dati.numPanetti || 4;
     const pesoPanetto = dati.pesoPanetto || 250;

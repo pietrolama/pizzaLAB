@@ -69,6 +69,82 @@
                 </div>
             </div>
 
+            <!-- BLEND & TAGLIO FARINE -->
+            <div class="blend-toggle-wrapper">
+                <div class="blend-toggle-title">
+                    <span>🌾 Selezione Farina</span>
+                    <span class="blend-badge" id="badge_w_consigliato">Consigliato: W 270</span>
+                </div>
+                <div class="segmented-control" role="group" aria-label="Modalità Farina">
+                    <button type="button" id="btn_mode_singola" class="segmented-btn active">Farina Singola</button>
+                    <button type="button" id="btn_mode_blend" class="segmented-btn">Taglio 2 Farine (Blend)</button>
+                </div>
+            </div>
+
+            <div id="sezione_blend" class="blend-card hidden">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
+                    <span style="font-size: 0.9rem; font-weight: 700; color: var(--text-main);">Calcolatore di Taglio (Quadrato di Pearson)</span>
+                    <div class="segmented-control" role="group" aria-label="Unità di misura">
+                        <button type="button" id="btn_unit_w" class="segmented-btn active">Usa Forza (W)</button>
+                        <button type="button" id="btn_unit_prot" class="segmented-btn">Usa Proteine (%)</button>
+                    </div>
+                </div>
+
+                <div class="blend-inputs-grid">
+                    <div class="blend-box">
+                        <div class="blend-box-label">
+                            <span>Farina Forte (A)</span>
+                            <span class="blend-stat-dot forte"></span>
+                        </div>
+                        <label for="blend_val_a" id="label_val_a" style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Forza W (es. Manitoba)</label>
+                        <input type="number" id="blend_val_a" class="form-control" value="380" min="50" max="500">
+                    </div>
+
+                    <div class="blend-box">
+                        <div class="blend-box-label">
+                            <span>Farina Debole (B)</span>
+                            <span class="blend-stat-dot debole"></span>
+                        </div>
+                        <label for="blend_val_b" id="label_val_b" style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Forza W (es. Tipo 0 / 00)</label>
+                        <input type="number" id="blend_val_b" class="form-control" value="180" min="50" max="500">
+                    </div>
+
+                    <div class="blend-box">
+                        <div class="blend-box-label">
+                            <span>W Obiettivo (Target)</span>
+                            <span style="color: var(--primary-color); font-weight: 700;" id="blend_target_preview">280 W</span>
+                        </div>
+                        <label for="blend_target_input" id="label_target" style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Valore W desiderato</label>
+                        <input type="number" id="blend_target_input" class="form-control" value="280" min="90" max="450">
+                        <div class="blend-target-quick">
+                            <span>Suggerito:</span>
+                            <button type="button" id="btn_applica_suggerito" class="btn-chip">Applica W ricetta</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="blend-summary-bar">
+                    <div class="blend-result-stats">
+                        <div class="blend-stat-item">
+                            <span class="blend-stat-dot forte"></span>
+                            <span><strong>Farina Forte (A):</strong> <span id="blend_res_perc_a">50%</span> (<span id="blend_res_peso_a">-</span>)</span>
+                        </div>
+                        <div class="blend-stat-item">
+                            <span class="blend-stat-dot debole"></span>
+                            <span><strong>Farina Debole (B):</strong> <span id="blend_res_perc_b">50%</span> (<span id="blend_res_peso_b">-</span>)</span>
+                        </div>
+                        <div class="blend-stat-item">
+                            <span><strong>Miscela finale:</strong> <span id="blend_res_w_eff">280 W</span> (<span id="blend_res_prot_eff">~12.5% prot</span>)</span>
+                        </div>
+                    </div>
+                    <div class="blend-progress-track">
+                        <div id="blend_bar_a" class="blend-progress-a" style="width: 50%;"></div>
+                        <div id="blend_bar_b" class="blend-progress-b" style="width: 50%;"></div>
+                    </div>
+                    <div id="blend_alert" style="font-size: 0.82rem; color: #ff9800; margin-top: 6px; display: none;"></div>
+                </div>
+            </div>
+
             <div id="sezione_teglia" class="form-row hidden">
                 <div class="form-group">
                     <label for="teglia_base">Base teglia (cm)</label>

@@ -871,3 +871,195 @@ footer {
         transform: translateY(0);
     }
 }
+
+/* ===== BLEND & TAGLIO FARINE ===== */
+.blend-toggle-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 18px 0 14px;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+}
+
+.blend-toggle-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
+    color: var(--text-main);
+}
+
+.blend-badge {
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 6px;
+    background: rgba(255, 82, 38, 0.15);
+    color: var(--primary-color);
+    border: 1px solid rgba(255, 82, 38, 0.3);
+    font-weight: 600;
+}
+
+.segmented-control {
+    display: inline-flex;
+    background: var(--bg-dark);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 3px;
+    gap: 4px;
+}
+
+.segmented-btn {
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-family: var(--font-heading);
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.segmented-btn.active {
+    background: var(--primary-color);
+    color: #fff;
+    box-shadow: 0 2px 8px var(--primary-glow);
+}
+
+.blend-card {
+    background: linear-gradient(180deg, rgba(255, 82, 38, 0.04) 0%, rgba(18, 20, 32, 0.6) 100%);
+    border: 1px solid rgba(255, 82, 38, 0.25);
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 24px;
+    transition: all 0.3s ease;
+}
+
+.blend-card.hidden {
+    display: none;
+}
+
+.blend-inputs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.blend-box {
+    background: var(--bg-dark);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 14px;
+    position: relative;
+}
+
+.blend-box-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.blend-target-quick {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.btn-chip {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border-color);
+    color: var(--primary-color);
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-chip:hover {
+    background: rgba(255, 82, 38, 0.15);
+    border-color: var(--primary-color);
+}
+
+.blend-summary-bar {
+    background: var(--bg-dark);
+    border: 1px solid rgba(255, 82, 38, 0.2);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-top: 14px;
+}
+
+.blend-progress-track {
+    height: 10px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 5px;
+    overflow: hidden;
+    display: flex;
+    margin: 10px 0;
+}
+
+.blend-progress-a {
+    background: linear-gradient(90deg, #ff5226, #ff7a50);
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+.blend-progress-b {
+    background: linear-gradient(90deg, #3b82f6, #60a5fa);
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+.blend-result-stats {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 0.88rem;
+}
+
+.blend-stat-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.blend-stat-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.blend-stat-dot.forte { background: #ff5226; }
+.blend-stat-dot.debole { background: #3b82f6; }
+
+.recipe-blend-breakdown {
+    grid-column: 1 / -1;
+    background: rgba(255, 82, 38, 0.06);
+    border: 1px dashed rgba(255, 82, 38, 0.3);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 0.9rem;
+    margin-top: 8px;
+}
+

@@ -14,6 +14,12 @@ import {
     estraiTotaliMacro,
 } from './calcolatore-engine.js';
 import { generaProcedura } from './procedura-engine.js';
+import {
+    calcolaTaglioDueFarine,
+    proteineToW,
+    wToProteine,
+    suggerisciWPerRicetta,
+} from './flour-blend-engine.js';
 
 const el = (id) => document.getElementById(id);
 
@@ -41,6 +47,148 @@ const CAMPO_IDRATAZIONE = {
     biga_poolish: 'idratazione_totale_biga_poolish',
 };
 
+// STATO BLEND FARINE
+let isBlendMode = false;
+let blendUnit = 'w'; // 'w' oppure 'prot'
+let wConsigliatoAttuale = 270;
+
+function aggiornaSuggerimentoW() {
+    const tipoPizza = el('tipo_pizza')?.value || 'napoletana';
+    let oreTotali = 8;
+    let oreFrigo = 0;
+
+    if (el('tipo_impasto')?.value === 'diretto') {
+        oreTotali = parseFloat(el('tempoLievTotale_diretto')?.value) || 8;
+        oreFrigo = parseFloat(el('tempoFrigo_diretto')?.value) || 0;
+    } else {
+        oreTotali = 24;
+        oreFrigo = 18;
+    }
+
+    const suggerimento = suggerisciWPerRicetta({ tipoPizza, oreTotali, oreFrigo });
+    wConsigliatoAttuale = suggerimento.wConsigliato;
+
+    const badge = el('badge_w_consigliato');
+    if (badge) {
+        badge.textContent = `Consigliato: W ${wConsigliatoAttuale} (${wToProteine(wConsigliatoAttuale)}% prot)`;
+        badge.title = suggerimento.descrizione;
+    }
+}
+
+function getValoriBlendInW() {
+    let valA = parseFloat(el('blend_val_a')?.value) || 350;
+    let valB = parseFloat(el('blend_val_b')?.value) || 180;
+    let target = parseFloat(el('blend_target_input')?.value) || 280;
+
+    if (blendUnit === 'prot') {
+        valA = proteineToW(valA);
+        valB = proteineToW(valB);
+        target = proteineToW(target);
+    }
+
+    return { wForte: valA, wDebole: valB, wTarget: target };
+}
+
+function aggiornaCalcoloBlend(pesoFarinaTotale = 1000) {
+    if (!el('sezione_blend')) return null;
+
+    const { wForte, wDebole, wTarget } = getValoriBlendInW();
+    const risultato = calcolaTaglioDueFarine({
+        wForte,
+        wDebole,
+        wTarget,
+        pesoTotale: pesoFarinaTotale,
+        nomeForte: 'Farina Forte (A)',
+        nomeDebole: 'Farina Debole (B)'
+    });
+
+    // Aggiorna UI anteprima
+    el('blend_target_preview').textContent = `${wTarget} W`;
+    el('blend_res_perc_a').textContent = `${risultato.percentualeForte}%`;
+    el('blend_res_perc_b').textContent = `${risultato.percentualeDebole}%`;
+
+    el('blend_res_peso_a').textContent = pesoFarinaTotale > 0 ? `${risultato.pesoForte} g` : '-';
+    el('blend_res_peso_b').textContent = pesoFarinaTotale > 0 ? `${risultato.pesoDebole} g` : '-';
+
+    el('blend_res_w_eff').textContent = `${risultato.wEffettivo} W`;
+    el('blend_res_prot_eff').textContent = `~${risultato.proteineEffettive}% prot`;
+
+    el('blend_bar_a').style.width = `${risultato.percentualeForte}%`;
+    el('blend_bar_b').style.width = `${risultato.percentualeDebole}%`;
+
+    const alertEl = el('blend_alert');
+    if (risultato.avviso) {
+        alertEl.textContent = `⚠️ ${risultato.avviso}`;
+        alertEl.style.display = 'block';
+    } else {
+        alertEl.style.display = 'none';
+    }
+
+    // Se in modalità blend, sincronizziamo il campo forza_farina base con il W target/effettivo
+    if (isBlendMode) {
+        el('forza_farina').value = risultato.wEffettivo;
+    }
+
+    return risultato;
+}
+
+function cambiaUnitaBlend(nuovaUnita) {
+    if (blendUnit === nuovaUnita) return;
+    blendUnit = nuovaUnita;
+
+    const btnW = el('btn_unit_w');
+    const btnProt = el('btn_unit_prot');
+    const labelA = el('label_val_a');
+    const labelB = el('label_val_b');
+    const labelTarget = el('label_target');
+    const inputA = el('blend_val_a');
+    const inputB = el('blend_val_b');
+    const inputTarget = el('blend_target_input');
+
+    if (nuovaUnita === 'prot') {
+        btnW.classList.remove('active');
+        btnProt.classList.add('active');
+
+        labelA.textContent = 'Proteine % (es. 14.0% Manitoba)';
+        labelB.textContent = 'Proteine % (es. 10.5% Tipo 0)';
+        labelTarget.textContent = 'Proteine % obiettivo';
+
+        inputA.value = wToProteine(parseFloat(inputA.value) || 380);
+        inputA.step = '0.1';
+        inputB.value = wToProteine(parseFloat(inputB.value) || 180);
+        inputB.step = '0.1';
+        inputTarget.value = wToProteine(parseFloat(inputTarget.value) || 280);
+        inputTarget.step = '0.1';
+    } else {
+        btnProt.classList.remove('active');
+        btnW.classList.add('active');
+
+        labelA.textContent = 'Forza W (es. Manitoba)';
+        labelB.textContent = 'Forza W (es. Tipo 0 / 00)';
+        labelTarget.textContent = 'Valore W desiderato';
+
+        inputA.value = proteineToW(parseFloat(inputA.value) || 14.0);
+        inputA.step = '1';
+        inputB.value = proteineToW(parseFloat(inputB.value) || 10.5);
+        inputB.step = '1';
+        inputTarget.value = proteineToW(parseFloat(inputTarget.value) || 12.5);
+        inputTarget.step = '1';
+    }
+
+    aggiornaCalcoloBlend();
+}
+
+function impostaModalitaBlend(attivo) {
+    isBlendMode = attivo;
+    el('btn_mode_singola').classList.toggle('active', !attivo);
+    el('btn_mode_blend').classList.toggle('active', attivo);
+    el('sezione_blend').classList.toggle('hidden', !attivo);
+
+    if (attivo) {
+        aggiornaCalcoloBlend();
+    }
+}
+
 function aggiornaMetodiDisponibili() {
     const tipoPizza = el('tipo_pizza').value;
     const metodoSelect = el('tipo_impasto');
@@ -64,6 +212,7 @@ function aggiornaMetodiDisponibili() {
     metodoSelect.value = metodiDisponibili.includes(metodoAttuale) ? metodoAttuale : metodiDisponibili[0];
     aggiornaSezioneVisibile();
     sincronizzaTeglia();
+    aggiornaSuggerimentoW();
 }
 
 function aggiornaSezioneVisibile() {
@@ -71,6 +220,7 @@ function aggiornaSezioneVisibile() {
     Object.values(SEZIONI_METODO).forEach((id) => el(id).classList.add('hidden'));
     const idAttivo = SEZIONI_METODO[metodo];
     if (idAttivo) el(idAttivo).classList.remove('hidden');
+    aggiornaSuggerimentoW();
 }
 
 function sincronizzaTeglia() {
@@ -118,7 +268,7 @@ function calcolaRicetta() {
                 pesoPanetto: parseFloat(el('peso_panetto_diretto').value),
                 idratazioneTotale: parseFloat(el('idratazione_totale_diretto').value),
                 numPanetti: parseInt(el('num_panetti_diretto').value, 10),
-                tempoLievitazioneTotale: parseFloat(el('tempoLievTotale_diretto').value),
+                tempoLievTotale: parseFloat(el('tempoLievTotale_diretto').value),
                 oreFrigo: parseFloat(el('tempoFrigo_diretto').value) || 0,
                 temperaturaAmbiente: parseFloat(el('temperatura_ambiente_diretto').value),
                 tipoPizza,
@@ -187,24 +337,48 @@ function renderRisultato(dati, tipoImpasto) {
     const idratazioneTotale = idratazioneTotaleAttuale(tipoImpasto);
 
     const totali = estraiTotaliMacro(tipoImpasto, dati);
+    const pesoFarinaTot = Math.round(totali.farina);
+
+    let blendInfo = null;
+    if (isBlendMode) {
+        blendInfo = aggiornaCalcoloBlend(pesoFarinaTot);
+    }
+
     const grid = el('risultato-grid');
     grid.innerHTML = `
-        <div><strong id="res-farina">0</strong><span>g farina</span></div>
+        <div><strong id="res-farina">0</strong><span>g farina totale</span></div>
         <div><strong id="res-acqua">0</strong><span>g acqua</span></div>
         <div><strong id="res-sale">0</strong><span>g sale</span></div>
         <div><strong id="res-zucchero">0</strong><span>g zucchero</span></div>
         <div><strong id="res-olio">0</strong><span>g olio</span></div>
         <div><strong id="res-lievito">0.00</strong><span>g lievito</span></div>
+        ${isBlendMode && blendInfo && blendInfo.possibile ? `
+        <div class="recipe-blend-breakdown">
+            <strong>🌾 Taglio Farine (${blendInfo.wEffettivo} W — ~${blendInfo.proteineEffettive}% proteine):</strong>
+            <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-top: 6px;">
+                <span>🔴 <strong>${blendInfo.pesoForte} g</strong> Farina Forte (${blendInfo.percentualeForte}%)</span>
+                <span>🔵 <strong>${blendInfo.pesoDebole} g</strong> Farina Debole (${blendInfo.percentualeDebole}%)</span>
+            </div>
+        </div>
+        ` : ''}
     `;
 
-    animateNumber(el('res-farina'), Math.round(totali.farina), 0);
+    animateNumber(el('res-farina'), pesoFarinaTot, 0);
     animateNumber(el('res-acqua'), Math.round(totali.acqua), 0);
     animateNumber(el('res-sale'), Math.round(totali.sale), 0);
     animateNumber(el('res-zucchero'), Math.round(totali.zucchero), 0);
     animateNumber(el('res-olio'), Math.round(totali.olio), 0);
     animateNumber(el('res-lievito'), totali.lievito, 2);
 
-    const { passi, avvisi } = generaProcedura({ tipoPizza, tipoImpasto, idratazioneTotale, forzaFarina, dati });
+    const { passi, avvisi } = generaProcedura({
+        tipoPizza,
+        tipoImpasto,
+        idratazioneTotale,
+        forzaFarina: isBlendMode && blendInfo ? blendInfo.wEffettivo : forzaFarina,
+        dati,
+        blend: isBlendMode ? blendInfo : null
+    });
+
     el('risultato-steps').innerHTML = passi.map((p, idx) => `<li style="animation-delay: ${idx * 60}ms">${p}</li>`).join('');
     el('risultato-avvisi').innerHTML = avvisi.map((a) => `<p>${a}</p>`).join('');
 
@@ -216,14 +390,48 @@ function renderRisultato(dati, tipoImpasto) {
     resBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
+// Event Listeners Base
 el('tipo_pizza').addEventListener('change', aggiornaMetodiDisponibili);
 el('tipo_impasto').addEventListener('change', () => {
     aggiornaSezioneVisibile();
     sincronizzaTeglia();
 });
+
 ['teglia_base', 'teglia_altezza', 'teglia_spessore', 'teglia_numero'].forEach((id) => {
     el(id).addEventListener('input', sincronizzaTeglia);
     el(id).addEventListener('change', sincronizzaTeglia);
+});
+
+['tempoLievTotale_diretto', 'tempoFrigo_diretto'].forEach((id) => {
+    const input = el(id);
+    if (input) {
+        input.addEventListener('input', aggiornaSuggerimentoW);
+        input.addEventListener('change', aggiornaSuggerimentoW);
+    }
+});
+
+// Event Listeners Blend
+el('btn_mode_singola')?.addEventListener('click', () => impostaModalitaBlend(false));
+el('btn_mode_blend')?.addEventListener('click', () => impostaModalitaBlend(true));
+
+el('btn_unit_w')?.addEventListener('click', () => cambiaUnitaBlend('w'));
+el('btn_unit_prot')?.addEventListener('click', () => cambiaUnitaBlend('prot'));
+
+['blend_val_a', 'blend_val_b', 'blend_target_input'].forEach((id) => {
+    const input = el(id);
+    if (input) {
+        input.addEventListener('input', () => aggiornaCalcoloBlend());
+        input.addEventListener('change', () => aggiornaCalcoloBlend());
+    }
+});
+
+el('btn_applica_suggerito')?.addEventListener('click', () => {
+    if (blendUnit === 'prot') {
+        el('blend_target_input').value = wToProteine(wConsigliatoAttuale);
+    } else {
+        el('blend_target_input').value = wConsigliatoAttuale;
+    }
+    aggiornaCalcoloBlend();
 });
 
 el('calcola-button').addEventListener('click', () => {
@@ -249,8 +457,6 @@ el('nutrienti-button').addEventListener('click', () => {
     window.location.href = 'simulator.html';
 });
 
-// Applica una configurazione passata dall'Assistente Virtuale (vedi
-// assistente-page.js), salvata in localStorage prima del redirect qui.
 function applicaConfigurazioneAssistente() {
     const raw = localStorage.getItem('configurazioneImpasto');
     if (!raw) return;
@@ -299,4 +505,6 @@ function applicaConfigurazioneAssistente() {
 }
 
 aggiornaMetodiDisponibili();
+aggiornaSuggerimentoW();
 applicaConfigurazioneAssistente();
+
