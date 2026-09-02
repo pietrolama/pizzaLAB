@@ -26,6 +26,7 @@ const ASSETS_TO_CACHE = [
     './js/procedura-engine.js',
     './js/timer-engine.js',
     './js/pizza-card-engine.js',
+    './js/tools-engine.js',
     './js/diario-page.js',
     './js/assistente-page.js',
     './js/simulator-page.js',

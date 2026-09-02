@@ -22,6 +22,11 @@ import {
 } from './flour-blend-engine.js';
 import { kitchenTimer } from './timer-engine.js';
 import { generaPizzaCardBlob } from './pizza-card-engine.js';
+import {
+    calcolaCondimenti,
+    calcolaTempAcquaFDT,
+    GUIDA_FORNI
+} from './tools-engine.js';
 
 const el = (id) => document.getElementById(id);
 
@@ -527,11 +532,16 @@ el('btn-share-card')?.addEventListener('click', async () => {
 let pianoPassi = [];
 let pianoIndex = 0;
 let wakeLock = null;
+let wakeLockAttivo = false; // stato desiderato dall'utente, sopravvive al rilascio automatico del browser
 
 async function attivaWakeLock() {
     if ('wakeLock' in navigator) {
         try {
             wakeLock = await navigator.wakeLock.request('screen');
+            wakeLockAttivo = true;
+            wakeLock.addEventListener('release', () => {
+                wakeLock = null;
+            });
             const btn = el('btn-wakelock-toggle');
             if (btn) {
                 btn.textContent = '💡 Schermo Attivo: ON';
@@ -545,6 +555,7 @@ async function attivaWakeLock() {
 }
 
 function disattivaWakeLock() {
+    wakeLockAttivo = false;
     if (wakeLock) {
         wakeLock.release().then(() => { wakeLock = null; });
         const btn = el('btn-wakelock-toggle');
@@ -560,6 +571,15 @@ el('btn-wakelock-toggle')?.addEventListener('click', () => {
     if (wakeLock) {
         disattivaWakeLock();
     } else {
+        attivaWakeLock();
+    }
+});
+
+// Il browser rilascia automaticamente il Wake Lock quando la tab perde
+// visibilità (es. utente passa ad un'altra app in cucina): lo ri-acquisiamo
+// se l'utente lo aveva attivato esplicitamente.
+document.addEventListener('visibilitychange', () => {
+    if (wakeLockAttivo && !wakeLock && document.visibilityState === 'visible') {
         attivaWakeLock();
     }
 });
@@ -609,6 +629,9 @@ function apriPianoOperativo() {
 }
 
 function chiudiPianoOperativo() {
+    if (kitchenTimer.isRunning) {
+        kitchenTimer.stop();
+    }
     const modal = el('piano-operativo-modal');
     if (modal) {
         modal.classList.add('hidden');
@@ -619,6 +642,12 @@ function chiudiPianoOperativo() {
 
 function renderPianoCard(idx) {
     if (!pianoPassi[idx]) return;
+    // Ferma un eventuale timer del passo precedente: cambiare card senza
+    // fermarlo lascerebbe un timer attivo ma invisibile, con i suoi tick che
+    // continuerebbero a sovrascrivere il display del nuovo passo.
+    if (kitchenTimer.isRunning) {
+        kitchenTimer.stop();
+    }
     const passo = pianoPassi[idx];
     pianoIndex = idx;
 
@@ -859,4 +888,124 @@ function applicaConfigurazioneAssistente() {
 aggiornaMetodiDisponibili();
 aggiornaSuggerimentoW();
 applicaConfigurazioneAssistente();
+
+// =========================================================================
+// CONTROLLER STRUMENTI EXTRA (TOPPING, FDT, FORNI)
+// =========================================================================
+
+// 1. Tab Switching
+const toolTabs = [
+    { btn: 'tab-btn-topping', panel: 'panel-topping' },
+    { btn: 'tab-btn-fdt', panel: 'panel-fdt' },
+    { btn: 'tab-btn-forni', panel: 'panel-forni' },
+];
+
+toolTabs.forEach(({ btn, panel }) => {
+    el(btn)?.addEventListener('click', () => {
+        toolTabs.forEach((t) => {
+            el(t.btn)?.classList.remove('active');
+            el(t.panel)?.classList.add('hidden');
+        });
+        el(btn)?.classList.add('active');
+        el(panel)?.classList.remove('hidden');
+    });
+});
+
+// 2. Calcolo Condimenti / Topping
+function aggiornaCondimentiUI() {
+    if (!el('topping-list-container')) return;
+
+    const forma = el('topping_forma')?.value || 'tonda';
+    const isTonda = forma === 'tonda';
+
+    el('group_topping_diametro')?.classList.toggle('hidden', !isTonda);
+    el('group_topping_teglia_base')?.classList.toggle('hidden', isTonda);
+    el('group_topping_teglia_alt')?.classList.toggle('hidden', isTonda);
+
+    const diametro = parseFloat(el('topping_diametro')?.value) || 30;
+    const base = parseFloat(el('topping_teglia_base')?.value) || 40;
+    const altezza = parseFloat(el('topping_teglia_alt')?.value) || 60;
+    const farcitura = el('topping_farcitura')?.value || 'margherita';
+
+    const res = calcolaCondimenti({ forma, diametro, base, altezza, farcitura });
+
+    el('topping-area-label').textContent = `Superficie calcolata: ~${res.areaCm2} cm² (${isTonda ? `Ø ${diametro} cm` : `${base}x${altezza} cm`})`;
+
+    const container = el('topping-list-container');
+    container.innerHTML = res.condimenti.map((c) => `
+        <div class="topping-item-row">
+            <div>
+                <strong style="color: var(--text-main);">${c.nome}</strong>
+                <span style="display: block; font-size: 0.8rem; color: var(--text-dim);">${c.note}</span>
+            </div>
+            <span style="font-family: var(--font-heading); font-weight: 800; font-size: 1.15rem; color: var(--primary-color);">${c.quantita}</span>
+        </div>
+    `).join('');
+}
+
+['topping_forma', 'topping_diametro', 'topping_teglia_base', 'topping_teglia_alt', 'topping_farcitura'].forEach((id) => {
+    const elem = el(id);
+    if (elem) {
+        elem.addEventListener('change', aggiornaCondimentiUI);
+        elem.addEventListener('input', aggiornaCondimentiUI);
+    }
+});
+
+// 3. Calcolo Temperatura Acqua (FDT)
+function aggiornaFDTUI() {
+    if (!el('fdt-res-temp')) return;
+
+    const tempTarget = parseFloat(el('fdt_target')?.value) || 24;
+    const tempAmbiente = parseFloat(el('fdt_ambiente')?.value) || 22;
+    const tempFarina = parseFloat(el('fdt_farina')?.value) || (tempAmbiente - 1);
+    const tipoImpastatrice = el('fdt_impastatrice')?.value || 'mani';
+
+    const res = calcolaTempAcquaFDT({ tempTarget, tempAmbiente, tempFarina, tipoImpastatrice });
+
+    el('fdt-res-temp').textContent = `${res.tempAcqua}°C`;
+    el('fdt-res-tipo').textContent = res.tipoAcqua;
+    el('fdt-res-consiglio').textContent = res.consiglio;
+}
+
+['fdt_target', 'fdt_ambiente', 'fdt_farina', 'fdt_impastatrice'].forEach((id) => {
+    const elem = el(id);
+    if (elem) {
+        elem.addEventListener('input', aggiornaFDTUI);
+        elem.addEventListener('change', aggiornaFDTUI);
+    }
+});
+
+// Sincronizza T° Ambiente del calcolatore principale con FDT
+el('temperatura_ambiente_diretto')?.addEventListener('input', (e) => {
+    const val = parseFloat(e.target.value);
+    if (val && el('fdt_ambiente')) {
+        el('fdt_ambiente').value = val;
+        if (el('fdt_farina')) el('fdt_farina').value = val - 1;
+        aggiornaFDTUI();
+    }
+});
+
+// 4. Guida Setup Forni
+function renderOvenDetail(ovenId) {
+    const data = GUIDA_FORNI.find((f) => f.id === ovenId) || GUIDA_FORNI[0];
+    if (!data || !el('oven-detail-title')) return;
+
+    el('oven-detail-title').textContent = `${data.icona} ${data.nome}`;
+    el('oven-detail-time').textContent = data.tempiCottura;
+    el('oven-detail-list').innerHTML = data.setup.map((s) => `<li>${s}</li>`).join('');
+}
+
+document.querySelectorAll('.oven-choice-card').forEach((card) => {
+    card.addEventListener('click', () => {
+        document.querySelectorAll('.oven-choice-card').forEach((c) => c.classList.remove('active'));
+        card.classList.add('active');
+        renderOvenDetail(card.dataset.oven);
+    });
+});
+
+// Inizializza tutti gli strumenti
+aggiornaCondimentiUI();
+aggiornaFDTUI();
+renderOvenDetail('domestico');
+
 

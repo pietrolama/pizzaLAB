@@ -313,6 +313,133 @@
             </div>
         </section>
 
+        <!-- STRUMENTI EXTRA DEL PIZZAIOLO -->
+        <section class="tools-section">
+            <h2 style="font-size: 1.6rem; margin-bottom: 8px;">🛠️ Laboratorio & Strumenti Avanzati</h2>
+            <p style="color: var(--text-muted); margin-bottom: 20px;">Utilities scientifiche per bilanciare farciture, controllare le temperature e calibrare la cottura.</p>
+
+            <div class="tools-nav-pills" role="tablist">
+                <button type="button" id="tab-btn-topping" class="tool-tab-btn active">🧀 Calcolo Condimenti</button>
+                <button type="button" id="tab-btn-fdt" class="tool-tab-btn">🌡️ Temperatura Acqua (FDT)</button>
+                <button type="button" id="tab-btn-forni" class="tool-tab-btn">🔥 Guida Setup Forni</button>
+            </div>
+
+            <!-- PANEL 1: CALCOLO CONDIMENTI -->
+            <div id="panel-topping" class="tool-panel">
+                <h3 style="margin-bottom: 16px;">Bilanciamento Farcitura & Grammature</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="topping_forma">Forma Pizza</label>
+                        <select id="topping_forma" class="form-control">
+                            <option value="tonda" selected>Tonda al Piatto</option>
+                            <option value="teglia">Teglia Rettangolare</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="group_topping_diametro">
+                        <label for="topping_diametro">Diametro (cm)</label>
+                        <select id="topping_diametro" class="form-control">
+                            <option value="28">28 cm (Piccola / Fornetto tondo)</option>
+                            <option value="30" selected>30 cm (Classica Pizzeria)</option>
+                            <option value="33">33 cm (Napoletana Tradizionale / Ruota di Carro)</option>
+                            <option value="36">36 cm (Grande / Famiglia)</option>
+                        </select>
+                    </div>
+                    <div class="form-group hidden" id="group_topping_teglia_base">
+                        <label for="topping_teglia_base">Base Teglia (cm)</label>
+                        <input type="number" id="topping_teglia_base" class="form-control" value="40">
+                    </div>
+                    <div class="form-group hidden" id="group_topping_teglia_alt">
+                        <label for="topping_teglia_alt">Altezza Teglia (cm)</label>
+                        <input type="number" id="topping_teglia_alt" class="form-control" value="60">
+                    </div>
+                    <div class="form-group">
+                        <label for="topping_farcitura">Tipo di Farcitura</label>
+                        <select id="topping_farcitura" class="form-control">
+                            <option value="margherita" selected>Margherita Classica</option>
+                            <option value="marinara">Marinara Tradizionale</option>
+                            <option value="quattro_formaggi">Quattro Formaggi</option>
+                            <option value="capricciosa">Capricciosa / 4 Stagioni</option>
+                            <option value="focaccia">Focaccia con Salamoia ed Erbe</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="topping-result-card" id="topping-result-box">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <strong style="color: var(--primary-color);" id="topping-area-label">Superficie: ~707 cm²</strong>
+                        <span style="font-size: 0.85rem; color: var(--text-muted);">Dosi al grammo per singolo pezzo</span>
+                    </div>
+                    <div id="topping-list-container"></div>
+                </div>
+            </div>
+
+            <!-- PANEL 2: TEMPERATURA ACQUA (FDT) -->
+            <div id="panel-fdt" class="tool-panel hidden">
+                <h3 style="margin-bottom: 16px;">Calcolo Temperatura Acqua (FDT — Fattore Finale)</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px;">Formula scientifica per chiudere l'impasto esattamente alla temperatura ideale (23-25°C) ed evitare sovralievitazioni precoci.</p>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="fdt_target">T° Finale Desiderata (°C)</label>
+                        <input type="number" id="fdt_target" class="form-control" value="24" min="20" max="28">
+                    </div>
+                    <div class="form-group">
+                        <label for="fdt_ambiente">T° Stanza / Ambiente (°C)</label>
+                        <input type="number" id="fdt_ambiente" class="form-control" value="22">
+                    </div>
+                    <div class="form-group">
+                        <label for="fdt_farina">T° Sacco Farina (°C)</label>
+                        <input type="number" id="fdt_farina" class="form-control" value="21" placeholder="Se non misurata: T.Ambiente - 1">
+                    </div>
+                    <div class="form-group">
+                        <label for="fdt_impastatrice">Metodo / Frizione Meccanica</label>
+                        <select id="fdt_impastatrice" class="form-control">
+                            <option value="mani" selected>A Mano (+1°C)</option>
+                            <option value="planetaria">Planetaria con Gancio (+3°C)</option>
+                            <option value="spirale_1v">Impastatrice a Spirale 1 vel. (+4°C)</option>
+                            <option value="spirale_2v">Impastatrice a Spirale 2 vel. / Alta (+7°C)</option>
+                            <option value="bimby">Robot da Cucina con Lame (+9°C)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="fdt-display-card">
+                    <span style="font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);">Temperatura consigliata dell'acqua da inserire:</span>
+                    <div class="fdt-target-number" id="fdt-res-temp">15°C</div>
+                    <strong style="color: #fff; font-size: 1.1rem; display: block; margin-bottom: 6px;" id="fdt-res-tipo">💧 Acqua fresca di rubinetto</strong>
+                    <p style="font-size: 0.9rem; color: var(--text-muted); max-width: 650px; margin: 0 auto;" id="fdt-res-consiglio"></p>
+                </div>
+            </div>
+
+            <!-- PANEL 3: GUIDA FORNI -->
+            <div id="panel-forni" class="tool-panel hidden">
+                <h3 style="margin-bottom: 16px;">Guida Termica & Configurazione Forni</h3>
+                <div class="oven-cards-grid">
+                    <div class="oven-choice-card active" data-oven="domestico">
+                        <div style="font-size: 2rem; margin-bottom: 6px;">🏠</div>
+                        <strong>Forno Domestico</strong>
+                        <p style="font-size: 0.8rem; color: var(--text-muted);">250°C - 300°C</p>
+                    </div>
+                    <div class="oven-choice-card" data-oven="elettrico_alta">
+                        <div style="font-size: 2rem; margin-bottom: 6px;">⚡</div>
+                        <strong>Fornetto Elettrico</strong>
+                        <p style="font-size: 0.8rem; color: var(--text-muted);">450°C - 500°C (Effeuno, Ooni)</p>
+                    </div>
+                    <div class="oven-choice-card" data-oven="gas_legna">
+                        <div style="font-size: 2rem; margin-bottom: 6px;">🔥</div>
+                        <strong>Forno a Gas / Legna</strong>
+                        <p style="font-size: 0.8rem; color: var(--text-muted);">450°C - 500°C Esterno</p>
+                    </div>
+                </div>
+
+                <div class="oven-detail-box" id="oven-detail-box">
+                    <h4 id="oven-detail-title" style="font-size: 1.15rem; color: var(--primary-color);">Forno Domestico Standard</h4>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">Tempo medio di cottura: <strong id="oven-detail-time" style="color: #fff;">4-7 minuti</strong></p>
+                    <ul id="oven-detail-list"></ul>
+                </div>
+            </div>
+        </section>
+
         <!-- OVERLAY MODALE PIANO OPERATIVO (CARD CAROUSEL) -->
         <div id="piano-operativo-modal" class="piano-modal-overlay hidden" role="dialog" aria-modal="true" aria-label="Piano Operativo in Cucina">
             <div class="piano-modal-header">
