@@ -22,6 +22,28 @@ const output = {
     lievito: document.getElementById('mc-lievito'),
 };
 
+function animateNumber(element, targetValue, decimals = 0, duration = 350) {
+    const startValue = parseFloat(element.dataset.currentVal) || 0;
+    if (startValue === targetValue) return;
+    const startTime = performance.now();
+
+    function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easeOutQuad = 1 - (1 - progress) * (1 - progress);
+        const current = startValue + (targetValue - startValue) * easeOutQuad;
+        element.textContent = decimals > 0 ? current.toFixed(decimals) : Math.round(current);
+
+        if (progress < 1) {
+            requestAnimationFrame(update);
+        } else {
+            element.dataset.currentVal = targetValue;
+            element.textContent = decimals > 0 ? targetValue.toFixed(decimals) : Math.round(targetValue);
+        }
+    }
+    requestAnimationFrame(update);
+}
+
 function aggiorna() {
     const numPanetti = parseInt(campi.numero.value, 10);
     const pesoPanetto = parseFloat(campi.peso.value);
@@ -40,10 +62,10 @@ function aggiorna() {
         tipoPizza,
     });
 
-    output.farina.textContent = Math.round(ricetta.pesoFarina);
-    output.acqua.textContent = Math.round(ricetta.pesoAcqua);
-    output.sale.textContent = Math.round(ricetta.pesoSale);
-    output.lievito.textContent = parseFloat(ricetta.pesoLievito).toFixed(2);
+    animateNumber(output.farina, Math.round(ricetta.pesoFarina), 0);
+    animateNumber(output.acqua, Math.round(ricetta.pesoAcqua), 0);
+    animateNumber(output.sale, Math.round(ricetta.pesoSale), 0);
+    animateNumber(output.lievito, parseFloat(ricetta.pesoLievito), 2);
 }
 
 Object.values(campi).forEach((el) => {

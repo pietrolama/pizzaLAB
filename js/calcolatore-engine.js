@@ -108,6 +108,8 @@ export function calcolaImpastoBiga({ pesoPanetto, idratazioneTotale, percentuale
     const olio = 0.03 * pesoTotaleFarina;
 
     return {
+        numPanetti: numPanetti.toFixed(0),
+        pesoPanetto: pesoPanetto.toFixed(0),
         pesoFarina: pesoFarinaPrincipale.toFixed(2),
         pesoFarinaPrincipale: pesoFarinaPrincipale.toFixed(2),
         pesoAcqua: pesoAcquaPrincipale.toFixed(2),
@@ -135,6 +137,8 @@ export function calcolaImpastoPoolish({ pesoPanetto, idratazioneTotale, percentu
     const olio = 0.03 * pesoTotaleFarina;
 
     return {
+        numPanetti: numPanetti.toFixed(0),
+        pesoPanetto: pesoPanetto.toFixed(0),
         pesoFarina: pesoFarinaPrincipale.toFixed(2),
         pesoFarinaPrincipale: pesoFarinaPrincipale.toFixed(2),
         pesoAcqua: pesoAcquaPrincipale.toFixed(2),
@@ -170,6 +174,8 @@ export function calcolaImpastoLievitoMadre({ pesoPanetto, idratazioneTotale, per
     const acquaRinfresco2 = farinaRinfresco2 * 0.5;
 
     return {
+        numPanetti: numPanetti.toFixed(0),
+        pesoPanetto: pesoPanetto.toFixed(0),
         pesoFarinaPrincipale: farinaPrincipale.toFixed(2),
         pesoAcquaPrincipale: acquaPrincipale.toFixed(2),
         pesoSale: pesoSale.toFixed(2),
@@ -203,6 +209,8 @@ export function calcolaImpastoBigaPoolish({ pesoPanetto, idratazioneTotale, perc
     const olio = 0.03 * pesoTotaleFarina;
 
     return {
+        numPanetti: numPanetti.toFixed(0),
+        pesoPanetto: pesoPanetto.toFixed(0),
         pesoFarinaPrincipale: pesoFarinaPrincipale.toFixed(2),
         pesoAcquaPrincipale: pesoAcquaPrincipale.toFixed(2),
         pesoSale: sale.toFixed(2),

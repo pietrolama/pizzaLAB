@@ -157,52 +157,63 @@ function calcolaRicetta() {
     }
 }
 
-// Passi di preparazione specifici del prefermento, da anteporre ai passi
-// generici di mixing/incordatura generati da procedura-engine (che
-// ragionano sull'impasto finale, non sul prefermento in sé).
-function passiPrefermento(tipoImpasto, dati) {
-    switch (tipoImpasto) {
-        case 'biga':
-            return [`Prepara la biga: mescola ${dati.pesoFarinaBiga} g di farina, ${dati.pesoAcquaBiga} g di acqua e ${dati.pesoLievitoBiga} g di lievito. Lascia fermentare 16-20 ore a 16-18°C.`];
-        case 'poolish':
-            return [`Prepara il poolish: mescola ${dati.pesoFarinaPoolish} g di farina, ${dati.pesoAcquaPoolish} g di acqua e ${dati.pesoLievitoPoolish} g di lievito fino a una pastella liquida. Lascia fermentare 10-12 ore a temperatura ambiente.`];
-        case 'lievito_madre':
-            return [`Rinfresca il lievito madre con ${dati.farinaRinfresco2} g di farina e ${dati.acquaRinfresco2} g di acqua rispetto alla pasta madre attiva, fino a ottenere ${dati.pesoPastaMadreFinale} g di lievito madre maturo.`];
-        case 'biga_poolish':
-            return [
-                `Prepara la biga: mescola ${dati.pesoFarinaBiga} g di farina, ${dati.pesoAcquaBiga} g di acqua e ${dati.pesoLievitoBiga} g di lievito. Lascia fermentare 16-20 ore a 16-18°C.`,
-                `Prepara il poolish: mescola ${dati.pesoFarinaPoolish} g di farina, ${dati.pesoAcquaPoolish} g di acqua e ${dati.pesoLievitoPoolish} g di lievito fino a una pastella liquida. Lascia fermentare 10-12 ore a temperatura ambiente.`,
-            ];
-        default:
-            return [];
-    }
-}
-
 function idratazioneTotaleAttuale(tipoImpasto) {
     return parseFloat(el(CAMPO_IDRATAZIONE[tipoImpasto]).value);
 }
 
+function animateNumber(element, targetValue, decimals = 0, duration = 400) {
+    const startValue = parseFloat(element.dataset.currentVal) || 0;
+    const startTime = performance.now();
+
+    function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easeOutQuad = 1 - (1 - progress) * (1 - progress);
+        const current = startValue + (targetValue - startValue) * easeOutQuad;
+        element.textContent = decimals > 0 ? current.toFixed(decimals) : Math.round(current);
+
+        if (progress < 1) {
+            requestAnimationFrame(update);
+        } else {
+            element.dataset.currentVal = targetValue;
+            element.textContent = decimals > 0 ? targetValue.toFixed(decimals) : Math.round(targetValue);
+        }
+    }
+    requestAnimationFrame(update);
+}
+
 function renderRisultato(dati, tipoImpasto) {
-    const { forzaFarina } = leggiComune();
+    const { tipoPizza, forzaFarina } = leggiComune();
     const idratazioneTotale = idratazioneTotaleAttuale(tipoImpasto);
 
     const totali = estraiTotaliMacro(tipoImpasto, dati);
     const grid = el('risultato-grid');
     grid.innerHTML = `
-        <div><strong>${Math.round(totali.farina)}</strong><span>g farina</span></div>
-        <div><strong>${Math.round(totali.acqua)}</strong><span>g acqua</span></div>
-        <div><strong>${Math.round(totali.sale)}</strong><span>g sale</span></div>
-        <div><strong>${Math.round(totali.zucchero)}</strong><span>g zucchero</span></div>
-        <div><strong>${Math.round(totali.olio)}</strong><span>g olio</span></div>
-        <div><strong>${totali.lievito.toFixed(2)}</strong><span>g lievito</span></div>
+        <div><strong id="res-farina">0</strong><span>g farina</span></div>
+        <div><strong id="res-acqua">0</strong><span>g acqua</span></div>
+        <div><strong id="res-sale">0</strong><span>g sale</span></div>
+        <div><strong id="res-zucchero">0</strong><span>g zucchero</span></div>
+        <div><strong id="res-olio">0</strong><span>g olio</span></div>
+        <div><strong id="res-lievito">0.00</strong><span>g lievito</span></div>
     `;
 
-    const { passi, avvisi } = generaProcedura({ idratazioneTotale, forzaFarina });
-    const passiCompleti = [...passiPrefermento(tipoImpasto, dati), ...passi];
-    el('risultato-steps').innerHTML = passiCompleti.map((p) => `<li>${p}</li>`).join('');
+    animateNumber(el('res-farina'), Math.round(totali.farina), 0);
+    animateNumber(el('res-acqua'), Math.round(totali.acqua), 0);
+    animateNumber(el('res-sale'), Math.round(totali.sale), 0);
+    animateNumber(el('res-zucchero'), Math.round(totali.zucchero), 0);
+    animateNumber(el('res-olio'), Math.round(totali.olio), 0);
+    animateNumber(el('res-lievito'), totali.lievito, 2);
+
+    const { passi, avvisi } = generaProcedura({ tipoPizza, tipoImpasto, idratazioneTotale, forzaFarina, dati });
+    el('risultato-steps').innerHTML = passi.map((p, idx) => `<li style="animation-delay: ${idx * 60}ms">${p}</li>`).join('');
     el('risultato-avvisi').innerHTML = avvisi.map((a) => `<p>${a}</p>`).join('');
 
-    el('risultato').classList.remove('hidden');
+    const resBox = el('risultato');
+    resBox.classList.remove('hidden');
+    resBox.classList.remove('animate-reveal');
+    void resBox.offsetWidth; // trigger reflow
+    resBox.classList.add('animate-reveal');
+    resBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 el('tipo_pizza').addEventListener('change', aggiornaMetodiDisponibili);
