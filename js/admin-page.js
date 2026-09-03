@@ -140,21 +140,22 @@ function renderI18nTable() {
     });
 
     tbody.innerHTML = filteredKeys.map((k) => {
+        const safeKey = escapeHtml(k);
         const itVal = state.i18nIt[k] || '';
         const enVal = state.i18nEn[k] || '';
         const isMissing = !enVal || enVal.trim() === '';
 
         return `
             <tr style="${isMissing ? 'background: rgba(245, 158, 11, 0.05);' : ''}">
-                <td><code style="color: var(--primary-color); font-size: 0.85rem;">${k}</code></td>
+                <td><code style="color: var(--primary-color); font-size: 0.85rem;">${safeKey}</code></td>
                 <td>
-                    <textarea class="form-control admin-cell-input" data-key="${k}" data-lang="it" rows="2">${escapeHtml(itVal)}</textarea>
+                    <textarea class="form-control admin-cell-input" data-key="${safeKey}" data-lang="it" rows="2">${escapeHtml(itVal)}</textarea>
                 </td>
                 <td>
-                    <textarea class="form-control admin-cell-input" data-key="${k}" data-lang="en" rows="2" placeholder="Traduzione mancante...">${escapeHtml(enVal)}</textarea>
+                    <textarea class="form-control admin-cell-input" data-key="${safeKey}" data-lang="en" rows="2" placeholder="Traduzione mancante...">${escapeHtml(enVal)}</textarea>
                 </td>
                 <td style="text-align: center;">
-                    <button type="button" class="btn-secondary btn-delete-key" data-key="${k}" style="padding: 4px 8px; color: #ef4444;" title="Elimina chiave">✕</button>
+                    <button type="button" class="btn-secondary btn-delete-key" data-key="${safeKey}" style="padding: 4px 8px; color: #ef4444;" title="Elimina chiave">✕</button>
                 </td>
             </tr>
         `;
@@ -194,8 +195,13 @@ el('filter-i18n-search')?.addEventListener('input', renderI18nTable);
 el('filter-i18n-status')?.addEventListener('change', renderI18nTable);
 
 el('btn-add-i18n-key')?.addEventListener('click', () => {
-    const key = prompt('Inserisci la nuova chiave (es. calcolatore.pulsante_avanzato):');
-    if (!key) return;
+    const rawKey = prompt('Inserisci la nuova chiave (es. calcolatore.pulsante_avanzato):');
+    if (!rawKey) return;
+    const key = rawKey.trim();
+    if (!/^[a-zA-Z0-9_.-]+$/.test(key)) {
+        alert('Formato chiave non valido: consentite solo lettere, numeri, punti, trattini e underscore.');
+        return;
+    }
     const itText = prompt(`Testo italiano per "${key}":`) || '';
     state.i18nIt[key] = itText;
     state.i18nEn[key] = '';
