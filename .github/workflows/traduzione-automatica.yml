@@ -1,0 +1,76 @@
+name: Traduzione automatica contenuti (Kimi)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "data/scienza.json"
+      - "data/stagionale.json"
+      - "*.html"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  traduci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Estrai dizionario IT dall'HTML del sito
+        run: node scripts/estrai-i18n.mjs
+
+      - name: Traduci contenuti con Kimi
+        id: traduci
+        env:
+          KIMI_API_KEY: ${{ secrets.KIMI_API_KEY }}
+        run: |
+          set -o pipefail
+          node scripts/traduci-contenuti.mjs | tee /tmp/output.log
+
+      - name: Verifica se ci sono novità
+        id: check
+        run: |
+          if grep -q "HA_NOVITA=true" /tmp/output.log; then
+            echo "novita=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "novita=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Apri Pull Request di revisione
+        if: steps.check.outputs.novita == 'true'
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "Traduzione automatica contenuti (Kimi) - ${{ github.run_id }}"
+          branch: traduzione-automatica-contenuti
+          delete-branch: true
+          title: "Traduzione automatica EN: revisiona prima di pubblicare"
+          body: |
+            Traduzione in inglese generata automaticamente da Kimi:
+            - `data/i18n/it.json` -> `data/i18n/en.json`: testi statici di
+              tutto il sito, marcati con `data-i18n` / `data-i18n-<attr>`
+              nell'HTML (rigenerato da `data/i18n/it.json` ad ogni run).
+            - `data/scienza.json` -> `data/scienza.en.json` e
+              `data/stagionale.json` -> `data/stagionale.en.json`: contenuti
+              auto-generati.
+
+            Solo i campi/chiavi di testo libero sono tradotti; id, date, URL,
+            fonti e percorsi immagine restano invariati. Le chiavi/voci
+            invariate dall'ultima traduzione sono riusate dalla cache, non
+            richiamano l'API: solo il nuovo o il modificato viene tradotto
+            di nuovo.
+
+            Rivedi la qualità della traduzione (soprattutto la terminologia
+            tecnica) prima del merge: dopo il merge questi file diventano i
+            contenuti EN live.
+          add-paths: |
+            data/i18n/it.json
+            data/i18n/en.json
+            data/scienza.en.json
+            data/stagionale.en.json

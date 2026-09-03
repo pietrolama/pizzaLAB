@@ -51,6 +51,31 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // --- Language Switcher Integration ---
+    const navContainer = document.querySelector('.nav-container');
+    const navLinksList = document.querySelector('.nav-links');
+    if (navContainer && !document.querySelector('.lang-switch-container')) {
+        const langContainer = document.createElement('div');
+        langContainer.className = 'lang-switch-container';
+        langContainer.setAttribute('role', 'group');
+        langContainer.setAttribute('aria-label', 'Selezione lingua');
+        langContainer.innerHTML = `
+            <button type="button" class="lang-btn active" data-lang="it" aria-pressed="true">IT</button>
+            <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+        `;
+
+        if (navLinksList) {
+            navLinksList.appendChild(langContainer);
+        } else {
+            navContainer.appendChild(langContainer);
+        }
+    }
+
+    // Carica il runtime di internazionalizzazione
+    import('./i18n-engine.js').catch((err) => {
+        console.warn('i18n engine initialization error:', err);
+    });
+
     // --- PWA Service Worker Registration ---
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
