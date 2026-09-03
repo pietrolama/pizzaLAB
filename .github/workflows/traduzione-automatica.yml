@@ -72,5 +72,6 @@ jobs:
           add-paths: |
             data/i18n/it.json
             data/i18n/en.json
+            data/i18n/.cache-en.json
             data/scienza.en.json
             data/stagionale.en.json
