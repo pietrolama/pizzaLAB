@@ -277,6 +277,7 @@ function calcolaRicetta() {
                 pesoPanetto: parseFloat(el('peso_panetto_diretto').value),
                 idratazioneTotale: parseFloat(el('idratazione_totale_diretto').value),
                 numPanetti: parseInt(el('num_panetti_diretto').value, 10),
+                tempoLievitazioneTotale: parseFloat(el('tempoLievTotale_diretto').value),
                 tempoLievTotale: parseFloat(el('tempoLievTotale_diretto').value),
                 oreFrigo: parseFloat(el('tempoFrigo_diretto').value) || 0,
                 temperaturaAmbiente: parseFloat(el('temperatura_ambiente_diretto').value),

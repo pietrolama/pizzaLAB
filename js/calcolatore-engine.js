@@ -48,13 +48,23 @@ export function calcolaLievito(numPanetti, pesoPanetto, idratazione, sale, grass
 
 // Metodo Diretto: { pesoPanetto, idratazioneTotale, numPanetti, tempoLievitazioneTotale,
 // oreFrigo, temperaturaAmbiente, tipoPizza } -> ricetta completa.
-export function calcolaImpastoDiretto({ pesoPanetto, idratazioneTotale, numPanetti, tempoLievitazioneTotale, oreFrigo = 0, temperaturaAmbiente, tipoPizza }) {
+export function calcolaImpastoDiretto({
+    pesoPanetto,
+    idratazioneTotale,
+    numPanetti,
+    tempoLievitazioneTotale,
+    tempoLievTotale,
+    oreFrigo = 0,
+    temperaturaAmbiente,
+    tipoPizza
+}) {
     // La correzione termica si applica a Teglia e Pala.
     const inTeglia = tipoPizza === 'teglia' || tipoPizza === 'pala';
+    const tempoTotale = tempoLievitazioneTotale ?? tempoLievTotale ?? 8;
 
-    let tempoLievitazioneEffettivo = tempoLievitazioneTotale;
+    let tempoLievitazioneEffettivo = tempoTotale;
     if (oreFrigo > 0) {
-        tempoLievitazioneEffettivo = tempoLievitazioneTotale - (9 * oreFrigo / 10);
+        tempoLievitazioneEffettivo = tempoTotale - (9 * oreFrigo / 10);
     }
     const massa = tempoLievitazioneEffettivo * 10 / 100;
     const apretto = tempoLievitazioneEffettivo - massa;
@@ -75,7 +85,7 @@ export function calcolaImpastoDiretto({ pesoPanetto, idratazioneTotale, numPanet
     let lievito = calcolaLievito(
         numPanetti, pesoPanetto, idratazioneTotale,
         salePercentuale, grassiPercentuale,
-        tempoLievitazioneTotale, oreFrigo, temperaturaAmbiente, inTeglia
+        tempoTotale, oreFrigo, temperaturaAmbiente, inTeglia
     );
     if (isNaN(lievito)) lievito = 0;
 
