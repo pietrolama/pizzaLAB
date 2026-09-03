@@ -75,6 +75,60 @@ document.addEventListener('DOMContentLoaded', () => {
         console.warn('i18n engine initialization error:', err);
     });
 
+    // --- Firebase Auth & User Bar Integration in Navbar ---
+    import('./firebase-auth.js').then(({ onAuthChange, loginWithGoogle, logoutUser }) => {
+        const navLinksList = document.querySelector('.nav-links');
+        const langContainer = document.querySelector('.lang-switch-container');
+
+        // Crea container utente nella navbar se non presente
+        let userContainer = document.querySelector('.nav-user-slot');
+        if (!userContainer && navContainer) {
+            userContainer = document.createElement('div');
+            userContainer.className = 'nav-user-slot';
+            if (langContainer) {
+                navContainer.insertBefore(userContainer, langContainer);
+            } else if (hamburger) {
+                navContainer.insertBefore(userContainer, hamburger);
+            } else {
+                navContainer.appendChild(userContainer);
+            }
+        }
+
+        onAuthChange((user, isAdmin) => {
+            // Gestione link admin nel menu
+            const existingAdminLink = document.getElementById('nav-admin-link');
+            if (isAdmin && navLinksList && !existingAdminLink) {
+                const li = document.createElement('li');
+                li.id = 'nav-admin-link';
+                li.innerHTML = '<a href="admin.html" style="color: var(--primary-color); font-weight: 700;">⚙️ Admin</a>';
+                navLinksList.appendChild(li);
+            } else if (!isAdmin && existingAdminLink) {
+                existingAdminLink.remove();
+            }
+
+            // Gestione pulsante profilo / login
+            if (userContainer) {
+                if (user) {
+                    const initial = (user.displayName || user.email || 'U').charAt(0).toUpperCase();
+                    userContainer.innerHTML = `
+                        <div class="nav-user-badge" title="${user.displayName || user.email}">
+                            <span class="nav-user-avatar">${initial}</span>
+                            <button type="button" class="nav-user-logout-btn" title="Disconnetti">✕</button>
+                        </div>
+                    `;
+                    userContainer.querySelector('.nav-user-logout-btn')?.addEventListener('click', () => logoutUser());
+                } else {
+                    userContainer.innerHTML = `
+                        <button type="button" class="btn-chip btn-nav-login" style="padding: 4px 10px; font-size: 0.78rem;">Accedi</button>
+                    `;
+                    userContainer.querySelector('.btn-nav-login')?.addEventListener('click', () => loginWithGoogle());
+                }
+            }
+        });
+    }).catch((err) => {
+        console.warn('Firebase Auth integration error in nav:', err);
+    });
+
     // --- PWA Service Worker Registration ---
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {

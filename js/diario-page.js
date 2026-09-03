@@ -1,7 +1,30 @@
 // diario-page.js
-// Diario di fermentazione salvato in localStorage (nessun backend/login in
-// questa fase): funziona subito, resta legato al browser/dispositivo.
+// Diario di fermentazione salvato in localStorage + sincronizzazione opzionale su Firebase Firestore.
+import { onAuthChange, salvaDiarioCloud, caricaDiarioCloud, eliminaDiarioCloud } from './firebase-auth.js';
+
 const CHIAVE_STORAGE = 'diarioFermentazioni';
+let currentUser = null;
+
+onAuthChange(async (user) => {
+    currentUser = user;
+    if (user) {
+        try {
+            const cloudEntries = await caricaDiarioCloud();
+            if (cloudEntries && cloudEntries.length > 0) {
+                const locali = leggiFermentazioni();
+                // Unisci per ID evitando duplicati
+                const idMap = new Map();
+                cloudEntries.forEach((e) => idMap.set(e.id || `${e.nome}_${e.data}`, e));
+                locali.forEach((e) => idMap.set(e.id || `${e.nome}_${e.data}`, e));
+                const uniti = Array.from(idMap.values());
+                salvaFermentazioni(uniti);
+                renderLista();
+            }
+        } catch (e) {
+            console.warn('Errore sync diario cloud:', e);
+        }
+    }
+});
 
 function leggiFermentazioni() {
     try {
@@ -83,27 +106,47 @@ function renderLista() {
     });
 
     container.querySelectorAll('.elimina-fermentazione').forEach((btn) => {
-        btn.addEventListener('click', () => {
+        btn.addEventListener('click', async () => {
             const lista2 = leggiFermentazioni();
-            lista2.splice(parseInt(btn.dataset.index, 10), 1);
+            const idx = parseInt(btn.dataset.index, 10);
+            const item = lista2[idx];
+            if (item && item.id) {
+                try {
+                    await eliminaDiarioCloud(item.id);
+                } catch (e) {
+                    console.warn('Errore eliminazione cloud:', e);
+                }
+            }
+            lista2.splice(idx, 1);
             salvaFermentazioni(lista2);
             renderLista();
         });
     });
 }
 
-document.getElementById('fermentazione-form').addEventListener('submit', (e) => {
+document.getElementById('fermentazione-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const lista = leggiFermentazioni();
-    lista.unshift({
+    const nuovaEntry = {
+        id: `ferm_${Date.now()}`,
         nome: document.getElementById('nome').value,
         data: document.getElementById('data').value,
         idratazione: document.getElementById('idratazione').value,
         lievito: document.getElementById('lievito').value,
         tempo: document.getElementById('tempo').value,
         note: document.getElementById('note').value,
-    });
+    };
+    lista.unshift(nuovaEntry);
     salvaFermentazioni(lista);
+    
+    if (currentUser) {
+        try {
+            await salvaDiarioCloud(nuovaEntry);
+        } catch (err) {
+            console.warn('Errore salvataggio cloud:', err);
+        }
+    }
+
     document.getElementById('fermentazione-form').reset();
     document.getElementById('data').value = new Date().toISOString().split('T')[0];
     renderLista();

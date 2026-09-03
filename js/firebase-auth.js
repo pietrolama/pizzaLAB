@@ -10,6 +10,17 @@ import {
     onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
+import {
+    getFirestore,
+    collection,
+    doc,
+    getDocs,
+    setDoc,
+    deleteDoc,
+    query,
+    orderBy
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
 export const ADMIN_EMAIL = "pietrolama@gmail.com";
 
 const firebaseConfig = {
@@ -24,6 +35,7 @@ const firebaseConfig = {
 
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
+export const db = getFirestore(app);
 export const provider = new GoogleAuthProvider();
 
 /**
@@ -49,3 +61,42 @@ export function onAuthChange(callback) {
         callback(user, isAdmin);
     });
 }
+
+/**
+ * Salva una fermentazione nel diario cloud dell'utente.
+ */
+export async function salvaDiarioCloud(entry) {
+    const user = auth.currentUser;
+    if (!user) return null;
+    const docId = entry.id || `ferm_${Date.now()}`;
+    const docRef = doc(db, "fermentazioni", user.uid, "entries", docId);
+    await setDoc(docRef, {
+        ...entry,
+        id: docId,
+        updatedAt: new Date().toISOString()
+    });
+    return docId;
+}
+
+/**
+ * Carica le fermentazioni salvate nel cloud per l'utente loggato.
+ */
+export async function caricaDiarioCloud() {
+    const user = auth.currentUser;
+    if (!user) return [];
+    const q = query(collection(db, "fermentazioni", user.uid, "entries"));
+    const snap = await getDocs(q);
+    const results = [];
+    snap.forEach((d) => results.push({ id: d.id, ...d.data() }));
+    return results;
+}
+
+/**
+ * Elimina una fermentazione dal cloud.
+ */
+export async function eliminaDiarioCloud(docId) {
+    const user = auth.currentUser;
+    if (!user || !docId) return;
+    await deleteDoc(doc(db, "fermentazioni", user.uid, "entries", docId));
+}
+
