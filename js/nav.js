@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (isAdmin && navLinksList && !existingAdminLink) {
                 const li = document.createElement('li');
                 li.id = 'nav-admin-link';
-                li.innerHTML = '<a href="admin.html" style="color: var(--primary-color); font-weight: 700;">⚙️ Admin</a>';
+                li.innerHTML = '<a href="admin.html" style="color: var(--primary-color); font-weight: 700;">⚙️ Redazione</a>';
                 navLinksList.appendChild(li);
             } else if (!isAdmin && existingAdminLink) {
                 existingAdminLink.remove();
