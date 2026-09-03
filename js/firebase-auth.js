@@ -21,7 +21,8 @@ import {
     orderBy
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-export const ADMIN_EMAIL = "pietrolama@gmail.com";
+export const ADMIN_EMAILS = ["pietrolama1@gmail.com", "pietrolama@gmail.com"];
+export const ADMIN_EMAIL = "pietrolama1@gmail.com";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDx2udaOvFXoQP-H2lldGXD268yrZHM0aI",
@@ -57,7 +58,7 @@ export async function logoutUser() {
  */
 export function onAuthChange(callback) {
     return onAuthStateChanged(auth, (user) => {
-        const isAdmin = user && user.email === ADMIN_EMAIL;
+        const isAdmin = user && ADMIN_EMAILS.includes(user.email);
         callback(user, isAdmin);
     });
 }
