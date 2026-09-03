@@ -50,6 +50,10 @@ onAuthChange((user, isAdmin) => {
 });
 
 el('btn-logout')?.addEventListener('click', async () => {
+    try {
+        sessionStorage.clear();
+        localStorage.removeItem(STORAGE_TOKEN_KEY);
+    } catch (e) {}
     await logoutUser();
     window.location.replace('index.html');
 });
@@ -207,30 +211,84 @@ el('btn-save-i18n-local')?.addEventListener('click', () => {
 // Traduzione con AI client-side per le chiavi mancanti
 el('btn-ai-translate-missing')?.addEventListener('click', async () => {
     const missingKeys = Object.keys(state.i18nIt).filter((k) => !state.i18nEn[k] || state.i18nEn[k].trim() === '');
+// Traduzione con AI client-side per le chiavi mancanti (Moonshot Kimi API)
+el('btn-ai-translate-missing')?.addEventListener('click', async () => {
+    const missingKeys = Object.keys(state.i18nIt).filter((k) => !state.i18nEn[k] || state.i18nEn[k].trim() === '');
     if (missingKeys.length === 0) {
         alert('Tutte le chiavi hanno già una traduzione in inglese!');
         return;
     }
 
+    let apiKey = sessionStorage.getItem('pizzalab_kimi_api_key');
+    if (!apiKey) {
+        apiKey = prompt(`Inserisci la tua KIMI_API_KEY (Moonshot AI) per tradurre ${missingKeys.length} chiavi:\n(Verrà conservata solo temporaneamente in memoria per questa sessione)`);
+        if (!apiKey) return;
+        sessionStorage.setItem('pizzalab_kimi_api_key', apiKey.trim());
+    }
+
     const btn = el('btn-ai-translate-missing');
     const origText = btn.textContent;
-    btn.textContent = `⏳ Traduzione di ${missingKeys.length} chiavi...`;
+    btn.textContent = `⏳ Traduzione con Kimi AI di ${missingKeys.length} chiavi...`;
     btn.disabled = true;
 
     try {
-        // Traduzione automatica con Kimi / API o fallback
-        for (const k of missingKeys) {
-            const itText = state.i18nIt[k];
-            if (itText) {
-                // Semplice fallback di traduzione o prefisso se offline
-                state.i18nEn[k] = itText;
+        const payloadToTranslate = {};
+        missingKeys.forEach((k) => {
+            payloadToTranslate[k] = state.i18nIt[k] || '';
+        });
+
+        const response = await fetch('https://api.moonshot.cn/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${apiKey.trim()}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                model: 'moonshot-v1-8k',
+                temperature: 0.2,
+                messages: [
+                    {
+                        role: 'system',
+                        content: 'Sei il traduttore ufficiale di PizzaLab (piattaforma web scientifica di pizza e panificazione). Traduci le stringhe italiane in un inglese naturale, moderno e tecnicamente accurato per il settore food e baking. Rispondi ESCLUSIVAMENTE con un oggetto JSON valido contenente le stesse chiavi e i testi tradotti in inglese, senza testo introduttivo o markdown non JSON.'
+                    },
+                    {
+                        role: 'user',
+                        content: JSON.stringify(payloadToTranslate, null, 2)
+                    }
+                ]
+            })
+        });
+
+        if (!response.ok) {
+            const errData = await response.json().catch(() => ({}));
+            throw new Error(errData.error?.message || `HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+        const rawContent = data.choices?.[0]?.message?.content || '{}';
+        
+        // Estrai JSON pulito anche se racchiuso in blocchi di codice markdown
+        const jsonMatch = rawContent.match(/\{[\s\S]*\}/);
+        if (!jsonMatch) {
+            throw new Error('La risposta dell\'AI non contiene un JSON valido.');
+        }
+
+        const translatedObj = JSON.parse(jsonMatch[0]);
+        let tradotteCount = 0;
+
+        for (const [k, v] of Object.entries(translatedObj)) {
+            if (state.i18nIt[k] !== undefined && typeof v === 'string') {
+                state.i18nEn[k] = v;
+                tradotteCount++;
             }
         }
+
         segnaFileModificato('data/i18n/en.json');
         renderI18nTable();
-        alert(`✅ Tradotte ${missingKeys.length} chiavi! Controlla e rifinisci le traduzioni.`);
+        alert(`🎉 Traduzione completata con successo! ${tradotteCount} chiavi aggiornate con Kimi AI.`);
     } catch (e) {
-        alert('Errore traduzione: ' + e.message);
+        alert('Errore traduzione con Kimi AI: ' + e.message);
+        sessionStorage.removeItem('pizzalab_kimi_api_key');
     } finally {
         btn.textContent = origText;
         btn.disabled = false;
@@ -370,11 +428,15 @@ el('btn-save-stagionale')?.addEventListener('click', () => {
 // 6. PUBBLICAZIONE GITHUB & SYNC API
 // =========================================================================
 function caricaTokenGitHub() {
-    const token = localStorage.getItem(STORAGE_TOKEN_KEY) || '';
+    // Rimuove qualsiasi residuo da localStorage per sicurezza
+    try { localStorage.removeItem(STORAGE_TOKEN_KEY); } catch (e) {}
+
+    // Il token vive solo nella sessione corrente (RAM / sessionStorage della scheda)
+    const token = sessionStorage.getItem(STORAGE_TOKEN_KEY) || '';
     if (el('github-pat-token')) {
         el('github-pat-token').value = token;
         el('github-pat-token').addEventListener('input', (e) => {
-            localStorage.setItem(STORAGE_TOKEN_KEY, e.target.value.trim());
+            sessionStorage.setItem(STORAGE_TOKEN_KEY, e.target.value.trim());
         });
     }
 }

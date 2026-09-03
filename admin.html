@@ -150,9 +150,9 @@
 
                 <div class="admin-github-card">
                     <div class="form-group" style="max-width: 600px; margin-bottom: 20px;">
-                        <label for="github-pat-token">GitHub Personal Access Token (Fine-grained o Classic con permessi <code>repo</code>)</label>
-                        <input type="password" id="github-pat-token" class="form-control" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
-                        <span style="font-size: 0.78rem; color: var(--text-dim); margin-top: 4px; display: block;">Il token viene salvato solo nel tuo browser locale (localStorage) e mai inviato a server terzi.</span>
+                        <label for="github-pat-token">GitHub Fine-grained PAT (con permessi <code>Contents: Read & Write</code> solo per <code>pietrolama/pizzaLAB</code>)</label>
+                        <input type="password" id="github-pat-token" class="form-control" placeholder="github_pat_xxxxxxxxxxxxxxxxxxxx">
+                        <span style="font-size: 0.78rem; color: #10b981; margin-top: 4px; display: block;">🔒 Sicurezza: il token è conservato unicamente nella memoria volatile di sessione (sessionStorage) e viene distrutto alla chiusura della scheda o al logout.</span>
                     </div>
 
                     <div id="github-status-box" class="admin-status-box">
