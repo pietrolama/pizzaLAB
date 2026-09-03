@@ -51,9 +51,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Language Switcher Integration ---
+    // --- Language Switcher Integration (sempre visibile sia desktop che mobile) ---
     const navContainer = document.querySelector('.nav-container');
-    const navLinksList = document.querySelector('.nav-links');
     if (navContainer && !document.querySelector('.lang-switch-container')) {
         const langContainer = document.createElement('div');
         langContainer.className = 'lang-switch-container';
@@ -64,8 +63,8 @@ document.addEventListener('DOMContentLoaded', () => {
             <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
         `;
 
-        if (navLinksList) {
-            navLinksList.appendChild(langContainer);
+        if (hamburger) {
+            navContainer.insertBefore(langContainer, hamburger);
         } else {
             navContainer.appendChild(langContainer);
         }
