@@ -1648,6 +1648,163 @@ footer {
     line-height: 1.4;
 }
 
+/* ===== ADMIN DASHBOARD ===== */
+.admin-body {
+    background-color: var(--bg-dark);
+}
+
+.admin-auth-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 48px 32px;
+    max-width: 540px;
+    margin: 40px auto;
+    text-align: center;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+    animation: fadeSlideUp 0.35s ease forwards;
+}
+
+.admin-auth-card h2 {
+    font-size: 1.6rem;
+    margin-bottom: 12px;
+}
+
+.admin-error-box {
+    margin-top: 20px;
+    padding: 12px 16px;
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.35);
+    color: #fca5a5;
+    border-radius: 10px;
+    font-size: 0.88rem;
+}
+
+.admin-user-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.admin-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.admin-stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.admin-stat-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 18px;
+    text-align: center;
+}
+
+.admin-stat-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.admin-stat-value {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--text-main);
+}
+
+.admin-filter-bar {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+.admin-table-container {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    overflow-x: auto;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.admin-table th {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 14px 16px;
+    text-align: left;
+    font-family: var(--font-heading);
+    color: var(--text-muted);
+    font-weight: 700;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.admin-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    vertical-align: top;
+}
+
+.admin-cell-input {
+    width: 100%;
+    font-size: 0.88rem;
+    padding: 8px 10px;
+    resize: vertical;
+}
+
+.admin-github-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 28px;
+}
+
+.admin-status-box {
+    background: var(--bg-dark);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.admin-result-alert {
+    margin-top: 20px;
+    padding: 14px 18px;
+    border-radius: 10px;
+    font-size: 0.92rem;
+    font-weight: 600;
+}
+
+.admin-result-alert.success {
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.4);
+    color: #34d399;
+}
+
+.admin-result-alert.error {
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    color: #f87171;
+}
+
+
 
 
 

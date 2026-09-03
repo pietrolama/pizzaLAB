@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PizzaLab — Admin & Editorial Dashboard</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="theme-color" content="#08090c">
+    <link rel="icon" href="img/logo.png" type="image/png">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body class="admin-body">
+    <nav class="site-nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <img src="img/logo.png" alt="PizzaLab">
+                PizzaLab <span style="font-size: 0.75rem; color: var(--primary-color); margin-left: 6px; padding: 2px 6px; border: 1px solid rgba(255,82,38,0.4); border-radius: 6px;">ADMIN</span>
+            </a>
+            <div id="admin-user-bar" class="admin-user-header hidden">
+                <span id="admin-user-name" style="font-size: 0.85rem; color: var(--text-muted);">pietrolama@gmail.com</span>
+                <button type="button" id="btn-logout" class="btn-secondary" style="padding: 6px 14px; font-size: 0.82rem;">Esci</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="page-container" style="max-width: 1280px; padding-top: 100px;">
+        <!-- 1. AUTH GATE (Se non autenticato come pietrolama@gmail.com) -->
+        <section id="auth-gate-section" class="admin-auth-card">
+            <div style="font-size: 3rem; margin-bottom: 12px;">🔐</div>
+            <h2>Pannello Riservato Amministratore</h2>
+            <p style="color: var(--text-muted); max-width: 480px; margin: 0 auto 24px;">
+                Accesso riservato a <strong>pietrolama@gmail.com</strong> per la gestione editoriale delle traduzioni, articoli scientifici e panificati stagionali.
+            </p>
+            <button type="button" id="btn-google-login" class="btn" style="padding: 14px 28px; font-size: 1rem; display: inline-flex; align-items: center; gap: 10px;">
+                <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#fff" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#fff" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#fff" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#fff" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
+                Accedi con Google
+            </button>
+            <div id="auth-error-box" class="admin-error-box hidden"></div>
+        </section>
+
+        <!-- 2. DASHBOARD OPERATIVA -->
+        <section id="dashboard-section" class="hidden">
+            <!-- Tabs di navigazione Admin -->
+            <div class="tools-nav-pills" style="margin-bottom: 24px;">
+                <button type="button" class="tool-tab-btn active" data-admin-tab="traduzioni">🌐 Traduzioni i18n</button>
+                <button type="button" class="tool-tab-btn" data-admin-tab="scienza">🔬 Articoli Scienza</button>
+                <button type="button" class="tool-tab-btn" data-admin-tab="stagionale">🍂 Panificato Stagionale</button>
+                <button type="button" class="tool-tab-btn" data-admin-tab="github">🚀 Pubblicazione GitHub</button>
+            </div>
+
+            <!-- TAB 1: TRADUZIONI I18N -->
+            <div id="admin-tab-traduzioni" class="admin-tab-panel">
+                <div class="admin-panel-header">
+                    <div>
+                        <h2>Gestione Traduzioni & Dizionari</h2>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">Sincronizzazione tra <code>data/i18n/it.json</code> e <code>data/i18n/en.json</code></p>
+                    </div>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button type="button" id="btn-add-i18n-key" class="btn-secondary" style="font-size: 0.85rem;">➕ Nuova Chiave</button>
+                        <button type="button" id="btn-ai-translate-missing" class="btn-chip" style="font-size: 0.85rem;">⚡ Traduci Mancanti con AI</button>
+                        <button type="button" id="btn-save-i18n-local" class="btn" style="font-size: 0.85rem;">💾 Salva Modifiche</button>
+                    </div>
+                </div>
+
+                <div class="admin-stats-row">
+                    <div class="admin-stat-card">
+                        <span class="admin-stat-label">Totale Chiavi</span>
+                        <strong id="stat-total-keys" class="admin-stat-value">0</strong>
+                    </div>
+                    <div class="admin-stat-card">
+                        <span class="admin-stat-label">Tradotte in Inglese</span>
+                        <strong id="stat-translated-en" class="admin-stat-value" style="color: #10b981;">0</strong>
+                    </div>
+                    <div class="admin-stat-card">
+                        <span class="admin-stat-label">Mancanti in Inglese</span>
+                        <strong id="stat-missing-en" class="admin-stat-value" style="color: #f59e0b;">0</strong>
+                    </div>
+                </div>
+
+                <div class="admin-filter-bar">
+                    <input type="text" id="filter-i18n-search" class="form-control" placeholder="Cerca per chiave o testo..." style="max-width: 320px;">
+                    <select id="filter-i18n-status" class="form-control" style="max-width: 200px;">
+                        <option value="all">Tutte le chiavi</option>
+                        <option value="missing">Solo mancanti in EN</option>
+                        <option value="translated">Solo completate</option>
+                    </select>
+                </div>
+
+                <div class="admin-table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 25%;">Chiave ID</th>
+                                <th style="width: 35%;">Italiano (Fonte)</th>
+                                <th style="width: 35%;">Inglese (Traduzione)</th>
+                                <th style="width: 5%;">Azioni</th>
+                            </tr>
+                        </thead>
+                        <tbody id="i18n-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB 2: ARTICOLI SCIENZA -->
+            <div id="admin-tab-scienza" class="admin-tab-panel hidden">
+                <div class="admin-panel-header">
+                    <div>
+                        <h2>Redazione Articoli Scientifici</h2>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">Gestisci i contenuti divulgativi in <code>data/scienza.json</code></p>
+                    </div>
+                    <button type="button" id="btn-add-scienza-article" class="btn" style="font-size: 0.85rem;">➕ Nuovo Articolo</button>
+                </div>
+
+                <div id="scienza-articles-list" class="admin-cards-list"></div>
+            </div>
+
+            <!-- TAB 3: PANIFICATO STAGIONALE -->
+            <div id="admin-tab-stagionale" class="admin-tab-panel hidden">
+                <div class="admin-panel-header">
+                    <div>
+                        <h2>Panificato Stagionale del Mese</h2>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">Configura la proposta stagionale in <code>data/stagionale.json</code></p>
+                    </div>
+                    <button type="button" id="btn-save-stagionale" class="btn" style="font-size: 0.85rem;">💾 Salva Panificato</button>
+                </div>
+
+                <div class="form-row" id="stagionale-form-container">
+                    <div class="form-group">
+                        <label for="stag-nome">Nome Pizza / Panificato</label>
+                        <input type="text" id="stag-nome" class="form-control" placeholder="Es. Pizza ai Fiori di Zucca e Alici">
+                    </div>
+                    <div class="form-group">
+                        <label for="stag-eyebrow">Mese / Stagione</label>
+                        <input type="text" id="stag-eyebrow" class="form-control" placeholder="Es. Maggio — Primavera">
+                    </div>
+                    <div class="form-group">
+                        <label for="stag-impasto">Impasto Consigliato</label>
+                        <input type="text" id="stag-impasto" class="form-control" placeholder="Es. Napoletana Contemporanea 70% idratazione">
+                    </div>
+                    <div class="form-group">
+                        <label for="stag-img">URL Immagine</label>
+                        <input type="text" id="stag-img" class="form-control" placeholder="img/stagionale.jpg">
+                    </div>
+                    <div class="form-group" style="flex: 1 1 100%;">
+                        <label for="stag-desc">Descrizione e Note di Degustazione</label>
+                        <textarea id="stag-desc" class="form-control" rows="4" placeholder="Descrivi il bilanciamento dei sapori..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 4: PUBBLICAZIONE GITHUB -->
+            <div id="admin-tab-github" class="admin-tab-panel hidden">
+                <div class="admin-panel-header">
+                    <div>
+                        <h2>Pubblicazione Diretta su GitHub</h2>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">Effettua il commit e push dei file aggiornati direttamente sul branch <code>main</code></p>
+                    </div>
+                </div>
+
+                <div class="admin-github-card">
+                    <div class="form-group" style="max-width: 600px; margin-bottom: 20px;">
+                        <label for="github-pat-token">GitHub Personal Access Token (Fine-grained o Classic con permessi <code>repo</code>)</label>
+                        <input type="password" id="github-pat-token" class="form-control" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+                        <span style="font-size: 0.78rem; color: var(--text-dim); margin-top: 4px; display: block;">Il token viene salvato solo nel tuo browser locale (localStorage) e mai inviato a server terzi.</span>
+                    </div>
+
+                    <div id="github-status-box" class="admin-status-box">
+                        <strong>Modifiche pronte per la pubblicazione:</strong>
+                        <ul id="github-pending-files-list" style="margin: 8px 0 0 20px; font-size: 0.9rem;">
+                            <li>Nessuna modifica non salvata</li>
+                        </ul>
+                    </div>
+
+                    <div style="display: flex; gap: 14px; flex-wrap: wrap; margin-top: 24px;">
+                        <button type="button" id="btn-github-publish-main" class="btn" style="padding: 12px 28px;">
+                            <span>🚀</span> Pubblica su GitHub (branch main)
+                        </button>
+                        <button type="button" id="btn-trigger-gh-action" class="btn-chip" style="padding: 12px 20px;">
+                            <span>🔄</span> Avvia Traduzione Automatica (GitHub Action)
+                        </button>
+                        <button type="button" id="btn-download-all-json" class="btn-secondary" style="padding: 12px 20px;">
+                            <span>⬇️</span> Scarica Backup JSON
+                        </button>
+                    </div>
+
+                    <div id="github-result-alert" class="admin-result-alert hidden"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- MODAL EDIT ARTICOLO SCIENZA -->
+    <div id="scienza-modal" class="piano-modal-overlay hidden" role="dialog" aria-modal="true">
+        <div class="piano-step-card" style="max-width: 750px; margin: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 id="scienza-modal-title">Modifica Articolo Scientifico</h3>
+                <button type="button" id="btn-close-scienza-modal" class="btn-secondary" style="padding: 4px 10px;">✕</button>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="art-id">ID Univoco (slug)</label>
+                    <input type="text" id="art-id" class="form-control" placeholder="es. idratazione-e-alveolatura">
+                </div>
+                <div class="form-group">
+                    <label for="art-tag">Tag / Categoria</label>
+                    <input type="text" id="art-tag" class="form-control" placeholder="es. Fermentazione">
+                </div>
+                <div class="form-group" style="flex: 1 1 100%;">
+                    <label for="art-titolo">Titolo Articolo</label>
+                    <input type="text" id="art-titolo" class="form-control" placeholder="Titolo chiaro e accattivante">
+                </div>
+                <div class="form-group" style="flex: 1 1 100%;">
+                    <label for="art-sintesi">Sintesi Breve (1-2 frasi)</label>
+                    <textarea id="art-sintesi" class="form-control" rows="2"></textarea>
+                </div>
+                <div class="form-group" style="flex: 1 1 100%;">
+                    <label for="art-corpo">Testo Completo / Spiegazione</label>
+                    <textarea id="art-corpo" class="form-control" rows="6"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="art-fonte">Fonte / Studio Bibliografico</label>
+                    <input type="text" id="art-fonte" class="form-control" placeholder="Es. Journal of Food Science (2024)">
+                </div>
+                <div class="form-group">
+                    <label for="art-url">Link Fonte (opzionale)</label>
+                    <input type="url" id="art-url" class="form-control" placeholder="https://...">
+                </div>
+            </div>
+            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px;">
+                <button type="button" id="btn-cancel-scienza" class="btn-secondary">Annulla</button>
+                <button type="button" id="btn-save-scienza" class="btn">Salva Articolo</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="js/admin-page.js"></script>
+</body>
+</html>
