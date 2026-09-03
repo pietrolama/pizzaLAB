@@ -1527,6 +1527,93 @@ footer {
     line-height: 1.5;
 }
 
+/* ===== CRONOPROGRAMMA / TIMELINE ORARIA ===== */
+.schedule-section {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 22px;
+    margin: 24px 0 20px;
+}
+
+.schedule-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.schedule-timeline {
+    position: relative;
+    padding-left: 28px;
+    margin-top: 16px;
+}
+
+.schedule-timeline::before {
+    content: '';
+    position: absolute;
+    top: 6px;
+    bottom: 6px;
+    left: 8px;
+    width: 2px;
+    background: linear-gradient(180deg, var(--primary-color), rgba(255, 82, 38, 0.2));
+}
+
+.schedule-item {
+    position: relative;
+    margin-bottom: 18px;
+}
+
+.schedule-item:last-child {
+    margin-bottom: 0;
+}
+
+.schedule-item::before {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: -24px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--bg-dark);
+    border: 2px solid var(--primary-color);
+    box-shadow: 0 0 8px var(--primary-glow);
+}
+
+.schedule-item.infornata::before {
+    background: #10b981;
+    border-color: #10b981;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
+}
+
+.schedule-time-badge {
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--primary-color);
+    background: rgba(255, 82, 38, 0.12);
+    padding: 2px 8px;
+    border-radius: 6px;
+    display: inline-block;
+    margin-bottom: 4px;
+}
+
+.schedule-item.infornata .schedule-time-badge {
+    color: #10b981;
+    background: rgba(16, 185, 129, 0.15);
+}
+
+.schedule-action-text {
+    font-size: 0.95rem;
+    color: var(--text-main);
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+
 
 
 

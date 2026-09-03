@@ -12,6 +12,11 @@ import {
     calcolaImpastoLievitoMadre,
     calcolaImpastoBigaPoolish,
     estraiTotaliMacro,
+    calculatePlanDiretto,
+    calculatePlanBiga,
+    calculatePlanPoolish,
+    calculatePlanLievitoMadre,
+    calculatePlanBigaPoolish,
 } from './calcolatore-engine.js';
 import { generaProcedura } from './procedura-engine.js';
 import {
@@ -428,6 +433,9 @@ function renderRisultato(dati, tipoImpasto) {
 
     el('risultato-avvisi').innerHTML = avvisi.map((a) => `<p>${a}</p>`).join('');
 
+    // Aggiorna tabella di marcia / cronoprogramma
+    aggiornaCronoprogrammaUI();
+
     // Collega i pulsanti timer generati dinamicamente
     el('risultato-steps').querySelectorAll('.step-timer-btn').forEach((btn) => {
         btn.addEventListener('click', () => {
@@ -517,13 +525,119 @@ el('btn-share-card')?.addEventListener('click', async () => {
             a.remove();
             setTimeout(() => URL.revokeObjectURL(url), 1000);
         }
-    } catch (e) {
-        if (e.name !== 'AbortError') {
-            alert('Errore nella condivisione della Pizza Card: ' + e.message);
+// --- GESTIONE CRONOPROGRAMMA / TIMELINE ORARIA ---
+function formattaDataOra(d) {
+    const options = { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' };
+    return d.toLocaleDateString('it-IT', options);
+}
+
+function aggiornaCronoprogrammaUI() {
+    if (!ultimoStatoRicetta || !el('schedule-timeline-container')) return;
+
+    const infornataInput = el('schedule_infornata_time');
+    let targetDate;
+    if (infornataInput && infornataInput.value) {
+        targetDate = new Date(infornataInput.value);
+    } else {
+        const now = new Date();
+        targetDate = new Date(now);
+        targetDate.setHours(20, 0, 0, 0);
+        const oreTotali = ultimoStatoRicetta.oreTotali || 8;
+        if (targetDate.getTime() - (oreTotali * 3600000) <= now.getTime()) {
+            targetDate.setDate(targetDate.getDate() + 1);
         }
-    } finally {
-        btn.innerHTML = originalText;
-        btn.disabled = false;
+        if (infornataInput) {
+            const offset = targetDate.getTimezoneOffset() * 60000;
+            const localISOTime = (new Date(targetDate.getTime() - offset)).toISOString().slice(0, 16);
+            infornataInput.value = localISOTime;
+        }
+    }
+
+    let plan = [];
+    const tipo = ultimoStatoRicetta.tipoImpasto;
+    if (tipo === 'diretto') {
+        const tot = ultimoStatoRicetta.oreTotali || 24;
+        const frigo = ultimoStatoRicetta.oreFrigo || 0;
+        plan = calculatePlanDiretto(targetDate, tot, frigo);
+    } else if (tipo === 'biga') {
+        const perc = parseFloat(el('percentuale_biga')?.value) || 30;
+        plan = calculatePlanBiga(targetDate, perc);
+    } else if (tipo === 'poolish') {
+        const perc = parseFloat(el('percentuale_poolish')?.value) || 20;
+        plan = calculatePlanPoolish(targetDate, perc);
+    } else if (tipo === 'lievito_madre') {
+        const perc = parseFloat(el('percentuale_lievito')?.value) || 20;
+        plan = calculatePlanLievitoMadre(targetDate, perc);
+    } else if (tipo === 'biga_poolish') {
+        const percB = parseFloat(el('percentuale_biga_bp')?.value) || 30;
+        const percP = parseFloat(el('percentuale_poolish_bp')?.value) || 20;
+        plan = calculatePlanBigaPoolish(targetDate, percB, percP);
+    }
+
+    const container = el('schedule-timeline-container');
+    if (!container) return;
+
+    container.innerHTML = plan.map((step, idx) => {
+        const isInfornata = idx === plan.length - 1;
+        return `
+            <div class="schedule-item ${isInfornata ? 'infornata' : ''}">
+                <span class="schedule-time-badge">${formattaDataOra(step.time)}</span>
+                <div class="schedule-action-text">${step.action}</div>
+            </div>
+        `;
+    }).join('');
+}
+
+el('schedule_infornata_time')?.addEventListener('change', aggiornaCronoprogrammaUI);
+el('schedule_infornata_time')?.addEventListener('input', aggiornaCronoprogrammaUI);
+
+// --- SALVATAGGIO NEL DIARIO FERMENTAZIONI ---
+el('btn-salva-diario')?.addEventListener('click', () => {
+    if (!ultimoStatoRicetta) return;
+
+    const btn = el('btn-salva-diario');
+    const originalText = btn.innerHTML;
+
+    try {
+        const diarioKey = 'diarioFermentazioni';
+        const lista = JSON.parse(localStorage.getItem(diarioKey)) || [];
+
+        const nuovaVoce = {
+            id: Date.now().toString(),
+            nome: `${ultimoStatoRicetta.tipoPizza.charAt(0).toUpperCase() + ultimoStatoRicetta.tipoPizza.slice(1)} (${ultimoStatoRicetta.tipoImpasto})`,
+            tipo_pizza: ultimoStatoRicetta.tipoPizza,
+            tipo_impasto: ultimoStatoRicetta.tipoImpasto,
+            data: new Date().toISOString(),
+            idratazione: ultimoStatoRicetta.idratazione,
+            tempo: ultimoStatoRicetta.oreTotali || 8,
+            tempo_lievitazione: ultimoStatoRicetta.oreTotali || 8,
+            tempo_frigo: ultimoStatoRicetta.oreFrigo || 0,
+            temperatura_ambiente: ultimoStatoRicetta.tempAmbiente || 22,
+            num_panetti: ultimoStatoRicetta.numPanetti,
+            peso_panetto: ultimoStatoRicetta.pesoPanetto,
+            farina_w: ultimoStatoRicetta.forzaFarina,
+            percentuale_biga: parseFloat(el('percentuale_biga')?.value) || 30,
+            percentuale_poolish: parseFloat(el('percentuale_poolish')?.value) || 20,
+            percentuale_lievito_madre: parseFloat(el('percentuale_lievito')?.value) || 20,
+            lievito: `${ultimoStatoRicetta.totali.lievito.toFixed(2)} g`,
+            totali: ultimoStatoRicetta.totali,
+            blend: ultimoStatoRicetta.blend,
+            note: `Calcolato con PizzaLab. Farina: ${Math.round(ultimoStatoRicetta.totali.farina)}g (${ultimoStatoRicetta.forzaFarina}W), Acqua: ${Math.round(ultimoStatoRicetta.totali.acqua)}g, Sale: ${Math.round(ultimoStatoRicetta.totali.sale)}g.`
+        };
+
+        lista.unshift(nuovaVoce);
+        localStorage.setItem(diarioKey, JSON.stringify(lista));
+
+        btn.innerHTML = '<span>✅</span> Salvato nel Diario!';
+        btn.style.borderColor = '#10b981';
+        btn.style.color = '#10b981';
+        setTimeout(() => {
+            btn.innerHTML = originalText;
+            btn.style.borderColor = '';
+            btn.style.color = '';
+        }, 3000);
+    } catch (e) {
+        alert('Errore nel salvataggio nel Diario: ' + e.message);
     }
 });
 

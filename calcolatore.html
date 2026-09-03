@@ -289,11 +289,31 @@
             <div id="risultato" class="recipe-box hidden">
                 <div class="recipe-header-flex">
                     <h2 id="risultato-titolo" style="margin-bottom: 0;">La tua scheda impasto</h2>
-                    <button type="button" id="btn-share-card" class="btn-chip" style="padding: 8px 16px; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 6px;">
-                        <span>📸</span> Condividi Pizza Card
-                    </button>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button type="button" id="btn-salva-diario" class="btn-chip" style="padding: 8px 16px; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 6px;">
+                            <span>💾</span> Salva nel Diario
+                        </button>
+                        <button type="button" id="btn-share-card" class="btn-chip" style="padding: 8px 16px; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 6px;">
+                            <span>📸</span> Condividi Pizza Card
+                        </button>
+                    </div>
                 </div>
                 <div class="recipe-grid" id="risultato-grid"></div>
+
+                <!-- CRONOPROGRAMMA / TABELLA DI MARCIA -->
+                <div class="schedule-section" id="schedule-box">
+                    <div class="schedule-header">
+                        <div>
+                            <span class="piano-tag" style="color: #60a5fa;">🕒 CRONOPROGRAMMA INVERSO</span>
+                            <h3 style="font-size: 1.15rem; margin-top: 2px;">Tabella di Marcia Oraria</h3>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                            <label for="schedule_infornata_time" style="font-size: 0.85rem; color: var(--text-muted);">Voglio infornare il:</label>
+                            <input type="datetime-local" id="schedule_infornata_time" class="form-control" style="padding: 6px 12px; font-size: 0.88rem; width: auto;">
+                        </div>
+                    </div>
+                    <div class="schedule-timeline" id="schedule-timeline-container"></div>
+                </div>
 
                 <!-- BANNER PIANO OPERATIVO -->
                 <div class="piano-operativo-banner">

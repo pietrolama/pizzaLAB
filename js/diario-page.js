@@ -40,14 +40,47 @@ function renderLista() {
     container.innerHTML = lista.map((f, i) => `
         <article class="listing-card">
             <div class="listing-card__body">
-                <h3>${escapeHtml(f.nome)}</h3>
-                <p class="listing-card__meta">${escapeHtml(formattaData(f.data))} · ${escapeHtml(f.idratazione)}% idratazione · ${escapeHtml(f.tempo)}h</p>
-                <p>Lievito: ${escapeHtml(f.lievito)}</p>
-                ${f.note ? `<p style="color: var(--text-dim);">${escapeHtml(f.note)}</p>` : ''}
-                <button data-index="${i}" class="btn-secondary elimina-fermentazione" style="margin-top: 8px;">Elimina</button>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 8px;">
+                    <h3>${escapeHtml(f.nome)}</h3>
+                    <span style="font-size: 0.8rem; color: var(--text-muted);">${escapeHtml(formattaData(f.data))}</span>
+                </div>
+                <p class="listing-card__meta">${escapeHtml(f.idratazione)}% idratazione · ${escapeHtml(f.tempo || f.tempo_lievitazione || 8)}h lievitazione${f.tempo_frigo ? ` (${f.tempo_frigo}h frigo)` : ''}</p>
+                <p>Lievito: <strong>${escapeHtml(f.lievito)}</strong>${f.farina_w ? ` · Farina: <strong>${escapeHtml(f.farina_w)} W</strong>` : ''}</p>
+                ${f.blend && f.blend.possibile ? `
+                <p style="font-size: 0.85rem; color: var(--primary-color);">🌾 Blend: ${f.blend.pesoForte}g Forte (${f.blend.percentualeForte}%) + ${f.blend.pesoDebole}g Debole (${f.blend.percentualeDebole}%)</p>
+                ` : ''}
+                ${f.note ? `<p style="color: var(--text-dim); margin-top: 6px;">${escapeHtml(f.note)}</p>` : ''}
+                <div style="margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap;">
+                    <button data-index="${i}" class="btn-chip riapri-calcolatore" style="font-size: 0.82rem; padding: 6px 12px;">🔄 Riapri nel Calcolatore</button>
+                    <button data-index="${i}" class="btn-secondary elimina-fermentazione" style="font-size: 0.82rem; padding: 6px 12px;">Elimina</button>
+                </div>
             </div>
         </article>
     `).join('');
+
+    container.querySelectorAll('.riapri-calcolatore').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const lista2 = leggiFermentazioni();
+            const f = lista2[parseInt(btn.dataset.index, 10)];
+            if (!f) return;
+
+            const config = {
+                tipo_pizza: f.tipo_pizza || 'napoletana',
+                tipo_impasto: f.tipo_impasto || 'diretto',
+                idratazione: Number(f.idratazione) || 65,
+                num_panetti: Number(f.num_panetti) || 4,
+                peso_panetto: Number(f.peso_panetto) || 250,
+                tempo_lievitazione: Number(f.tempo_lievitazione || f.tempo) || 8,
+                tempo_frigo: Number(f.tempo_frigo) || 0,
+                percentuale_biga: Number(f.percentuale_biga) || 30,
+                percentuale_poolish: Number(f.percentuale_poolish) || 20,
+                percentuale_lievito_madre: Number(f.percentuale_lievito_madre) || 20
+            };
+
+            localStorage.setItem('configurazioneImpasto', JSON.stringify(config));
+            window.location.href = 'calcolatore.html';
+        });
+    });
 
     container.querySelectorAll('.elimina-fermentazione').forEach((btn) => {
         btn.addEventListener('click', () => {
