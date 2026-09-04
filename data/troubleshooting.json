@@ -1,0 +1,120 @@
+[
+    {
+        "id": "sticky_dough",
+        "titolo": "Impasto appiccicoso e senza corda (non chiude)",
+        "titolo_en": "Sticky dough, fails to build gluten structure",
+        "icona": "💧",
+        "categoria": "impasto",
+        "categoria_en": "mixing",
+        "sintomi": [
+            "L'impasto si attacca alle mani o alla ciotola",
+            "Sembra crema e non forma una palla liscia",
+            "Si straccia appena si prova a tirarlo"
+        ],
+        "sintomi_en": [
+            "Dough sticks aggressively to hands and bowl",
+            "Resembles cream rather than a smooth ball",
+            "Tears as soon as you stretch it"
+        ],
+        "causa_scientifica": "Rottura della maglia glutinica causata da surriscaldamento oltre i 26°C (inizio denaturazione termica), idratazione eccessiva rispetto al W della farina, oppure sovra-impastamento meccanico.",
+        "causa_scientifica_en": "Gluten network breakdown caused by dough overheating above 26°C (thermal protein denaturation), excessive hydration exceeding flour strength (W), or mechanical over-kneading.",
+        "rimedio_immediato": "1. Stop immediato all'impastamento. 2. Riponi l'impasto in frigo a 4°C per 20-30 minuti (il freddo compatta il glutine). 3. Esegui 2 serie di pieghe Coil Fold sul banco inumidito a distanza di 15 minuti.",
+        "rimedio_immediato_en": "1. Stop kneading immediately. 2. Place dough in the fridge at 4°C for 20-30 minutes (cold tightens gluten). 3. Perform 2 sets of Coil Folds on a dampened surface spaced 15 minutes apart.",
+        "prevenzione": "Usa acqua fredda di frigorifero (o calcola con lo strumento FDT), inserisci l'acqua all'80% subito e il restante 20% a filo solo a corda formata.",
+        "prevenzione_en": "Use chilled water (or calculate with the FDT tool), add 80% of water upfront and drizzle the remaining 20% slowly only after gluten is formed."
+    },
+    {
+        "id": "overfermented_balls",
+        "titolo": "Panetti spiattellati e collassati (Sovralievitazione)",
+        "titolo_en": "Flattened, collapsed dough balls (Overfermentation)",
+        "icona": "🌋",
+        "categoria": "lievitazione",
+        "categoria_en": "fermentation",
+        "sintomi": [
+            "I panetti si sono allargati formando una massa unica",
+            "Pieni di bolle giganti sottili che scoppiano",
+            "L'impasto è fragile e traslucido, odore acido o alcolico"
+        ],
+        "sintomi_en": [
+            "Dough balls spread out into a single flat mass",
+            "Covered in thin oversized bubbles that pop easily",
+            "Dough feels fragile and translucent with acidic/alcoholic aroma"
+        ],
+        "causa_scientifica": "Eccesso di fermentazione e proteolisi avanzata: i lieviti hanno consumato tutti gli zuccheri e gli enzimi proteasi hanno degradato la maglia glutinica, che non trattiene più la CO2.",
+        "causa_scientifica_en": "Advanced fermentation and proteolysis: yeasts depleted fermentable sugars and protease enzymes degraded the gluten matrix, preventing CO2 retention.",
+        "rimedio_immediato": "NON re-impallare. Trasformalo in Pizza in Teglia o Focaccia: trasferiscilo delicatamente in una teglia unta con olio EVO, allargalo coi polpastrelli senza sgonfiarlo e inforna a temperatura massima.",
+        "rimedio_immediato_en": "DO NOT re-ball. Repurpose it into Pan Pizza or Focaccia: gently transfer into an oiled pan, dimple with fingertips without degreasing, and bake at max heat.",
+        "prevenzione": "Riduci il lievito del 30%, abbassa la temperatura ambiente o anticipa il passaggio in frigo per rallentare l'attività biologica.",
+        "prevenzione_en": "Reduce yeast by 30%, lower ambient temperature, or move dough to the fridge earlier to slow down biological fermentation."
+    },
+    {
+        "id": "elastic_springback",
+        "titolo": "L'impasto si ritira in stesura (Troppo elastico / Tenace)",
+        "titolo_en": "Dough springs back during stretching (Excessive Elasticity)",
+        "icona": "🪃",
+        "categoria": "stesura",
+        "categoria_en": "stretching",
+        "sintomi": [
+            "Stendi il disco e si restringe tornando piccolo",
+            "Sembra gomma dura e oppone forte resistenza",
+            "Se forzi la stesura si strappa al centro"
+        ],
+        "sintomi_en": [
+            "You stretch the disc and it contracts back immediately",
+            "Feels stiff and rubbery with high resistance",
+            "Tears in the center if forced"
+        ],
+        "causa_scientifica": "Rapporto P/L sbilanciato verso la tenacia o appretto troppo breve: i ponti disolfuro del glutine sono in forte tensione elastica e richiedono rilassamento per proteolisi controllata.",
+        "causa_scientifica_en": "Unbalanced P/L ratio (high tenacity) or insufficient final proof: gluten disulfide bonds remain under high elastic tension and need relaxation via controlled proteolysis.",
+        "rimedio_immediato": "Copri il panetto con una ciotola a campana e lascialo riposare a temperatura ambiente per 25-45 minuti per far rilassare la maglia glutinica.",
+        "rimedio_immediato_en": "Cover the dough ball with an inverted bowl and let it rest at room temperature for 25-45 minutes to relax gluten tension naturally.",
+        "prevenzione": "Allunga l'appretto finale (almeno 4-6 ore a temperatura ambiente dopo lo staglio), oppure usa farine con P/L bilanciato (0.50 - 0.60).",
+        "prevenzione_en": "Extend final proof (at least 4-6 hours at room temp after balling), or choose flour with balanced P/L (0.50 - 0.60)."
+    },
+    {
+        "id": "pale_crust",
+        "titolo": "Cornicione pallido / Non prende colore in cottura",
+        "titolo_en": "Pale crust / Lacks browning in the oven",
+        "icona": "⚪",
+        "categoria": "cottura",
+        "categoria_en": "baking",
+        "sintomi": [
+            "La pizza cuoce ma rimane bianca o grigiastra",
+            "Zero maculatura o doratura",
+            "Crosta secca tipo biscotto"
+        ],
+        "sintomi_en": [
+            "Pizza bakes through but remains pale or grayish",
+            "No leopard spotting or golden browning",
+            "Dry cracker-like crust texture"
+        ],
+        "causa_scientifica": "Assenza di zuccheri riducenti liberi per la Reazione di Maillard e caramellizzazione (consumati per sovralievitazione) oppure calore superiore del forno insufficiente.",
+        "causa_scientifica_en": "Depletion of free reducing sugars required for Maillard browning and caramelization (consumed by excessive fermentation), or insufficient top heat.",
+        "rimedio_immediato": "Spennella delicatamente il cornicione con un velo sottile di olio EVO prima degli ultimi 2 minuti e attiva il grill superiore al massimo.",
+        "rimedio_immediato_en": "Lightly brush the crust edge with extra virgin olive oil for the last 2 minutes and turn on top broiler to max.",
+        "prevenzione": "In forno domestico (250-300°C), aggiungi lo 0.8-1.5% di malto diastasico o zucchero/miele all'impasto per garantire zuccheri per la doratura.",
+        "prevenzione_en": "In home ovens (250-300°C), add 0.8-1.5% diastatic malt or honey/sugar to ensure residual sugars for Maillard reaction."
+    },
+    {
+        "id": "burnt_bottom",
+        "titolo": "Fondo bruciato e sopra crudo",
+        "titolo_en": "Burnt bottom while top remains pale/raw",
+        "icona": "🔥",
+        "categoria": "cottura",
+        "categoria_en": "baking",
+        "sintomi": [
+            "Base bruciata e amara mentre mozzarella e condimenti non sono fusi",
+            "Pietra refrattaria troppo calda rispetto alla volta"
+        ],
+        "sintomi_en": [
+            "Bottom is charred and bitter while cheese and top crust are undercooked",
+            "Baking stone overheated relative to upper heat"
+        ],
+        "causa_scientifica": "Discrepanza tra conducibilità termica per conduzione (fondo a contatto con la pietra cordierite) e calore per irraggiamento/convezione (superiore).",
+        "causa_scientifica_en": "Thermal mismatch between conductive bottom heat (cordierite stone contact) and top radiant/convective heat.",
+        "rimedio_immediato": "Solleva la pizza con la pala vicino alla resistenza superiore (cottura a mezz'aria) negli ultimi 60 secondi per completare la doratura.",
+        "rimedio_immediato_en": "Lift the pizza on the peel close to the top heating element for the last 60 seconds to finish top browning without stone contact.",
+        "prevenzione": "In forni ad alta temperatura (>450°C) usa biscotto di Casapulla; in forno domestico cuoci sul fondo per 3 minuti e poi sposta sotto al grill.",
+        "prevenzione_en": "In ultra-high heat ovens (>450°C) use clay saputo stone; in home ovens bake on the oven floor for 3 mins then move under broiler."
+    }
+]

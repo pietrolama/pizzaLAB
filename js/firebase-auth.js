@@ -21,7 +21,7 @@ import {
     orderBy
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-export const ADMIN_EMAILS = ["pietrolama1@gmail.com", "pietrolama@gmail.com"];
+export const ADMIN_EMAILS = ["pietrolama1@gmail.com"];
 export const ADMIN_EMAIL = "pietrolama1@gmail.com";
 
 const firebaseConfig = {

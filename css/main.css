@@ -1849,6 +1849,241 @@ footer {
     color: #f87171;
 }
 
+/* ===== 1. SOS IMPASTO / TROUBLESHOOTING ===== */
+.troubleshoot-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+    margin-top: 16px;
+}
+
+.troubleshoot-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.troubleshoot-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(255, 82, 38, 0.4);
+}
+
+.troubleshoot-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+}
+
+.troubleshoot-icon {
+    font-size: 2.2rem;
+}
+
+.troubleshoot-title {
+    margin: 0 0 4px 0;
+    font-size: 1.15rem;
+    color: var(--text-main);
+}
+
+.troubleshoot-badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 2px 8px;
+    border-radius: 6px;
+    background: rgba(255, 82, 38, 0.15);
+    color: var(--primary-color);
+    border: 1px solid rgba(255, 82, 38, 0.3);
+}
+
+.troubleshoot-symptoms {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+}
+
+.troubleshoot-symptoms ul {
+    margin: 6px 0 0 0;
+    padding-left: 0;
+    list-style: none;
+}
+
+.troubleshoot-box {
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-top: 10px;
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+.troubleshoot-box p {
+    margin: 4px 0 0 0;
+}
+
+.box-tag {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    display: inline-block;
+}
+
+.troubleshoot-box.cause {
+    background: rgba(245, 158, 11, 0.08);
+    border: 1px solid rgba(245, 158, 11, 0.25);
+    color: #fde68a;
+}
+.troubleshoot-box.cause .cause-tag { color: #f59e0b; }
+
+.troubleshoot-box.remedy {
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: #a7f3d0;
+}
+.troubleshoot-box.remedy .remedy-tag { color: #10b981; }
+
+.troubleshoot-box.prev {
+    background: rgba(59, 130, 246, 0.08);
+    border: 1px solid rgba(59, 130, 246, 0.25);
+    color: #bfdbfe;
+}
+.troubleshoot-box.prev .prev-tag { color: #60a5fa; }
+
+/* ===== 2. FERMENTATION CHART ===== */
+.fermentation-chart-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.fermentation-chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* ===== 3. GRAIN & SPECIAL FLOURS CARDS ===== */
+.grain-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 22px;
+    margin-bottom: 16px;
+}
+
+.grain-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.grain-icon {
+    font-size: 2rem;
+}
+
+.grain-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    background: var(--bg-dark);
+    padding: 12px 16px;
+    border-radius: 10px;
+}
+
+.grain-stat .stat-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    display: block;
+}
+
+.grain-stat .stat-val {
+    font-size: 0.95rem;
+    font-weight: 700;
+}
+
+/* ===== 4. GLOSSARIO SCIENTIFICO POPOVER ===== */
+.glossary-popover {
+    position: absolute;
+    z-index: 3000;
+    max-width: 320px;
+    background: rgba(18, 20, 28, 0.96);
+    border: 1px solid rgba(255, 82, 38, 0.4);
+    border-radius: 12px;
+    padding: 14px 16px;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    pointer-events: none;
+    animation: fadeSlideUp 0.2s ease forwards;
+}
+
+.glossary-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 14px;
+}
+
+.glossary-term {
+    color: var(--primary-color);
+    border-bottom: 1px dashed rgba(255, 82, 38, 0.6);
+    cursor: help;
+}
+
+/* ===== 5. STAMPA A4 PROFESSIONALE ===== */
+@media print {
+    .site-nav,
+    footer,
+    .tools-section,
+    .hero-actions,
+    .btn,
+    .btn-secondary,
+    .btn-chip,
+    .segmented-control,
+    .form-row,
+    .blend-toggle-wrapper,
+    .piano-operativo-banner,
+    .schedule-header input,
+    .lang-switch-container,
+    .nav-user-slot {
+        display: none !important;
+    }
+
+    body, main, .page-container, .calculator-card, .recipe-box {
+        background: #fff !important;
+        color: #000 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+        border: none !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .recipe-grid {
+        display: grid !important;
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 10px !important;
+    }
+
+    .recipe-stat {
+        background: #f5f5f5 !important;
+        border: 1px solid #ccc !important;
+        color: #000 !important;
+    }
+}
+
+
 
 
 

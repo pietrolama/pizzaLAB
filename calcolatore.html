@@ -290,6 +290,9 @@
                 <div class="recipe-header-flex">
                     <h2 id="risultato-titolo" style="margin-bottom: 0;" data-i18n="calc.recipe_sheet_title">La tua scheda impasto</h2>
                     <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button type="button" id="btn-stampa-scheda" class="btn-chip" style="padding: 8px 16px; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 6px;">
+                            <span>🖨️</span> <span data-i18n="calc.print_sheet">Stampa Scheda da Banco</span>
+                        </button>
                         <button type="button" id="btn-salva-diario" class="btn-chip" style="padding: 8px 16px; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 6px;">
                             <span>💾</span> <span data-i18n="calc.save_diary">Salva nel Diario</span>
                         </button>
@@ -310,10 +313,16 @@
                         <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
                             <label for="schedule_infornata_time" style="font-size: 0.85rem; color: var(--text-muted);" data-i18n="calc.schedule_bake_label">Voglio infornare il:</label>
                             <input type="datetime-local" id="schedule_infornata_time" class="form-control" style="padding: 6px 12px; font-size: 0.88rem; width: auto;">
+                            <button type="button" id="btn-export-calendar" class="btn-chip" style="padding: 6px 12px; font-size: 0.82rem; display: inline-flex; align-items: center; gap: 6px;">
+                                <span>📅</span> <span data-i18n="calc.add_to_calendar">Aggiungi al Calendario (.ics)</span>
+                            </button>
                         </div>
                     </div>
                     <div class="schedule-timeline" id="schedule-timeline-container"></div>
                 </div>
+
+                <!-- CURVA DINAMICA DI FERMENTAZIONE SVG -->
+                <div id="fermentation-curve-container"></div>
 
                 <!-- BANNER PIANO OPERATIVO -->
                 <div class="piano-operativo-banner">
@@ -342,6 +351,10 @@
                 <button type="button" id="tab-btn-topping" class="tool-tab-btn active" data-i18n="tools.tab_topping">🧀 Calcolo Condimenti</button>
                 <button type="button" id="tab-btn-fdt" class="tool-tab-btn" data-i18n="tools.tab_fdt">🌡️ Temperatura Acqua (FDT)</button>
                 <button type="button" id="tab-btn-forni" class="tool-tab-btn" data-i18n="tools.tab_ovens">🔥 Guida Setup Forni</button>
+                <button type="button" id="tab-btn-lieviti" class="tool-tab-btn" data-i18n="tools.tab_yeast">🔄 Convertitore Lieviti</button>
+                <button type="button" id="tab-btn-cereali" class="tool-tab-btn" data-i18n="tools.tab_grains">🌾 Cereali & Farine Speciali</button>
+                <button type="button" id="tab-btn-sos" class="tool-tab-btn" data-i18n="tools.tab_sos" style="color: #f87171;">🆘 SOS Impasto</button>
+                <button type="button" id="tab-btn-glossario" class="tool-tab-btn" data-i18n="tools.tab_glossary">📖 Glossario Scientifico</button>
             </div>
 
             <!-- PANEL 1: CALCOLO CONDIMENTI -->
@@ -457,6 +470,80 @@
                     <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;"><span data-i18n="ovens.avg_bake_time">Tempo medio di cottura:</span> <strong id="oven-detail-time" style="color: #fff;">4-7 minuti</strong></p>
                     <ul id="oven-detail-list"></ul>
                 </div>
+            </div>
+
+            <!-- PANEL 4: CONVERTITORE LIEVITI -->
+            <div id="panel-lieviti" class="tool-panel hidden">
+                <h3 style="margin-bottom: 16px;" data-i18n="yeast.converter_title">Convertitore Universale di Lieviti</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px;" data-i18n="yeast.converter_subtitle">Converti qualsiasi dose tra Lievito Fresco, Secco, Licoli o Pasta Madre, con ricalcolo automatico dell'acqua e farina da sottrarre.</p>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="conv_yeast_qty" data-i18n="yeast.qty_label">Quantità da convertire (g)</label>
+                        <input type="number" id="conv_yeast_qty" class="form-control" value="10" min="0.1" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="conv_yeast_from" data-i18n="yeast.from_label">Da Lievito:</label>
+                        <select id="conv_yeast_from" class="form-control">
+                            <option value="lbf" selected>Lievito di Birra Fresco (LBF)</option>
+                            <option value="lbs">Lievito di Birra Secco (LBS)</option>
+                            <option value="licoli">Li.Co.Li (Madre Liquido 100%)</option>
+                            <option value="solido">Pasta Madre Solida (50%)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="conv_yeast_to" data-i18n="yeast.to_label">A Lievito:</label>
+                        <select id="conv_yeast_to" class="form-control">
+                            <option value="lbs" selected>Lievito di Birra Secco (LBS)</option>
+                            <option value="lbf">Lievito di Birra Fresco (LBF)</option>
+                            <option value="licoli">Li.Co.Li (Madre Liquido 100%)</option>
+                            <option value="solido">Pasta Madre Solida (50%)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="fdt-display-card" id="yeast-result-card" style="margin-top: 16px;">
+                    <span style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);" data-i18n="yeast.result_dose">Dose Equivalente Calcolata:</span>
+                    <div class="fdt-target-number" id="yeast-res-qty" style="color: #10b981;">3.30 g</div>
+                    <p style="font-size: 0.9rem; color: #fde68a; margin-top: 8px;" id="yeast-res-compensation"></p>
+                </div>
+            </div>
+
+            <!-- PANEL 5: CEREALI & FARINE SPECIALI -->
+            <div id="panel-cereali" class="tool-panel hidden">
+                <h3 style="margin-bottom: 16px;" data-i18n="grains.title">Tavola dei Cereali, Grani Antichi & Tagli Speciali</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;" data-i18n="grains.subtitle">Guida scientifica alle percentuali massime di sostituzione, variazione di idratazione e comportamento del glutine.</p>
+                <div id="cereali-cards-container"></div>
+            </div>
+
+            <!-- PANEL 6: SOS IMPASTO (TROUBLESHOOTING) -->
+            <div id="panel-sos" class="tool-panel hidden">
+                <div class="admin-panel-header" style="margin-bottom: 16px;">
+                    <div>
+                        <h3 style="color: #f87171; margin: 0 0 4px 0;" data-i18n="sos.title">🆘 Pronto Soccorso Impasti & Risoluzione Errori</h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;" data-i18n="sos.subtitle">Diagnosi scientifica istantanea della causa e procedura guidata di recupero.</p>
+                    </div>
+                </div>
+
+                <div class="admin-filter-bar">
+                    <input type="text" id="filter-sos-search" class="form-control" placeholder="Cerca sintomo (es. appiccicoso, pallido, elastico...)" style="max-width: 360px;">
+                    <select id="filter-sos-cat" class="form-control" style="max-width: 200px;">
+                        <option value="all">Tutte le fasi</option>
+                        <option value="impasto">Fase Impasto</option>
+                        <option value="lievitazione">Lievitazione / Appretto</option>
+                        <option value="stesura">Stesura</option>
+                        <option value="cottura">Cottura & Forno</option>
+                    </select>
+                </div>
+
+                <div id="troubleshoot-cards-container" class="troubleshoot-grid"></div>
+            </div>
+
+            <!-- PANEL 7: GLOSSARIO SCIENTIFICO -->
+            <div id="panel-glossario" class="tool-panel hidden">
+                <h3 style="margin-bottom: 16px;" data-i18n="glossary.title">📖 Glossario Scientifico della Panificazione</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px;" data-i18n="glossary.subtitle">I concetti biochimici e reologici spiegati in modo semplice e scientifico.</p>
+                <div id="glossario-cards-container"></div>
             </div>
         </section>
 

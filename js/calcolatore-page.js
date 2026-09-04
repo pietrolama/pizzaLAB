@@ -32,10 +32,18 @@ import {
     calcolaTempAcquaFDT,
     GUIDA_FORNI
 } from './tools-engine.js';
+import { stampaSchedaRicetta } from './print-engine.js';
+import { esportaCalendarioICS } from './calendar-export.js';
+import { generaCurvaFermentazioneSVG } from './fermentation-curve-engine.js';
+import { convertiLievito } from './yeast-converter.js';
+import { caricaTroubleshootingData, renderTroubleshootingList } from './troubleshooting-engine.js';
+import { caricaCerealiData, renderCerealiCards } from './grains-engine.js';
+import { caricaGlossarioData, renderGlossarioDrawer, inizializzaGlossarioTooltips } from './glossario-engine.js';
 
 const el = (id) => document.getElementById(id);
 
 let ultimoStatoRicetta = null;
+let ultimoPianoGenerato = [];
 
 const SEZIONI_METODO = {
     diretto: 'sezione_diretto',
@@ -436,6 +444,18 @@ function renderRisultato(dati, tipoImpasto) {
     // Aggiorna tabella di marcia / cronoprogramma
     aggiornaCronoprogrammaUI();
 
+    // Render della curva di fermentazione SVG dinamica
+    const curveContainer = el('fermentation-curve-container');
+    if (curveContainer) {
+        curveContainer.innerHTML = generaCurvaFermentazioneSVG({
+            oreTotali: ultimoStatoRicetta.oreTotali || 8,
+            oreFrigo: ultimoStatoRicetta.oreFrigo || 0,
+            tempAmbiente: ultimoStatoRicetta.tempAmbiente || 22,
+            tipoImpasto: ultimoStatoRicetta.tipoImpasto || 'diretto',
+            tipoPizza: ultimoStatoRicetta.tipoPizza || 'napoletana'
+        });
+    }
+
     // Collega i pulsanti timer generati dinamicamente
     el('risultato-steps').querySelectorAll('.step-timer-btn').forEach((btn) => {
         btn.addEventListener('click', () => {
@@ -525,6 +545,16 @@ el('btn-share-card')?.addEventListener('click', async () => {
             a.remove();
             setTimeout(() => URL.revokeObjectURL(url), 1000);
         }
+    } catch (e) {
+        if (e.name !== 'AbortError') {
+            alert('Errore nella condivisione della Pizza Card: ' + e.message);
+        }
+    } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+    }
+});
+
 // --- GESTIONE CRONOPROGRAMMA / TIMELINE ORARIA ---
 function formattaDataOra(d) {
     const options = { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' };
@@ -574,6 +604,8 @@ function aggiornaCronoprogrammaUI() {
         plan = calculatePlanBigaPoolish(targetDate, percB, percP);
     }
 
+    ultimoPianoGenerato = plan;
+
     const container = el('schedule-timeline-container');
     if (!container) return;
 
@@ -590,6 +622,21 @@ function aggiornaCronoprogrammaUI() {
 
 el('schedule_infornata_time')?.addEventListener('change', aggiornaCronoprogrammaUI);
 el('schedule_infornata_time')?.addEventListener('input', aggiornaCronoprogrammaUI);
+
+// --- ESPORTAZIONE CALENDARIO (.ICS) ---
+el('btn-export-calendar')?.addEventListener('click', () => {
+    if (!ultimoStatoRicetta) return;
+    if (!ultimoPianoGenerato || ultimoPianoGenerato.length === 0) {
+        aggiornaCronoprogrammaUI();
+    }
+    esportaCalendarioICS(ultimoPianoGenerato, ultimoStatoRicetta);
+});
+
+// --- STAMPA SCHEDA RICETTA A4 ---
+el('btn-stampa-scheda')?.addEventListener('click', () => {
+    if (!ultimoStatoRicetta) return;
+    stampaSchedaRicetta(ultimoStatoRicetta);
+});
 
 // --- SALVATAGGIO NEL DIARIO FERMENTAZIONI ---
 el('btn-salva-diario')?.addEventListener('click', () => {
@@ -1008,11 +1055,15 @@ applicaConfigurazioneAssistente();
 // CONTROLLER STRUMENTI EXTRA (TOPPING, FDT, FORNI)
 // =========================================================================
 
-// 1. Tab Switching
+// 1. Tab Switching (Tutti i 7 strumenti)
 const toolTabs = [
     { btn: 'tab-btn-topping', panel: 'panel-topping' },
     { btn: 'tab-btn-fdt', panel: 'panel-fdt' },
     { btn: 'tab-btn-forni', panel: 'panel-forni' },
+    { btn: 'tab-btn-lieviti', panel: 'panel-lieviti' },
+    { btn: 'tab-btn-cereali', panel: 'panel-cereali' },
+    { btn: 'tab-btn-sos', panel: 'panel-sos' },
+    { btn: 'tab-btn-glossario', panel: 'panel-glossario' },
 ];
 
 toolTabs.forEach(({ btn, panel }) => {
@@ -1118,9 +1169,75 @@ document.querySelectorAll('.oven-choice-card').forEach((card) => {
     });
 });
 
+// 5. Convertitore Universale Lieviti
+function aggiornaYeastConverterUI() {
+    if (!el('yeast-res-qty')) return;
+    const qty = parseFloat(el('conv_yeast_qty')?.value) || 0;
+    const fromType = el('conv_yeast_from')?.value || 'lbf';
+    const toType = el('conv_yeast_to')?.value || 'lbs';
+    const res = convertiLievito({ quantita: qty, daTipo: fromType, aTipo: toType });
+
+    el('yeast-res-qty').textContent = `${res.quantitaEquivalente.toFixed(2)} g`;
+
+    const compEl = el('yeast-res-compensation');
+    if (compEl) {
+        if (res.differenzaFarina > 0 || res.differenzaAcqua > 0) {
+            compEl.innerHTML = `⚠️ <strong>Adeguamento Impasto:</strong> Sottrai <strong>${res.differenzaFarina.toFixed(1)} g</strong> di farina e <strong>${res.differenzaAcqua.toFixed(1)} g</strong> di acqua dall'impasto principale.`;
+            compEl.style.display = 'block';
+        } else if (res.differenzaFarina < 0 || res.differenzaAcqua < 0) {
+            compEl.innerHTML = `⚠️ <strong>Adeguamento Impasto:</strong> Aggiungi <strong>${Math.abs(res.differenzaFarina).toFixed(1)} g</strong> di farina e <strong>${Math.abs(res.differenzaAcqua).toFixed(1)} g</strong> di acqua all'impasto principale.`;
+            compEl.style.display = 'block';
+        } else {
+            compEl.textContent = 'Nessuna compensazione di acqua/farina necessaria.';
+            compEl.style.display = 'block';
+        }
+    }
+}
+
+['conv_yeast_qty', 'conv_yeast_from', 'conv_yeast_to'].forEach((id) => {
+    const elem = el(id);
+    if (elem) {
+        elem.addEventListener('input', aggiornaYeastConverterUI);
+        elem.addEventListener('change', aggiornaYeastConverterUI);
+    }
+});
+
+// 6. SOS Impasto (Troubleshooting)
+let troubleshootingData = [];
+async function initTroubleshooting() {
+    troubleshootingData = await caricaTroubleshootingData();
+    renderTroubleshootingList(troubleshootingData, '#troubleshoot-cards-container');
+
+    function filtraSOS() {
+        const query = el('filter-sos-search')?.value || '';
+        const cat = el('filter-sos-cat')?.value || 'all';
+        renderTroubleshootingList(troubleshootingData, '#troubleshoot-cards-container', { query, categoria: cat });
+    }
+
+    el('filter-sos-search')?.addEventListener('input', filtraSOS);
+    el('filter-sos-cat')?.addEventListener('change', filtraSOS);
+}
+
+// 7. Cereali & Grani Speciali
+async function initCereali() {
+    const data = await caricaCerealiData();
+    renderCerealiCards(data, '#cereali-cards-container');
+}
+
+// 8. Glossario Scientifico & Tooltips
+async function initGlossario() {
+    const data = await caricaGlossarioData();
+    renderGlossarioDrawer(data, '#glossario-cards-container');
+    inizializzaGlossarioTooltips(data);
+}
+
 // Inizializza tutti gli strumenti
 aggiornaCondimentiUI();
 aggiornaFDTUI();
 renderOvenDetail('domestico');
+aggiornaYeastConverterUI();
+initTroubleshooting();
+initCereali();
+initGlossario();
 
 

@@ -1,7 +1,7 @@
 // admin-page.js
 // Controller della dashboard amministrativa di PizzaLab.
 // Gestisce:
-// 1. Firebase Auth (Google Sign-In con controllo su pietrolama@gmail.com)
+// 1. Firebase Auth (Google Sign-In con controllo su pietrolama1@gmail.com)
 // 2. Editor dizionari i18n (it.json / en.json) con traduzione assistita
 // 3. Redazione articoli scientifici (scienza.json)
 // 4. Panificato stagionale (stagionale.json)
@@ -246,9 +246,6 @@ el('btn-save-i18n-local')?.addEventListener('click', () => {
     alert('✅ Modifiche salvate in memoria locale! Vai alla scheda "Pubblicazione GitHub" per applicarle sul sito.');
 });
 
-// Traduzione con AI client-side per le chiavi mancanti
-el('btn-ai-translate-missing')?.addEventListener('click', async () => {
-    const missingKeys = Object.keys(state.i18nIt).filter((k) => !state.i18nEn[k] || state.i18nEn[k].trim() === '');
 // Traduzione con AI client-side per le chiavi mancanti (Moonshot Kimi API)
 el('btn-ai-translate-missing')?.addEventListener('click', async () => {
     const missingKeys = Object.keys(state.i18nIt).filter((k) => !state.i18nEn[k] || state.i18nEn[k].trim() === '');
@@ -257,12 +254,11 @@ el('btn-ai-translate-missing')?.addEventListener('click', async () => {
         return;
     }
 
-    let apiKey = sessionStorage.getItem('pizzalab_kimi_api_key');
-    if (!apiKey) {
-        apiKey = prompt(`Inserisci la tua KIMI_API_KEY (Moonshot AI) per tradurre ${missingKeys.length} chiavi:\n(Verrà conservata solo temporaneamente in memoria per questa sessione)`);
-        if (!apiKey) return;
-        sessionStorage.setItem('pizzalab_kimi_api_key', apiKey.trim());
-    }
+    // Non persistita da nessuna parte (né localStorage né sessionStorage):
+    // chiesta ad ogni utilizzo e tenuta solo in questa variabile locale, per
+    // ridurre al minimo la finestra in cui un eventuale XSS potrebbe rubarla.
+    const apiKey = (prompt(`Inserisci la tua KIMI_API_KEY (Moonshot AI) per tradurre ${missingKeys.length} chiavi:\n(non viene salvata da nessuna parte, va reinserita ad ogni utilizzo)`) || '').trim();
+    if (!apiKey) return;
 
     const btn = el('btn-ai-translate-missing');
     const origText = btn.textContent;
@@ -275,10 +271,10 @@ el('btn-ai-translate-missing')?.addEventListener('click', async () => {
             payloadToTranslate[k] = state.i18nIt[k] || '';
         });
 
-        const response = await fetch('https://api.moonshot.cn/v1/chat/completions', {
+        const response = await fetch('https://api.moonshot.ai/v1/chat/completions', {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${apiKey.trim()}`,
+                'Authorization': `Bearer ${apiKey}`,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
@@ -326,7 +322,6 @@ el('btn-ai-translate-missing')?.addEventListener('click', async () => {
         alert(`🎉 Traduzione completata con successo! ${tradotteCount} chiavi aggiornate con Kimi AI.`);
     } catch (e) {
         alert('Errore traduzione con Kimi AI: ' + e.message);
-        sessionStorage.removeItem('pizzalab_kimi_api_key');
     } finally {
         btn.textContent = origText;
         btn.disabled = false;
@@ -466,17 +461,15 @@ el('btn-save-stagionale')?.addEventListener('click', () => {
 // 6. PUBBLICAZIONE GITHUB & SYNC API
 // =========================================================================
 function caricaTokenGitHub() {
-    // Rimuove qualsiasi residuo da localStorage per sicurezza
-    try { localStorage.removeItem(STORAGE_TOKEN_KEY); } catch (e) {}
-
-    // Il token vive solo nella sessione corrente (RAM / sessionStorage della scheda)
-    const token = sessionStorage.getItem(STORAGE_TOKEN_KEY) || '';
-    if (el('github-pat-token')) {
-        el('github-pat-token').value = token;
-        el('github-pat-token').addEventListener('input', (e) => {
-            sessionStorage.setItem(STORAGE_TOKEN_KEY, e.target.value.trim());
-        });
-    }
+    // Il token GitHub non viene più persistito in nessuna Web Storage API
+    // (né localStorage né sessionStorage): un eventuale XSS sulla pagina
+    // potrebbe comunque leggerlo mentre è nel campo, ma non resta
+    // recuperabile una volta ricaricata la pagina o chiusa la scheda.
+    // Rimuove eventuali residui salvati da versioni precedenti del codice.
+    try {
+        localStorage.removeItem(STORAGE_TOKEN_KEY);
+        sessionStorage.removeItem(STORAGE_TOKEN_KEY);
+    } catch (e) {}
 }
 
 function segnaFileModificato(filePath) {
@@ -587,6 +580,9 @@ el('btn-github-publish-main')?.addEventListener('click', async () => {
     } finally {
         btn.innerHTML = origText;
         btn.disabled = false;
+        // Il token resta solo per la singola operazione: viene ripulito dal
+        // campo subito dopo l'uso, successo o errore che sia.
+        if (el('github-pat-token')) el('github-pat-token').value = '';
     }
 });
 
@@ -617,6 +613,8 @@ el('btn-trigger-gh-action')?.addEventListener('click', async () => {
         }
     } catch (e) {
         alert('Errore: ' + e.message);
+    } finally {
+        if (el('github-pat-token')) el('github-pat-token').value = '';
     }
 });
 

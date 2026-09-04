@@ -1,0 +1,56 @@
+[
+    {
+        "termine": "Autolisi",
+        "termine_en": "Autolyse",
+        "icona": "🧬",
+        "definizione_breve": "Riposo iniziale di sola farina e parte dell acqua prima di aggiungere lievito e sale.",
+        "definizione_breve_en": "Initial resting phase of just flour and water before adding yeast and salt.",
+        "spiegazione_scientifica": "Attiva gli enzimi endogeni amilasi e proteasi: le amilasi scindono gli amidi in zuccheri semplici per i lieviti, mentre le proteasi rilassano le catene proteiche riducendo i tempi di impasto e aumentando l estensibilità.",
+        "spiegazione_scientifica_en": "Triggers endogenous amylase and protease enzymes: amylases break down starches into fermentable sugars, while proteases gently relax protein chains, shortening mix time and boosting extensibility."
+    },
+    {
+        "termine": "Proteolisi",
+        "termine_en": "Proteolysis",
+        "icona": "✂️",
+        "definizione_breve": "Degradazione enzimatica delle proteine del glutine nel tempo.",
+        "definizione_breve_en": "Enzymatic breakdown of gluten proteins over time.",
+        "spiegazione_scientifica": "Le proteasi trasformano le lunghe catene di glutenina e gliadina in peptidi e aminoacidi più corti. Questo processo rende l impasto morbido, estensibile, digeribile e ricco di precursori aromatici.",
+        "spiegazione_scientifica_en": "Proteases break down complex glutenin and gliadin matrices into shorter peptides and amino acids, creating a tender, extensible crumb with rich aroma precursors and superior digestibility."
+    },
+    {
+        "termine": "Reazione di Maillard",
+        "termine_en": "Maillard Reaction",
+        "icona": "🍞",
+        "definizione_breve": "Reazione chimica tra zuccheri riducenti e aminoacidi durante la cottura sopra i 140°C.",
+        "definizione_breve_en": "Chemical reaction between reducing sugars and amino acids occurring during baking above 140°C.",
+        "spiegazione_scientifica": "Produce centinaia di composti aromatici complessi (melanoidine) responsabili del profumo di pane appena sfornato, della croccantezza e della tipica doratura / maculatura del cornicione.",
+        "spiegazione_scientifica_en": "Produces hundreds of complex aromatic compounds (melanoidins) responsible for freshly baked bread aromas, crispness, and the signature leopard-spotting on the crust."
+    },
+    {
+        "termine": "Rapporto P/L (Chopin)",
+        "termine_en": "P/L Ratio (Alveograph)",
+        "icona": "📐",
+        "definizione_breve": "Rapporto tra Tenacia (P) ed Estensibilità (L) della farina.",
+        "definizione_breve_en": "Ratio between Tenacity (P) and Extensibility (L) of the flour.",
+        "spiegazione_scientifica": "Misurato con l alveografo di Chopin. Un valore ideale per pizza napoletana e tonda è compreso tra 0.50 e 0.60. Valori > 0.80 indicano farine troppo tenaci che si ritirano in stesura.",
+        "spiegazione_scientifica_en": "Measured using the Chopin Alveograph. The ideal range for round and Neapolitan pizza is 0.50 to 0.60. Values > 0.80 indicate excessively stiff flours that snap back during stretching."
+    },
+    {
+        "termine": "Forza della Farina (W)",
+        "termine_en": "Flour Strength (W)",
+        "icona": "💪",
+        "definizione_breve": "Capacità della farina di formare una maglia glutinica resistente e assorbire acqua.",
+        "definizione_breve_en": "Ability of flour to build a strong gluten network and absorb water.",
+        "spiegazione_scientifica": "Rappresenta l energia necessaria per rompere una bolla di impasto nell alveografo. W debole (160-200) = 4-8 ore; W medio (240-280) = 24 ore; W forte (300-380) = lunghe lievitazioni e prefermenti.",
+        "spiegazione_scientifica_en": "Measures the mechanical energy required to inflate and burst a dough bubble. Weak W (160-200) = 4-8h; Medium W (240-280) = 24h; Strong W (300-380) = long cold proofs and preferments."
+    },
+    {
+        "termine": "Staglio & Appretto",
+        "termine_en": "Balling & Final Proof",
+        "icona": "⚪",
+        "definizione_breve": "Divisione dell impasto in panetti singoli (staglio) e riposo finale prima della stesura (appretto).",
+        "definizione_breve_en": "Dividing dough into individual balls (staglio) and final proofing before stretching (appretto).",
+        "spiegazione_scientifica": "Durante l appretto la fermentazione accumula gas all interno del panetto sferico mentre la maglia glutinica si distende, consentendo la formazione dei grandi alveoli d aria tipici del cornicione.",
+        "spiegazione_scientifica_en": "During final proof, gas builds up inside each spherical ball while the gluten matrix relaxes, allowing the formation of airy, inflated crust cavities during baking."
+    }
+]

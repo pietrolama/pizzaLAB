@@ -54,6 +54,18 @@
             <h2>Farine e Forza (W)</h2>
             <div class="listing-grid" id="farine-container"></div>
         </section>
+
+        <section class="listing-section">
+            <h2 data-i18n="grains.title">Cereali, Grani Antichi & Tagli Speciali</h2>
+            <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px;" data-i18n="grains.subtitle">Guida scientifica alle percentuali massime di sostituzione, variazione di idratazione e comportamento del glutine.</p>
+            <div id="cereali-cards-container"></div>
+        </section>
+
+        <section class="listing-section">
+            <h2 data-i18n="glossary.title">Glossario Scientifico della Panificazione</h2>
+            <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px;" data-i18n="glossary.subtitle">I concetti biochimici e reologici spiegati in modo semplice e scientifico.</p>
+            <div id="glossario-cards-container"></div>
+        </section>
     </main>
 
     <footer>
@@ -63,6 +75,8 @@
     <script src="js/nav.js" defer></script>
     <script type="module">
         import { renderListing } from './js/listing.js';
+        import { caricaCerealiData, renderCerealiCards } from './js/grains-engine.js';
+        import { caricaGlossarioData, renderGlossarioDrawer, inizializzaGlossarioTooltips } from './js/glossario-engine.js';
 
         renderListing({
             containerSelector: '#prefermenti-container',
@@ -97,6 +111,17 @@
                 </article>
             `,
         });
+
+        async function initExtraContent() {
+            const [cereali, glossario] = await Promise.all([
+                caricaCerealiData(),
+                caricaGlossarioData()
+            ]);
+            renderCerealiCards(cereali, '#cereali-cards-container');
+            renderGlossarioDrawer(glossario, '#glossario-cards-container');
+            inizializzaGlossarioTooltips(glossario);
+        }
+        initExtraContent();
     </script>
 </body>
 </html>
