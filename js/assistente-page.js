@@ -247,7 +247,7 @@ function configureCalculator() {
     container.style.display = 'block';
     container.style.maxWidth = '520px';
     container.innerHTML = `
-        <div class="form-row" style="grid-template-columns: 1fr 1fr;">
+        <div class="form-row">
             ${campoRiepilogo({
                 id: 'riep_idratazione',
                 label: 'Idratazione (%)',

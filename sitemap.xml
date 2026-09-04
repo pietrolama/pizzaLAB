@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://pizzalab.pizza/</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://pizzalab.pizza/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://pizzalab.pizza/?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://pizzalab.pizza/" />
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://pizzalab.pizza/calcolatore.html</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://pizzalab.pizza/calcolatore.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://pizzalab.pizza/calcolatore.html?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://pizzalab.pizza/calcolatore.html" />
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pizzalab.pizza/tipi-di-pizza.html</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://pizzalab.pizza/tipi-di-pizza.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://pizzalab.pizza/tipi-di-pizza.html?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://pizzalab.pizza/tipi-di-pizza.html" />
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pizzalab.pizza/prefermenti_e_farine.html</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://pizzalab.pizza/prefermenti_e_farine.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://pizzalab.pizza/prefermenti_e_farine.html?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://pizzalab.pizza/prefermenti_e_farine.html" />
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pizzalab.pizza/assistente.html</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://pizzalab.pizza/assistente.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://pizzalab.pizza/assistente.html?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://pizzalab.pizza/assistente.html" />
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pizzalab.pizza/scienza.html</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://pizzalab.pizza/scienza.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://pizzalab.pizza/scienza.html?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://pizzalab.pizza/scienza.html" />
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://pizzalab.pizza/diario.html</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://pizzalab.pizza/diario.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://pizzalab.pizza/diario.html?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://pizzalab.pizza/diario.html" />
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://pizzalab.pizza/simulator.html</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://pizzalab.pizza/simulator.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://pizzalab.pizza/simulator.html?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://pizzalab.pizza/simulator.html" />
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://pizzalab.pizza/shop.html</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://pizzalab.pizza/shop.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://pizzalab.pizza/shop.html?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://pizzalab.pizza/shop.html" />
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://pizzalab.pizza/contatti.html</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://pizzalab.pizza/contatti.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://pizzalab.pizza/contatti.html?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://pizzalab.pizza/contatti.html" />
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://pizzalab.pizza/privacy.html</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://pizzalab.pizza/privacy.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://pizzalab.pizza/privacy.html?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://pizzalab.pizza/privacy.html" />
+    <lastmod>2026-09-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+</urlset>
