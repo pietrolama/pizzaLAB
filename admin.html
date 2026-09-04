@@ -13,24 +13,52 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 </head>
-</head>
-<body class="admin-body" style="display: none;" id="admin-root-body">
+<body class="admin-body" id="admin-root-body">
     <nav class="site-nav">
         <div class="nav-container">
             <a href="index.html" class="nav-brand">
                 <img src="img/logo.png" alt="PizzaLab">
                 PizzaLab <span style="font-size: 0.75rem; color: var(--primary-color); margin-left: 6px; padding: 2px 6px; border: 1px solid rgba(255,82,38,0.4); border-radius: 6px;">REDAZIONE</span>
             </a>
-            <div id="admin-user-bar" class="admin-user-header">
-                <span id="admin-user-name" style="font-size: 0.85rem; color: var(--text-muted);">pietrolama@gmail.com</span>
+            <div id="admin-user-bar" class="admin-user-header hidden">
+                <span id="admin-user-name" style="font-size: 0.85rem; color: var(--text-muted);">pietrolama1@gmail.com</span>
                 <button type="button" id="btn-logout" class="btn-secondary" style="padding: 6px 14px; font-size: 0.82rem;">Esci</button>
             </div>
         </div>
     </nav>
 
     <main class="page-container" style="max-width: 1280px; padding-top: 100px;">
-        <!-- DASHBOARD OPERATIVA (Sbloccata solo per pietrolama@gmail.com) -->
-        <section id="dashboard-section">
+        <!-- SCHERMATA 1: CARICAMENTO INIZIALE -->
+        <div id="admin-loading-screen" class="admin-auth-card">
+            <div style="font-size: 2.8rem; margin-bottom: 16px; animation: pulse 1.5s infinite;">⏳</div>
+            <h2>Verifica Redazione</h2>
+            <p style="color: var(--text-muted); margin-top: 8px;">Verifica delle credenziali di accesso in corso...</p>
+        </div>
+
+        <!-- SCHERMATA 2: ACCESSO REDAZIONE RICHIESTO -->
+        <div id="admin-login-screen" class="admin-auth-card hidden">
+            <div style="font-size: 2.8rem; margin-bottom: 16px;">🔐</div>
+            <h2>Area Redazione PizzaLab</h2>
+            <p style="color: var(--text-muted); margin-bottom: 24px;">Effettua l'accesso con il tuo account Google autorizzato per aprire la dashboard editoriale.</p>
+            <button type="button" id="btn-admin-google-login" class="btn" style="padding: 12px 28px; font-size: 1rem; display: inline-flex; align-items: center; gap: 8px;">
+                <span>🔑</span> Accedi con Google
+            </button>
+            <div id="admin-login-error" class="admin-error-box hidden" style="margin-top: 16px;"></div>
+        </div>
+
+        <!-- SCHERMATA 3: NON AUTORIZZATO -->
+        <div id="admin-unauthorized-screen" class="admin-auth-card hidden">
+            <div style="font-size: 2.8rem; margin-bottom: 16px;">⛔</div>
+            <h2>Accesso Riservato</h2>
+            <p style="color: var(--text-muted); margin-bottom: 20px;">L'account Google attualmente connesso (<strong id="unauth-user-email" style="color: #fff;"></strong>) non dispone dei permessi di redazione.</p>
+            <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                <button type="button" id="btn-switch-account" class="btn-secondary">Cambia Account Google</button>
+                <a href="index.html" class="btn">Torna alla Home</a>
+            </div>
+        </div>
+
+        <!-- DASHBOARD OPERATIVA (Sbloccata solo per pietrolama1@gmail.com) -->
+        <section id="dashboard-section" class="hidden">
             <!-- Tabs di navigazione Admin -->
             <div class="tools-nav-pills" style="margin-bottom: 24px;">
                 <button type="button" class="tool-tab-btn active" data-admin-tab="traduzioni">🌐 Traduzioni i18n</button>

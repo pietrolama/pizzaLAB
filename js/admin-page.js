@@ -28,24 +28,70 @@ let state = {
 const el = (id) => document.getElementById(id);
 
 // =========================================================================
-// 1. GESTIONE AUTENTICAZIONE STEALTH (Invisibile a tutti i non-admin)
+// 1. GESTIONE AUTENTICAZIONE REDAZIONE
 // =========================================================================
 onAuthChange((user, isAdmin) => {
     state.user = user;
 
+    const loadingScreen = el('admin-loading-screen');
+    const loginScreen = el('admin-login-screen');
+    const unauthScreen = el('admin-unauthorized-screen');
+    const dashboardSection = el('dashboard-section');
+    const userBar = el('admin-user-bar');
+
+    if (loadingScreen) loadingScreen.classList.add('hidden');
+
     if (user && isAdmin) {
-        // Accesso autorizzato esclusivamente a pietrolama@gmail.com
-        const rootBody = el('admin-root-body') || document.body;
-        rootBody.style.display = 'block';
+        // Accesso autorizzato a pietrolama1@gmail.com
+        if (loginScreen) loginScreen.classList.add('hidden');
+        if (unauthScreen) unauthScreen.classList.add('hidden');
+        if (dashboardSection) dashboardSection.classList.remove('hidden');
+        if (userBar) userBar.classList.remove('hidden');
 
         const userEmailEl = el('admin-user-name');
         if (userEmailEl) {
             userEmailEl.textContent = user.displayName ? `${user.displayName} (${user.email})` : user.email;
         }
         caricaTuttiIDati();
+    } else if (user && !isAdmin) {
+        // Connesso con account non autorizzato
+        if (dashboardSection) dashboardSection.classList.add('hidden');
+        if (loginScreen) loginScreen.classList.add('hidden');
+        if (userBar) userBar.classList.add('hidden');
+        if (unauthScreen) {
+            unauthScreen.classList.remove('hidden');
+            const unauthEmail = el('unauth-user-email');
+            if (unauthEmail) unauthEmail.textContent = user.email;
+        }
     } else {
-        // Chiunque altro (ospite o utente normale) viene istantaneamente rimbalzato alla Home
-        window.location.replace('index.html');
+        // Non ancora connesso: mostra schermata di accesso
+        if (dashboardSection) dashboardSection.classList.add('hidden');
+        if (unauthScreen) unauthScreen.classList.add('hidden');
+        if (userBar) userBar.classList.add('hidden');
+        if (loginScreen) loginScreen.classList.remove('hidden');
+    }
+});
+
+el('btn-admin-google-login')?.addEventListener('click', async () => {
+    try {
+        const errorBox = el('admin-login-error');
+        if (errorBox) errorBox.classList.add('hidden');
+        await loginWithGoogle();
+    } catch (err) {
+        const errorBox = el('admin-login-error');
+        if (errorBox) {
+            errorBox.textContent = `Errore di accesso: ${err.message}`;
+            errorBox.classList.remove('hidden');
+        }
+    }
+});
+
+el('btn-switch-account')?.addEventListener('click', async () => {
+    try {
+        await logoutUser();
+        await loginWithGoogle();
+    } catch (err) {
+        console.error('Errore cambio account:', err);
     }
 });
 
@@ -56,20 +102,6 @@ el('btn-logout')?.addEventListener('click', async () => {
     } catch (e) {}
     await logoutUser();
     window.location.replace('index.html');
-});
-
-el('btn-google-login')?.addEventListener('click', async () => {
-    try {
-        await loginWithGoogle();
-    } catch (err) {
-        const errorBox = el('auth-error-box');
-        errorBox.textContent = `Errore di accesso: ${err.message}`;
-        errorBox.classList.remove('hidden');
-    }
-});
-
-el('btn-logout')?.addEventListener('click', () => {
-    logoutUser();
 });
 
 // =========================================================================
