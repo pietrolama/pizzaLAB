@@ -44,6 +44,7 @@ function previousQuestion() {
 
 function renderStep(step) {
     backButton().disabled = step <= 1;
+    optionsEl().style.cssText = 'display: grid; gap: 12px; max-width: 420px; margin: 0 auto;';
     switch (step) {
         case 1: askTimePreference(); break;
         case 2: askTipoPizza(); break;
@@ -189,31 +190,123 @@ function impostaParametriMetodo(metodo, tempoPreferenza) {
     }
 }
 
+const NOTE_PERCENTUALE = {
+    biga: 'Percentuale di farina prefermentata in biga: più alta prolunga la maturazione e rinforza la struttura.',
+    poolish: 'Percentuale di farina prefermentata in poolish: più alta aumenta estensibilità e alveolatura.',
+    lievito_madre: 'Percentuale di lievito madre sul totale farina: regola forza e acidità dell\'impasto.',
+};
+
+function notaIdratazione(range, consistenza) {
+    const base = consistenza === 'soffice'
+        ? 'Idratazione alta: impasto più soffice e alveolato, cornicione morbido.'
+        : 'Idratazione più contenuta: impasto più croccante e facile da gestire a mano.';
+    return `${base} Range consigliato per questa pizza: ${range[0]}–${range[1]}%.`;
+}
+
+function notaTempoLievitazione(tempoPreferenza) {
+    return tempoPreferenza === 'piu_di_24'
+        ? 'Lievitazione lunga: più tempo per sviluppo aromatico e digeribilità, con dosi di lievito ridotte.'
+        : 'Lievitazione più breve: dosi di lievito leggermente più alte per essere pronta nei tempi indicati.';
+}
+
+function notaTempoFrigo(tempoFrigo) {
+    return tempoFrigo > 0
+        ? 'Il passaggio in frigo (4°C) rallenta la fermentazione e la rende più gestibile nei tempi.'
+        : 'Nessun passaggio in frigo: tutta la maturazione avviene a temperatura ambiente.';
+}
+
+function campoRiepilogo({ id, label, value, hint, step = 1, min = 0 }) {
+    return `
+        <div class="form-group">
+            <label for="${id}">${label}</label>
+            <input type="number" id="${id}" class="form-control" value="${value}" step="${step}" min="${min}">
+            <p class="form-hint">${hint}</p>
+        </div>
+    `;
+}
+
 function configureCalculator() {
-    const { tipo_pizza: tipoPizza, consistenza, tipo_impasto: tipoImpasto, num_panetti: numPanetti } = userSelections;
+    const { tipo_pizza: tipoPizza, consistenza, tipo_impasto: tipoImpasto, num_panetti: numPanetti, tempo_preferenza: tempoPreferenza } = userSelections;
     const params = configData[tipoPizza].parametri[consistenza];
+    const idratazioneMedia = Array.isArray(params.idratazione)
+        ? Math.round((params.idratazione[0] + params.idratazione[1]) / 2)
+        : params.idratazione;
 
-    const configToSave = {
-        tipo_pizza: tipoPizza,
-        tipo_impasto: tipoImpasto,
-        consistenza,
-        num_panetti: numPanetti,
-        idratazione: params.idratazione,
-        peso_panetto: params.peso_panetto,
-        tempo_lievitazione: params.tempo_lievitazione,
-        tempo_frigo: params.tempo_frigo,
-    };
-    if (userSelections.percentuale_biga) configToSave.percentuale_biga = userSelections.percentuale_biga;
-    if (userSelections.percentuale_poolish) configToSave.percentuale_poolish = userSelections.percentuale_poolish;
-    if (userSelections.percentuale_lievito_madre) configToSave.percentuale_lievito_madre = userSelections.percentuale_lievito_madre;
+    questionEl().textContent = 'Ecco i parametri suggeriti: puoi modificarli prima di procedere.';
 
-    localStorage.setItem('configurazioneImpasto', JSON.stringify(configToSave));
+    const percentualeCampo = ['biga', 'poolish', 'lievito_madre'].includes(tipoImpasto)
+        ? campoRiepilogo({
+            id: 'riep_percentuale',
+            label: tipoImpasto === 'lievito_madre' ? 'Lievito madre (%)' : `${capitalizza(tipoImpasto)} (%)`,
+            value: userSelections[`percentuale_${tipoImpasto}`] || 0,
+            hint: NOTE_PERCENTUALE[tipoImpasto],
+        })
+        : '';
 
-    questionEl().textContent = 'Perfetto! Ho configurato il calcolatore con i parametri ideali per te.';
     const container = optionsEl();
-    container.innerHTML = '';
-    container.appendChild(creaOpzioneBottone('Vai al Calcolatore', () => {
+    container.style.display = 'block';
+    container.style.maxWidth = '520px';
+    container.innerHTML = `
+        <div class="form-row" style="grid-template-columns: 1fr 1fr;">
+            ${campoRiepilogo({
+                id: 'riep_idratazione',
+                label: 'Idratazione (%)',
+                value: idratazioneMedia,
+                hint: notaIdratazione(params.idratazione, consistenza),
+                step: 0.5,
+            })}
+            ${campoRiepilogo({
+                id: 'riep_peso',
+                label: 'Peso panetto (g)',
+                value: params.peso_panetto,
+                hint: 'Peso del singolo panetto: incide su spessore e tempo di cottura.',
+                min: 100,
+            })}
+            ${campoRiepilogo({
+                id: 'riep_num_panetti',
+                label: 'Numero pizze',
+                value: numPanetti,
+                hint: 'Quante pizze verranno calcolate in totale.',
+                min: 1,
+            })}
+            ${campoRiepilogo({
+                id: 'riep_tempo_lievitazione',
+                label: 'Ore totali lievitazione',
+                value: params.tempo_lievitazione,
+                hint: notaTempoLievitazione(tempoPreferenza),
+                min: 1,
+            })}
+            ${campoRiepilogo({
+                id: 'riep_tempo_frigo',
+                label: 'Ore in frigo',
+                value: params.tempo_frigo || 0,
+                hint: notaTempoFrigo(params.tempo_frigo || 0),
+            })}
+            ${percentualeCampo}
+        </div>
+    `;
+
+    const conferma = creaOpzioneBottone('Vai al Calcolatore', () => {
+        const configToSave = {
+            tipo_pizza: tipoPizza,
+            tipo_impasto: tipoImpasto,
+            consistenza,
+            num_panetti: parseInt(document.getElementById('riep_num_panetti').value, 10) || numPanetti,
+            idratazione: parseFloat(document.getElementById('riep_idratazione').value) || idratazioneMedia,
+            peso_panetto: parseFloat(document.getElementById('riep_peso').value) || params.peso_panetto,
+            tempo_lievitazione: parseFloat(document.getElementById('riep_tempo_lievitazione').value) || params.tempo_lievitazione,
+            tempo_frigo: parseFloat(document.getElementById('riep_tempo_frigo').value) || 0,
+        };
+        const percentualeInput = document.getElementById('riep_percentuale');
+        if (percentualeInput) {
+            configToSave[`percentuale_${tipoImpasto}`] = parseFloat(percentualeInput.value) || 0;
+        }
+
+        localStorage.setItem('configurazioneImpasto', JSON.stringify(configToSave));
         window.location.href = 'calcolatore.html';
-    }));
-    backButton().disabled = true;
+    });
+    conferma.style.gridColumn = '1 / -1';
+    container.appendChild(conferma);
+
+    backButton().disabled = false;
 }

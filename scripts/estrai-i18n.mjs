@@ -42,11 +42,14 @@ function estraiTesti(html, pagina, dizionario, conflitti) {
     // Assume che l'elemento marcato non contenga a sua volta un altro
     // elemento con lo stesso nome di tag annidato (limite accettabile per
     // testo semplice: titoli, paragrafi, label, bottoni, voci di menu).
-    const re = /<([a-zA-Z][\w-]*)\b([^>]*)\bdata-i18n="([\w.-]+)"([^>]*)>([\s\S]*?)<\/\1>/g;
+    const re = /<([a-zA-Z][\w-]*)\b([^>]*)\bdata-i18n(?:-html)?="([\w.-]+)"([^>]*)>([\s\S]*?)<\/\1>/g;
     let m;
     while ((m = re.exec(html))) {
         const [, , , chiave, , contenutoRaw] = m;
-        const testo = decodificaEntitaBase(contenutoRaw.replace(/<[^>]+>/g, '').trim());
+        const hasInlineTags = /<(?:em|strong|br|b|i|span)\b[^>]*>/i.test(contenutoRaw);
+        const testo = hasInlineTags
+            ? decodificaEntitaBase(contenutoRaw.trim().replace(/\r?\n\s*/g, ''))
+            : decodificaEntitaBase(contenutoRaw.replace(/<[^>]+>/g, '').trim());
         if (!testo) continue;
         if (dizionario[chiave] && dizionario[chiave] !== testo) {
             conflitti.push(`"${chiave}" ha testi diversi tra pagine (es. in ${pagina}: "${testo}" vs "${dizionario[chiave]}")`);

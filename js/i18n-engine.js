@@ -74,12 +74,17 @@ export function applyTranslations(root = document) {
     if (!root) return;
 
     // 1. Traduzione del testo degli elementi con data-i18n
-    const textNodes = root.querySelectorAll('[data-i18n]');
+    const textNodes = root.querySelectorAll('[data-i18n], [data-i18n-html]');
     textNodes.forEach((el) => {
-        const key = el.getAttribute('data-i18n');
+        const isHtml = el.hasAttribute('data-i18n-html');
+        const key = isHtml ? el.getAttribute('data-i18n-html') : el.getAttribute('data-i18n');
         if (key && translations[key] !== undefined) {
-            // Preserva eventuali figli se marcati specificatamente, altrimenti aggiorna textContent
-            el.textContent = translations[key];
+            const val = translations[key];
+            if (isHtml || /<[a-z][\s\S]*>/i.test(val)) {
+                el.innerHTML = val;
+            } else {
+                el.textContent = val;
+            }
         }
     });
 
