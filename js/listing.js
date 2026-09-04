@@ -1,9 +1,23 @@
+import { getSavedLocale } from './i18n-engine.js';
+
 export async function renderListing({ containerSelector, jsonPath, renderItem }) {
     const container = document.querySelector(containerSelector);
     if (!container) return;
 
     try {
-        const res = await fetch(jsonPath);
+        const locale = getSavedLocale();
+        let targetPath = jsonPath;
+        if (locale && locale !== 'it') {
+            const localizedPath = jsonPath.replace(/\.json$/, `.${locale}.json`);
+            try {
+                const checkRes = await fetch(localizedPath, { method: 'HEAD' });
+                if (checkRes.ok) {
+                    targetPath = localizedPath;
+                }
+            } catch (e) {}
+        }
+
+        const res = await fetch(targetPath);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const items = await res.json();
         container.innerHTML = items.map((item, index) => {

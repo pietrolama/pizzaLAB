@@ -46,58 +46,58 @@
 
     <main class="page-container">
         <section class="calculator-card" style="margin-bottom: 24px;">
-            <h2 style="margin-bottom: 20px;">Aggiungi una fermentazione</h2>
+            <h2 style="margin-bottom: 20px;" data-i18n="diario.add_title">Aggiungi una fermentazione</h2>
             <form id="fermentazione-form">
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="nome">Nome impasto / descrizione</label>
+                        <label for="nome" data-i18n="diario.dough_name">Nome impasto / descrizione</label>
                         <input type="text" id="nome" class="form-control" placeholder="es. Napoletana 24h Biga" required>
                     </div>
                     <div class="form-group">
-                        <label for="data">Data inizio</label>
+                        <label for="data" data-i18n="diario.start_date">Data inizio</label>
                         <input type="date" id="data" class="form-control" required>
                     </div>
                     <div class="form-group">
-                        <label for="idratazione">Idratazione (%)</label>
+                        <label for="idratazione" data-i18n="diario.hydration">Idratazione (%)</label>
                         <input type="number" id="idratazione" class="form-control" placeholder="es. 68" required>
                     </div>
                     <div class="form-group">
-                        <label for="lievito">Tipo di lievito</label>
+                        <label for="lievito" data-i18n="diario.yeast_type">Tipo di lievito</label>
                         <input type="text" id="lievito" class="form-control" placeholder="es. Birra fresco / Lievito madre" required>
                     </div>
                     <div class="form-group">
-                        <label for="tempo">Tempo lievitazione (ore)</label>
+                        <label for="tempo" data-i18n="diario.fermentation_time">Tempo lievitazione (ore)</label>
                         <input type="number" id="tempo" class="form-control" placeholder="es. 24" required>
                     </div>
                     <div class="form-group">
-                        <label for="note">Note</label>
+                        <label for="note" data-i18n="diario.notes">Note</label>
                         <input type="text" id="note" class="form-control" placeholder="es. Risultato, aggiustamenti...">
                     </div>
                 </div>
                 <div style="text-align: center;">
-                    <button type="submit" class="btn">Salva nel Diario</button>
+                    <button type="submit" class="btn" data-i18n="diario.save_btn">Salva nel Diario</button>
                 </div>
             </form>
         </section>
 
         <section class="calculator-card">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
-                <h2>I tuoi impasti registrati</h2>
+                <h2 data-i18n="diario.registered_title">I tuoi impasti registrati</h2>
                 <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                    <button id="btn-export-backup" class="btn-chip" style="font-size: 0.85rem; padding: 6px 12px;">📥 Esporta Backup (JSON)</button>
+                    <button id="btn-export-backup" class="btn-chip" style="font-size: 0.85rem; padding: 6px 12px;" data-i18n="diario.export_backup">📥 Esporta Backup (JSON)</button>
                     <label class="btn-chip" style="font-size: 0.85rem; padding: 6px 12px; cursor: pointer; display: inline-flex; align-items: center;">
-                        📤 Importa Backup
+                        <span data-i18n="diario.import_backup">📤 Importa Backup</span>
                         <input type="file" id="input-import-backup" accept=".json" style="display: none;">
                     </label>
                 </div>
             </div>
             <div id="fermentazioni-list" class="listing-grid"></div>
-            <p id="fermentazioni-vuoto" style="color: var(--text-muted); text-align: center;">Non hai ancora registrato nessuna fermentazione.</p>
+            <p id="fermentazioni-vuoto" style="color: var(--text-muted); text-align: center;" data-i18n="diario.empty_msg">Non hai ancora registrato nessuna fermentazione.</p>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2026 PizzaLab — Diario di esperimenti e progressi</p>
+        <p data-i18n="footer.copy">&copy; 2026 PizzaLab — La tua guida alla pizza perfetta</p>
     </footer>
 
     <script src="js/nav.js" defer></script>

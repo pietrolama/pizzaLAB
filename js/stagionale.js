@@ -22,13 +22,17 @@
         return oggiNum >= inizioNum || oggiNum <= fineNum;
     }
 
-    fetch('data/stagionale.json')
-        .then((res) => (res.ok ? res.json() : []))
+    const locale = localStorage.getItem('pizzalab_locale') || (navigator.language || '').slice(0, 2);
+    const jsonPath = (locale === 'en') ? 'data/stagionale.en.json' : 'data/stagionale.json';
+
+    fetch(jsonPath)
+        .then((res) => (res.ok ? res.json() : fetch('data/stagionale.json').then((r) => r.json())))
         .then((voci) => {
             const oggi = new Date();
-            const attuale = voci.find((v) => nelPeriodo(oggi, v.inizio, v.fine));
-            if (!attuale) return;
+            const attuale = (Array.isArray(voci) ? voci : [voci]).find((v) => nelPeriodo(oggi, v.inizio, v.fine)) || (Array.isArray(voci) ? voci[0] : voci);
+            if (!attuale || !attuale.nome) return;
 
+            const ctaText = locale === 'en' ? 'Discover more' : 'Scopri di più';
             container.innerHTML = `
                 <div class="stagionale-banner__media">
                     <img src="${attuale.immagine}" alt="${attuale.nome}">
@@ -37,7 +41,7 @@
                     <p class="lab-section__eyebrow">${attuale.eyebrow}</p>
                     <h2>${attuale.nome}</h2>
                     <p>${attuale.descrizione}</p>
-                    <a href="${attuale.link}" class="btn-ghost">Scopri di più</a>
+                    <a href="${attuale.link || 'calcolatore.html'}" class="btn-ghost">${ctaText}</a>
                 </div>
             `;
             container.hidden = false;

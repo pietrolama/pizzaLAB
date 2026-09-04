@@ -46,7 +46,7 @@
 
     <main class="page-container">
         <section id="no-data-section" class="calculator-card hidden" style="text-align: center;">
-            <p style="color: var(--text-muted);">Nessun dato disponibile. Vai al <a href="calcolatore.html" style="color: var(--primary-color);">Calcolatore</a>, imposta la tua ricetta e premi "Valori Nutrizionali".</p>
+            <p style="color: var(--text-muted);" data-i18n="simulator.no_data_msg">Nessun dato disponibile. Vai al <a href="calcolatore.html" style="color: var(--primary-color);">Calcolatore</a>, imposta la tua ricetta e premi "Valori Nutrizionali".</p>
         </section>
 
         <div id="data-section" class="hidden">
@@ -56,38 +56,38 @@
             </section>
 
             <section class="calculator-card" style="margin-bottom: 20px;">
-                <h2 style="margin-bottom: 16px;">Aggiungi farciture</h2>
+                <h2 style="margin-bottom: 16px;" data-i18n="simulator.add_toppings_title">Aggiungi farciture</h2>
                 <div class="form-row" style="margin-bottom: 12px;">
                     <div class="form-group">
-                        <label for="topping-select">Ingrediente</label>
+                        <label for="topping-select" data-i18n="simulator.topping_ingredient">Ingrediente</label>
                         <select id="topping-select" class="form-control">
-                            <option value="">Seleziona...</option>
+                            <option value="" data-i18n="simulator.select_ingredient">Seleziona...</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="topping-qty">Quantità (g, per pizza)</label>
+                        <label for="topping-qty" data-i18n="simulator.topping_qty">Quantità (g, per pizza)</label>
                         <input type="number" id="topping-qty" class="form-control" value="50" min="1">
                     </div>
                 </div>
-                <button id="add-topping" class="btn-secondary">Aggiungi</button>
+                <button id="add-topping" class="btn-secondary" data-i18n="simulator.add_btn">Aggiungi</button>
                 <ul id="toppings-list" style="list-style: none; padding: 0; margin-top: 16px; display: grid; gap: 8px;"></ul>
             </section>
 
             <section class="calculator-card" style="margin-bottom: 20px;">
-                <h2 style="margin-bottom: 6px;">Per singola porzione</h2>
-                <p style="color: var(--text-muted); margin-bottom: 16px;">Un panetto da <span id="peso-panetto-label"></span>, farciture incluse.</p>
+                <h2 style="margin-bottom: 6px;" data-i18n="simulator.per_portion_title">Per singola porzione</h2>
+                <p style="color: var(--text-muted); margin-bottom: 16px;"><span data-i18n="simulator.portion_dough_ball">Un panetto da</span> <span id="peso-panetto-label"></span>, <span data-i18n="simulator.portion_toppings_included">farciture incluse.</span></p>
                 <div class="recipe-grid" id="nutrienti-porzione-grid"></div>
             </section>
 
             <section class="calculator-card">
-                <h2 style="margin-bottom: 16px;">Totale impasto</h2>
+                <h2 style="margin-bottom: 16px;" data-i18n="simulator.total_dough_title">Totale impasto</h2>
                 <div class="recipe-grid" id="nutrienti-totali-grid"></div>
             </section>
         </div>
     </main>
 
     <footer>
-        <p>&copy; 2026 PizzaLab — La tua guida alla pizza perfetta</p>
+        <p data-i18n="footer.copy">&copy; 2026 PizzaLab — La tua guida alla pizza perfetta</p>
     </footer>
 
     <script src="js/nav.js" defer></script>

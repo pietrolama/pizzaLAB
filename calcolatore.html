@@ -48,28 +48,28 @@
         <section class="calculator-card">
             <div class="form-row" id="selezione_base">
                 <div class="form-group">
-                    <label for="tipo_pizza">Tipo di pizza</label>
+                    <label for="tipo_pizza" data-i18n="calc.pizza_type">Tipo di pizza</label>
                     <select id="tipo_pizza" class="form-control">
-                        <option value="napoletana" selected>Napoletana STG</option>
-                        <option value="romana">Romana (Tonda Scrocchiarella)</option>
-                        <option value="contemporanea">Contemporanea (Cornicione Alto)</option>
-                        <option value="pala">Pizza in Pala</option>
-                        <option value="padellino">Pizza al Padellino</option>
-                        <option value="teglia">Pizza in Teglia</option>
+                        <option value="napoletana" selected data-i18n="pizza.napoletana_stg">Napoletana STG</option>
+                        <option value="romana" data-i18n="pizza.romana_tonda">Romana (Tonda Scrocchiarella)</option>
+                        <option value="contemporanea" data-i18n="pizza.contemporanea_alta">Contemporanea (Cornicione Alto)</option>
+                        <option value="pala" data-i18n="pizza.pala_lunga">Pizza in Pala</option>
+                        <option value="padellino" data-i18n="pizza.padellino_lungo">Pizza al Padellino</option>
+                        <option value="teglia" data-i18n="pizza.teglia">Pizza in Teglia</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="tipo_impasto">Metodo di impasto</label>
+                    <label for="tipo_impasto" data-i18n="calc.dough_method">Metodo di impasto</label>
                     <select id="tipo_impasto" class="form-control">
-                        <option value="diretto">Impasto Diretto</option>
-                        <option value="biga">Prefermento Biga</option>
-                        <option value="poolish">Prefermento Poolish</option>
-                        <option value="lievito_madre">Lievito Madre</option>
-                        <option value="biga_poolish">Biga + Poolish</option>
+                        <option value="diretto" data-i18n="method.diretto">Impasto Diretto</option>
+                        <option value="biga" data-i18n="method.biga">Prefermento Biga</option>
+                        <option value="poolish" data-i18n="method.poolish">Prefermento Poolish</option>
+                        <option value="lievito_madre" data-i18n="method.lievito_madre">Lievito Madre</option>
+                        <option value="biga_poolish" data-i18n="method.biga_poolish">Biga + Poolish</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="forza_farina">Forza farina (W)</label>
+                    <label for="forza_farina" data-i18n="calc.flour_strength">Forza farina (W)</label>
                     <input type="number" id="forza_farina" class="form-control" value="260" min="90" placeholder="es. 260">
                 </div>
             </div>
@@ -77,53 +77,53 @@
             <!-- BLEND & TAGLIO FARINE -->
             <div class="blend-toggle-wrapper">
                 <div class="blend-toggle-title">
-                    <span>🌾 Selezione Farina</span>
+                    <span data-i18n="calc.flour_selection">🌾 Selezione Farina</span>
                     <span class="blend-badge" id="badge_w_consigliato">Consigliato: W 270</span>
                 </div>
                 <div class="segmented-control" role="group" aria-label="Modalità Farina">
-                    <button type="button" id="btn_mode_singola" class="segmented-btn active">Farina Singola</button>
-                    <button type="button" id="btn_mode_blend" class="segmented-btn">Taglio 2 Farine (Blend)</button>
+                    <button type="button" id="btn_mode_singola" class="segmented-btn active" data-i18n="calc.single_flour">Farina Singola</button>
+                    <button type="button" id="btn_mode_blend" class="segmented-btn" data-i18n="calc.blend_flour">Taglio 2 Farine (Blend)</button>
                 </div>
             </div>
 
             <div id="sezione_blend" class="blend-card hidden">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
-                    <span style="font-size: 0.9rem; font-weight: 700; color: var(--text-main);">Calcolatore di Taglio (Quadrato di Pearson)</span>
+                    <span style="font-size: 0.9rem; font-weight: 700; color: var(--text-main);" data-i18n="calc.pearson_title">Calcolatore di Taglio (Quadrato di Pearson)</span>
                     <div class="segmented-control" role="group" aria-label="Unità di misura">
-                        <button type="button" id="btn_unit_w" class="segmented-btn active">Usa Forza (W)</button>
-                        <button type="button" id="btn_unit_prot" class="segmented-btn">Usa Proteine (%)</button>
+                        <button type="button" id="btn_unit_w" class="segmented-btn active" data-i18n="calc.use_strength_w">Usa Forza (W)</button>
+                        <button type="button" id="btn_unit_prot" class="segmented-btn" data-i18n="calc.use_protein">Usa Proteine (%)</button>
                     </div>
                 </div>
 
                 <div class="blend-inputs-grid">
                     <div class="blend-box">
                         <div class="blend-box-label">
-                            <span>Farina Forte (A)</span>
+                            <span data-i18n="calc.flour_strong">Farina Forte (A)</span>
                             <span class="blend-stat-dot forte"></span>
                         </div>
-                        <label for="blend_val_a" id="label_val_a" style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Forza W (es. Manitoba)</label>
+                        <label for="blend_val_a" id="label_val_a" style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 4px;" data-i18n="calc.flour_strong_hint">Forza W (es. Manitoba)</label>
                         <input type="number" id="blend_val_a" class="form-control" value="380" min="50" max="500">
                     </div>
 
                     <div class="blend-box">
                         <div class="blend-box-label">
-                            <span>Farina Debole (B)</span>
+                            <span data-i18n="calc.flour_weak">Farina Debole (B)</span>
                             <span class="blend-stat-dot debole"></span>
                         </div>
-                        <label for="blend_val_b" id="label_val_b" style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Forza W (es. Tipo 0 / 00)</label>
+                        <label for="blend_val_b" id="label_val_b" style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 4px;" data-i18n="calc.flour_weak_hint">Forza W (es. Tipo 0 / 00)</label>
                         <input type="number" id="blend_val_b" class="form-control" value="180" min="50" max="500">
                     </div>
 
                     <div class="blend-box">
                         <div class="blend-box-label">
-                            <span>W Obiettivo (Target)</span>
+                            <span data-i18n="calc.target_w">W Obiettivo (Target)</span>
                             <span style="color: var(--primary-color); font-weight: 700;" id="blend_target_preview">280 W</span>
                         </div>
-                        <label for="blend_target_input" id="label_target" style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Valore W desiderato</label>
+                        <label for="blend_target_input" id="label_target" style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 4px;" data-i18n="calc.target_w_hint">Valore W desiderato</label>
                         <input type="number" id="blend_target_input" class="form-control" value="280" min="90" max="450">
                         <div class="blend-target-quick">
-                            <span>Suggerito:</span>
-                            <button type="button" id="btn_applica_suggerito" class="btn-chip">Applica W ricetta</button>
+                            <span data-i18n="calc.suggested">Suggerito:</span>
+                            <button type="button" id="btn_applica_suggerito" class="btn-chip" data-i18n="calc.apply_recipe_w">Applica W ricetta</button>
                         </div>
                     </div>
                 </div>
@@ -132,14 +132,14 @@
                     <div class="blend-result-stats">
                         <div class="blend-stat-item">
                             <span class="blend-stat-dot forte"></span>
-                            <span><strong>Farina Forte (A):</strong> <span id="blend_res_perc_a">50%</span> (<span id="blend_res_peso_a">-</span>)</span>
+                            <span><strong data-i18n="calc.flour_strong_colon">Farina Forte (A):</strong> <span id="blend_res_perc_a">50%</span> (<span id="blend_res_peso_a">-</span>)</span>
                         </div>
                         <div class="blend-stat-item">
                             <span class="blend-stat-dot debole"></span>
-                            <span><strong>Farina Debole (B):</strong> <span id="blend_res_perc_b">50%</span> (<span id="blend_res_peso_b">-</span>)</span>
+                            <span><strong data-i18n="calc.flour_weak_colon">Farina Debole (B):</strong> <span id="blend_res_perc_b">50%</span> (<span id="blend_res_peso_b">-</span>)</span>
                         </div>
                         <div class="blend-stat-item">
-                            <span><strong>Miscela finale:</strong> <span id="blend_res_w_eff">280 W</span> (<span id="blend_res_prot_eff">~12.5% prot</span>)</span>
+                            <span><strong data-i18n="calc.final_mix">Miscela finale:</strong> <span id="blend_res_w_eff">280 W</span> (<span id="blend_res_prot_eff">~12.5% prot</span>)</span>
                         </div>
                     </div>
                     <div class="blend-progress-track">
@@ -152,149 +152,149 @@
 
             <div id="sezione_teglia" class="form-row hidden">
                 <div class="form-group">
-                    <label for="teglia_base">Base teglia (cm)</label>
+                    <label for="teglia_base" data-i18n="calc.pan_base">Base teglia (cm)</label>
                     <input type="number" id="teglia_base" class="form-control" value="40">
                 </div>
                 <div class="form-group">
-                    <label for="teglia_altezza">Altezza teglia (cm)</label>
+                    <label for="teglia_altezza" data-i18n="calc.pan_height">Altezza teglia (cm)</label>
                     <input type="number" id="teglia_altezza" class="form-control" value="60">
                 </div>
                 <div class="form-group">
-                    <label for="teglia_spessore">Spessore</label>
+                    <label for="teglia_spessore" data-i18n="calc.pan_thickness">Spessore</label>
                     <select id="teglia_spessore" class="form-control">
-                        <option value="sottile">Sottile</option>
-                        <option value="media" selected>Media</option>
-                        <option value="alta">Alta</option>
+                        <option value="sottile" data-i18n="calc.thickness_thin">Sottile</option>
+                        <option value="media" selected data-i18n="calc.thickness_medium">Media</option>
+                        <option value="alta" data-i18n="calc.thickness_thick">Alta</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="teglia_numero">Numero teglie</label>
+                    <label for="teglia_numero" data-i18n="calc.pan_quantity">Numero teglie</label>
                     <input type="number" id="teglia_numero" class="form-control" value="1" min="1">
                 </div>
             </div>
-            <p class="form-hint hidden" id="teglia_hint">Il peso dell'impasto viene calcolato dalle dimensioni della teglia e sostituisce Peso Panetto / Numero Panetti qui sotto.</p>
+            <p class="form-hint hidden" id="teglia_hint" data-i18n="calc.pan_hint">Il peso dell'impasto viene calcolato dalle dimensioni della teglia e sostituisce Peso Panetto / Numero Panetti qui sotto.</p>
 
             <div id="sezione_diretto" class="form-row">
                 <div class="form-group">
-                    <label for="peso_panetto_diretto">Peso panetto (g)</label>
+                    <label for="peso_panetto_diretto" data-i18n="calc.ball_weight">Peso panetto (g)</label>
                     <input type="number" id="peso_panetto_diretto" class="form-control" value="250">
                 </div>
                 <div class="form-group">
-                    <label for="num_panetti_diretto">Numero panetti</label>
+                    <label for="num_panetti_diretto" data-i18n="calc.num_balls">Numero panetti</label>
                     <input type="number" id="num_panetti_diretto" class="form-control" value="4">
                 </div>
                 <div class="form-group">
-                    <label for="idratazione_totale_diretto">Idratazione totale (%)</label>
+                    <label for="idratazione_totale_diretto" data-i18n="calc.total_hydration">Idratazione totale (%)</label>
                     <input type="number" id="idratazione_totale_diretto" class="form-control" value="65">
                 </div>
                 <div class="form-group">
-                    <label for="temperatura_ambiente_diretto">T° ambiente (°C)</label>
+                    <label for="temperatura_ambiente_diretto" data-i18n="calc.room_temp">T° ambiente (°C)</label>
                     <input type="number" id="temperatura_ambiente_diretto" class="form-control" value="22">
                 </div>
                 <div class="form-group">
-                    <label for="tempoLievTotale_diretto">Tempo totale (ore)</label>
+                    <label for="tempoLievTotale_diretto" data-i18n="calc.total_time">Tempo totale (ore)</label>
                     <input type="number" id="tempoLievTotale_diretto" class="form-control" value="24">
                 </div>
                 <div class="form-group">
-                    <label for="tempoFrigo_diretto">Tempo in frigo (ore)</label>
+                    <label for="tempoFrigo_diretto" data-i18n="calc.fridge_time">Tempo in frigo (ore)</label>
                     <input type="number" id="tempoFrigo_diretto" class="form-control" value="18">
                 </div>
             </div>
 
             <div id="sezione_biga" class="form-row hidden">
                 <div class="form-group">
-                    <label for="peso_panetto_biga">Peso panetto (g)</label>
+                    <label for="peso_panetto_biga" data-i18n="calc.ball_weight">Peso panetto (g)</label>
                     <input type="number" id="peso_panetto_biga" class="form-control" value="250">
                 </div>
                 <div class="form-group">
-                    <label for="num_panetti_biga">Numero panetti</label>
+                    <label for="num_panetti_biga" data-i18n="calc.num_balls">Numero panetti</label>
                     <input type="number" id="num_panetti_biga" class="form-control" value="4">
                 </div>
                 <div class="form-group">
-                    <label for="idratazione_totale_biga">Idratazione totale (%)</label>
+                    <label for="idratazione_totale_biga" data-i18n="calc.total_hydration">Idratazione totale (%)</label>
                     <input type="number" id="idratazione_totale_biga" class="form-control" value="70">
                 </div>
                 <div class="form-group">
-                    <label for="percentuale_biga">Percentuale biga (%)</label>
+                    <label for="percentuale_biga" data-i18n="calc.biga_perc">Percentuale biga (%)</label>
                     <input type="number" id="percentuale_biga" class="form-control" value="100">
                 </div>
             </div>
 
             <div id="sezione_poolish" class="form-row hidden">
                 <div class="form-group">
-                    <label for="peso_panetto_poolish">Peso panetto (g)</label>
+                    <label for="peso_panetto_poolish" data-i18n="calc.ball_weight">Peso panetto (g)</label>
                     <input type="number" id="peso_panetto_poolish" class="form-control" value="250">
                 </div>
                 <div class="form-group">
-                    <label for="num_panetti_poolish">Numero panetti</label>
+                    <label for="num_panetti_poolish" data-i18n="calc.num_balls">Numero panetti</label>
                     <input type="number" id="num_panetti_poolish" class="form-control" value="4">
                 </div>
                 <div class="form-group">
-                    <label for="idratazione_totale_poolish">Idratazione totale (%)</label>
+                    <label for="idratazione_totale_poolish" data-i18n="calc.total_hydration">Idratazione totale (%)</label>
                     <input type="number" id="idratazione_totale_poolish" class="form-control" value="70">
                 </div>
                 <div class="form-group">
-                    <label for="percentuale_poolish">Percentuale poolish (%)</label>
+                    <label for="percentuale_poolish" data-i18n="calc.poolish_perc">Percentuale poolish (%)</label>
                     <input type="number" id="percentuale_poolish" class="form-control" value="50">
                 </div>
             </div>
 
             <div id="sezione_lievito_madre" class="form-row hidden">
                 <div class="form-group">
-                    <label for="peso_panetto_lievito">Peso panetto (g)</label>
+                    <label for="peso_panetto_lievito" data-i18n="calc.ball_weight">Peso panetto (g)</label>
                     <input type="number" id="peso_panetto_lievito" class="form-control" value="250">
                 </div>
                 <div class="form-group">
-                    <label for="num_panetti_lievito">Numero panetti</label>
+                    <label for="num_panetti_lievito" data-i18n="calc.num_balls">Numero panetti</label>
                     <input type="number" id="num_panetti_lievito" class="form-control" value="4">
                 </div>
                 <div class="form-group">
-                    <label for="idratazione_totale_lievito">Idratazione totale (%)</label>
+                    <label for="idratazione_totale_lievito" data-i18n="calc.total_hydration">Idratazione totale (%)</label>
                     <input type="number" id="idratazione_totale_lievito" class="form-control" value="68">
                 </div>
                 <div class="form-group">
-                    <label for="percentuale_lievito">Percentuale lievito madre (%)</label>
+                    <label for="percentuale_lievito" data-i18n="calc.sourdough_perc">Percentuale lievito madre (%)</label>
                     <input type="number" id="percentuale_lievito" class="form-control" value="20">
                 </div>
             </div>
 
             <div id="sezione_biga_poolish" class="form-row hidden">
                 <div class="form-group">
-                    <label for="peso_panetto_biga_poolish">Peso panetto (g)</label>
+                    <label for="peso_panetto_biga_poolish" data-i18n="calc.ball_weight">Peso panetto (g)</label>
                     <input type="number" id="peso_panetto_biga_poolish" class="form-control" value="250">
                 </div>
                 <div class="form-group">
-                    <label for="num_panetti_biga_poolish">Numero panetti</label>
+                    <label for="num_panetti_biga_poolish" data-i18n="calc.num_balls">Numero panetti</label>
                     <input type="number" id="num_panetti_biga_poolish" class="form-control" value="4">
                 </div>
                 <div class="form-group">
-                    <label for="idratazione_totale_biga_poolish">Idratazione totale (%)</label>
+                    <label for="idratazione_totale_biga_poolish" data-i18n="calc.total_hydration">Idratazione totale (%)</label>
                     <input type="number" id="idratazione_totale_biga_poolish" class="form-control" value="75">
                 </div>
                 <div class="form-group">
-                    <label for="percentuale_biga_bp">Percentuale biga (%)</label>
+                    <label for="percentuale_biga_bp" data-i18n="calc.biga_perc">Percentuale biga (%)</label>
                     <input type="number" id="percentuale_biga_bp" class="form-control" value="30">
                 </div>
                 <div class="form-group">
-                    <label for="percentuale_poolish_bp">Percentuale poolish (%)</label>
+                    <label for="percentuale_poolish_bp" data-i18n="calc.poolish_perc">Percentuale poolish (%)</label>
                     <input type="number" id="percentuale_poolish_bp" class="form-control" value="20">
                 </div>
             </div>
 
             <div style="text-align: center; margin-top: 8px; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
-                <button id="calcola-button" class="btn">Calcola e genera ricetta</button>
-                <button id="nutrienti-button" class="btn-secondary">Valori Nutrizionali</button>
+                <button id="calcola-button" class="btn" data-i18n="calc.calculate_btn">Calcola e genera ricetta</button>
+                <button id="nutrienti-button" class="btn-secondary" data-i18n="calc.nutrition_btn">Valori Nutrizionali</button>
             </div>
 
             <div id="risultato" class="recipe-box hidden">
                 <div class="recipe-header-flex">
-                    <h2 id="risultato-titolo" style="margin-bottom: 0;">La tua scheda impasto</h2>
+                    <h2 id="risultato-titolo" style="margin-bottom: 0;" data-i18n="calc.recipe_sheet_title">La tua scheda impasto</h2>
                     <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                         <button type="button" id="btn-salva-diario" class="btn-chip" style="padding: 8px 16px; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 6px;">
-                            <span>💾</span> Salva nel Diario
+                            <span>💾</span> <span data-i18n="calc.save_diary">Salva nel Diario</span>
                         </button>
                         <button type="button" id="btn-share-card" class="btn-chip" style="padding: 8px 16px; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 6px;">
-                            <span>📸</span> Condividi Pizza Card
+                            <span>📸</span> <span data-i18n="calc.share_card">Condividi Pizza Card</span>
                         </button>
                     </div>
                 </div>
@@ -304,11 +304,11 @@
                 <div class="schedule-section" id="schedule-box">
                     <div class="schedule-header">
                         <div>
-                            <span class="piano-tag" style="color: #60a5fa;">🕒 CRONOPROGRAMMA INVERSO</span>
-                            <h3 style="font-size: 1.15rem; margin-top: 2px;">Tabella di Marcia Oraria</h3>
+                            <span class="piano-tag" style="color: #60a5fa;" data-i18n="calc.schedule_tag">🕒 CRONOPROGRAMMA INVERSO</span>
+                            <h3 style="font-size: 1.15rem; margin-top: 2px;" data-i18n="calc.schedule_title">Tabella di Marcia Oraria</h3>
                         </div>
                         <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                            <label for="schedule_infornata_time" style="font-size: 0.85rem; color: var(--text-muted);">Voglio infornare il:</label>
+                            <label for="schedule_infornata_time" style="font-size: 0.85rem; color: var(--text-muted);" data-i18n="calc.schedule_bake_label">Voglio infornare il:</label>
                             <input type="datetime-local" id="schedule_infornata_time" class="form-control" style="padding: 6px 12px; font-size: 0.88rem; width: auto;">
                         </div>
                     </div>
@@ -318,16 +318,16 @@
                 <!-- BANNER PIANO OPERATIVO -->
                 <div class="piano-operativo-banner">
                     <div class="piano-operativo-info">
-                        <span class="piano-tag">👨‍🍳 MODALITÀ IN CUCINA</span>
-                        <h3>Piano Operativo a Scorrimento</h3>
-                        <p>Segui la lavorazione passo dopo passo con card a schermo grande, timer dedicati e display sempre attivo.</p>
+                        <span class="piano-tag" data-i18n="calc.kitchen_mode_tag">👨‍🍳 MODALITÀ IN CUCINA</span>
+                        <h3 data-i18n="calc.kitchen_mode_title">Piano Operativo a Scorrimento</h3>
+                        <p data-i18n="calc.kitchen_mode_desc">Segui la lavorazione passo dopo passo con card a schermo grande, timer dedicati e display sempre attivo.</p>
                     </div>
                     <button type="button" id="btn-avvia-piano-operativo" class="btn" style="padding: 12px 24px; white-space: nowrap;">
-                        <span>🚀</span> Avvia Piano Operativo
+                        <span>🚀</span> <span data-i18n="calc.start_plan_btn">Avvia Piano Operativo</span>
                     </button>
                 </div>
 
-                <h3>Procedimento con Timer Interattivi</h3>
+                <h3 data-i18n="calc.procedure_title">Procedimento con Timer Interattivi</h3>
                 <ol class="recipe-steps" id="risultato-steps"></ol>
                 <div class="recipe-warnings" id="risultato-avvisi"></div>
             </div>
@@ -335,51 +335,51 @@
 
         <!-- STRUMENTI EXTRA DEL PIZZAIOLO -->
         <section class="tools-section">
-            <h2 style="font-size: 1.6rem; margin-bottom: 8px;">🛠️ Laboratorio & Strumenti Avanzati</h2>
-            <p style="color: var(--text-muted); margin-bottom: 20px;">Utilities scientifiche per bilanciare farciture, controllare le temperature e calibrare la cottura.</p>
+            <h2 style="font-size: 1.6rem; margin-bottom: 8px;" data-i18n="tools.title">🛠️ Laboratorio & Strumenti Avanzati</h2>
+            <p style="color: var(--text-muted); margin-bottom: 20px;" data-i18n="tools.subtitle">Utilities scientifiche per bilanciare farciture, controllare le temperature e calibrare la cottura.</p>
 
             <div class="tools-nav-pills" role="tablist">
-                <button type="button" id="tab-btn-topping" class="tool-tab-btn active">🧀 Calcolo Condimenti</button>
-                <button type="button" id="tab-btn-fdt" class="tool-tab-btn">🌡️ Temperatura Acqua (FDT)</button>
-                <button type="button" id="tab-btn-forni" class="tool-tab-btn">🔥 Guida Setup Forni</button>
+                <button type="button" id="tab-btn-topping" class="tool-tab-btn active" data-i18n="tools.tab_topping">🧀 Calcolo Condimenti</button>
+                <button type="button" id="tab-btn-fdt" class="tool-tab-btn" data-i18n="tools.tab_fdt">🌡️ Temperatura Acqua (FDT)</button>
+                <button type="button" id="tab-btn-forni" class="tool-tab-btn" data-i18n="tools.tab_ovens">🔥 Guida Setup Forni</button>
             </div>
 
             <!-- PANEL 1: CALCOLO CONDIMENTI -->
             <div id="panel-topping" class="tool-panel">
-                <h3 style="margin-bottom: 16px;">Bilanciamento Farcitura & Grammature</h3>
+                <h3 style="margin-bottom: 16px;" data-i18n="topping.title">Bilanciamento Farcitura & Grammature</h3>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="topping_forma">Forma Pizza</label>
+                        <label for="topping_forma" data-i18n="topping.shape">Forma Pizza</label>
                         <select id="topping_forma" class="form-control">
-                            <option value="tonda" selected>Tonda al Piatto</option>
-                            <option value="teglia">Teglia Rettangolare</option>
+                            <option value="tonda" selected data-i18n="topping.shape_round">Tonda al Piatto</option>
+                            <option value="teglia" data-i18n="topping.shape_pan">Teglia Rettangolare</option>
                         </select>
                     </div>
                     <div class="form-group" id="group_topping_diametro">
-                        <label for="topping_diametro">Diametro (cm)</label>
+                        <label for="topping_diametro" data-i18n="topping.diameter">Diametro (cm)</label>
                         <select id="topping_diametro" class="form-control">
-                            <option value="28">28 cm (Piccola / Fornetto tondo)</option>
-                            <option value="30" selected>30 cm (Classica Pizzeria)</option>
-                            <option value="33">33 cm (Napoletana Tradizionale / Ruota di Carro)</option>
-                            <option value="36">36 cm (Grande / Famiglia)</option>
+                            <option value="28" data-i18n="topping.dia_28">28 cm (Piccola / Fornetto tondo)</option>
+                            <option value="30" selected data-i18n="topping.dia_30">30 cm (Classica Pizzeria)</option>
+                            <option value="33" data-i18n="topping.dia_33">33 cm (Napoletana Tradizionale / Ruota di Carro)</option>
+                            <option value="36" data-i18n="topping.dia_36">36 cm (Grande / Famiglia)</option>
                         </select>
                     </div>
                     <div class="form-group hidden" id="group_topping_teglia_base">
-                        <label for="topping_teglia_base">Base Teglia (cm)</label>
+                        <label for="topping_teglia_base" data-i18n="topping.pan_base">Base Teglia (cm)</label>
                         <input type="number" id="topping_teglia_base" class="form-control" value="40">
                     </div>
                     <div class="form-group hidden" id="group_topping_teglia_alt">
-                        <label for="topping_teglia_alt">Altezza Teglia (cm)</label>
+                        <label for="topping_teglia_alt" data-i18n="topping.pan_height">Altezza Teglia (cm)</label>
                         <input type="number" id="topping_teglia_alt" class="form-control" value="60">
                     </div>
                     <div class="form-group">
-                        <label for="topping_farcitura">Tipo di Farcitura</label>
+                        <label for="topping_farcitura" data-i18n="topping.type">Tipo di Farcitura</label>
                         <select id="topping_farcitura" class="form-control">
-                            <option value="margherita" selected>Margherita Classica</option>
-                            <option value="marinara">Marinara Tradizionale</option>
-                            <option value="quattro_formaggi">Quattro Formaggi</option>
-                            <option value="capricciosa">Capricciosa / 4 Stagioni</option>
-                            <option value="focaccia">Focaccia con Salamoia ed Erbe</option>
+                            <option value="margherita" selected data-i18n="topping.farcitura_margherita">Margherita Classica</option>
+                            <option value="marinara" data-i18n="topping.farcitura_marinara">Marinara Tradizionale</option>
+                            <option value="quattro_formaggi" data-i18n="topping.farcitura_4formaggi">Quattro Formaggi</option>
+                            <option value="capricciosa" data-i18n="topping.farcitura_capricciosa">Capricciosa / 4 Stagioni</option>
+                            <option value="focaccia" data-i18n="topping.farcitura_focaccia">Focaccia con Salamoia ed Erbe</option>
                         </select>
                     </div>
                 </div>
@@ -387,7 +387,7 @@
                 <div class="topping-result-card" id="topping-result-box">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                         <strong style="color: var(--primary-color);" id="topping-area-label">Superficie: ~707 cm²</strong>
-                        <span style="font-size: 0.85rem; color: var(--text-muted);">Dosi al grammo per singolo pezzo</span>
+                        <span style="font-size: 0.85rem; color: var(--text-muted);" data-i18n="topping.doses_per_piece">Dosi al grammo per singolo pezzo</span>
                     </div>
                     <div id="topping-list-container"></div>
                 </div>
@@ -395,36 +395,36 @@
 
             <!-- PANEL 2: TEMPERATURA ACQUA (FDT) -->
             <div id="panel-fdt" class="tool-panel hidden">
-                <h3 style="margin-bottom: 16px;">Calcolo Temperatura Acqua (FDT — Fattore Finale)</h3>
-                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px;">Formula scientifica per chiudere l'impasto esattamente alla temperatura ideale (23-25°C) ed evitare sovralievitazioni precoci.</p>
+                <h3 style="margin-bottom: 16px;" data-i18n="fdt.title">Calcolo Temperatura Acqua (FDT — Fattore Finale)</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px;" data-i18n="fdt.subtitle">Formula scientifica per chiudere l'impasto esattamente alla temperatura ideale (23-25°C) ed evitare sovralievitazioni precoci.</p>
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="fdt_target">T° Finale Desiderata (°C)</label>
+                        <label for="fdt_target" data-i18n="fdt.target_temp">T° Finale Desiderata (°C)</label>
                         <input type="number" id="fdt_target" class="form-control" value="24" min="20" max="28">
                     </div>
                     <div class="form-group">
-                        <label for="fdt_ambiente">T° Stanza / Ambiente (°C)</label>
+                        <label for="fdt_ambiente" data-i18n="fdt.room_temp">T° Stanza / Ambiente (°C)</label>
                         <input type="number" id="fdt_ambiente" class="form-control" value="22">
                     </div>
                     <div class="form-group">
-                        <label for="fdt_farina">T° Sacco Farina (°C)</label>
+                        <label for="fdt_farina" data-i18n="fdt.flour_temp">T° Sacco Farina (°C)</label>
                         <input type="number" id="fdt_farina" class="form-control" value="21" placeholder="Se non misurata: T.Ambiente - 1">
                     </div>
                     <div class="form-group">
-                        <label for="fdt_impastatrice">Metodo / Frizione Meccanica</label>
+                        <label for="fdt_impastatrice" data-i18n="fdt.mixing_method">Metodo / Frizione Meccanica</label>
                         <select id="fdt_impastatrice" class="form-control">
-                            <option value="mani" selected>A Mano (+1°C)</option>
-                            <option value="planetaria">Planetaria con Gancio (+3°C)</option>
-                            <option value="spirale_1v">Impastatrice a Spirale 1 vel. (+4°C)</option>
-                            <option value="spirale_2v">Impastatrice a Spirale 2 vel. / Alta (+7°C)</option>
-                            <option value="bimby">Robot da Cucina con Lame (+9°C)</option>
+                            <option value="mani" selected data-i18n="fdt.method_hand">A Mano (+1°C)</option>
+                            <option value="planetaria" data-i18n="fdt.method_stand">Planetaria con Gancio (+3°C)</option>
+                            <option value="spirale_1v" data-i18n="fdt.method_spiral1">Impastatrice a Spirale 1 vel. (+4°C)</option>
+                            <option value="spirale_2v" data-i18n="fdt.method_spiral2">Impastatrice a Spirale 2 vel. / Alta (+7°C)</option>
+                            <option value="bimby" data-i18n="fdt.method_foodproc">Robot da Cucina con Lame (+9°C)</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="fdt-display-card">
-                    <span style="font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);">Temperatura consigliata dell'acqua da inserire:</span>
+                    <span style="font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted);" data-i18n="fdt.recommended_water">Temperatura consigliata dell'acqua da inserire:</span>
                     <div class="fdt-target-number" id="fdt-res-temp">15°C</div>
                     <strong style="color: #fff; font-size: 1.1rem; display: block; margin-bottom: 6px;" id="fdt-res-tipo">💧 Acqua fresca di rubinetto</strong>
                     <p style="font-size: 0.9rem; color: var(--text-muted); max-width: 650px; margin: 0 auto;" id="fdt-res-consiglio"></p>
@@ -433,28 +433,28 @@
 
             <!-- PANEL 3: GUIDA FORNI -->
             <div id="panel-forni" class="tool-panel hidden">
-                <h3 style="margin-bottom: 16px;">Guida Termica & Configurazione Forni</h3>
+                <h3 style="margin-bottom: 16px;" data-i18n="ovens.title">Guida Termica & Configurazione Forni</h3>
                 <div class="oven-cards-grid">
                     <div class="oven-choice-card active" data-oven="domestico">
                         <div style="font-size: 2rem; margin-bottom: 6px;">🏠</div>
-                        <strong>Forno Domestico</strong>
+                        <strong data-i18n="ovens.home_oven">Forno Domestico</strong>
                         <p style="font-size: 0.8rem; color: var(--text-muted);">250°C - 300°C</p>
                     </div>
                     <div class="oven-choice-card" data-oven="elettrico_alta">
                         <div style="font-size: 2rem; margin-bottom: 6px;">⚡</div>
-                        <strong>Fornetto Elettrico</strong>
+                        <strong data-i18n="ovens.pizza_oven">Fornetto Elettrico</strong>
                         <p style="font-size: 0.8rem; color: var(--text-muted);">450°C - 500°C (Effeuno, Ooni)</p>
                     </div>
                     <div class="oven-choice-card" data-oven="gas_legna">
                         <div style="font-size: 2rem; margin-bottom: 6px;">🔥</div>
-                        <strong>Forno a Gas / Legna</strong>
+                        <strong data-i18n="ovens.outdoor_oven">Forno a Gas / Legna</strong>
                         <p style="font-size: 0.8rem; color: var(--text-muted);">450°C - 500°C Esterno</p>
                     </div>
                 </div>
 
                 <div class="oven-detail-box" id="oven-detail-box">
                     <h4 id="oven-detail-title" style="font-size: 1.15rem; color: var(--primary-color);">Forno Domestico Standard</h4>
-                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">Tempo medio di cottura: <strong id="oven-detail-time" style="color: #fff;">4-7 minuti</strong></p>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;"><span data-i18n="ovens.avg_bake_time">Tempo medio di cottura:</span> <strong id="oven-detail-time" style="color: #fff;">4-7 minuti</strong></p>
                     <ul id="oven-detail-list"></ul>
                 </div>
             </div>
@@ -468,8 +468,8 @@
                     <span style="font-size: 0.85rem; color: var(--text-muted); margin-left: 8px;" id="piano-pizza-label">Napoletana STG</span>
                 </div>
                 <div class="piano-header-actions">
-                    <button type="button" id="btn-wakelock-toggle" class="btn-chip" title="Mantieni schermo attivo">💡 Schermo Attivo</button>
-                    <button type="button" id="btn-chiudi-piano" class="btn-secondary" style="padding: 6px 14px; font-size: 0.85rem;">✕ Chiudi</button>
+                    <button type="button" id="btn-wakelock-toggle" class="btn-chip" title="Mantieni schermo attivo" data-i18n="calc.screen_active">💡 Schermo Attivo</button>
+                    <button type="button" id="btn-chiudi-piano" class="btn-secondary" style="padding: 6px 14px; font-size: 0.85rem;" data-i18n="calc.close_btn">✕ Chiudi</button>
                 </div>
             </div>
 
@@ -488,17 +488,17 @@
                         <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 6px;" id="piano-timer-label">Timer Autolisi</span>
                         <div class="piano-timer-digits" id="piano-modal-timer-digits">20:00</div>
                         <div class="piano-timer-actions">
-                            <button type="button" id="btn-modal-timer-start" class="btn" style="padding: 10px 22px; font-size: 0.95rem;">⏱️ Avvia Timer</button>
-                            <button type="button" id="btn-modal-timer-pause" class="btn-secondary hidden" style="padding: 10px 18px;">⏸️ Pausa</button>
-                            <button type="button" id="btn-modal-timer-stop" class="btn-secondary hidden" style="padding: 10px 18px;">⏹️ Reset</button>
+                            <button type="button" id="btn-modal-timer-start" class="btn" style="padding: 10px 22px; font-size: 0.95rem;" data-i18n="calc.start_timer">⏱️ Avvia Timer</button>
+                            <button type="button" id="btn-modal-timer-pause" class="btn-secondary hidden" style="padding: 10px 18px;" data-i18n="calc.pause_timer">⏸️ Pausa</button>
+                            <button type="button" id="btn-modal-timer-stop" class="btn-secondary hidden" style="padding: 10px 18px;" data-i18n="calc.reset_timer">⏹️ Reset</button>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="piano-modal-footer">
-                <button type="button" id="btn-piano-prev" class="btn-secondary" style="padding: 12px 24px;">← Precedente</button>
-                <button type="button" id="btn-piano-next" class="btn" style="padding: 12px 28px;">Successivo →</button>
+                <button type="button" id="btn-piano-prev" class="btn-secondary" style="padding: 12px 24px;" data-i18n="calc.prev_btn">← Precedente</button>
+                <button type="button" id="btn-piano-next" class="btn" style="padding: 12px 28px;" data-i18n="calc.next_btn">Successivo →</button>
             </div>
         </div>
 
@@ -516,7 +516,7 @@
     </main>
 
     <footer>
-        <p>&copy; 2026 PizzaLab — La tua guida alla pizza perfetta</p>
+        <p data-i18n="footer.copy">&copy; 2026 PizzaLab — La tua guida alla pizza perfetta</p>
     </footer>
 
     <script src="js/nav.js" defer></script>
