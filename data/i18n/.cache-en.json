@@ -1,0 +1,731 @@
+{
+    "assistente.back_btn": {
+        "_source_hash": "80426885bb7468ff"
+    },
+    "assistente.header.subtitle": {
+        "_source_hash": "bcc434916ac8dc7c"
+    },
+    "assistente.header.title": {
+        "_source_hash": "34792ab7c20bb0fc"
+    },
+    "calc.add_to_calendar": {
+        "_source_hash": "467ec153a35df7a6"
+    },
+    "calc.apply_recipe_w": {
+        "_source_hash": "f77cfc56dd3b6b2a"
+    },
+    "calc.ball_weight": {
+        "_source_hash": "94ec3962f6abac3f"
+    },
+    "calc.biga_perc": {
+        "_source_hash": "7138b7dca43183d4"
+    },
+    "calc.blend_flour": {
+        "_source_hash": "41b4566dce154e28"
+    },
+    "calc.calculate_btn": {
+        "_source_hash": "4a4d6584c47c0fc2"
+    },
+    "calc.close_btn": {
+        "_source_hash": "cef0d5f768376281"
+    },
+    "calc.dough_method": {
+        "_source_hash": "72581a9d0867240c"
+    },
+    "calc.final_mix": {
+        "_source_hash": "bc092dfc0e77023e"
+    },
+    "calc.flour_selection": {
+        "_source_hash": "c6fcc80bacf8a64e"
+    },
+    "calc.flour_strength": {
+        "_source_hash": "969e17eb8de22a40"
+    },
+    "calc.flour_strong": {
+        "_source_hash": "ff1c207edea87654"
+    },
+    "calc.flour_strong_colon": {
+        "_source_hash": "b16b977c2c809096"
+    },
+    "calc.flour_strong_hint": {
+        "_source_hash": "5205a1fb9f15d85e"
+    },
+    "calc.flour_weak": {
+        "_source_hash": "5cd022b3c781179e"
+    },
+    "calc.flour_weak_colon": {
+        "_source_hash": "0a3356d4729407c5"
+    },
+    "calc.flour_weak_hint": {
+        "_source_hash": "4c55c69d37508538"
+    },
+    "calc.fridge_time": {
+        "_source_hash": "7ef47925c6d3fa82"
+    },
+    "calc.kitchen_mode_desc": {
+        "_source_hash": "2ab08fb8210bdf54"
+    },
+    "calc.kitchen_mode_tag": {
+        "_source_hash": "2ef559b28c8b93de"
+    },
+    "calc.kitchen_mode_title": {
+        "_source_hash": "55b4a61c17057c75"
+    },
+    "calc.next_btn": {
+        "_source_hash": "d1ebcea9fa238a91"
+    },
+    "calc.num_balls": {
+        "_source_hash": "cb4c4d51383829d7"
+    },
+    "calc.nutrition_btn": {
+        "_source_hash": "29e5d2b2079ba3b6"
+    },
+    "calc.pan_base": {
+        "_source_hash": "ba6622d2cc1a4860"
+    },
+    "calc.pan_height": {
+        "_source_hash": "f949e11bafc5612b"
+    },
+    "calc.pan_hint": {
+        "_source_hash": "38e2f5ca083a6fc1"
+    },
+    "calc.pan_quantity": {
+        "_source_hash": "ad2bcb13f414e86a"
+    },
+    "calc.pan_thickness": {
+        "_source_hash": "3a29a4d83d7929d6"
+    },
+    "calc.pause_timer": {
+        "_source_hash": "68f25651c8397807"
+    },
+    "calc.pearson_title": {
+        "_source_hash": "452983f469b86f48"
+    },
+    "calc.pizza_type": {
+        "_source_hash": "9f76ad7eac386b2d"
+    },
+    "calc.poolish_perc": {
+        "_source_hash": "c26fdd5c23e2b3bd"
+    },
+    "calc.prev_btn": {
+        "_source_hash": "b6f1c6d040ab2046"
+    },
+    "calc.print_sheet": {
+        "_source_hash": "741bbe337e2b8c3b"
+    },
+    "calc.procedure_title": {
+        "_source_hash": "a06c2cf68d61a706"
+    },
+    "calc.recipe_sheet_title": {
+        "_source_hash": "dcb0af354d668b8d"
+    },
+    "calc.reset_timer": {
+        "_source_hash": "e67cb3ecbc1a8fd5"
+    },
+    "calc.room_temp": {
+        "_source_hash": "d224f7d8af2cb275"
+    },
+    "calc.save_diary": {
+        "_source_hash": "c5650e05479191d1"
+    },
+    "calc.schedule_bake_label": {
+        "_source_hash": "3f4745e763835e39"
+    },
+    "calc.schedule_tag": {
+        "_source_hash": "8a458585a10990e8"
+    },
+    "calc.schedule_title": {
+        "_source_hash": "f020be5d8f70230b"
+    },
+    "calc.screen_active": {
+        "_source_hash": "9605c91771c95d17"
+    },
+    "calc.share_card": {
+        "_source_hash": "0011e81ef73e2308"
+    },
+    "calc.single_flour": {
+        "_source_hash": "8b5719631d2b835d"
+    },
+    "calc.sourdough_perc": {
+        "_source_hash": "bb97f2f2348e06ce"
+    },
+    "calc.start_plan_btn": {
+        "_source_hash": "de955c221bf90b98"
+    },
+    "calc.start_timer": {
+        "_source_hash": "12032757f197fc54"
+    },
+    "calc.suggested": {
+        "_source_hash": "8f89f3ca3c77a4c4"
+    },
+    "calc.target_w": {
+        "_source_hash": "1e4d3ce334ae7e65"
+    },
+    "calc.target_w_hint": {
+        "_source_hash": "b2866c7b25553c4d"
+    },
+    "calc.thickness_medium": {
+        "_source_hash": "d357175cfe8978d3"
+    },
+    "calc.thickness_thick": {
+        "_source_hash": "42719229fd62e2d6"
+    },
+    "calc.thickness_thin": {
+        "_source_hash": "39a56a18cb6e79ff"
+    },
+    "calc.total_hydration": {
+        "_source_hash": "1dbfc0887fe16e04"
+    },
+    "calc.total_time": {
+        "_source_hash": "b74c59e055df32e4"
+    },
+    "calc.use_protein": {
+        "_source_hash": "d8359a7a58e347de"
+    },
+    "calc.use_strength_w": {
+        "_source_hash": "1ef223794ae8661b"
+    },
+    "calcolatore.header.subtitle": {
+        "_source_hash": "01d3b191c8bf6aee"
+    },
+    "calcolatore.header.title": {
+        "_source_hash": "e268823443d58749"
+    },
+    "contatti.email_address": {
+        "_source_hash": "5df4aa5fa0b18311"
+    },
+    "contatti.email_label": {
+        "_source_hash": "17507dcf845793fa"
+    },
+    "contatti.form_title": {
+        "_source_hash": "a062a4659a684013"
+    },
+    "contatti.full_name": {
+        "_source_hash": "52015b04c01add60"
+    },
+    "contatti.header.subtitle": {
+        "_source_hash": "3c7af8d75c5c202e"
+    },
+    "contatti.header.title": {
+        "_source_hash": "de8b6c2c614d01c0"
+    },
+    "contatti.info_title": {
+        "_source_hash": "548f34ec0fa44003"
+    },
+    "contatti.location_label": {
+        "_source_hash": "6cbe4b1b39f0c491"
+    },
+    "contatti.message": {
+        "_source_hash": "17a893e335717530"
+    },
+    "contatti.name_label": {
+        "_source_hash": "0939548aea0fed39"
+    },
+    "contatti.send_btn": {
+        "_source_hash": "c9fb565a0f1a14a9"
+    },
+    "diario.add_title": {
+        "_source_hash": "0ce69e54b8dca84f"
+    },
+    "diario.dough_name": {
+        "_source_hash": "2cece957455450d1"
+    },
+    "diario.empty_msg": {
+        "_source_hash": "638b71c34d64b99c"
+    },
+    "diario.export_backup": {
+        "_source_hash": "5b146b98384f63d4"
+    },
+    "diario.fermentation_time": {
+        "_source_hash": "63f03bea5c265655"
+    },
+    "diario.header.subtitle": {
+        "_source_hash": "43a9cb80bcdbd879"
+    },
+    "diario.header.title": {
+        "_source_hash": "1e5cc0b94b81af87"
+    },
+    "diario.hydration": {
+        "_source_hash": "0d4f5260a78d21cb"
+    },
+    "diario.import_backup": {
+        "_source_hash": "0c36a8cc98124b1a"
+    },
+    "diario.notes": {
+        "_source_hash": "d8da2c49df39d91d"
+    },
+    "diario.registered_title": {
+        "_source_hash": "d5476f43f9723cf5"
+    },
+    "diario.save_btn": {
+        "_source_hash": "c5650e05479191d1"
+    },
+    "diario.start_date": {
+        "_source_hash": "c1e77f9920bdda16"
+    },
+    "diario.yeast_type": {
+        "_source_hash": "70f09dab2060e330"
+    },
+    "fdt.flour_temp": {
+        "_source_hash": "d1f4c7d63d70ac62"
+    },
+    "fdt.method_foodproc": {
+        "_source_hash": "3ad5131445af9e58"
+    },
+    "fdt.method_hand": {
+        "_source_hash": "b534edb02f6dc98b"
+    },
+    "fdt.method_spiral1": {
+        "_source_hash": "93e1f167a20d840c"
+    },
+    "fdt.method_spiral2": {
+        "_source_hash": "9ca9b32a32554cbd"
+    },
+    "fdt.method_stand": {
+        "_source_hash": "74b440f0070b7d7d"
+    },
+    "fdt.mixing_method": {
+        "_source_hash": "3842bcf0368cc546"
+    },
+    "fdt.recommended_water": {
+        "_source_hash": "e289ad89aa543050"
+    },
+    "fdt.room_temp": {
+        "_source_hash": "2f4a3ade606c5cc6"
+    },
+    "fdt.subtitle": {
+        "_source_hash": "5ab7e48475e216cd"
+    },
+    "fdt.target_temp": {
+        "_source_hash": "cba1d14cdd420e07"
+    },
+    "fdt.title": {
+        "_source_hash": "b9cf90b16d85bd96"
+    },
+    "footer.copy": {
+        "_source_hash": "bf248094c19ee72d"
+    },
+    "glossary.subtitle": {
+        "_source_hash": "bd9086dfd5640420"
+    },
+    "glossary.title": {
+        "_source_hash": "651e693e5ff3d2fe"
+    },
+    "grains.subtitle": {
+        "_source_hash": "7e75e3e1c69cdf37"
+    },
+    "grains.title": {
+        "_source_hash": "bb15b5e55f6a7c2b"
+    },
+    "home.hero.cta_calcolatore": {
+        "_source_hash": "5e88f8484f012650"
+    },
+    "home.hero.cta_pizze": {
+        "_source_hash": "b815188cf9d55cf6"
+    },
+    "home.hero.eyebrow": {
+        "_source_hash": "97e3652b295ee408"
+    },
+    "home.hero.subtitle": {
+        "_source_hash": "38fec42c3ffe4bc6"
+    },
+    "home.hero.title": {
+        "_source_hash": "76496c0a7b655dc1"
+    },
+    "home.minicalc.ball_weight": {
+        "_source_hash": "94ec3962f6abac3f"
+    },
+    "home.minicalc.desc": {
+        "_source_hash": "6b41ee8a7f761e0a"
+    },
+    "home.minicalc.dough_balls": {
+        "_source_hash": "cb4c4d51383829d7"
+    },
+    "home.minicalc.eyebrow": {
+        "_source_hash": "92f2398d55e5ba2e"
+    },
+    "home.minicalc.full_calc": {
+        "_source_hash": "53aeab3b578923e4"
+    },
+    "home.minicalc.g_flour": {
+        "_source_hash": "a0cdc7f69ddde343"
+    },
+    "home.minicalc.g_salt": {
+        "_source_hash": "a3751cc02e33ae2f"
+    },
+    "home.minicalc.g_water": {
+        "_source_hash": "5a3d81bc1b90769b"
+    },
+    "home.minicalc.g_yeast": {
+        "_source_hash": "021e52c48bf433ab"
+    },
+    "home.minicalc.hydration": {
+        "_source_hash": "0d4f5260a78d21cb"
+    },
+    "home.minicalc.pizza_type": {
+        "_source_hash": "9f76ad7eac386b2d"
+    },
+    "home.minicalc.title": {
+        "_source_hash": "f0ea1415b2c81067"
+    },
+    "home.sec1.cta": {
+        "_source_hash": "5679044b4389a210"
+    },
+    "home.sec1.desc": {
+        "_source_hash": "002a01bc418287df"
+    },
+    "home.sec1.eyebrow": {
+        "_source_hash": "186a1d94838a1abf"
+    },
+    "home.sec1.title": {
+        "_source_hash": "e268823443d58749"
+    },
+    "home.sec2.cta": {
+        "_source_hash": "6181e70dc1db7a82"
+    },
+    "home.sec2.desc": {
+        "_source_hash": "9e75c37c3832aff2"
+    },
+    "home.sec2.eyebrow": {
+        "_source_hash": "44a70f68e31a9a91"
+    },
+    "home.sec2.title": {
+        "_source_hash": "1fc87e15645f951f"
+    },
+    "home.sec3.cta": {
+        "_source_hash": "bb0091795946602f"
+    },
+    "home.sec3.desc": {
+        "_source_hash": "92a87d10e75fbf87"
+    },
+    "home.sec3.eyebrow": {
+        "_source_hash": "b2a1fe667fc055fd"
+    },
+    "home.sec3.title": {
+        "_source_hash": "9e824c88e595d6dc"
+    },
+    "home.sec4.cta": {
+        "_source_hash": "0740bcb1130b2e8c"
+    },
+    "home.sec4.desc": {
+        "_source_hash": "4394f4784c713f69"
+    },
+    "home.sec4.eyebrow": {
+        "_source_hash": "699c6144dbbb6d6e"
+    },
+    "home.sec4.title": {
+        "_source_hash": "4527ada4a09e5f90"
+    },
+    "home.sec5.cta": {
+        "_source_hash": "b55a88b30155f716"
+    },
+    "home.sec5.desc": {
+        "_source_hash": "31f3b7f35e985708"
+    },
+    "home.sec5.eyebrow": {
+        "_source_hash": "f939b63beae1a113"
+    },
+    "home.sec5.title": {
+        "_source_hash": "b3637d2b646fef36"
+    },
+    "home.sec6.cta": {
+        "_source_hash": "be223789fac0b425"
+    },
+    "home.sec6.desc": {
+        "_source_hash": "be82e482ee458c78"
+    },
+    "home.sec6.eyebrow": {
+        "_source_hash": "02ad97985fb58a9d"
+    },
+    "home.sec6.title": {
+        "_source_hash": "a8405fe8765f30e6"
+    },
+    "home.sec7.cta": {
+        "_source_hash": "7dd7caae443f9157"
+    },
+    "home.sec7.desc": {
+        "_source_hash": "b1d2c5b1441f6a8d"
+    },
+    "home.sec7.eyebrow": {
+        "_source_hash": "32a512191c338aa5"
+    },
+    "home.sec7.title": {
+        "_source_hash": "4338ba14ef6d4d33"
+    },
+    "home.sec8.cta": {
+        "_source_hash": "5f408194c80489e4"
+    },
+    "home.sec8.desc": {
+        "_source_hash": "fb95f57c34b86e09"
+    },
+    "home.sec8.eyebrow": {
+        "_source_hash": "51341f9be5c20d27"
+    },
+    "home.sec8.title": {
+        "_source_hash": "81b716d22b72393d"
+    },
+    "method.biga": {
+        "_source_hash": "8d6efaa8731a2069"
+    },
+    "method.biga_poolish": {
+        "_source_hash": "899435061136335f"
+    },
+    "method.diretto": {
+        "_source_hash": "74aeb8783a92f1a6"
+    },
+    "method.lievito_madre": {
+        "_source_hash": "5d12ad03c748a8e4"
+    },
+    "method.poolish": {
+        "_source_hash": "dcda598fc46600c4"
+    },
+    "nav.assistente": {
+        "_source_hash": "6b623668e93f1557"
+    },
+    "nav.calcolatore": {
+        "_source_hash": "49213e58dda4e278"
+    },
+    "nav.contatti": {
+        "_source_hash": "560195b3515b7e22"
+    },
+    "nav.diario": {
+        "_source_hash": "ffa5b3464a52f557"
+    },
+    "nav.home": {
+        "_source_hash": "3a78695388b38b5c"
+    },
+    "nav.nutrienti": {
+        "_source_hash": "0cd3cb5d2671ffa4"
+    },
+    "nav.prefermenti": {
+        "_source_hash": "9e824c88e595d6dc"
+    },
+    "nav.scienza": {
+        "_source_hash": "943b7a9c02f320db"
+    },
+    "nav.shop": {
+        "_source_hash": "d00aae6b7fbf77a4"
+    },
+    "nav.tipi_pizza": {
+        "_source_hash": "1fc87e15645f951f"
+    },
+    "ovens.avg_bake_time": {
+        "_source_hash": "a27b2753d16bed93"
+    },
+    "ovens.home_oven": {
+        "_source_hash": "d4d152c4e8b33623"
+    },
+    "ovens.outdoor_oven": {
+        "_source_hash": "4695722f0c310f47"
+    },
+    "ovens.pizza_oven": {
+        "_source_hash": "373126b74a7934d2"
+    },
+    "ovens.title": {
+        "_source_hash": "66443ceb08b483df"
+    },
+    "pizza.contemporanea": {
+        "_source_hash": "ddb753b75d071b03"
+    },
+    "pizza.contemporanea_alta": {
+        "_source_hash": "c0792986515e18e4"
+    },
+    "pizza.napoletana": {
+        "_source_hash": "400041da6394cf6c"
+    },
+    "pizza.napoletana_stg": {
+        "_source_hash": "1411b53078155e86"
+    },
+    "pizza.padellino": {
+        "_source_hash": "2825d0dd730c543b"
+    },
+    "pizza.padellino_lungo": {
+        "_source_hash": "d3e63f03f60cf403"
+    },
+    "pizza.pala": {
+        "_source_hash": "3af87675f7e0bc8b"
+    },
+    "pizza.pala_lunga": {
+        "_source_hash": "1ac8dea40acc2fc3"
+    },
+    "pizza.romana": {
+        "_source_hash": "8f56195a117faafc"
+    },
+    "pizza.romana_tonda": {
+        "_source_hash": "261509a092716323"
+    },
+    "pizza.teglia": {
+        "_source_hash": "5a54453825913e4b"
+    },
+    "prefermenti.header.subtitle": {
+        "_source_hash": "10a2abf63e32bcb1"
+    },
+    "prefermenti.header.title": {
+        "_source_hash": "9e824c88e595d6dc"
+    },
+    "privacy.header.title": {
+        "_source_hash": "878d415d28f9fc6c"
+    },
+    "scienza.header.subtitle": {
+        "_source_hash": "9e62270e3d9ae6b2"
+    },
+    "scienza.header.title": {
+        "_source_hash": "a8405fe8765f30e6"
+    },
+    "shop.affiliate_disclaimer": {
+        "_source_hash": "dfccc787c44a2c76"
+    },
+    "shop.header.subtitle": {
+        "_source_hash": "7e87661b82203f41"
+    },
+    "shop.header.title": {
+        "_source_hash": "81b716d22b72393d"
+    },
+    "simulator.add_btn": {
+        "_source_hash": "84cbef7b19b823d9"
+    },
+    "simulator.add_toppings_title": {
+        "_source_hash": "5b04e6aa6f296018"
+    },
+    "simulator.header.subtitle": {
+        "_source_hash": "b6363784eae38eaa"
+    },
+    "simulator.header.title": {
+        "_source_hash": "b3637d2b646fef36"
+    },
+    "simulator.no_data_msg": {
+        "_source_hash": "6b6370d2f7ab9f70"
+    },
+    "simulator.per_portion_title": {
+        "_source_hash": "2ddc5dde9c822504"
+    },
+    "simulator.portion_dough_ball": {
+        "_source_hash": "3bbfd036314eeaaa"
+    },
+    "simulator.portion_toppings_included": {
+        "_source_hash": "5bb3137a0316420a"
+    },
+    "simulator.select_ingredient": {
+        "_source_hash": "5245d445caf15468"
+    },
+    "simulator.topping_ingredient": {
+        "_source_hash": "fcb71f0ec834a5a1"
+    },
+    "simulator.topping_qty": {
+        "_source_hash": "58f824f9749450e0"
+    },
+    "simulator.total_dough_title": {
+        "_source_hash": "68182a70d4540fcc"
+    },
+    "sos.subtitle": {
+        "_source_hash": "4ee4a18faab35aff"
+    },
+    "sos.title": {
+        "_source_hash": "5ffa927db5e8a9f0"
+    },
+    "tipi.header.subtitle": {
+        "_source_hash": "6e71d2a0b7d5247c"
+    },
+    "tipi.header.title": {
+        "_source_hash": "1fc87e15645f951f"
+    },
+    "tools.subtitle": {
+        "_source_hash": "f5e6e58b5e1d1032"
+    },
+    "tools.tab_fdt": {
+        "_source_hash": "d38cb83ee5b58766"
+    },
+    "tools.tab_glossary": {
+        "_source_hash": "93c470eb401eaec7"
+    },
+    "tools.tab_grains": {
+        "_source_hash": "8872821d114c140d"
+    },
+    "tools.tab_ovens": {
+        "_source_hash": "cfff7cb252ba4b61"
+    },
+    "tools.tab_sos": {
+        "_source_hash": "0d9bed608144cb95"
+    },
+    "tools.tab_topping": {
+        "_source_hash": "ce38bc3aa1bbec19"
+    },
+    "tools.tab_yeast": {
+        "_source_hash": "05e9774e21761530"
+    },
+    "tools.title": {
+        "_source_hash": "4a6ea9dfc4b6ec39"
+    },
+    "topping.dia_28": {
+        "_source_hash": "1723d30c7128d841"
+    },
+    "topping.dia_30": {
+        "_source_hash": "9682d826e9db4ae2"
+    },
+    "topping.dia_33": {
+        "_source_hash": "8b6c663892d3494a"
+    },
+    "topping.dia_36": {
+        "_source_hash": "b9224f53ff5ce6d0"
+    },
+    "topping.diameter": {
+        "_source_hash": "84ea91044cd42412"
+    },
+    "topping.doses_per_piece": {
+        "_source_hash": "572082560f625d4d"
+    },
+    "topping.farcitura_4formaggi": {
+        "_source_hash": "622bf5b9aff4826e"
+    },
+    "topping.farcitura_capricciosa": {
+        "_source_hash": "5016481971a17e09"
+    },
+    "topping.farcitura_focaccia": {
+        "_source_hash": "e5e376b224d47d80"
+    },
+    "topping.farcitura_margherita": {
+        "_source_hash": "b84889b2515b1a63"
+    },
+    "topping.farcitura_marinara": {
+        "_source_hash": "dfe62cd7c6e2c8bf"
+    },
+    "topping.pan_base": {
+        "_source_hash": "8feb23aa71fd6748"
+    },
+    "topping.pan_height": {
+        "_source_hash": "695d94fa2c3193d3"
+    },
+    "topping.shape": {
+        "_source_hash": "50508e2d366cdf81"
+    },
+    "topping.shape_pan": {
+        "_source_hash": "971abbd570a03c5b"
+    },
+    "topping.shape_round": {
+        "_source_hash": "95c25a9e3a7bcd66"
+    },
+    "topping.title": {
+        "_source_hash": "812b3dc302c6ae7a"
+    },
+    "topping.type": {
+        "_source_hash": "6d85b3a3897bc66b"
+    },
+    "yeast.converter_subtitle": {
+        "_source_hash": "f80de94ea5436d27"
+    },
+    "yeast.converter_title": {
+        "_source_hash": "e3fd81e9ecbe473e"
+    },
+    "yeast.from_label": {
+        "_source_hash": "39f795459838967a"
+    },
+    "yeast.qty_label": {
+        "_source_hash": "23d3cb9d466638df"
+    },
+    "yeast.result_dose": {
+        "_source_hash": "f0ff5742779eb6b0"
+    },
+    "yeast.to_label": {
+        "_source_hash": "595c4661be446e99"
+    }
+}
