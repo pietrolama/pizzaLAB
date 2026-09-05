@@ -8,26 +8,83 @@
     <meta name="keywords" content="calcolatore impasto pizza, calcolo lievito birra, calcolo biga, calcolo poolish, idratazione impasto, taglio farine W, cronoprogramma pizza">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://pizzalab.pizza/calcolatore.html">
+    <link rel="alternate" hreflang="it" href="https://pizzalab.pizza/calcolatore.html">
+    <link rel="alternate" hreflang="en" href="https://pizzalab.pizza/calcolatore.html?lang=en">
+    <link rel="alternate" hreflang="x-default" href="https://pizzalab.pizza/calcolatore.html">
 
     <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://pizzalab.pizza/calcolatore.html">
-    <meta property="og:title" content="Calcolatore Impasto Pizza Professionale | PizzaLab">
-    <meta property="og:description" content="Calcola dosi perfette al grammo, gestisci prefermenti e pianifica le tue infornate con precisione scientifica.">
+    <meta property="og:title" content="Calcolatore Impasto Pizza Professionale Gratuito | PizzaLab">
+    <meta property="og:description" content="Calcola dosi perfette al grammo, gestisci idratazione, prefermenti (biga, poolish, licoli), taglio farine W e cronoprogramma di fermentazione.">
     <meta property="og:image" content="https://pizzalab.pizza/img/calcolatore.jpg">
 
-    <!-- Schema.org Application -->
+    <!-- Schema.org WebApplication & FAQPage -->
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "PizzaLab Calcolatore Impasto",
-      "url": "https://pizzalab.pizza/calcolatore.html",
-      "applicationCategory": "Food & Drink / Culinary Tool",
-      "operatingSystem": "All",
-      "browserRequirements": "Requires JavaScript",
-      "description": "Calcolatore scientifico avanzato per impasti di pizza, pane e lievitati."
-    }
+    [
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "PizzaLab — Calcolatore Impasto Pizza Professionale",
+        "url": "https://pizzalab.pizza/calcolatore.html",
+        "applicationCategory": "CulinaryApplication",
+        "operatingSystem": "All",
+        "browserRequirements": "Requires JavaScript",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "EUR"
+        },
+        "description": "Tool scientifico gratuito per calcolare dosi al grammo di farina, idratazione (55%-90%), lievito di birra fresco o secco, sale, biga al 100%, poolish, licoli, taglio farine con indice W e cronoprogramma orario di lievitazione.",
+        "featureList": [
+          "Calcolo idratazione dal 55% al 90%",
+          "Gestione temperatura ambiente e fermentazione controllata in frigorifero",
+          "Prefermenti: Biga (dal 20% al 100%) e Poolish",
+          "Gestione Pasta Madre e Licoli con correzione liquidi automatica",
+          "Calcolo miscela e taglio farine W con formula di Pearson",
+          "Cronoprogramma orario con notifiche e timer cucina integrato",
+          "Calcolatore pizza in teglia con coefficiente di spessore personalizzato"
+        ]
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Come calcolare la quantità di lievito di birra in base alla temperatura e al tempo?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "La quantità di lievito varia in modo esponenziale rispetto alla temperatura ambiente e alle ore totali di lievitazione. A 20-22°C per una fermentazione di 24 ore (con sosta frigo) occorrono circa 1-1,5g di lievito fresco per kg di farina. PizzaLab applica una curva cinetica enzimatica corretta per frigo a 4°C per fornirti la grammatura esatta al decimo di grammo."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Come convertire il lievito di birra fresco in lievito secco attivo?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Il rapporto standard di conversione è di 3 a 1: 1 grammo di lievito di birra secco disidratato equivale a circa 3-3,3 grammi di lievito di birra fresco compresso."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Come calcolare l'idratazione ideale per la pizza?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "L'idratazione dipende dallo stile di pizza e dalla forza della farina (W): per una Napoletana STG si utilizza il 60-65% con farina W 280-300; per una Teglia alla Romana o una Pala si sale al 75-85% richiedendo farine forti (W 320-360) o biga; per la tonda romana scrocchiarella si preferisce il 55-58%."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Come fare il calcolo per la Biga al 100% per pizza?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Per una biga classica al 100%, tutta la farina della ricetta viene impastata con il 44-45% di acqua e l'1% di lievito di birra fresco. Dopo 16-24 ore a 16-18°C, nel rinfresco finale si aggiungono la restante acqua per raggiungere l'idratazione target, il sale (2.5-3%) ed eventuale malto o olio."
+            }
+          }
+        ]
+      }
+    ]
     </script>
     <link rel="stylesheet" href="css/main.css">
     <link rel="icon" href="logo.ico" type="image/x-icon">
@@ -620,11 +677,87 @@
                 <span id="floating-timer-label" class="timer-label">Timer</span>
                 <span id="floating-timer-digits" class="timer-digits">00:00</span>
             </div>
-            <div class="timer-controls">
-                <button type="button" id="btn-timer-pause" class="timer-btn" title="Pausa / Riprendi" aria-label="Pausa o Riprendi Timer">⏸️</button>
-                <button type="button" id="btn-timer-stop" class="timer-btn danger" title="Ferma Timer" aria-label="Ferma Timer">⏹️</button>
+        <!-- GUIDA SCIENTIFICA & RISORSE SEO (SEARCH INTENT & FAQ) -->
+        <section class="calc-seo-guide" style="margin-top: 60px; padding: 40px 24px; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: 16px;">
+            <div style="max-width: 1000px; margin: 0 auto;">
+                <h2 style="font-size: 1.8rem; margin-bottom: 12px; color: var(--text-main);">Guida Scientifica al Calcolo dell'Impasto per Pizza</h2>
+                <p style="color: var(--text-muted); font-size: 1.05rem; line-height: 1.6; margin-bottom: 32px;">
+                    Ottenere un impasto per pizza leggero, alveolato e ad alta digeribilità richiede un equilibrio chimico e termico rigoroso. Il calcolatore di PizzaLab adotta formule reologiche per bilanciare idratazione, cinetica dei lieviti e maturazione delle farine.
+                </p>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-bottom: 36px;">
+                    <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px;">
+                        <h3 style="font-size: 1.15rem; color: var(--primary-color); margin-bottom: 10px;">💧 Calcolo Idratazione Impasto (55% - 85%)</h3>
+                        <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.55;">
+                            L'idratazione esprime il peso dell'acqua rispetto al 100% della farina.
+                        </p>
+                        <ul style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin-top: 8px; padding-left: 18px;">
+                            <li><strong>55% - 58%:</strong> Pizza Romana Tonda Scrocchiarella, friabile e sottile.</li>
+                            <li><strong>62% - 68%:</strong> Pizza Napoletana Tradizionale STG e canotto contemporaneo.</li>
+                            <li><strong>75% - 85%:</strong> Pizza in Teglia alla Romana e Pala ad altissima alveolatura.</li>
+                        </ul>
+                    </div>
+
+                    <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px;">
+                        <h3 style="font-size: 1.15rem; color: var(--primary-color); margin-bottom: 10px;">🌡️ Lievito e Temperatura Ambiente</h3>
+                        <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.55;">
+                            L'attività del <em>Saccharomyces cerevisiae</em> raddoppia ogni 5-7°C di incremento termico tra 18°C e 28°C:
+                        </p>
+                        <ul style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin-top: 8px; padding-left: 18px;">
+                            <li>A <strong>18°C</strong> sono necessari circa 1.8g - 2.2g di lievito fresco per kg di farina per 24h.</li>
+                            <li>A <strong>25°C</strong> la dose scende a 0.7g - 1.0g per evitare sovralievitazione precoce.</li>
+                            <li>La sosta a <strong>4°C (frigorifero)</strong> blocca l'attività gassosa consentendo la maturazione enzimatica (proteolisi).</li>
+                        </ul>
+                    </div>
+
+                    <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px;">
+                        <h3 style="font-size: 1.15rem; color: var(--primary-color); margin-bottom: 10px;">🌾 Tabella Forza Farine (W) e P/L</h3>
+                        <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.55;">
+                            La forza alveografica W indica la capacità di assorbire liquidi e trattenere i gas di fermentazione:
+                        </p>
+                        <ul style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin-top: 8px; padding-left: 18px;">
+                            <li><strong>W 180 - 220 (Deboli):</strong> lievitazioni rapide 4-6h (biscotti, tonda diretta).</li>
+                            <li><strong>W 260 - 300 (Medie):</strong> lievitazioni 12-24h (pizza napoletana standard).</li>
+                            <li><strong>W 320 - 380 (Forti / Manitoba):</strong> maturazioni oltre 48h, biga 100% e teglia romana.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- DOMANDE FREQUENTI CON SCHEMA FAQPAGE -->
+                <div style="margin-top: 40px;">
+                    <h3 style="font-size: 1.4rem; margin-bottom: 20px; color: var(--text-main);">Domande Frequenti sul Calcolo dell'Impasto</h3>
+                    <div style="display: flex; flex-direction: column; gap: 16px;">
+                        <article style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: 10px; padding: 18px 22px;">
+                            <h4 style="font-size: 1.05rem; margin-bottom: 8px; color: var(--text-main);">Come calcolare il lievito di birra in base alla temperatura e al tempo?</h4>
+                            <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6; margin: 0;">
+                                La quantità di lievito varia in modo esponenziale rispetto alla temperatura ambiente e alla durata totale del ciclo di lievitazione. Per un impasto a 24 ore con idratazione 65% a 22°C (con 18 ore in frigorifero a 4°C e 6 ore a temperatura ambiente), la dose consigliata è di circa 1,2g di lievito fresco compresso per kg di farina. In estate, con temperature superiori ai 26°C, riduci del 30-40% o aumenta le ore a freddo.
+                            </p>
+                        </article>
+
+                        <article style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: 10px; padding: 18px 22px;">
+                            <h4 style="font-size: 1.05rem; margin-bottom: 8px; color: var(--text-main);">Come convertire il lievito di birra fresco in lievito secco attivo o licoli?</h4>
+                            <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6; margin: 0;">
+                                Per convertire il lievito fresco (LBF) in lievito secco disidratato (LBS), dividi la dose di fresco per 3 (rapporto 1:3). Ad esempio, 9g di fresco corrispondono a 3g di secco. Se utilizzi Licoli (lievito madre liquido al 100% di idratazione), la proporzione media consigliata va dal 15% al 20% sul peso della farina, ricordando di sottrarre il 50% del suo peso dall'acqua totale e il restante 50% dalla farina totale della ricetta.
+                            </p>
+                        </article>
+
+                        <article style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: 10px; padding: 18px 22px;">
+                            <h4 style="font-size: 1.05rem; margin-bottom: 8px; color: var(--text-main);">Come funziona il calcolo della Biga al 100% per pizza?</h4>
+                            <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6; margin: 0;">
+                                In un impasto con Biga al 100%, tutta la farina della ricetta viene impastata con il 44-45% di acqua e l'1% di lievito fresco, senza sale. L'impasto non deve essere incordato ma lasciato grezzo e fatto fermentare a 16-18°C per 16-24 ore. Nel rinfresco finale si aggiungono l'acqua residua (necessaria a raggiungere l'idratazione finale desiderata, es. 75-80%), il 2.5-3% di sale ed eventuale malto diastasico.
+                            </p>
+                        </article>
+
+                        <article style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: 10px; padding: 18px 22px;">
+                            <h4 style="font-size: 1.05rem; margin-bottom: 8px; color: var(--text-main);">Come si calcola la quantità di impasto per una teglia da forno?</h4>
+                            <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6; margin: 0;">
+                                Il calcolo si basa sull'area della teglia moltiplicata per il coefficiente di spessore: <code>Peso (g) = (Base × Altezza) × Coefficiente</code>. Per una teglia casalinga standard (es. 40x30 cm = 1200 cm²), moltiplica per 0.55 per uno spessore medio soffice (circa 660g di impasto), per 0.50 per una teglia sottile e croccante (600g), oppure per 0.65 per un trancio alto e soffice (780g).
+                            </p>
+                        </article>
+                    </div>
+                </div>
             </div>
-        </div>
+        </section>
     </main>
 
     <footer>
