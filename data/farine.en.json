@@ -1,0 +1,72 @@
+[
+  {
+    "id": "00",
+    "titolo": "Type 00 Flour (Italian Fine Grind)",
+    "descrizione": "Ultra-fine, highly refined flour with low ash content, ideal for silky, delicate doughs and classic Neapolitan pizza.",
+    "caratteristiche": [
+      "Excellent for tender, delicate crumb",
+      "Very smooth handling and dough formation",
+      "Fast enzymatic sugar release"
+    ],
+    "contenuto_glutine": "11-12% Protein",
+    "uso": "Neapolitan pizza, fresh pasta, light pastries",
+    "procedimento": "Best for recipes requiring a fine, smooth texture and quick high-heat baking.",
+    "immagine": "img/farina00.jpg"
+  },
+  {
+    "id": "0",
+    "titolo": "Type 0 Flour (All-Purpose Bread)",
+    "descrizione": "Slightly less refined flour with moderate ash content, highly versatile for balanced dough elasticity and strength.",
+    "caratteristiche": [
+      "Well-balanced elasticity and tenacity",
+      "Supports medium to long fermentation",
+      "Versatile across all pizza styles"
+    ],
+    "contenuto_glutine": "12-14% Protein",
+    "uso": "Bread, focaccia, traditional Roman and tray pizzas",
+    "procedimento": "Ideal for doughs needing a solid balance between gas-retaining gluten structure and lightness.",
+    "immagine": "img/farina0.jpg"
+  },
+  {
+    "id": "1",
+    "titolo": "Type 1 Flour (Semi-Rustic)",
+    "descrizione": "Stone-ground or partially sifted flour with higher mineral and germ content, delivering superior flavor and robust crust.",
+    "caratteristiche": [
+      "High gluten tenacity and water absorption",
+      "Rich rustic grain aroma and color",
+      "Supports long cold retard (24-48h)"
+    ],
+    "contenuto_glutine": "13-15% Protein",
+    "uso": "Rustic sourdough bread, contemporary pizza, high-hydration pans",
+    "procedimento": "Perfect for recipes requiring deep grain complexity, extra water absorption, and extended maturation.",
+    "immagine": "img/farina1.jpg"
+  },
+  {
+    "id": "2",
+    "titolo": "Type 2 Flour (Semi-Whole Wheat)",
+    "descrizione": "Coarser flour containing substantial bran and germ particles, ideal for deeply flavorful, artisanal baked goods.",
+    "caratteristiche": [
+      "Maximum flavor and fiber complexity",
+      "High water absorption (+4-6%)",
+      "Requires gentle mixing or autolyse"
+    ],
+    "contenuto_glutine": "14-16% Protein",
+    "uso": "Artisan country breads, rustic focaccias, whole-grain pizza blends",
+    "procedimento": "Use autolyse to soften bran flakes and develop optimum elasticity before adding yeast and salt.",
+    "immagine": "img/farina2.jpg"
+  },
+  {
+    "id": "integrale",
+    "titolo": "Whole Wheat Flour (100% Integrale)",
+    "descrizione": "Complete grain flour containing 100% of the bran, endosperm, and germ, packed with minerals, vitamins, and intense rustic aroma.",
+    "caratteristiche": [
+      "Maximum dietary fiber and nutrients",
+      "Nutty, earthy, and toasted flavor profile",
+      "High satiety and lower glycemic index"
+    ],
+    "contenuto_glutine": "11-13% Protein",
+    "uso": "Whole grain bread, health-focused pizza crusts, ancient grain blends",
+    "procedimento": "Blend with 50-70% strong white flour or use prolonged autolyse for an airy, open whole-grain crumb.",
+    "immagine": "img/farina_integrale.jpg"
+  }
+]

@@ -39,10 +39,12 @@ import { convertiLievito } from './yeast-converter.js';
 import { caricaTroubleshootingData, renderTroubleshootingList } from './troubleshooting-engine.js';
 import { caricaCerealiData, renderCerealiCards } from './grains-engine.js';
 import { caricaGlossarioData, renderGlossarioDrawer, inizializzaGlossarioTooltips } from './glossario-engine.js';
+import { getSavedLocale } from './i18n-engine.js';
 
 const el = (id) => document.getElementById(id);
 
 let ultimoStatoRicetta = null;
+let ultimoDatiCalcolati = null;
 let ultimoPianoGenerato = [];
 
 const SEZIONI_METODO = {
@@ -398,20 +400,23 @@ function renderRisultato(dati, tipoImpasto) {
         oreFrigo: parseFloat(el('tempoFrigo_diretto')?.value) || 18,
     };
 
+    ultimoDatiCalcolati = dati;
+    const isEn = (document.documentElement.lang || getSavedLocale()) === 'en';
+
     const grid = el('risultato-grid');
     grid.innerHTML = `
-        <div><strong id="res-farina">0</strong><span>g farina totale</span></div>
-        <div><strong id="res-acqua">0</strong><span>g acqua</span></div>
-        <div><strong id="res-sale">0</strong><span>g sale</span></div>
-        <div><strong id="res-zucchero">0</strong><span>g zucchero</span></div>
-        <div><strong id="res-olio">0</strong><span>g olio</span></div>
-        <div><strong id="res-lievito">0.00</strong><span>g lievito</span></div>
+        <div><strong id="res-farina">0</strong><span>${isEn ? 'g total flour' : 'g farina totale'}</span></div>
+        <div><strong id="res-acqua">0</strong><span>${isEn ? 'g water' : 'g acqua'}</span></div>
+        <div><strong id="res-sale">0</strong><span>${isEn ? 'g salt' : 'g sale'}</span></div>
+        <div><strong id="res-zucchero">0</strong><span>${isEn ? 'g sugar' : 'g zucchero'}</span></div>
+        <div><strong id="res-olio">0</strong><span>${isEn ? 'g oil' : 'g olio'}</span></div>
+        <div><strong id="res-lievito">0.00</strong><span>${isEn ? 'g yeast' : 'g lievito'}</span></div>
         ${isBlendMode && blendInfo && blendInfo.possibile ? `
         <div class="recipe-blend-breakdown">
-            <strong>🌾 Taglio Farine (${blendInfo.wEffettivo} W — ~${blendInfo.proteineEffettive}% proteine):</strong>
+            <strong>🌾 ${isEn ? `Flour Blend (${blendInfo.wEffettivo} W — ~${blendInfo.proteineEffettive}% protein):` : `Taglio Farine (${blendInfo.wEffettivo} W — ~${blendInfo.proteineEffettive}% proteine):`}</strong>
             <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-top: 6px;">
-                <span>🔴 <strong>${blendInfo.pesoForte} g</strong> Farina Forte (${blendInfo.percentualeForte}%)</span>
-                <span>🔵 <strong>${blendInfo.pesoDebole} g</strong> Farina Debole (${blendInfo.percentualeDebole}%)</span>
+                <span>🔴 <strong>${blendInfo.pesoForte} g</strong> ${isEn ? 'Strong Flour' : 'Farina Forte'} (${blendInfo.percentualeForte}%)</span>
+                <span>🔵 <strong>${blendInfo.pesoDebole} g</strong> ${isEn ? 'Weak Flour' : 'Farina Debole'} (${blendInfo.percentualeDebole}%)</span>
             </div>
         </div>
         ` : ''}
@@ -430,12 +435,13 @@ function renderRisultato(dati, tipoImpasto) {
         idratazioneTotale,
         forzaFarina: isBlendMode && blendInfo ? blendInfo.wEffettivo : forzaFarina,
         dati,
-        blend: isBlendMode ? blendInfo : null
+        blend: isBlendMode ? blendInfo : null,
+        locale: isEn ? 'en' : 'it'
     });
 
     el('risultato-steps').innerHTML = passi.map((p, idx) => {
         const minuti = estraiMinutiTimer(p);
-        const timerButton = minuti ? ` <button type="button" class="step-timer-btn" data-minutes="${minuti}" data-label="Passo ${idx + 1}">⏱️ Avvia ${minuti} min</button>` : '';
+        const timerButton = minuti ? ` <button type="button" class="step-timer-btn" data-minutes="${minuti}" data-label="${isEn ? 'Step' : 'Passo'} ${idx + 1}">⏱️ ${isEn ? 'Start' : 'Avvia'} ${minuti} min</button>` : '';
         return `<li style="animation-delay: ${idx * 60}ms">${p}${timerButton}</li>`;
     }).join('');
 
@@ -1239,5 +1245,17 @@ aggiornaYeastConverterUI();
 initTroubleshooting();
 initCereali();
 initGlossario();
+
+// Aggiorna dinamicamente al cambio lingua
+window.addEventListener('pizzalab:locale-changed', () => {
+    initTroubleshooting();
+    initCereali();
+    initGlossario();
+    aggiornaYeastConverterUI();
+    if (ultimoStatoRicetta && ultimoDatiCalcolati) {
+        renderRisultato(ultimoDatiCalcolati, ultimoStatoRicetta.tipoImpasto);
+    }
+});
+
 
 

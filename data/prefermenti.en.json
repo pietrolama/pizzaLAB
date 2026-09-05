@@ -1,0 +1,65 @@
+[
+  {
+    "id": "biga",
+    "titolo": "Biga",
+    "inventore": "Giorilli",
+    "idratazione": "44%",
+    "descrizione": "A stiff, dry preferment that dramatically enhances honeycomb alveolation, crust structure, and fragrance.",
+    "caratteristiche": [
+      "Ideal for lightweight, airy, and structured doughs",
+      "Requires 16-20 hours of cool fermentation",
+      "Strengthens the gluten matrix and dough volume",
+      "Adds complex aromatic acidity and crust color"
+    ],
+    "temperatura_fermentazione": "18-20°C (64-68°F)",
+    "ingredienti": [
+      "Strong flour with W > 300 or Protein > 13%",
+      "Water (44-45%)",
+      "Fresh Yeast (1%)"
+    ],
+    "procedimento": "Biga is prepared by briefly mixing strong flour and water with a small amount of yeast without developing gluten, then left to ferment at controlled temperature (18°C) for 16-20 hours before incorporation into the final dough.",
+    "immagine": "img/biga.jpg"
+  },
+  {
+    "id": "poolish",
+    "titolo": "Poolish",
+    "inventore": "Polish Bakers / Viennese Method",
+    "idratazione": "100%",
+    "descrizione": "An equal-ratio liquid preferment that boosts dough extensibility, lactic sweetness, and fine crumb openness.",
+    "caratteristiche": [
+      "Equal 1:1 ratio of flour and water (100% hydration)",
+      "Fermentation time from 8 to 16 hours",
+      "Increases dough extensibility and ease of stretching",
+      "Accelerates gas production and browning"
+    ],
+    "temperatura_fermentazione": "20-22°C (68-72°F)",
+    "ingredienti": [
+      "Flour with W > 280 or Protein > 12.5%",
+      "Water (100%)",
+      "Yeast (0.1% - 1%)"
+    ],
+    "procedimento": "Poolish is mixed by blending flour and water in equal weights with a calculated dose of yeast, then left to ferment until the surface reaches peak dome concavity with fine bubbles (approx. 12 hours).",
+    "immagine": "img/poolish.jpg"
+  },
+  {
+    "id": "lievito-madre",
+    "titolo": "Sourdough Starter (Lievito Madre)",
+    "inventore": "Traditional Wild Fermentation",
+    "idratazione": "70% - 100%",
+    "descrizione": "A symbiotic ecosystem of wild yeasts and lactic acid bacteria for superior digestibility, keeping quality, and rich aroma.",
+    "caratteristiche": [
+      "Powered by wild lactic bacteria and natural yeasts",
+      "Creates an unmistakable aromatic profile",
+      "Significantly increases enzymatic digestibility",
+      "Extends shelf life and delays staling"
+    ],
+    "temperatura_fermentazione": "18-24°C (64-75°F)",
+    "ingredienti": [
+      "Unbleached stone-ground or strong flour",
+      "Water",
+      "Active wild bacterial culture"
+    ],
+    "procedimento": "Sourdough starter is refreshed regularly with flour and water at controlled ratios, active when tripled in volume with a sweet-tangy lactic aroma, then added to the final mix.",
+    "immagine": "img/lievito-madre.jpg"
+  }
+]

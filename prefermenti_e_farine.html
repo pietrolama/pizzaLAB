@@ -124,9 +124,13 @@
                 caricaCerealiData(),
                 caricaGlossarioData()
             ]);
-            renderCerealiCards(cereali, '#cereali-cards-container');
-            renderGlossarioDrawer(glossario, '#glossario-cards-container');
-            inizializzaGlossarioTooltips(glossario);
+            function renderAll() {
+                renderCerealiCards(cereali, '#cereali-cards-container');
+                renderGlossarioDrawer(glossario, '#glossario-cards-container');
+                inizializzaGlossarioTooltips(glossario);
+            }
+            renderAll();
+            window.addEventListener('pizzalab:locale-changed', renderAll);
         }
         initExtraContent();
     </script>

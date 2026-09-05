@@ -1,0 +1,57 @@
+[
+    {
+        "nome": "Neapolitan Pizza",
+        "tipo": "napoletana",
+        "descrizione": "Neapolitan pizza is an Italian culinary icon, originating from Naples. It is distinguished by a soft, thin crust with a delicate, puffy edge called the 'cornicione'. Baked in a high-heat wood-fired oven at around 485°C (900°F) for just 60 to 90 seconds. This technique gives the pizza a unique texture: the center remains soft and moist, while the cornicione is lightly crisp on the outside and airy inside. Traditional ingredients include San Marzano tomatoes, fresh Buffalo Mozzarella Campana DOP, fresh basil, and extra virgin olive oil. The most famous variations are the Margherita (tomato, mozzarella, basil) and Marinara (tomato, garlic, oregano, olive oil).",
+        "caratteristiche": [
+            "Soft and thin center crust",
+            "Puffy, airy, delicate cornicione",
+            "Ultra-fast high-temperature bake"
+        ],
+        "immagine": "img/napoletana.jpg"
+    },
+    {
+        "nome": "Roman Round Pizza",
+        "tipo": "romana",
+        "descrizione": "Roman pizza (Pizza Tonda Romana), typical of Italy's capital, is characterized by a very thin and crispy base, with low, cracker-like edges. The dough has lower hydration compared to Neapolitan, making it drier and pleasantly crumbly. Baking takes place at lower temperatures, around 300°C (570°F), for a longer duration to achieve uniform crispness throughout. Toppings vary widely, often featuring tomato, mozzarella, anchovies, capers, and oregano. A renowned variety is 'scrocchiarella', famed for its extreme crunch.",
+        "caratteristiche": [
+            "Thin and extra-crispy base",
+            "Low, flat crust edges",
+            "Longer bake at moderate temperature"
+        ],
+        "immagine": "img/romana.jpg"
+    },
+    {
+        "nome": "Pizza alla Pala",
+        "tipo": "pala",
+        "descrizione": "Originating in Rome and central Italy, Pizza alla Pala is characterized by its elongated shape and presentation on a wooden peel (pala). Baked directly on the oven refractory stone, its high-hydration dough produces a crispy, crunchy crust on the exterior while preserving an airy, soft interior honeycomb crumb.",
+        "caratteristiche": [
+            "Elongated oval/rectangular shape",
+            "High hydration (75-85%)",
+            "Baked directly on refractory stone"
+        ],
+        "immagine": "img/pala.jpg"
+    },
+    {
+        "nome": "Contemporary Pizza",
+        "tipo": "contemporanea",
+        "descrizione": "Contemporary pizza is a modern evolution of the classic craft, featuring premium artisanal ingredients and advanced biochemical techniques such as long cold fermentation, poolish/biga preferments, and high-protein stone-ground flours. Yields an exaggerated, cloud-like, highly-alveolated cornicione.",
+        "caratteristiche": [
+            "Sophisticated flavor pairings",
+            "Specialty & ancient grain flours",
+            "Long preferment cold fermentations"
+        ],
+        "immagine": "img/contemporanea.jpg"
+    },
+    {
+        "nome": "Pizza al Padellino",
+        "tipo": "padellino",
+        "descrizione": "Traditional to Turin (Piedmont), Pizza al Padellino (or al tegamino) is proofed and baked in small oiled round pans. It stands out for its golden, crunchy fried base and ultra-fluffy, tender crumb inside. Ideal for lovers of the perfect balance between crunch and cloud-like tenderness.",
+        "caratteristiche": [
+            "Proofed and baked in small round pans",
+            "Crispy, golden bottom crust",
+            "Thick, tender, and fluffy crumb"
+        ],
+        "immagine": "img/padellino.jpg"
+    }
+]
