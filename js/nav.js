@@ -88,6 +88,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- Firebase Auth & User Bar Integration in Navbar ---
+    // Firebase arriva da gstatic.com: senza rete, o con il dominio bloccato da
+    // un ad blocker o da una rete aziendale, l'import fallisce. Va intercettato,
+    // altrimenti resta una promise rifiutata non gestita a ogni caricamento —
+    // cosa che offline accade sempre, proprio dove la PWA dovrebbe funzionare.
     import('./firebase-auth.js').then(({ onAuthChange, loginWithGoogle, logoutUser }) => {
         const navLinksList = document.querySelector('.nav-links');
         const langContainer = document.querySelector('.lang-switch-container');

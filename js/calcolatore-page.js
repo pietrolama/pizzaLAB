@@ -635,7 +635,7 @@ function avviaTimerCucina(minuti, label) {
         },
         onComplete: (lbl) => {
             if (digits) digits.textContent = '00:00';
-            if (labelEl) labelEl.textContent = '🎉 Pronto!';
+            if (labelEl) labelEl.textContent = t('calc.timer_ready', {}, '🎉 Pronto!');
             setTimeout(() => {
                 if (!kitchenTimer.isRunning && floating) {
                     floating.classList.add('hidden');

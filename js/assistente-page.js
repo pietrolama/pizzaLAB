@@ -2,7 +2,7 @@
 // Wizard interattivo per configurare il Calcolatore in base alle preferenze.
 // Supporta lingua Italiana ed Inglese con aggiornamento dinamico.
 
-import { getSavedLocale } from './i18n-engine.js';
+import { getSavedLocale, t } from './i18n-engine.js';
 
 let configData;
 const userSelections = {};
@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .catch((err) => {
             console.error('Errore nel caricamento di config.json:', err);
-            questionEl().textContent = 'Contenuto non disponibile al momento.';
+            questionEl().textContent = t('listing.error', {}, 'Contenuto non disponibile al momento.');
         });
 
     backButton().addEventListener('click', previousQuestion);

@@ -21,8 +21,22 @@ const W_MINIMO_PER_FASCIA = {
     estrema: 340,
 };
 
+// Attenzione al confronto con NaN: `NaN < x` è falso per ogni x, quindi un
+// valore non numerico non seleziona nessuna fascia — nemmeno quella con max
+// Infinity — e find() restituisce undefined. Senza questa guardia, leggere .id
+// solleva un TypeError che fa fallire l'intero render della scheda ricetta
+// (succede, per esempio, svuotando il campo idratazione e cambiando lingua).
 function trovaFasciaIdratazione(idratazioneTotale) {
-    return FASCE_IDRATAZIONE.find((f) => idratazioneTotale < f.max).id;
+    // null e stringa vuota vanno esclusi prima di Number(), che li convertirebbe
+    // entrambi in 0 facendoli passare per un'idratazione bassissima.
+    if (idratazioneTotale === null || idratazioneTotale === undefined || idratazioneTotale === '') {
+        return 'media';
+    }
+    const valore = Number(idratazioneTotale);
+    if (!Number.isFinite(valore)) return 'media';
+
+    const fascia = FASCE_IDRATAZIONE.find((f) => valore < f.max);
+    return fascia ? fascia.id : FASCE_IDRATAZIONE[FASCE_IDRATAZIONE.length - 1].id;
 }
 
 export function generaProcedura({ tipoPizza, tipoImpasto, idratazioneTotale, forzaFarina, dati = {}, blend = null, locale = 'it' }) {
