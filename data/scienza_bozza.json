@@ -1,1 +1,15 @@
-[]
+[
+    {
+        "id": "digeribilita-pizza-lievitazione-crea",
+        "titolo": "La digeribilità della pizza dipende dai tempi di lievitazione",
+        "sintesi": "Ricerche del CREA confermano che tempi di lievitazione prolungati con lievito naturale migliorano la digeribilità della pizza. La fermentazione estesa modifica la struttura dell'impasto rendendolo più digeribile.",
+        "corpo": "Studi condotti dal CREA hanno dimostrato che gli impasti per pizza preparati con lievito naturale e sottoposti a tempi di lievitazione prolungati producono un prodotto finale significativamente più digeribile. Durante la fermentazione, i microrganismi presenti nella pasta madre, inclusi lieviti e lattobacilli, agiscono sulla struttura del glutine e degradano fattori antinutrizionali presenti nella farina. Questo processo non solo migliora la digeribilità, ma può anche influenzare positivamente l'indice glicemico e la biodisponibilità di alcuni nutrienti. I risultati sottolineano l'importanza tecnologica e nutrizionale di una corretta gestione della fermentazione nella preparazione della pizza.",
+        "data_pubblicazione": "2023-06-05",
+        "fonti": [
+            {
+                "titolo": "CREA - La digeribilità della pizza dipende dai tempi di lievitazione",
+                "url": "https://www.crea.gov.it/-/la-digeribilit%C3%A0-della-pizza-dipende-dai-tempi-di-lievitazione"
+            }
+        ]
+    }
+]
