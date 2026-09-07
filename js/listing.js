@@ -6,7 +6,7 @@ export function renderListing({ containerSelector, jsonPath, renderItem }) {
 
     async function loadAndRender() {
         try {
-            const locale = document.documentElement.lang || getSavedLocale() || 'it';
+            const locale = getSavedLocale() || document.documentElement.lang || 'it';
             let targetPath = jsonPath;
             if (locale && locale !== 'it') {
                 const localizedPath = jsonPath.replace(/\.json$/, `.${locale}.json`);
@@ -14,7 +14,7 @@ export function renderListing({ containerSelector, jsonPath, renderItem }) {
                     const testRes = await fetch(localizedPath);
                     if (testRes.ok) {
                         const items = await testRes.json();
-                        renderItems(items);
+                        renderItems(items, locale);
                         return;
                     }
                 } catch (e) {}
@@ -23,16 +23,16 @@ export function renderListing({ containerSelector, jsonPath, renderItem }) {
             const res = await fetch(targetPath);
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
             const items = await res.json();
-            renderItems(items);
+            renderItems(items, locale);
         } catch (err) {
             console.error(`Errore nel caricamento di ${jsonPath}:`, err);
             container.innerHTML = '<p class="listing-error">Contenuto non disponibile al momento.</p>';
         }
     }
 
-    function renderItems(items) {
+    function renderItems(items, locale) {
         container.innerHTML = items.map((item, index) => {
-            const html = renderItem(item);
+            const html = renderItem(item, locale);
             return html.replace(/class="([^"]*listing-card[^"]*)"/, `class="$1 reveal is-visible" style="animation-delay: ${index * 60}ms"`);
         }).join('');
     }
@@ -44,4 +44,5 @@ export function renderListing({ containerSelector, jsonPath, renderItem }) {
         loadAndRender();
     });
 }
+
 

@@ -58,9 +58,21 @@ document.addEventListener('DOMContentLoaded', () => {
         langContainer.className = 'lang-switch-container';
         langContainer.setAttribute('role', 'group');
         langContainer.setAttribute('aria-label', 'Selezione lingua');
+        
+        let isEn = false;
+        try {
+            const saved = localStorage.getItem('pizzalab_locale');
+            if (saved === 'en') {
+                isEn = true;
+            } else if (!saved) {
+                const browserLang = (navigator.language || '').slice(0, 2).toLowerCase();
+                if (browserLang === 'en') isEn = true;
+            }
+        } catch (e) {}
+
         langContainer.innerHTML = `
-            <button type="button" class="lang-btn active" data-lang="it" aria-pressed="true">IT</button>
-            <button type="button" class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+            <button type="button" class="lang-btn ${!isEn ? 'active' : ''}" data-lang="it" aria-pressed="${!isEn}">IT</button>
+            <button type="button" class="lang-btn ${isEn ? 'active' : ''}" data-lang="en" aria-pressed="${isEn}">EN</button>
         `;
 
         if (hamburger) {

@@ -21,7 +21,8 @@ export function calcolaCondimenti({
     diametro = 30,
     base = 40,
     altezza = 60,
-    farcitura = 'margherita'
+    farcitura = 'margherita',
+    locale = 'it'
 }) {
     let areaCm2 = 0;
     if (forma === 'tonda') {
@@ -31,55 +32,59 @@ export function calcolaCondimenti({
         areaCm2 = (Number(base) || 40) * (Number(altezza) || 60);
     }
 
+    const isEn = locale === 'en';
+
     // Densità superficiali standard (g/cm2)
-    // Riferimento tonda standard 30cm (area ~706 cm2): ~85g salsa, ~95g mozzarella
     const condensita = {
         margherita: [
-            { nome: 'Salsa di Pomodoro', densita: 0.12, note: 'Polpa fine o pelati schiacciati a mano' },
-            { nome: 'Fiordilatte / Mozzarella', densita: 0.135, note: 'Tagliata a listarelle e ben scolata' },
-            { nome: 'Olio EVO', densita: 0.008, note: 'Un filo a spirale in uscita' },
-            { nome: 'Parmigiano / Pecorino', densita: 0.007, note: 'Grattugiato fine' },
-            { nome: 'Basilico fresco', densita: 0, fisso: '3-5 foglie', note: 'In cottura o a crudo' }
+            { nome: 'Salsa di Pomodoro', nome_en: 'Tomato Sauce', densita: 0.12, note: 'Polpa fine o pelati schiacciati a mano', note_en: 'Crushed San Marzano or plum tomatoes' },
+            { nome: 'Fiordilatte / Mozzarella', nome_en: 'Fiordilatte / Mozzarella', densita: 0.135, note: 'Tagliata a listarelle e ben scolata', note_en: 'Shredded and well-drained' },
+            { nome: 'Olio EVO', nome_en: 'EVO Olive Oil', densita: 0.008, note: 'Un filo a spirale in uscita', note_en: 'A spiral drizzle after baking' },
+            { nome: 'Parmigiano / Pecorino', nome_en: 'Parmesan / Pecorino', densita: 0.007, note: 'Grattugiato fine', note_en: 'Finely grated' },
+            { nome: 'Basilico fresco', nome_en: 'Fresh Basil', densita: 0, fisso: '3-5 foglie', fisso_en: '3-5 leaves', note: 'In cottura o a crudo', note_en: 'Baked or fresh on top' }
         ],
         marinara: [
-            { nome: 'Salsa di Pomodoro', densita: 0.14, note: 'Leggermente più generosa rispetto alla Margherita' },
-            { nome: 'Aglio a lamelle', densita: 0, fisso: '1-2 spicchi', note: 'Tagliato molto sottile' },
-            { nome: 'Origano essiccato', densita: 0.002, note: 'Origano di montagna' },
-            { nome: 'Olio EVO', densita: 0.012, note: 'Giro generoso prima di infornare' }
+            { nome: 'Salsa di Pomodoro', nome_en: 'Tomato Sauce', densita: 0.14, note: 'Leggermente più generosa rispetto alla Margherita', note_en: 'Slightly more generous than Margherita' },
+            { nome: 'Aglio a lamelle', nome_en: 'Sliced Garlic', densita: 0, fisso: '1-2 spicchi', fisso_en: '1-2 cloves', note: 'Tagliato molto sottile', note_en: 'Thinly shaved' },
+            { nome: 'Origano essiccato', nome_en: 'Dried Oregano', densita: 0.002, note: 'Origano di montagna', note_en: 'Wild Mediterranean oregano' },
+            { nome: 'Olio EVO', nome_en: 'EVO Olive Oil', densita: 0.012, note: 'Giro generoso prima di infornare', note_en: 'Generous spiral drizzle before baking' }
         ],
         quattro_formaggi: [
-            { nome: 'Mozzarella base', densita: 0.09, note: 'Base protettiva' },
-            { nome: 'Gorgonzola / Blu', densita: 0.045, note: 'A tocchetti ben distribuiti' },
-            { nome: 'Fontina / Provola', densita: 0.04, note: 'A cubetti' },
-            { nome: 'Parmigiano Reggiano', densita: 0.015, note: 'Grattugiato' }
+            { nome: 'Mozzarella base', nome_en: 'Mozzarella base', densita: 0.09, note: 'Base protettiva', note_en: 'Protective cheese base' },
+            { nome: 'Gorgonzola / Blu', nome_en: 'Gorgonzola / Blue Cheese', densita: 0.045, note: 'A tocchetti ben distribuiti', note_en: 'Evenly distributed pieces' },
+            { nome: 'Fontina / Provola', nome_en: 'Fontina / Smoked Provola', densita: 0.04, note: 'A cubetti', note_en: 'Cubed' },
+            { nome: 'Parmigiano Reggiano', nome_en: 'Parmigiano Reggiano', densita: 0.015, note: 'Grattugiato', note_en: 'Grated' }
         ],
         focaccia: [
-            { nome: 'Salamoia (Acqua + Olio EVO)', densita: 0.045, note: 'Emulsione 50% acqua e 50% olio' },
-            { nome: 'Sale grosso / Maldon', densita: 0.004, note: 'In superficie prima di infornare' },
-            { nome: 'Rosmarino fresco', densita: 0, fisso: 'q.b.', note: 'Aghi freschi' }
+            { nome: 'Salamoia (Acqua + Olio EVO)', nome_en: 'Brine (Water + EVO Oil)', densita: 0.045, note: 'Emulsione 50% acqua e 50% olio', note_en: '50/50 water and olive oil emulsion' },
+            { nome: 'Sale grosso / Maldon', nome_en: 'Coarse / Flaky Salt', densita: 0.004, note: 'In superficie prima di infornare', note_en: 'Sprinkled over surface before baking' },
+            { nome: 'Rosmarino fresco', nome_en: 'Fresh Rosemary', densita: 0, fisso: 'q.b.', fisso_en: 'to taste', note: 'Aghi freschi', note_en: 'Fresh needles' }
         ],
         capricciosa: [
-            { nome: 'Salsa di Pomodoro', densita: 0.11, note: 'Base classica' },
-            { nome: 'Mozzarella / Fiordilatte', densita: 0.11, note: 'Ben asciutta' },
-            { nome: 'Prosciutto cotto', densita: 0.06, note: 'A listarelle' },
-            { nome: 'Funghi champignon', densita: 0.05, note: 'Affettati sottili' },
-            { nome: 'Carciofini sott\'olio', densita: 0.04, note: 'A spicchi ben sgocciolati' },
-            { nome: 'Olive nere', densita: 0.03, note: 'Denocciolate' }
+            { nome: 'Salsa di Pomodoro', nome_en: 'Tomato Sauce', densita: 0.11, note: 'Base classica', note_en: 'Classic tomato base' },
+            { nome: 'Mozzarella / Fiordilatte', nome_en: 'Mozzarella / Fiordilatte', densita: 0.11, note: 'Ben asciutta', note_en: 'Well-drained' },
+            { nome: 'Prosciutto cotto', nome_en: 'Cooked Ham (Prosciutto)', densita: 0.06, note: 'A listarelle', note_en: 'Shredded / sliced' },
+            { nome: 'Funghi champignon', nome_en: 'Mushrooms', densita: 0.05, note: 'Affettati sottili', note_en: 'Thinly sliced' },
+            { nome: 'Carciofini sott\'olio', nome_en: 'Artichoke Hearts in Oil', densita: 0.04, note: 'A spicchi ben sgocciolati', note_en: 'Quartered and well-drained' },
+            { nome: 'Olive nere', nome_en: 'Black Olives', densita: 0.03, note: 'Denocciolate', note_en: 'Pitted' }
         ]
     };
 
     const lista = condensita[farcitura] || condensita.margherita;
 
     const condimenti = lista.map((c) => {
+        const itemNome = isEn && c.nome_en ? c.nome_en : c.nome;
+        const itemNote = isEn && c.note_en ? c.note_en : c.note;
         if (c.fisso) {
-            return { nome: c.nome, quantita: c.fisso, note: c.note };
+            const itemFisso = isEn && c.fisso_en ? c.fisso_en : c.fisso;
+            return { nome: itemNome, quantita: itemFisso, note: itemNote };
         }
         const grammi = Math.round(areaCm2 * c.densita);
         return {
-            nome: c.nome,
+            nome: itemNome,
             quantita: `${grammi} g`,
             quantitaG: grammi,
-            note: c.note
+            note: itemNote
         };
     });
 
@@ -93,20 +98,13 @@ export function calcolaCondimenti({
 /**
  * Calcola la temperatura ideale dell'acqua di impasto (FDT).
  * Formula: T_acqua = (3 * T_target) - (T_ambiente + T_farina + T_frizione)
- * 
- * @param {Object} params
- * @param {number} [params.tempTarget=24] - Temperatura finale desiderata dell'impasto (°C, tipico 23-25°C)
- * @param {number} [params.tempAmbiente=22] - Temperatura della stanza (°C)
- * @param {number} [params.tempFarina] - Temperatura della farina (°C, default tempAmbiente - 1)
- * @param {'mani'|'planetaria'|'spirale_1v'|'spirale_2v'|'bimby'} [params.tipoImpastatrice='mani']
- * 
- * @returns {{ tempAcqua: number, consiglio: string, tipoAcqua: string }}
  */
 export function calcolaTempAcquaFDT({
     tempTarget = 24,
     tempAmbiente = 22,
     tempFarina = null,
-    tipoImpastatrice = 'mani'
+    tipoImpastatrice = 'mani',
+    locale = 'it'
 }) {
     const tTarget = Number(tempTarget) || 24;
     const tAmb = Number(tempAmbiente) || 22;
@@ -123,24 +121,35 @@ export function calcolaTempAcquaFDT({
     const tFriz = frizioneImpasto[tipoImpastatrice] ?? 2;
     const tAcqua = Math.round((3 * tTarget) - (tAmb + tFar + tFriz));
 
-    let tipoAcqua = 'Rubinetto / Ambiente';
+    const isEn = locale === 'en';
+    let tipoAcqua = isEn ? 'Tap / Ambient' : 'Rubinetto / Ambiente';
     let consiglio = '';
 
     if (tAcqua <= 4) {
-        tipoAcqua = '🧊 Acqua di Frigorifero + Ghiaccio';
-        consiglio = `L'ambiente e l'impastatrice scaldano molto. Usa acqua a 4°C da frigo e, se necessario, sostituisci una parte dell'acqua (${Math.abs(tAcqua * 5)}g) con ghiaccio tritato fino.`;
+        tipoAcqua = isEn ? '🧊 Fridge Water + Ice' : '🧊 Acqua di Frigorifero + Ghiaccio';
+        consiglio = isEn
+            ? `The room and mixer generate high friction heat. Use 4°C chilled fridge water and, if needed, replace part of the water (${Math.abs(tAcqua * 5)}g) with finely crushed ice.`
+            : `L'ambiente e l'impastatrice scaldano molto. Usa acqua a 4°C da frigo e, se necessario, sostituisci una parte dell'acqua (${Math.abs(tAcqua * 5)}g) con ghiaccio tritato fino.`;
     } else if (tAcqua <= 10) {
-        tipoAcqua = '❄️ Acqua molto fredda di Frigo (4-8°C)';
-        consiglio = 'Metti la bottiglia d\'acqua in frigorifero per 2 ore prima di iniziare l\'impasto per non oltrepassare i 24°C finali.';
+        tipoAcqua = isEn ? '❄️ Very Cold Fridge Water (4-8°C)' : '❄️ Acqua molto fredda di Frigo (4-8°C)';
+        consiglio = isEn
+            ? 'Place your water bottle in the refrigerator for 2 hours before mixing to keep the final dough temperature below 24°C.'
+            : 'Metti la bottiglia d\'acqua in frigorifero per 2 ore prima di iniziare l\'impasto per non oltrepassare i 24°C finali.';
     } else if (tAcqua <= 18) {
-        tipoAcqua = '💧 Acqua fresca di rubinetto (12-16°C)';
-        consiglio = 'È sufficiente l\'acqua fredda del rubinetto lasciata scorrere qualche secondo.';
+        tipoAcqua = isEn ? '💧 Cool Tap Water (12-16°C)' : '💧 Acqua fresca di rubinetto (12-16°C)';
+        consiglio = isEn
+            ? 'Cold tap water run for a few seconds is completely sufficient.'
+            : 'È sufficiente l\'acqua fredda del rubinetto lasciata scorrere qualche secondo.';
     } else if (tAcqua <= 26) {
-        tipoAcqua = '🌡️ Acqua a temperatura ambiente (20-24°C)';
-        consiglio = 'Usa acqua a temperatura ambiente per favorire una corretta e rapida attivazione dei lieviti.';
+        tipoAcqua = isEn ? '🌡️ Room Temperature Water (20-24°C)' : '🌡️ Acqua a temperatura ambiente (20-24°C)';
+        consiglio = isEn
+            ? 'Use room temperature water to promote optimal and timely yeast activation.'
+            : 'Usa acqua a temperatura ambiente per favorire una corretta e rapida attivazione dei lieviti.';
     } else {
-        tipoAcqua = '♨️ Acqua tiepida (28-32°C)';
-        consiglio = 'Ambiente freddo: usa acqua leggermente tiepida (non bollente per non uccidere il lievito) per aiutare la partenza fermentativa.';
+        tipoAcqua = isEn ? '♨️ Lukewarm Water (28-32°C)' : '♨️ Acqua tiepida (28-32°C)';
+        consiglio = isEn
+            ? 'Cold environment: use slightly lukewarm water (never hot, to protect yeast) to kickstart fermentation.'
+            : 'Ambiente freddo: usa acqua leggermente tiepida (non bollente per non uccidere il lievito) per aiutare la partenza fermentativa.';
     }
 
     return {
@@ -161,6 +170,7 @@ export const GUIDA_FORNI = [
     {
         id: 'domestico',
         nome: 'Forno Domestico Standard (250°C - 300°C)',
+        nome_en: 'Standard Home Oven (250°C - 300°C / 480-570°F)',
         icona: '🏠',
         tempMax: '250-300°C',
         setup: [
@@ -170,11 +180,20 @@ export const GUIDA_FORNI = [
             'Tecnica "Doppia Cottura" per la Napoletana: cuoci prima la base 2 minuti in padella sul fornello fino a doratura del fondo, poi trasferisci sotto al grill per 2-3 minuti.',
             'Consiglio impasto: aggiungi il 2-3% di olio EVO o strutto e lo 0.5-1% di malto per favorire la colorazione e non far seccare la pizza.'
         ],
-        tempiCottura: '4-7 minuti'
+        setup_en: [
+            'Place a baking stone or steel (or inverted heavy baking tray) on the highest rack, directly beneath the top broiler element.',
+            'Preheat at maximum static temperature for at least 45-60 minutes.',
+            'Turn on the top broiler at maximum power 5 minutes before loading the pizza.',
+            'Skillet-Broiler Double Bake Technique for Neapolitan: cook the base for 2 minutes in a screaming hot stovetop skillet until the bottom is spotted, then transfer directly under the broiler for 2-3 minutes.',
+            'Dough advice: add 2-3% extra virgin olive oil and 0.5-1% diastatic malt to boost crust coloration and retain tenderness.'
+        ],
+        tempiCottura: '4-7 minuti',
+        tempiCottura_en: '4-7 minutes'
     },
     {
         id: 'elettrico_alta',
         nome: 'Fornetto Elettrico ad Alta Temperatura (Effeuno, Ooni Volt, Spice 450-500°C)',
+        nome_en: 'High-Temperature Electric Pizza Oven (Effeuno, Ooni Volt 450-500°C / 850-930°F)',
         icona: '⚡',
         tempMax: '450-500°C',
         setup: [
@@ -184,11 +203,20 @@ export const GUIDA_FORNI = [
             'Ruota la pizza di 180° a metà cottura (dopo circa 45 secondi) con un palino girapizza.',
             'Consiglio impasto: zero zuccheri e zero grassi per evitare macchie nere premature.'
         ],
-        tempiCottura: '60-90 secondi (Napoletana) / 3-4 min (Teglia)'
+        setup_en: [
+            'Ideal floor: cordierite refractory stone (for pan/roman style) or artisanal clay Biscotto (Casapulla/Sorrento) for high-heat Neapolitan.',
+            'Preheating: 30-40 minutes with top and deck thermostats set to target bake temperature.',
+            'Thermostat balance: for Contemporary Neapolitan set Top to 450-480°C (840-900°F) and Deck to 380-400°C (715-750°F) to prevent bottom charring.',
+            'Rotate the pizza 180° halfway through baking (~45 seconds) using a small turning peel.',
+            'Dough advice: zero sugar and zero added fats to avoid premature acrid char spots.'
+        ],
+        tempiCottura: '60-90 secondi (Napoletana) / 3-4 min (Teglia)',
+        tempiCottura_en: '60-90 seconds (Neapolitan) / 3-4 min (Pan pizza)'
     },
     {
         id: 'gas_legna',
         nome: 'Forno a Gas o Legna Esterno (Ooni Koda/Karu, Roccbox, Alfa Forni)',
+        nome_en: 'Outdoor Gas or Wood-Fired Oven (Ooni Koda/Karu, Roccbox, Gozney)',
         icona: '🔥',
         tempMax: '450-500°C',
         setup: [
@@ -198,6 +226,15 @@ export const GUIDA_FORNI = [
             'Gira la pizza ogni 20-25 secondi per una cottura uniforme rispetto alla sorgente di calore posteriore/laterale.',
             'Impasto consigliato: farina di media-forte tenuta ($W 280-320$), solo acqua, farina, lievito e sale.'
         ],
-        tempiCottura: '60-80 secondi'
+        setup_en: [
+            'Preheat the stone until an infrared laser thermometer reads at least 420-440°C (790-825°F) at dead center.',
+            'Flame management (Low Flame Technique): immediately after launching the pizza, dial the gas flame to ultra-low to allow the bottom crust to set without incinerating the top cornicione.',
+            'Turn the flame back up for the final 15 seconds to achieve textbook leopard spotting.',
+            'Turn the pizza every 20-25 seconds for even exposure against the rear/side heat source.',
+            'Dough advice: medium-strong flour (W 280-320), pure four ingredients (flour, water, yeast, salt).'
+        ],
+        tempiCottura: '60-80 secondi',
+        tempiCottura_en: '60-80 seconds'
     }
 ];
+

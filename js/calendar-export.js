@@ -1,5 +1,6 @@
 // calendar-export.js
 // Genera ed esporta file .ics (iCalendar) per Google Calendar, Apple Calendar e Outlook.
+import { getSavedLocale } from './i18n-engine.js';
 
 export function formatICSDate(d) {
     const pad = (n) => String(n).padStart(2, '0');
@@ -11,6 +12,7 @@ export function generaTestoICS(timelineEvents, recipeTitle = 'PizzaLab Impasto')
         return '';
     }
 
+    const isEn = getSavedLocale() === 'en';
     const titleStr = typeof recipeTitle === 'object' 
         ? `${recipeTitle.tipoPizza || 'Pizza'} (${recipeTitle.tipoImpasto || 'Diretto'})` 
         : String(recipeTitle);
@@ -19,7 +21,7 @@ export function generaTestoICS(timelineEvents, recipeTitle = 'PizzaLab Impasto')
     let icsContent = [
         'BEGIN:VCALENDAR',
         'VERSION:2.0',
-        'PRODID:-//PizzaLab//Tabella di Marcia Impasto//IT',
+        `PRODID:-//PizzaLab//${isEn ? 'Dough Schedule' : 'Tabella di Marcia Impasto'}//${isEn ? 'EN' : 'IT'}`,
         'CALSCALE:GREGORIAN',
         'METHOD:PUBLISH'
     ];
@@ -27,7 +29,7 @@ export function generaTestoICS(timelineEvents, recipeTitle = 'PizzaLab Impasto')
     timelineEvents.forEach((ev, idx) => {
         const start = ev.time instanceof Date ? ev.time : (ev.dateObj instanceof Date ? ev.dateObj : new Date());
         const end = new Date(start.getTime() + (ev.durationMinutes || 30) * 60000);
-        const actionTitle = ev.action || ev.title || 'Passaggio impasto';
+        const actionTitle = ev.action || ev.title || (isEn ? 'Dough step' : 'Passaggio impasto');
         const uid = `pizzalab-${Date.now()}-${idx}@pizzalab.pizza`;
 
         icsContent.push(
@@ -37,13 +39,13 @@ export function generaTestoICS(timelineEvents, recipeTitle = 'PizzaLab Impasto')
             `DTSTART:${formatICSDate(start)}`,
             `DTEND:${formatICSDate(end)}`,
             `SUMMARY:🍕 PizzaLab [${titleStr}]: ${actionTitle}`,
-            `DESCRIPTION:${(actionTitle || '').replace(/\n/g, '\\n')}\\n\\nRicetta: ${titleStr}\\nCalcolato su https://pizzalab.pizza`,
+            `DESCRIPTION:${(actionTitle || '').replace(/\n/g, '\\n')}\\n\\n${isEn ? 'Recipe' : 'Ricetta'}: ${titleStr}\\n${isEn ? 'Calculated on' : 'Calcolato su'} https://pizzalab.pizza`,
             'STATUS:CONFIRMED',
             // Allarme notifica 10 minuti prima
             'BEGIN:VALARM',
             'TRIGGER:-PT10M',
             'ACTION:DISPLAY',
-            `DESCRIPTION:Promemoria PizzaLab: ${actionTitle}`,
+            `DESCRIPTION:${isEn ? 'PizzaLab Reminder' : 'Promemoria PizzaLab'}: ${actionTitle}`,
             'END:VALARM',
             'END:VEVENT'
         );
@@ -54,9 +56,10 @@ export function generaTestoICS(timelineEvents, recipeTitle = 'PizzaLab Impasto')
 }
 
 export function esportaCalendarioICS(timelineEvents, recipeTitle = 'PizzaLab Impasto') {
+    const isEn = getSavedLocale() === 'en';
     const icsString = generaTestoICS(timelineEvents, recipeTitle);
     if (!icsString) {
-        alert('Nessun evento disponibile nella tabella di marcia.');
+        alert(isEn ? 'No schedule events available to export.' : 'Nessun evento disponibile nella tabella di marcia.');
         return;
     }
 
@@ -64,7 +67,7 @@ export function esportaCalendarioICS(timelineEvents, recipeTitle = 'PizzaLab Imp
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `pizzalab-programma-${new Date().toISOString().slice(0, 10)}.ics`;
+    a.download = `pizzalab-${isEn ? 'schedule' : 'programma'}-${new Date().toISOString().slice(0, 10)}.ics`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);

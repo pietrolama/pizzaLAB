@@ -291,9 +291,10 @@ export function createStep(currentTime, duration, action) {
     };
 }
 
-export function calculatePlanDiretto(infornataTime, totalLievitazione, tempoFrigo) {
+export function calculatePlanDiretto(infornataTime, totalLievitazione, tempoFrigo, locale = 'it') {
     const plan = [];
     let currentTime = new Date(infornataTime);
+    const isEn = locale === 'en';
 
     const tempoLievitazioneEffettivo = tempoFrigo > 0
         ? totalLievitazione - (9 * tempoFrigo / 10)
@@ -301,30 +302,31 @@ export function calculatePlanDiretto(infornataTime, totalLievitazione, tempoFrig
     const apretto = tempoLievitazioneEffettivo * 0.9;
     const massa = tempoLievitazioneEffettivo - apretto;
 
-    plan.push({ time: new Date(currentTime), action: 'Inforna adesso.' });
+    plan.push({ time: new Date(currentTime), action: isEn ? 'Bake now.' : 'Inforna adesso.' });
 
-    plan.unshift(createStep(currentTime, apretto, "Dividi l'impasto in panetti e inizia l'appretto (lievitazione finale)."));
+    plan.unshift(createStep(currentTime, apretto, isEn ? "Divide dough into balls and start final proofing (appretto)." : "Dividi l'impasto in panetti e inizia l'appretto (lievitazione finale)."));
     currentTime = new Date(currentTime.getTime() - apretto * 60 * 60 * 1000);
 
     if (tempoFrigo > 0) {
-        plan.unshift(createStep(currentTime, tempoFrigo, "Togli l'impasto dal frigorifero e lascia riposare a temperatura ambiente."));
+        plan.unshift(createStep(currentTime, tempoFrigo, isEn ? "Remove dough from refrigerator and let rest at room temperature." : "Togli l'impasto dal frigorifero e lascia riposare a temperatura ambiente."));
         currentTime = new Date(currentTime.getTime() - tempoFrigo * 60 * 60 * 1000);
-        plan.unshift(createStep(currentTime, 0, 'Metti l\'impasto in frigorifero.'));
+        plan.unshift(createStep(currentTime, 0, isEn ? "Put dough into the refrigerator." : "Metti l'impasto in frigorifero."));
     }
 
-    plan.unshift(createStep(currentTime, massa, 'Inizio della lievitazione in massa.'));
+    plan.unshift(createStep(currentTime, massa, isEn ? 'Start bulk fermentation (puntata).' : 'Inizio della lievitazione in massa.'));
     currentTime = new Date(currentTime.getTime() - massa * 60 * 60 * 1000);
 
-    plan.unshift(createStep(currentTime, 0.5, "Prepara l'impasto."));
+    plan.unshift(createStep(currentTime, 0.5, isEn ? 'Mix and knead the dough.' : "Prepara l'impasto."));
 
     return plan;
 }
 
-export function calculatePlanGeneric(infornataTime, durations, steps) {
+export function calculatePlanGeneric(infornataTime, durations, steps, locale = 'it') {
     const plan = [];
     let currentTime = new Date(infornataTime);
+    const isEn = locale === 'en';
 
-    plan.push({ time: new Date(currentTime), action: 'Inforna adesso.' });
+    plan.push({ time: new Date(currentTime), action: isEn ? 'Bake now.' : 'Inforna adesso.' });
 
     for (let i = steps.length - 1; i >= 0; i--) {
         currentTime = new Date(currentTime.getTime() - durations[i] * 60 * 60 * 1000);
@@ -334,47 +336,71 @@ export function calculatePlanGeneric(infornataTime, durations, steps) {
     return plan;
 }
 
-export function calculatePlanBiga(infornataTime, percentualeBiga) {
+export function calculatePlanBiga(infornataTime, percentualeBiga, locale = 'it') {
     const durations = [1, 16, 0.5, percentualeBiga <= 30 ? 6 : percentualeBiga >= 70 ? 3 : 4.5];
-    const steps = [
+    const isEn = locale === 'en';
+    const steps = isEn ? [
+        'Prepare biga',
+        'Start biga fermentation.',
+        'Mix final dough',
+        'Wait for dough to double in volume.',
+    ] : [
         'Preparazione biga',
         'Inizia la lievitazione della biga.',
         'Creazione impasto',
         "Attesa raddoppio dell'impasto.",
     ];
-    return calculatePlanGeneric(infornataTime, durations, steps);
+    return calculatePlanGeneric(infornataTime, durations, steps, locale);
 }
 
-export function calculatePlanPoolish(infornataTime, percentualePoolish) {
+export function calculatePlanPoolish(infornataTime, percentualePoolish, locale = 'it') {
     const durations = [1, 12, 0.5, percentualePoolish <= 30 ? 6 : percentualePoolish >= 70 ? 3 : 4.5];
-    const steps = [
+    const isEn = locale === 'en';
+    const steps = isEn ? [
+        'Prepare poolish',
+        'Start poolish fermentation.',
+        'Mix final dough',
+        'Wait for dough to double in volume.',
+    ] : [
         'Preparazione poolish',
         'Inizia la lievitazione del poolish.',
         'Creazione impasto',
         "Attesa raddoppio dell'impasto.",
     ];
-    return calculatePlanGeneric(infornataTime, durations, steps);
+    return calculatePlanGeneric(infornataTime, durations, steps, locale);
 }
 
-export function calculatePlanLievitoMadre(infornataTime, percentualeLievitoMadre) {
+export function calculatePlanLievitoMadre(infornataTime, percentualeLievitoMadre, locale = 'it') {
     const durations = [1, 8, 0.5, percentualeLievitoMadre <= 30 ? 7 : percentualeLievitoMadre >= 70 ? 4 : 5.5];
-    const steps = [
+    const isEn = locale === 'en';
+    const steps = isEn ? [
+        'Prepare sourdough starter',
+        'Start sourdough fermentation.',
+        'Mix final dough',
+        'Wait for dough to double in volume.',
+    ] : [
         'Preparazione lievito madre',
         'Inizia la lievitazione del lievito madre.',
         'Creazione impasto',
         "Attesa raddoppio dell'impasto.",
     ];
-    return calculatePlanGeneric(infornataTime, durations, steps);
+    return calculatePlanGeneric(infornataTime, durations, steps, locale);
 }
 
-export function calculatePlanBigaPoolish(infornataTime, percentualeBiga, percentualePoolish) {
+export function calculatePlanBigaPoolish(infornataTime, percentualeBiga, percentualePoolish, locale = 'it') {
     const media = (percentualeBiga + percentualePoolish) / 2;
     const durations = [1, 10, 0.5, media <= 30 ? 6 : media >= 70 ? 3 : 4.5];
-    const steps = [
+    const isEn = locale === 'en';
+    const steps = isEn ? [
+        'Prepare biga and poolish',
+        'Start combined fermentation of biga and poolish.',
+        'Mix final dough',
+        'Wait for dough to double in volume.',
+    ] : [
         'Preparazione biga e poolish',
         'Inizia la lievitazione combinata di biga e poolish.',
         'Creazione impasto',
         "Attesa raddoppio dell'impasto.",
     ];
-    return calculatePlanGeneric(infornataTime, durations, steps);
+    return calculatePlanGeneric(infornataTime, durations, steps, locale);
 }

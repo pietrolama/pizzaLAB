@@ -59,12 +59,24 @@
     </main>
 
     <footer>
-        <p>&copy; 2026 PizzaLab — La tua guida alla pizza perfetta</p>
+        <p data-i18n="footer.copy">&copy; 2026 PizzaLab — La tua guida alla pizza perfetta</p>
     </footer>
 
     <script src="js/nav.js" defer></script>
     <script type="module">
         import { renderListing } from './js/listing.js';
+        import { getSavedLocale } from './js/i18n-engine.js';
+
+        function checkEmpty() {
+            const container = document.querySelector('#scienza-container');
+            if (container && !container.children.length) {
+                const isEn = (document.documentElement.lang === 'en') || (getSavedLocale() === 'en');
+                const msg = isEn 
+                    ? 'No articles published at the moment: this section is periodically updated with verified scientific literature.'
+                    : 'Nessun approfondimento pubblicato al momento: la sezione si aggiorna periodicamente con contenuti verificati da fonti scientifiche.';
+                container.innerHTML = `<p class="listing-error">${msg}</p>`;
+            }
+        }
 
         renderListing({
             containerSelector: '#scienza-container',
@@ -81,12 +93,10 @@
                     </div>
                 </article>
             `,
-        }).then(() => {
-            const container = document.querySelector('#scienza-container');
-            if (container && !container.children.length) {
-                container.innerHTML = '<p class="listing-error">Nessun approfondimento pubblicato al momento: la sezione si aggiorna periodicamente con contenuti verificati da fonti scientifiche.</p>';
-            }
         });
+
+        setTimeout(checkEmpty, 300);
+        window.addEventListener('pizzalab:locale-changed', () => setTimeout(checkEmpty, 300));
     </script>
 </body>
 </html>

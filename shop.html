@@ -69,15 +69,18 @@
         renderListing({
             containerSelector: '#shop-container',
             jsonPath: 'data/products.json',
-            renderItem: (p) => `
+            renderItem: (p, locale) => {
+                const title = (locale === 'en' && p.title_en) ? p.title_en : p.title;
+                return `
                 <a class="listing-card" href="${p.link}" target="_blank" rel="noopener noreferrer sponsored" style="text-decoration:none; color:inherit;">
-                    <img src="${p.image}" alt="${p.title}" loading="lazy">
+                    <img src="${p.image}" alt="${title}" loading="lazy">
                     <div class="listing-card__body">
-                        <h3>${p.title}</h3>
+                        <h3>${title}</h3>
                         <span class="listing-card__price">${p.price}</span>
                     </div>
                 </a>
-            `,
+                `;
+            },
         });
     </script>
 </body>

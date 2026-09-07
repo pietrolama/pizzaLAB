@@ -1,6 +1,7 @@
 [
     {
         "nome": "Acqua",
+        "nome_en": "Water",
         "calorie": 0,
         "grassi": 0,
         "carboidrati": 0,
@@ -11,6 +12,7 @@
     },
     {
         "nome": "Farina",
+        "nome_en": "Flour",
         "calorie": 340,
         "grassi": 1,
         "carboidrati": 74,
@@ -21,6 +23,7 @@
     },
     {
         "nome": "Lievito",
+        "nome_en": "Yeast",
         "calorie": 105,
         "grassi": 1.9,
         "carboidrati": 3.5,
@@ -31,6 +34,7 @@
     },
     {
         "nome": "Zucchero",
+        "nome_en": "Sugar",
         "calorie": 400,
         "grassi": 0,
         "carboidrati": 100,
@@ -41,6 +45,7 @@
     },
     {
         "nome": "Sale",
+        "nome_en": "Salt",
         "calorie": 0,
         "grassi": 0,
         "carboidrati": 0,
@@ -51,6 +56,7 @@
     },
     {
         "nome": "Olio d'oliva",
+        "nome_en": "Olive oil",
         "calorie": 884,
         "grassi": 100,
         "carboidrati": 0,
@@ -61,6 +67,7 @@
     },
     {
         "nome": "Pomodoro pelato",
+        "nome_en": "Canned peeled tomatoes",
         "calorie": 18,
         "grassi": 0.2,
         "carboidrati": 3.6,
@@ -71,6 +78,7 @@
     },
     {
         "nome": "Mozzarella di bufala",
+        "nome_en": "Buffalo mozzarella",
         "calorie": 280,
         "grassi": 22,
         "carboidrati": 2,
@@ -81,6 +89,7 @@
     },
     {
         "nome": "Prosciutto crudo",
+        "nome_en": "Prosciutto crudo",
         "calorie": 250,
         "grassi": 15,
         "carboidrati": 0,
@@ -91,6 +100,7 @@
     },
     {
         "nome": "Funghi champignon",
+        "nome_en": "White button mushrooms",
         "calorie": 22,
         "grassi": 0.3,
         "carboidrati": 3.3,
@@ -101,6 +111,7 @@
     },
     {
         "nome": "Peperoni rossi",
+        "nome_en": "Red bell peppers",
         "calorie": 31,
         "grassi": 0.3,
         "carboidrati": 6,
@@ -111,6 +122,7 @@
     },
     {
         "nome": "Salame piccante",
+        "nome_en": "Spicy salami (Pepperoni)",
         "calorie": 400,
         "grassi": 35,
         "carboidrati": 1,
@@ -121,6 +133,7 @@
     },
     {
         "nome": "Parmigiano Reggiano",
+        "nome_en": "Parmigiano Reggiano",
         "calorie": 392,
         "grassi": 29,
         "carboidrati": 0,
@@ -131,6 +144,7 @@
     },
     {
         "nome": "Zucchine",
+        "nome_en": "Zucchini",
         "calorie": 17,
         "grassi": 0.3,
         "carboidrati": 3.1,
@@ -141,6 +155,7 @@
     },
     {
         "nome": "Salsiccia",
+        "nome_en": "Italian sausage",
         "calorie": 310,
         "grassi": 28,
         "carboidrati": 0,
@@ -151,6 +166,7 @@
     },
     {
         "nome": "Panna da cucina",
+        "nome_en": "Cooking cream",
         "calorie": 292,
         "grassi": 30,
         "carboidrati": 3,
@@ -161,6 +177,7 @@
     },
     {
         "nome": "Patate bollite",
+        "nome_en": "Boiled potatoes",
         "calorie": 86,
         "grassi": 0.1,
         "carboidrati": 20,
@@ -171,6 +188,7 @@
     },
     {
         "nome": "Patate al forno",
+        "nome_en": "Roasted potatoes",
         "calorie": 150,
         "grassi": 5,
         "carboidrati": 28,
@@ -181,6 +199,7 @@
     },
     {
         "nome": "Patate fritte",
+        "nome_en": "French fries",
         "calorie": 312,
         "grassi": 15,
         "carboidrati": 41,
@@ -191,6 +210,7 @@
     },
     {
         "nome": "Patate scaldate",
+        "nome_en": "Reheated potatoes",
         "calorie": 90,
         "grassi": 1.5,
         "carboidrati": 17,
@@ -201,6 +221,7 @@
     },
     {
         "nome": "Latte intero",
+        "nome_en": "Whole milk",
         "calorie": 64,
         "grassi": 3.6,
         "carboidrati": 4.8,
@@ -211,6 +232,7 @@
     },
     {
         "nome": "Latte scremato",
+        "nome_en": "Skimmed milk",
         "calorie": 35,
         "grassi": 0.1,
         "carboidrati": 5,
@@ -221,6 +243,7 @@
     },
     {
         "nome": "Crema di latte",
+        "nome_en": "Heavy cream",
         "calorie": 340,
         "grassi": 36,
         "carboidrati": 3.5,
@@ -231,6 +254,7 @@
     },
     {
         "nome": "Provola affumicata",
+        "nome_en": "Smoked provola cheese",
         "calorie": 350,
         "grassi": 29,
         "carboidrati": 2,
@@ -241,6 +265,7 @@
     },
     {
         "nome": "Rucola",
+        "nome_en": "Arugula (Rocket)",
         "calorie": 25,
         "grassi": 0.7,
         "carboidrati": 3.6,
@@ -251,6 +276,7 @@
     },
     {
         "nome": "Melanzane grigliate",
+        "nome_en": "Grilled eggplant",
         "calorie": 25,
         "grassi": 0.2,
         "carboidrati": 5.5,
@@ -261,6 +287,7 @@
     },
     {
         "nome": "Carciofi sott'olio",
+        "nome_en": "Marinated artichokes",
         "calorie": 250,
         "grassi": 25,
         "carboidrati": 5,
@@ -271,6 +298,7 @@
     },
     {
         "nome": "Tonno sott'olio",
+        "nome_en": "Tuna in olive oil",
         "calorie": 200,
         "grassi": 14,
         "carboidrati": 0,
@@ -281,6 +309,7 @@
     },
     {
         "nome": "Gamberetti",
+        "nome_en": "Shrimp",
         "calorie": 70,
         "grassi": 1,
         "carboidrati": 0,
@@ -291,6 +320,7 @@
     },
     {
         "nome": "Acciughe sott'olio",
+        "nome_en": "Anchovies in oil",
         "calorie": 210,
         "grassi": 11,
         "carboidrati": 0,
@@ -301,6 +331,7 @@
     },
     {
         "nome": "Basilico fresco",
+        "nome_en": "Fresh basil",
         "calorie": 22,
         "grassi": 0.6,
         "carboidrati": 2.7,
@@ -311,6 +342,7 @@
     },
     {
         "nome": "Aglio",
+        "nome_en": "Garlic",
         "calorie": 149,
         "grassi": 0.5,
         "carboidrati": 33,
@@ -321,6 +353,7 @@
     },
     {
         "nome": "Spinaci freschi",
+        "nome_en": "Fresh spinach",
         "calorie": 23,
         "grassi": 0.4,
         "carboidrati": 3.6,
@@ -331,6 +364,7 @@
     },
     {
         "nome": "Uova intere",
+        "nome_en": "Whole eggs",
         "calorie": 155,
         "grassi": 11,
         "carboidrati": 1.1,
@@ -341,6 +375,7 @@
     },
     {
         "nome": "Peperoncino",
+        "nome_en": "Chili pepper",
         "calorie": 40,
         "grassi": 0.4,
         "carboidrati": 9,
@@ -351,6 +386,7 @@
     },
     {
         "nome": "Olive nere",
+        "nome_en": "Black olives",
         "calorie": 115,
         "grassi": 11,
         "carboidrati": 6,
@@ -361,6 +397,7 @@
     },
     {
         "nome": "Olive verdi",
+        "nome_en": "Green olives",
         "calorie": 146,
         "grassi": 15,
         "carboidrati": 4,
@@ -371,6 +408,7 @@
     },
     {
         "nome": "Cipolle rosse",
+        "nome_en": "Red onions",
         "calorie": 40,
         "grassi": 0.1,
         "carboidrati": 9,
@@ -381,6 +419,7 @@
     },
     {
         "nome": "Zucca",
+        "nome_en": "Pumpkin / Squash",
         "calorie": 26,
         "grassi": 0.1,
         "carboidrati": 6.5,

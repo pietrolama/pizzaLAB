@@ -94,7 +94,8 @@ function aggiornaSuggerimentoW() {
 
     const badge = el('badge_w_consigliato');
     if (badge) {
-        badge.textContent = `Consigliato: W ${wConsigliatoAttuale} (${wToProteine(wConsigliatoAttuale)}% prot)`;
+        const isEn = document.documentElement.lang === 'en';
+        badge.textContent = `${isEn ? 'Recommended' : 'Consigliato'}: W ${wConsigliatoAttuale} (${wToProteine(wConsigliatoAttuale)}% prot)`;
         badge.title = suggerimento.descrizione;
     }
 }
@@ -563,8 +564,9 @@ el('btn-share-card')?.addEventListener('click', async () => {
 
 // --- GESTIONE CRONOPROGRAMMA / TIMELINE ORARIA ---
 function formattaDataOra(d) {
+    const isEn = document.documentElement.lang === 'en';
     const options = { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' };
-    return d.toLocaleDateString('it-IT', options);
+    return d.toLocaleDateString(isEn ? 'en-US' : 'it-IT', options);
 }
 
 function aggiornaCronoprogrammaUI() {
@@ -591,23 +593,24 @@ function aggiornaCronoprogrammaUI() {
 
     let plan = [];
     const tipo = ultimoStatoRicetta.tipoImpasto;
+    const loc = document.documentElement.lang === 'en' ? 'en' : 'it';
     if (tipo === 'diretto') {
         const tot = ultimoStatoRicetta.oreTotali || 24;
         const frigo = ultimoStatoRicetta.oreFrigo || 0;
-        plan = calculatePlanDiretto(targetDate, tot, frigo);
+        plan = calculatePlanDiretto(targetDate, tot, frigo, loc);
     } else if (tipo === 'biga') {
         const perc = parseFloat(el('percentuale_biga')?.value) || 30;
-        plan = calculatePlanBiga(targetDate, perc);
+        plan = calculatePlanBiga(targetDate, perc, loc);
     } else if (tipo === 'poolish') {
         const perc = parseFloat(el('percentuale_poolish')?.value) || 20;
-        plan = calculatePlanPoolish(targetDate, perc);
+        plan = calculatePlanPoolish(targetDate, perc, loc);
     } else if (tipo === 'lievito_madre') {
         const perc = parseFloat(el('percentuale_lievito')?.value) || 20;
-        plan = calculatePlanLievitoMadre(targetDate, perc);
+        plan = calculatePlanLievitoMadre(targetDate, perc, loc);
     } else if (tipo === 'biga_poolish') {
         const percB = parseFloat(el('percentuale_biga_bp')?.value) || 30;
         const percP = parseFloat(el('percentuale_poolish_bp')?.value) || 20;
-        plan = calculatePlanBigaPoolish(targetDate, percB, percP);
+        plan = calculatePlanBigaPoolish(targetDate, percB, percP, loc);
     }
 
     ultimoPianoGenerato = plan;
@@ -650,6 +653,7 @@ el('btn-salva-diario')?.addEventListener('click', () => {
 
     const btn = el('btn-salva-diario');
     const originalText = btn.innerHTML;
+    const isEn = document.documentElement.lang === 'en';
 
     try {
         const diarioKey = 'diarioFermentazioni';
@@ -675,13 +679,15 @@ el('btn-salva-diario')?.addEventListener('click', () => {
             lievito: `${ultimoStatoRicetta.totali.lievito.toFixed(2)} g`,
             totali: ultimoStatoRicetta.totali,
             blend: ultimoStatoRicetta.blend,
-            note: `Calcolato con PizzaLab. Farina: ${Math.round(ultimoStatoRicetta.totali.farina)}g (${ultimoStatoRicetta.forzaFarina}W), Acqua: ${Math.round(ultimoStatoRicetta.totali.acqua)}g, Sale: ${Math.round(ultimoStatoRicetta.totali.sale)}g.`
+            note: isEn 
+                ? `Calculated with PizzaLab. Flour: ${Math.round(ultimoStatoRicetta.totali.farina)}g (${ultimoStatoRicetta.forzaFarina}W), Water: ${Math.round(ultimoStatoRicetta.totali.acqua)}g, Salt: ${Math.round(ultimoStatoRicetta.totali.sale)}g.`
+                : `Calcolato con PizzaLab. Farina: ${Math.round(ultimoStatoRicetta.totali.farina)}g (${ultimoStatoRicetta.forzaFarina}W), Acqua: ${Math.round(ultimoStatoRicetta.totali.acqua)}g, Sale: ${Math.round(ultimoStatoRicetta.totali.sale)}g.`
         };
 
         lista.unshift(nuovaVoce);
         localStorage.setItem(diarioKey, JSON.stringify(lista));
 
-        btn.innerHTML = '<span>✅</span> Salvato nel Diario!';
+        btn.innerHTML = isEn ? '<span>✅</span> Saved to Diary!' : '<span>✅</span> Salvato nel Diario!';
         btn.style.borderColor = '#10b981';
         btn.style.color = '#10b981';
         setTimeout(() => {
@@ -690,7 +696,7 @@ el('btn-salva-diario')?.addEventListener('click', () => {
             btn.style.color = '';
         }, 3000);
     } catch (e) {
-        alert('Errore nel salvataggio nel Diario: ' + e.message);
+        alert(isEn ? 'Error saving to Diary: ' + e.message : 'Errore nel salvataggio nel Diario: ' + e.message);
     }
 });
 
@@ -753,17 +759,18 @@ document.addEventListener('visibilitychange', () => {
 });
 
 function assegnaFase(idx, totale, testo) {
-    if (/miscela|farina/i.test(testo)) return 'Fase: Preparazione Farine';
-    if (/biga|poolish|lievito madre/i.test(testo) && idx === 0) return 'Fase: Prefermento';
-    if (/autolisi/i.test(testo)) return 'Fase: Autolisi';
-    if (/impasta|incordatura|planetaria|lavora/i.test(testo)) return 'Fase: Impasto & Incordatura';
-    if (/pieghe|rinforzo/i.test(testo)) return 'Fase: Pieghe di Struttura';
-    if (/massa|puntata|riposare/i.test(testo)) return 'Fase: Prima Lievitazione (Puntata)';
-    if (/staglio|panetti|pirlando/i.test(testo)) return 'Fase: Staglio & Formatura';
-    if (/appretto/i.test(testo)) return 'Fase: Seconda Lievitazione (Appretto)';
-    if (/stesura/i.test(testo)) return 'Fase: Stesura';
-    if (/cottura|inforna/i.test(testo)) return 'Fase: Cottura';
-    return `Passo ${idx + 1}`;
+    const isEn = document.documentElement.lang === 'en';
+    if (/miscela|farina/i.test(testo)) return isEn ? 'Phase: Flour Preparation' : 'Fase: Preparazione Farine';
+    if (/biga|poolish|lievito madre/i.test(testo) && idx === 0) return isEn ? 'Phase: Preferment' : 'Fase: Prefermento';
+    if (/autolisi/i.test(testo)) return isEn ? 'Phase: Autolyse' : 'Fase: Autolisi';
+    if (/impasta|incordatura|planetaria|lavora/i.test(testo)) return isEn ? 'Phase: Mixing & Gluten Development' : 'Fase: Impasto & Incordatura';
+    if (/pieghe|rinforzo/i.test(testo)) return isEn ? 'Phase: Stretch & Folds' : 'Fase: Pieghe di Struttura';
+    if (/massa|puntata|riposare/i.test(testo)) return isEn ? 'Phase: Bulk Fermentation (Puntata)' : 'Fase: Prima Lievitazione (Puntata)';
+    if (/staglio|panetti|pirlando/i.test(testo)) return isEn ? 'Phase: Balling & Shaping (Staglio)' : 'Fase: Staglio & Formatura';
+    if (/appretto/i.test(testo)) return isEn ? 'Phase: Final Proofing (Appretto)' : 'Fase: Seconda Lievitazione (Appretto)';
+    if (/stesura/i.test(testo)) return isEn ? 'Phase: Dough Stretching' : 'Fase: Stesura';
+    if (/cottura|inforna/i.test(testo)) return isEn ? 'Phase: Baking' : 'Fase: Cottura';
+    return isEn ? `Step ${idx + 1}` : `Passo ${idx + 1}`;
 }
 
 function apriPianoOperativo() {
@@ -819,8 +826,10 @@ function renderPianoCard(idx) {
     const passo = pianoPassi[idx];
     pianoIndex = idx;
 
+    const isEn = document.documentElement.lang === 'en';
+
     // Aggiorna contatore e progress bar
-    el('piano-counter').textContent = `Passo ${idx + 1} di ${pianoPassi.length}`;
+    el('piano-counter').textContent = isEn ? `Step ${idx + 1} of ${pianoPassi.length}` : `Passo ${idx + 1} di ${pianoPassi.length}`;
     const perc = Math.round(((idx + 1) / pianoPassi.length) * 100);
     el('piano-progress-fill').style.width = `${perc}%`;
 
@@ -838,10 +847,12 @@ function renderPianoCard(idx) {
     const timerBox = el('piano-timer-container');
     if (passo.minuti) {
         timerBox.classList.remove('hidden');
-        el('piano-timer-label').textContent = `Timer consigliato per questa fase: ${passo.minuti} minuti`;
+        el('piano-timer-label').textContent = isEn 
+            ? `Recommended timer for this step: ${passo.minuti} minutes`
+            : `Timer consigliato per questa fase: ${passo.minuti} minuti`;
         el('piano-modal-timer-digits').textContent = `${passo.minuti.toString().padStart(2, '0')}:00`;
         el('btn-modal-timer-start').classList.remove('hidden');
-        el('btn-modal-timer-start').textContent = `⏱️ Avvia Timer (${passo.minuti} min)`;
+        el('btn-modal-timer-start').textContent = `⏱️ ${isEn ? 'Start Timer' : 'Avvia Timer'} (${passo.minuti} min)`;
         el('btn-modal-timer-pause').classList.add('hidden');
         el('btn-modal-timer-stop').classList.add('hidden');
     } else {
@@ -855,14 +866,15 @@ function renderPianoCard(idx) {
     if (prevBtn) {
         prevBtn.disabled = idx === 0;
         prevBtn.style.opacity = idx === 0 ? '0.4' : '1';
+        prevBtn.textContent = isEn ? '← Previous' : '← Precedente';
     }
 
     if (nextBtn) {
         if (idx === pianoPassi.length - 1) {
-            nextBtn.textContent = '🎉 Completa Piano';
+            nextBtn.textContent = isEn ? '🎉 Complete Plan' : '🎉 Completa Piano';
             nextBtn.classList.add('btn');
         } else {
-            nextBtn.textContent = 'Successivo →';
+            nextBtn.textContent = isEn ? 'Next →' : 'Successivo →';
         }
     }
 }
@@ -1098,10 +1110,13 @@ function aggiornaCondimentiUI() {
     const base = parseFloat(el('topping_teglia_base')?.value) || 40;
     const altezza = parseFloat(el('topping_teglia_alt')?.value) || 60;
     const farcitura = el('topping_farcitura')?.value || 'margherita';
+    const isEn = document.documentElement.lang === 'en';
 
-    const res = calcolaCondimenti({ forma, diametro, base, altezza, farcitura });
+    const res = calcolaCondimenti({ forma, diametro, base, altezza, farcitura, locale: isEn ? 'en' : 'it' });
 
-    el('topping-area-label').textContent = `Superficie calcolata: ~${res.areaCm2} cm² (${isTonda ? `Ø ${diametro} cm` : `${base}x${altezza} cm`})`;
+    el('topping-area-label').textContent = isEn
+        ? `Calculated surface area: ~${res.areaCm2} cm² (${isTonda ? `Ø ${diametro} cm` : `${base}x${altezza} cm`})`
+        : `Superficie calcolata: ~${res.areaCm2} cm² (${isTonda ? `Ø ${diametro} cm` : `${base}x${altezza} cm`})`;
 
     const container = el('topping-list-container');
     container.innerHTML = res.condimenti.map((c) => `
@@ -1131,8 +1146,9 @@ function aggiornaFDTUI() {
     const tempAmbiente = parseFloat(el('fdt_ambiente')?.value) || 22;
     const tempFarina = parseFloat(el('fdt_farina')?.value) || (tempAmbiente - 1);
     const tipoImpastatrice = el('fdt_impastatrice')?.value || 'mani';
+    const isEn = document.documentElement.lang === 'en';
 
-    const res = calcolaTempAcquaFDT({ tempTarget, tempAmbiente, tempFarina, tipoImpastatrice });
+    const res = calcolaTempAcquaFDT({ tempTarget, tempAmbiente, tempFarina, tipoImpastatrice, locale: isEn ? 'en' : 'it' });
 
     el('fdt-res-temp').textContent = `${res.tempAcqua}°C`;
     el('fdt-res-tipo').textContent = res.tipoAcqua;
@@ -1162,9 +1178,14 @@ function renderOvenDetail(ovenId) {
     const data = GUIDA_FORNI.find((f) => f.id === ovenId) || GUIDA_FORNI[0];
     if (!data || !el('oven-detail-title')) return;
 
-    el('oven-detail-title').textContent = `${data.icona} ${data.nome}`;
-    el('oven-detail-time').textContent = data.tempiCottura;
-    el('oven-detail-list').innerHTML = data.setup.map((s) => `<li>${s}</li>`).join('');
+    const isEn = document.documentElement.lang === 'en';
+    const ovenNome = isEn && data.nome_en ? data.nome_en : data.nome;
+    const ovenTempi = isEn && data.tempiCottura_en ? data.tempiCottura_en : data.tempiCottura;
+    const ovenSetup = isEn && data.setup_en ? data.setup_en : data.setup;
+
+    el('oven-detail-title').textContent = `${data.icona} ${ovenNome}`;
+    el('oven-detail-time').textContent = ovenTempi;
+    el('oven-detail-list').innerHTML = ovenSetup.map((s) => `<li>${s}</li>`).join('');
 }
 
 document.querySelectorAll('.oven-choice-card').forEach((card) => {
@@ -1185,16 +1206,21 @@ function aggiornaYeastConverterUI() {
 
     el('yeast-res-qty').textContent = `${res.quantitaEquivalente.toFixed(2)} g`;
 
+    const isEn = document.documentElement.lang === 'en';
     const compEl = el('yeast-res-compensation');
     if (compEl) {
         if (res.differenzaFarina > 0 || res.differenzaAcqua > 0) {
-            compEl.innerHTML = `⚠️ <strong>Adeguamento Impasto:</strong> Sottrai <strong>${res.differenzaFarina.toFixed(1)} g</strong> di farina e <strong>${res.differenzaAcqua.toFixed(1)} g</strong> di acqua dall'impasto principale.`;
+            compEl.innerHTML = isEn
+                ? `⚠️ <strong>Dough Adjustment:</strong> Subtract <strong>${res.differenzaFarina.toFixed(1)} g</strong> of flour and <strong>${res.differenzaAcqua.toFixed(1)} g</strong> of water from the main dough.`
+                : `⚠️ <strong>Adeguamento Impasto:</strong> Sottrai <strong>${res.differenzaFarina.toFixed(1)} g</strong> di farina e <strong>${res.differenzaAcqua.toFixed(1)} g</strong> di acqua dall'impasto principale.`;
             compEl.style.display = 'block';
         } else if (res.differenzaFarina < 0 || res.differenzaAcqua < 0) {
-            compEl.innerHTML = `⚠️ <strong>Adeguamento Impasto:</strong> Aggiungi <strong>${Math.abs(res.differenzaFarina).toFixed(1)} g</strong> di farina e <strong>${Math.abs(res.differenzaAcqua).toFixed(1)} g</strong> di acqua all'impasto principale.`;
+            compEl.innerHTML = isEn
+                ? `⚠️ <strong>Dough Adjustment:</strong> Add <strong>${Math.abs(res.differenzaFarina).toFixed(1)} g</strong> of flour and <strong>${Math.abs(res.differenzaAcqua).toFixed(1)} g</strong> of water to the main dough.`
+                : `⚠️ <strong>Adeguamento Impasto:</strong> Aggiungi <strong>${Math.abs(res.differenzaFarina).toFixed(1)} g</strong> di farina e <strong>${Math.abs(res.differenzaAcqua).toFixed(1)} g</strong> di acqua all'impasto principale.`;
             compEl.style.display = 'block';
         } else {
-            compEl.textContent = 'Nessuna compensazione di acqua/farina necessaria.';
+            compEl.textContent = isEn ? 'No water/flour compensation needed.' : 'Nessuna compensazione di acqua/farina necessaria.';
             compEl.style.display = 'block';
         }
     }
@@ -1252,6 +1278,11 @@ window.addEventListener('pizzalab:locale-changed', () => {
     initCereali();
     initGlossario();
     aggiornaYeastConverterUI();
+    aggiornaCondimentiUI();
+    aggiornaFDTUI();
+    const activeOven = document.querySelector('.oven-choice-card.active')?.dataset?.oven || 'domestico';
+    renderOvenDetail(activeOven);
+    aggiornaWConsigliato();
     if (ultimoStatoRicetta && ultimoDatiCalcolati) {
         renderRisultato(ultimoDatiCalcolati, ultimoStatoRicetta.tipoImpasto);
     }

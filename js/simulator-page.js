@@ -2,24 +2,50 @@
 // Calcola calorie e macronutrienti a partire dai grammi generati dal
 // Calcolatore (salvati in localStorage sotto 'datiNutrizionali'), con
 // farciture opzionali prese da data/ingredienti.json.
+import { getSavedLocale, loadLocaleData } from './i18n-engine.js';
+
 const NOMI_BASE = ['acqua', 'farina', 'lievito', 'zucchero', 'sale', "olio d'oliva"];
 const CHIAVI_NUTRIENTI = ['calorie', 'grassi', 'carboidrati', 'zuccheri', 'fibre', 'proteine', 'sale'];
+
 const ETICHETTE = {
-    calorie: 'kcal',
-    grassi: 'g grassi',
-    carboidrati: 'g carboidrati',
-    zuccheri: 'g zuccheri',
-    fibre: 'g fibre',
-    proteine: 'g proteine',
-    sale: 'g sale',
+    it: {
+        calorie: 'kcal',
+        grassi: 'g grassi',
+        carboidrati: 'g carboidrati',
+        zuccheri: 'g zuccheri',
+        fibre: 'g fibre',
+        proteine: 'g proteine',
+        sale: 'g sale',
+    },
+    en: {
+        calorie: 'kcal',
+        grassi: 'g fat',
+        carboidrati: 'g carbs',
+        zuccheri: 'g sugars',
+        fibre: 'g fiber',
+        proteine: 'g protein',
+        sale: 'g salt',
+    }
 };
 
+function getCurrentLocale() {
+    try {
+        return getSavedLocale() || localStorage.getItem('pizzalab_locale') || document.documentElement.lang || 'it';
+    } catch (e) {
+        return document.documentElement.lang || 'it';
+    }
+}
+
 function capitalizza(s) {
+    if (!s) return '';
     return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
 function calcolaNutrientiSuGrammi(nomeIngrediente, grammi, listaIngredienti) {
-    const ref = listaIngredienti.find((i) => i.nome.toLowerCase() === nomeIngrediente.toLowerCase());
+    const ref = listaIngredienti.find((i) => 
+        i.nome.toLowerCase() === nomeIngrediente.toLowerCase() ||
+        (i.nome_en && i.nome_en.toLowerCase() === nomeIngrediente.toLowerCase())
+    );
     if (!ref) return null;
     const fattore = grammi / 100;
     const risultato = {};
@@ -33,9 +59,10 @@ function sommaNutrienti(a, b) {
     return risultato;
 }
 
-function renderGrid(container, nutrienti) {
+function renderGrid(container, nutrienti, locale = 'it') {
+    const labels = ETICHETTE[locale] || ETICHETTE.it;
     container.innerHTML = CHIAVI_NUTRIENTI.map((k) => `
-        <div><strong>${Math.round(nutrienti[k] * 10) / 10}</strong><span>${ETICHETTE[k]}</span></div>
+        <div><strong>${Math.round(nutrienti[k] * 10) / 10}</strong><span>${labels[k]}</span></div>
     `).join('');
 }
 
@@ -86,20 +113,11 @@ async function main() {
 
     dataSection.classList.remove('hidden');
 
-    const nomeRicetta = ricette?.[datiImpasto.tipoPizza]?.[datiImpasto.tipoImpasto]?.nome
-        || `${capitalizza(datiImpasto.tipoPizza)} - ${capitalizza(datiImpasto.tipoImpasto.replace('_', ' '))}`;
-    titoloImpasto.textContent = nomeRicetta;
-    sottotitoloImpasto.textContent = `${datiImpasto.numPanetti} panetti da ${datiImpasto.pesoPanetto} g`;
-    pesoPanettoLabel.textContent = `${datiImpasto.pesoPanetto} g`;
-
-    ingredientiDisponibili
-        .filter((ing) => !NOMI_BASE.includes(ing.nome.toLowerCase()))
-        .forEach((ing) => {
-            const opt = document.createElement('option');
-            opt.value = ing.nome;
-            opt.textContent = ing.nome;
-            toppingSelect.appendChild(opt);
-        });
+    let currentLocale = getCurrentLocale();
+    let translations = {};
+    try {
+        translations = await loadLocaleData(currentLocale);
+    } catch (e) {}
 
     let farciture = []; // { nome, quantita } in grammi per singola pizza
 
@@ -115,7 +133,47 @@ async function main() {
         lievito: 'Lievito',
     };
 
-    function aggiornaTotali() {
+    function renderTitolo(locale) {
+        const defaultNome = ricette?.[datiImpasto.tipoPizza]?.[datiImpasto.tipoImpasto]?.nome
+            || `${capitalizza(datiImpasto.tipoPizza)} - ${capitalizza(datiImpasto.tipoImpasto.replace('_', ' '))}`;
+
+        if (locale === 'en') {
+            const pizzaKey = `pizza.${datiImpasto.tipoPizza}`;
+            const methodKey = `method.${datiImpasto.tipoImpasto}`;
+            const pizzaTrans = translations?.[pizzaKey];
+            const methodTrans = translations?.[methodKey];
+            if (pizzaTrans && methodTrans) {
+                titoloImpasto.textContent = `${pizzaTrans} - ${methodTrans}`;
+            } else if (pizzaTrans) {
+                titoloImpasto.textContent = `${pizzaTrans} - ${capitalizza(datiImpasto.tipoImpasto.replace('_', ' '))}`;
+            } else {
+                titoloImpasto.textContent = defaultNome;
+            }
+            sottotitoloImpasto.textContent = `${datiImpasto.numPanetti} dough ball${datiImpasto.numPanetti > 1 ? 's' : ''} (${datiImpasto.pesoPanetto} g each)`;
+        } else {
+            titoloImpasto.textContent = defaultNome;
+            sottotitoloImpasto.textContent = `${datiImpasto.numPanetti} panetti da ${datiImpasto.pesoPanetto} g`;
+        }
+        pesoPanettoLabel.textContent = `${datiImpasto.pesoPanetto} g`;
+    }
+
+    function popolaSelectToppings(locale) {
+        const currentVal = toppingSelect.value;
+        const defaultPrompt = locale === 'en' ? 'Select...' : 'Seleziona...';
+        toppingSelect.innerHTML = `<option value="" data-i18n="simulator.select_ingredient">${defaultPrompt}</option>`;
+
+        ingredientiDisponibili
+            .filter((ing) => !NOMI_BASE.includes(ing.nome.toLowerCase()))
+            .forEach((ing) => {
+                const opt = document.createElement('option');
+                opt.value = ing.nome;
+                opt.textContent = (locale === 'en' && ing.nome_en) ? ing.nome_en : ing.nome;
+                if (opt.value === currentVal) opt.selected = true;
+                toppingSelect.appendChild(opt);
+            });
+    }
+
+    function aggiornaTotali(locale) {
         // Nutrienti dell'impasto base, distribuiti sull'intero batch.
         let totaleImpasto = Object.fromEntries(CHIAVI_NUTRIENTI.map((k) => [k, 0]));
         Object.entries(datiImpasto.ingredientiBase).forEach(([chiave, grammi]) => {
@@ -141,22 +199,28 @@ async function main() {
             Object.fromEntries(CHIAVI_NUTRIENTI.map((k) => [k, nutrientiFarciture[k] * numPanetti])),
         );
 
-        renderGrid(porzioneGrid, nutrientiPorzione);
-        renderGrid(totaliGrid, nutrientiTotali);
+        renderGrid(porzioneGrid, nutrientiPorzione, locale);
+        renderGrid(totaliGrid, nutrientiTotali, locale);
     }
 
-    function renderFarciture() {
-        toppingsList.innerHTML = farciture.map((f, i) => `
+    function renderFarciture(locale) {
+        toppingsList.innerHTML = farciture.map((f, i) => {
+            const ingRef = ingredientiDisponibili.find((ing) => ing.nome === f.nome);
+            const displayName = (locale === 'en' && ingRef?.nome_en) ? ingRef.nome_en : f.nome;
+            const removeTitle = locale === 'en' ? 'Remove' : 'Rimuovi';
+            return `
             <li style="display: flex; justify-content: space-between; align-items: center; background: var(--bg-dark); border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 14px;">
-                <span>${f.nome} — ${f.quantita} g</span>
-                <button data-index="${i}" class="rimuovi-topping" style="background:none; border:none; color: var(--text-dim); cursor:pointer; font-size:1.1rem;">&times;</button>
+                <span>${displayName} — ${f.quantita} g</span>
+                <button data-index="${i}" class="rimuovi-topping" style="background:none; border:none; color: var(--text-dim); cursor:pointer; font-size:1.1rem;" title="${removeTitle}">&times;</button>
             </li>
-        `).join('');
+            `;
+        }).join('');
+
         toppingsList.querySelectorAll('.rimuovi-topping').forEach((btn) => {
             btn.addEventListener('click', () => {
                 farciture.splice(parseInt(btn.dataset.index, 10), 1);
-                renderFarciture();
-                aggiornaTotali();
+                renderFarciture(currentLocale);
+                aggiornaTotali(currentLocale);
             });
         });
     }
@@ -166,11 +230,28 @@ async function main() {
         const quantita = parseFloat(toppingQty.value);
         if (!nome || !quantita || quantita <= 0) return;
         farciture.push({ nome, quantita });
-        renderFarciture();
-        aggiornaTotali();
+        renderFarciture(currentLocale);
+        aggiornaTotali(currentLocale);
     });
 
-    aggiornaTotali();
+    // Render iniziale
+    renderTitolo(currentLocale);
+    popolaSelectToppings(currentLocale);
+    aggiornaTotali(currentLocale);
+
+    // Ascolta cambi lingua reattivi
+    window.addEventListener('pizzalab:locale-changed', async (e) => {
+        currentLocale = e.detail?.locale || getCurrentLocale();
+        if (e.detail?.translations) {
+            translations = e.detail.translations;
+        } else {
+            translations = await loadLocaleData(currentLocale);
+        }
+        renderTitolo(currentLocale);
+        popolaSelectToppings(currentLocale);
+        renderFarciture(currentLocale);
+        aggiornaTotali(currentLocale);
+    });
 }
 
 main();

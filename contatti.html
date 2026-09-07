@@ -59,7 +59,7 @@
             <ul style="list-style: none; padding: 0; display: grid; gap: 12px; color: var(--text-muted);">
                 <li><strong style="color: var(--text-main);" data-i18n="contatti.name_label">Nome:</strong> Pietro Lama</li>
                 <li><strong style="color: var(--text-main);" data-i18n="contatti.email_label">Email:</strong> <a href="mailto:pizzalab@gmail.com" style="color: var(--primary-color);">pizzalab@gmail.com</a></li>
-                <li><strong style="color: var(--text-main);" data-i18n="contatti.location_label">Località:</strong> Napoli, Italia</li>
+                <li><strong style="color: var(--text-main);" data-i18n="contatti.location_label">Località:</strong> <span data-i18n="contatti.location_city">Napoli, Italia</span></li>
             </ul>
         </section>
 
@@ -69,16 +69,16 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label for="name" data-i18n="contatti.full_name">Nome completo</label>
-                        <input type="text" id="name" name="name" class="form-control" placeholder="Il tuo nome" required>
+                        <input type="text" id="name" name="name" class="form-control" placeholder="Il tuo nome" data-i18n-placeholder="contatti.placeholder_name" required>
                     </div>
                     <div class="form-group">
                         <label for="email" data-i18n="contatti.email_address">Indirizzo email</label>
-                        <input type="email" id="email" name="email" class="form-control" placeholder="La tua email" required>
+                        <input type="email" id="email" name="email" class="form-control" placeholder="La tua email" data-i18n-placeholder="contatti.placeholder_email" required>
                     </div>
                 </div>
                 <div class="form-group" style="margin-bottom: 24px;">
                     <label for="message" data-i18n="contatti.message">Messaggio</label>
-                    <textarea id="message" name="message" class="form-control" rows="5" placeholder="Scrivi qui..." required></textarea>
+                    <textarea id="message" name="message" class="form-control" rows="5" placeholder="Scrivi qui..." data-i18n-placeholder="contatti.placeholder_msg" required></textarea>
                 </div>
                 <button type="submit" class="btn" data-i18n="contatti.send_btn">Invia messaggio</button>
             </form>

@@ -543,7 +543,7 @@
                     <div class="oven-choice-card" data-oven="gas_legna">
                         <div style="font-size: 2rem; margin-bottom: 6px;">🔥</div>
                         <strong data-i18n="ovens.outdoor_oven">Forno a Gas / Legna</strong>
-                        <p style="font-size: 0.8rem; color: var(--text-muted);">450°C - 500°C Esterno</p>
+                        <p style="font-size: 0.8rem; color: var(--text-muted);" data-i18n="ovens.outdoor_temp">450°C - 500°C Esterno</p>
                     </div>
                 </div>
 
@@ -567,19 +567,19 @@
                     <div class="form-group">
                         <label for="conv_yeast_from" data-i18n="yeast.from_label">Da Lievito:</label>
                         <select id="conv_yeast_from" class="form-control">
-                            <option value="lbf" selected>Lievito di Birra Fresco (LBF)</option>
-                            <option value="lbs">Lievito di Birra Secco (LBS)</option>
-                            <option value="licoli">Li.Co.Li (Madre Liquido 100%)</option>
-                            <option value="solido">Pasta Madre Solida (50%)</option>
+                            <option value="lbf" selected data-i18n="yeast.lbf">Lievito di Birra Fresco (LBF)</option>
+                            <option value="lbs" data-i18n="yeast.lbs">Lievito di Birra Secco (LBS)</option>
+                            <option value="licoli" data-i18n="yeast.licoli">Li.Co.Li (Madre Liquido 100%)</option>
+                            <option value="solido" data-i18n="yeast.solido">Pasta Madre Solida (50%)</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="conv_yeast_to" data-i18n="yeast.to_label">A Lievito:</label>
                         <select id="conv_yeast_to" class="form-control">
-                            <option value="lbs" selected>Lievito di Birra Secco (LBS)</option>
-                            <option value="lbf">Lievito di Birra Fresco (LBF)</option>
-                            <option value="licoli">Li.Co.Li (Madre Liquido 100%)</option>
-                            <option value="solido">Pasta Madre Solida (50%)</option>
+                            <option value="lbs" selected data-i18n="yeast.lbs">Lievito di Birra Secco (LBS)</option>
+                            <option value="lbf" data-i18n="yeast.lbf">Lievito di Birra Fresco (LBF)</option>
+                            <option value="licoli" data-i18n="yeast.licoli">Li.Co.Li (Madre Liquido 100%)</option>
+                            <option value="solido" data-i18n="yeast.solido">Pasta Madre Solida (50%)</option>
                         </select>
                     </div>
                 </div>
@@ -608,13 +608,13 @@
                 </div>
 
                 <div class="admin-filter-bar">
-                    <input type="text" id="filter-sos-search" class="form-control" placeholder="Cerca sintomo (es. appiccicoso, pallido, elastico...)" style="max-width: 360px;">
+                    <input type="text" id="filter-sos-search" class="form-control" placeholder="Cerca sintomo (es. appiccicoso, pallido, elastico...)" data-i18n-placeholder="sos.search_placeholder" style="max-width: 360px;">
                     <select id="filter-sos-cat" class="form-control" style="max-width: 200px;">
-                        <option value="all">Tutte le fasi</option>
-                        <option value="impasto">Fase Impasto</option>
-                        <option value="lievitazione">Lievitazione / Appretto</option>
-                        <option value="stesura">Stesura</option>
-                        <option value="cottura">Cottura & Forno</option>
+                        <option value="all" data-i18n="sos.filter_all">Tutte le fasi</option>
+                        <option value="impasto" data-i18n="sos.filter_impasto">Fase Impasto</option>
+                        <option value="lievitazione" data-i18n="sos.filter_lievitazione">Lievitazione / Appretto</option>
+                        <option value="stesura" data-i18n="sos.filter_stesura">Stesura</option>
+                        <option value="cottura" data-i18n="sos.filter_cottura">Cottura & Forno</option>
                     </select>
                 </div>
 
@@ -680,77 +680,77 @@
         <!-- GUIDA SCIENTIFICA & RISORSE SEO (SEARCH INTENT & FAQ) -->
         <section class="calc-seo-guide" style="margin-top: 60px; padding: 40px 24px; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: 16px;">
             <div style="max-width: 1000px; margin: 0 auto;">
-                <h2 style="font-size: 1.8rem; margin-bottom: 12px; color: var(--text-main);">Guida Scientifica al Calcolo dell'Impasto per Pizza</h2>
-                <p style="color: var(--text-muted); font-size: 1.05rem; line-height: 1.6; margin-bottom: 32px;">
+                <h2 style="font-size: 1.8rem; margin-bottom: 12px; color: var(--text-main);" data-i18n="calc.seo.title">Guida Scientifica al Calcolo dell'Impasto per Pizza</h2>
+                <p style="color: var(--text-muted); font-size: 1.05rem; line-height: 1.6; margin-bottom: 32px;" data-i18n="calc.seo.desc">
                     Ottenere un impasto per pizza leggero, alveolato e ad alta digeribilità richiede un equilibrio chimico e termico rigoroso. Il calcolatore di PizzaLab adotta formule reologiche per bilanciare idratazione, cinetica dei lieviti e maturazione delle farine.
                 </p>
 
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-bottom: 36px;">
                     <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px;">
-                        <h3 style="font-size: 1.15rem; color: var(--primary-color); margin-bottom: 10px;">💧 Calcolo Idratazione Impasto (55% - 85%)</h3>
-                        <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.55;">
+                        <h3 style="font-size: 1.15rem; color: var(--primary-color); margin-bottom: 10px;" data-i18n="calc.seo.card1_title">💧 Calcolo Idratazione Impasto (55% - 85%)</h3>
+                        <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.55;" data-i18n="calc.seo.card1_desc">
                             L'idratazione esprime il peso dell'acqua rispetto al 100% della farina.
                         </p>
                         <ul style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin-top: 8px; padding-left: 18px;">
-                            <li><strong>55% - 58%:</strong> Pizza Romana Tonda Scrocchiarella, friabile e sottile.</li>
-                            <li><strong>62% - 68%:</strong> Pizza Napoletana Tradizionale STG e canotto contemporaneo.</li>
-                            <li><strong>75% - 85%:</strong> Pizza in Teglia alla Romana e Pala ad altissima alveolatura.</li>
+                            <li data-i18n-html="calc.seo.card1_li1"><strong>55% - 58%:</strong> Pizza Romana Tonda Scrocchiarella, friabile e sottile.</li>
+                            <li data-i18n-html="calc.seo.card1_li2"><strong>62% - 68%:</strong> Pizza Napoletana Tradizionale STG e canotto contemporaneo.</li>
+                            <li data-i18n-html="calc.seo.card1_li3"><strong>75% - 85%:</strong> Pizza in Teglia alla Romana e Pala ad altissima alveolatura.</li>
                         </ul>
                     </div>
 
                     <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px;">
-                        <h3 style="font-size: 1.15rem; color: var(--primary-color); margin-bottom: 10px;">🌡️ Lievito e Temperatura Ambiente</h3>
-                        <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.55;">
+                        <h3 style="font-size: 1.15rem; color: var(--primary-color); margin-bottom: 10px;" data-i18n="calc.seo.card2_title">🌡️ Lievito e Temperatura Ambiente</h3>
+                        <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.55;" data-i18n-html="calc.seo.card2_desc">
                             L'attività del <em>Saccharomyces cerevisiae</em> raddoppia ogni 5-7°C di incremento termico tra 18°C e 28°C:
                         </p>
                         <ul style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin-top: 8px; padding-left: 18px;">
-                            <li>A <strong>18°C</strong> sono necessari circa 1.8g - 2.2g di lievito fresco per kg di farina per 24h.</li>
-                            <li>A <strong>25°C</strong> la dose scende a 0.7g - 1.0g per evitare sovralievitazione precoce.</li>
-                            <li>La sosta a <strong>4°C (frigorifero)</strong> blocca l'attività gassosa consentendo la maturazione enzimatica (proteolisi).</li>
+                            <li data-i18n-html="calc.seo.card2_li1">A <strong>18°C</strong> sono necessari circa 1.8g - 2.2g di lievito fresco per kg di farina per 24h.</li>
+                            <li data-i18n-html="calc.seo.card2_li2">A <strong>25°C</strong> la dose scende a 0.7g - 1.0g per evitare sovralievitazione precoce.</li>
+                            <li data-i18n-html="calc.seo.card2_li3">La sosta a <strong>4°C (frigorifero)</strong> blocca l'attività gassosa consentendo la maturazione enzimatica (proteolisi).</li>
                         </ul>
                     </div>
 
                     <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px;">
-                        <h3 style="font-size: 1.15rem; color: var(--primary-color); margin-bottom: 10px;">🌾 Tabella Forza Farine (W) e P/L</h3>
-                        <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.55;">
+                        <h3 style="font-size: 1.15rem; color: var(--primary-color); margin-bottom: 10px;" data-i18n="calc.seo.card3_title">🌾 Tabella Forza Farine (W) e P/L</h3>
+                        <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.55;" data-i18n="calc.seo.card3_desc">
                             La forza alveografica W indica la capacità di assorbire liquidi e trattenere i gas di fermentazione:
                         </p>
                         <ul style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin-top: 8px; padding-left: 18px;">
-                            <li><strong>W 180 - 220 (Deboli):</strong> lievitazioni rapide 4-6h (biscotti, tonda diretta).</li>
-                            <li><strong>W 260 - 300 (Medie):</strong> lievitazioni 12-24h (pizza napoletana standard).</li>
-                            <li><strong>W 320 - 380 (Forti / Manitoba):</strong> maturazioni oltre 48h, biga 100% e teglia romana.</li>
+                            <li data-i18n-html="calc.seo.card3_li1"><strong>W 180 - 220 (Deboli):</strong> lievitazioni rapide 4-6h (biscotti, tonda diretta).</li>
+                            <li data-i18n-html="calc.seo.card3_li2"><strong>W 260 - 300 (Medie):</strong> lievitazioni 12-24h (pizza napoletana standard).</li>
+                            <li data-i18n-html="calc.seo.card3_li3"><strong>W 320 - 380 (Forti / Manitoba):</strong> maturazioni oltre 48h, biga 100% e teglia romana.</li>
                         </ul>
                     </div>
                 </div>
 
                 <!-- DOMANDE FREQUENTI CON SCHEMA FAQPAGE -->
                 <div style="margin-top: 40px;">
-                    <h3 style="font-size: 1.4rem; margin-bottom: 20px; color: var(--text-main);">Domande Frequenti sul Calcolo dell'Impasto</h3>
+                    <h3 style="font-size: 1.4rem; margin-bottom: 20px; color: var(--text-main);" data-i18n="calc.seo.faq_title">Domande Frequenti sul Calcolo dell'Impasto</h3>
                     <div style="display: flex; flex-direction: column; gap: 16px;">
                         <article style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: 10px; padding: 18px 22px;">
-                            <h4 style="font-size: 1.05rem; margin-bottom: 8px; color: var(--text-main);">Come calcolare il lievito di birra in base alla temperatura e al tempo?</h4>
-                            <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6; margin: 0;">
+                            <h4 style="font-size: 1.05rem; margin-bottom: 8px; color: var(--text-main);" data-i18n="calc.seo.faq1_q">Come calcolare il lievito di birra in base alla temperatura e al tempo?</h4>
+                            <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6; margin: 0;" data-i18n="calc.seo.faq1_a">
                                 La quantità di lievito varia in modo esponenziale rispetto alla temperatura ambiente e alla durata totale del ciclo di lievitazione. Per un impasto a 24 ore con idratazione 65% a 22°C (con 18 ore in frigorifero a 4°C e 6 ore a temperatura ambiente), la dose consigliata è di circa 1,2g di lievito fresco compresso per kg di farina. In estate, con temperature superiori ai 26°C, riduci del 30-40% o aumenta le ore a freddo.
                             </p>
                         </article>
 
                         <article style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: 10px; padding: 18px 22px;">
-                            <h4 style="font-size: 1.05rem; margin-bottom: 8px; color: var(--text-main);">Come convertire il lievito di birra fresco in lievito secco attivo o licoli?</h4>
-                            <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6; margin: 0;">
+                            <h4 style="font-size: 1.05rem; margin-bottom: 8px; color: var(--text-main);" data-i18n="calc.seo.faq2_q">Come convertire il lievito di birra fresco in lievito secco attivo o licoli?</h4>
+                            <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6; margin: 0;" data-i18n="calc.seo.faq2_a">
                                 Per convertire il lievito fresco (LBF) in lievito secco disidratato (LBS), dividi la dose di fresco per 3 (rapporto 1:3). Ad esempio, 9g di fresco corrispondono a 3g di secco. Se utilizzi Licoli (lievito madre liquido al 100% di idratazione), la proporzione media consigliata va dal 15% al 20% sul peso della farina, ricordando di sottrarre il 50% del suo peso dall'acqua totale e il restante 50% dalla farina totale della ricetta.
                             </p>
                         </article>
 
                         <article style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: 10px; padding: 18px 22px;">
-                            <h4 style="font-size: 1.05rem; margin-bottom: 8px; color: var(--text-main);">Come funziona il calcolo della Biga al 100% per pizza?</h4>
-                            <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6; margin: 0;">
+                            <h4 style="font-size: 1.05rem; margin-bottom: 8px; color: var(--text-main);" data-i18n="calc.seo.faq3_q">Come funziona il calcolo della Biga al 100% per pizza?</h4>
+                            <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6; margin: 0;" data-i18n="calc.seo.faq3_a">
                                 In un impasto con Biga al 100%, tutta la farina della ricetta viene impastata con il 44-45% di acqua e l'1% di lievito fresco, senza sale. L'impasto non deve essere incordato ma lasciato grezzo e fatto fermentare a 16-18°C per 16-24 ore. Nel rinfresco finale si aggiungono l'acqua residua (necessaria a raggiungere l'idratazione finale desiderata, es. 75-80%), il 2.5-3% di sale ed eventuale malto diastasico.
                             </p>
                         </article>
 
                         <article style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: 10px; padding: 18px 22px;">
-                            <h4 style="font-size: 1.05rem; margin-bottom: 8px; color: var(--text-main);">Come si calcola la quantità di impasto per una teglia da forno?</h4>
-                            <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6; margin: 0;">
+                            <h4 style="font-size: 1.05rem; margin-bottom: 8px; color: var(--text-main);" data-i18n="calc.seo.faq4_q">Come si calcola la quantità di impasto per una teglia da forno?</h4>
+                            <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.6; margin: 0;" data-i18n-html="calc.seo.faq4_a">
                                 Il calcolo si basa sull'area della teglia moltiplicata per il coefficiente di spessore: <code>Peso (g) = (Base × Altezza) × Coefficiente</code>. Per una teglia casalinga standard (es. 40x30 cm = 1200 cm²), moltiplica per 0.55 per uno spessore medio soffice (circa 660g di impasto), per 0.50 per una teglia sottile e croccante (600g), oppure per 0.65 per un trancio alto e soffice (780g).
                             </p>
                         </article>
