@@ -5,6 +5,7 @@
 // moduli: qui c'è solo lettura del DOM, dispatch e rendering.
 import {
     metodiPerPizza,
+    composizionePizza,
     calcolaPesoTeglia,
     calcolaImpastoDiretto,
     calcolaImpastoBiga,
@@ -39,7 +40,8 @@ import { convertiLievito } from './yeast-converter.js';
 import { caricaTroubleshootingData, renderTroubleshootingList } from './troubleshooting-engine.js';
 import { caricaCerealiData, renderCerealiCards } from './grains-engine.js';
 import { caricaGlossarioData, renderGlossarioDrawer, inizializzaGlossarioTooltips } from './glossario-engine.js';
-import { getSavedLocale } from './i18n-engine.js';
+import { getSavedLocale, t } from './i18n-engine.js';
+import { validaInput, verificaRisultato } from './validazione-engine.js';
 
 const el = (id) => document.getElementById(id);
 
@@ -96,7 +98,7 @@ function aggiornaSuggerimentoW() {
     if (badge) {
         const isEn = document.documentElement.lang === 'en';
         badge.textContent = `${isEn ? 'Recommended' : 'Consigliato'}: W ${wConsigliatoAttuale} (${wToProteine(wConsigliatoAttuale)}% prot)`;
-        badge.title = suggerimento.descrizione;
+        badge.title = t(suggerimento.descrizione, {}, '');
     }
 }
 
@@ -143,7 +145,9 @@ function aggiornaCalcoloBlend(pesoFarinaTotale = 1000) {
 
     const alertEl = el('blend_alert');
     if (risultato.avviso) {
-        alertEl.textContent = `⚠️ ${risultato.avviso}`;
+        // Il motore restituisce chiave i18n e parametri: il testo si compone qui,
+        // così l'avviso segue la lingua attiva invece di restare in italiano.
+        alertEl.textContent = `⚠️ ${t(risultato.avviso.chiave, risultato.avviso.params, risultato.avviso.chiave)}`;
         alertEl.style.display = 'block';
     } else {
         alertEl.style.display = 'none';
@@ -284,53 +288,171 @@ function leggiComune() {
     };
 }
 
+// Campi letti da ogni metodo: nome logico -> id dell'input nel markup.
+// Serve sia a raccogliere i valori sia a evidenziare il campo in errore.
+const CAMPI_PER_METODO = {
+    diretto: {
+        pesoPanetto: 'peso_panetto_diretto',
+        idratazioneTotale: 'idratazione_totale_diretto',
+        numPanetti: 'num_panetti_diretto',
+        tempoLievitazioneTotale: 'tempoLievTotale_diretto',
+        oreFrigo: 'tempoFrigo_diretto',
+        temperaturaAmbiente: 'temperatura_ambiente_diretto',
+    },
+    biga: {
+        pesoPanetto: 'peso_panetto_biga',
+        idratazioneTotale: 'idratazione_totale_biga',
+        percentualeBiga: 'percentuale_biga',
+        numPanetti: 'num_panetti_biga',
+    },
+    poolish: {
+        pesoPanetto: 'peso_panetto_poolish',
+        idratazioneTotale: 'idratazione_totale_poolish',
+        percentualePoolish: 'percentuale_poolish',
+        numPanetti: 'num_panetti_poolish',
+    },
+    lievito_madre: {
+        pesoPanetto: 'peso_panetto_lievito',
+        idratazioneTotale: 'idratazione_totale_lievito',
+        percentualePastaMadre: 'percentuale_lievito',
+        numPanetti: 'num_panetti_lievito',
+    },
+    biga_poolish: {
+        pesoPanetto: 'peso_panetto_biga_poolish',
+        idratazioneTotale: 'idratazione_totale_biga_poolish',
+        percentualeBiga: 'percentuale_biga_bp',
+        percentualePoolish: 'percentuale_poolish_bp',
+        numPanetti: 'num_panetti_biga_poolish',
+    },
+};
+
+// Nome logico del campo -> suffisso della chiave i18n usata in LIMITI,
+// per risalire dall'errore all'input da evidenziare.
+const MAPPA_LABEL = {
+    pesoPanetto: 'ball_weight',
+    numPanetti: 'ball_count',
+    idratazioneTotale: 'hydration',
+    temperaturaAmbiente: 'temperature',
+    tempoLievitazioneTotale: 'total_time',
+    oreFrigo: 'fridge_time',
+    percentualeBiga: 'biga_perc',
+    percentualePoolish: 'poolish_perc',
+    percentualePastaMadre: 'sourdough_perc',
+};
+
+// Legge i valori grezzi del metodo attivo. Un campo vuoto diventa NaN e non un
+// valore di comodo: è la validazione a decidere che farne, così un input
+// mancante non può passare silenziosamente per un default plausibile.
+function leggiInput(tipoImpasto) {
+    const mappa = CAMPI_PER_METODO[tipoImpasto];
+    if (!mappa) return null;
+
+    const input = {};
+    for (const [nome, id] of Object.entries(mappa)) {
+        const valore = el(id)?.value;
+        input[nome] = nome === 'numPanetti'
+            ? parseInt(valore, 10)
+            : parseFloat(valore);
+    }
+    return input;
+}
+
+// Applica/rimuove l'evidenziazione sui campi del metodo attivo.
+function evidenziaCampi(tipoImpasto, nomiCampi = []) {
+    const mappa = CAMPI_PER_METODO[tipoImpasto] || {};
+    for (const [nome, id] of Object.entries(mappa)) {
+        el(id)?.classList.toggle('is-invalid', nomiCampi.includes(nome));
+    }
+}
+
+// Traduce un messaggio di validazione. Le etichette dei campi sono a loro volta
+// chiavi i18n, quindi vanno risolte prima di sostituirle nel testo.
+function testoMessaggio(msg) {
+    const params = { ...msg.params };
+    if (params.campo) params.campo = t(params.campo, {}, params.campo);
+    return t(msg.chiave, params, msg.chiave);
+}
+
+function mostraMessaggiValidazione(errori, avvisi) {
+    const box = el('validazione-messaggi');
+    if (!box) return;
+
+    if (errori.length === 0 && avvisi.length === 0) {
+        box.innerHTML = '';
+        box.hidden = true;
+        return;
+    }
+
+    const riga = (msg, classe) => {
+        const p = document.createElement('p');
+        p.className = classe;
+        p.textContent = testoMessaggio(msg);
+        return p;
+    };
+
+    box.innerHTML = '';
+    errori.forEach((e) => box.appendChild(riga(e, 'validation-error')));
+    avvisi.forEach((a) => box.appendChild(riga(a, 'validation-warning')));
+    box.hidden = false;
+}
+
+/**
+ * Legge il form, valida e calcola. Restituisce null se gli input non
+ * descrivono una ricetta realizzabile: in quel caso i messaggi sono già
+ * stati mostrati all'utente.
+ */
 function calcolaRicetta() {
     const { tipoPizza, tipoImpasto } = leggiComune();
+    const input = leggiInput(tipoImpasto);
+    if (!input) return null;
 
+    const esito = validaInput(tipoImpasto, input);
+    if (!esito.valido) {
+        // I campi citati negli errori vengono evidenziati nel form.
+        const campiInErrore = Object.keys(CAMPI_PER_METODO[tipoImpasto] || {})
+            .filter((nome) => esito.errori.some((e) => e.params?.campo === `valid.field.${MAPPA_LABEL[nome]}`));
+        evidenziaCampi(tipoImpasto, campiInErrore);
+        mostraMessaggiValidazione(esito.errori, esito.avvisi);
+        el('validazione-messaggi')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        return null;
+    }
+
+    evidenziaCampi(tipoImpasto, []);
+
+    let dati;
     switch (tipoImpasto) {
         case 'diretto':
-            return calcolaImpastoDiretto({
-                pesoPanetto: parseFloat(el('peso_panetto_diretto').value),
-                idratazioneTotale: parseFloat(el('idratazione_totale_diretto').value),
-                numPanetti: parseInt(el('num_panetti_diretto').value, 10),
-                tempoLievitazioneTotale: parseFloat(el('tempoLievTotale_diretto').value),
-                tempoLievTotale: parseFloat(el('tempoLievTotale_diretto').value),
-                oreFrigo: parseFloat(el('tempoFrigo_diretto').value) || 0,
-                temperaturaAmbiente: parseFloat(el('temperatura_ambiente_diretto').value),
-                tipoPizza,
-            });
+            dati = calcolaImpastoDiretto({ ...input, tempoLievTotale: input.tempoLievitazioneTotale, tipoPizza });
+            break;
         case 'biga':
-            return calcolaImpastoBiga({
-                pesoPanetto: parseFloat(el('peso_panetto_biga').value),
-                idratazioneTotale: parseFloat(el('idratazione_totale_biga').value),
-                percentualeBiga: parseFloat(el('percentuale_biga').value),
-                numPanetti: parseInt(el('num_panetti_biga').value, 10),
-            });
+            dati = calcolaImpastoBiga({ ...input, tipoPizza });
+            break;
         case 'poolish':
-            return calcolaImpastoPoolish({
-                pesoPanetto: parseFloat(el('peso_panetto_poolish').value),
-                idratazioneTotale: parseFloat(el('idratazione_totale_poolish').value),
-                percentualePoolish: parseFloat(el('percentuale_poolish').value),
-                numPanetti: parseInt(el('num_panetti_poolish').value, 10),
-            });
+            dati = calcolaImpastoPoolish({ ...input, tipoPizza });
+            break;
         case 'lievito_madre':
-            return calcolaImpastoLievitoMadre({
-                pesoPanetto: parseFloat(el('peso_panetto_lievito').value),
-                idratazioneTotale: parseFloat(el('idratazione_totale_lievito').value),
-                percentualePastaMadre: parseFloat(el('percentuale_lievito').value),
-                numPanetti: parseInt(el('num_panetti_lievito').value, 10),
-            });
+            dati = calcolaImpastoLievitoMadre({ ...input, tipoPizza });
+            break;
         case 'biga_poolish':
-            return calcolaImpastoBigaPoolish({
-                pesoPanetto: parseFloat(el('peso_panetto_biga_poolish').value),
-                idratazioneTotale: parseFloat(el('idratazione_totale_biga_poolish').value),
-                percentualeBiga: parseFloat(el('percentuale_biga_bp').value),
-                percentualePoolish: parseFloat(el('percentuale_poolish_bp').value),
-                numPanetti: parseInt(el('num_panetti_biga_poolish').value, 10),
-            });
+            dati = calcolaImpastoBigaPoolish({ ...input, tipoPizza });
+            break;
         default:
             return null;
     }
+
+    // Rete di sicurezza: se malgrado la validazione un valore risultasse non
+    // finito o negativo, si avvisa invece di stampare NaN nella scheda.
+    const controllo = verificaRisultato(dati);
+    if (!controllo.pulito) {
+        mostraMessaggiValidazione(
+            [{ chiave: 'valid.result_not_computable', params: {} }],
+            esito.avvisi,
+        );
+        return null;
+    }
+
+    mostraMessaggiValidazione([], esito.avvisi);
+    return dati;
 }
 
 function idratazioneTotaleAttuale(tipoImpasto) {
@@ -338,6 +460,17 @@ function idratazioneTotaleAttuale(tipoImpasto) {
 }
 
 function animateNumber(element, targetValue, decimals = 0, duration = 400) {
+    if (!element) return;
+
+    // Ultima barriera prima del DOM: un valore non finito arriverebbe a schermo
+    // come "NaN" o "Infinity". Meglio un trattino, che si legge come "non
+    // disponibile" invece che come un difetto dell'applicazione.
+    if (!Number.isFinite(targetValue)) {
+        element.textContent = '—';
+        delete element.dataset.currentVal;
+        return;
+    }
+
     const startValue = parseFloat(element.dataset.currentVal) || 0;
     const startTime = performance.now();
 
@@ -404,13 +537,18 @@ function renderRisultato(dati, tipoImpasto) {
     ultimoDatiCalcolati = dati;
     const isEn = (document.documentElement.lang || getSavedLocale()) === 'en';
 
+    // La napoletana non prevede zucchero né olio: le celle a zero non vanno
+    // mostrate, altrimenti la scheda suggerisce ingredienti che non fanno
+    // parte della ricetta.
+    const comp = composizionePizza(tipoPizza);
+
     const grid = el('risultato-grid');
     grid.innerHTML = `
         <div><strong id="res-farina">0</strong><span>${isEn ? 'g total flour' : 'g farina totale'}</span></div>
         <div><strong id="res-acqua">0</strong><span>${isEn ? 'g water' : 'g acqua'}</span></div>
         <div><strong id="res-sale">0</strong><span>${isEn ? 'g salt' : 'g sale'}</span></div>
-        <div><strong id="res-zucchero">0</strong><span>${isEn ? 'g sugar' : 'g zucchero'}</span></div>
-        <div><strong id="res-olio">0</strong><span>${isEn ? 'g oil' : 'g olio'}</span></div>
+        ${comp.zucchero > 0 ? `<div><strong id="res-zucchero">0</strong><span>${isEn ? 'g sugar' : 'g zucchero'}</span></div>` : ''}
+        ${comp.olio > 0 ? `<div><strong id="res-olio">0</strong><span>${isEn ? 'g oil' : 'g olio'}</span></div>` : ''}
         <div><strong id="res-lievito">0.00</strong><span>${isEn ? 'g yeast' : 'g lievito'}</span></div>
         ${isBlendMode && blendInfo && blendInfo.possibile ? `
         <div class="recipe-blend-breakdown">
@@ -995,6 +1133,14 @@ el('btn_applica_suggerito')?.addEventListener('click', () => {
     aggiornaCalcoloBlend();
 });
 
+// Appena l'utente corregge un campo segnalato, l'evidenziazione sparisce: un
+// bordo rosso che resta dopo la correzione fa credere che l'errore ci sia ancora.
+Object.values(CAMPI_PER_METODO).forEach((campi) => {
+    Object.values(campi).forEach((id) => {
+        el(id)?.addEventListener('input', (e) => e.target.classList.remove('is-invalid'));
+    });
+});
+
 el('calcola-button').addEventListener('click', () => {
     const { tipoImpasto } = leggiComune();
     const dati = calcolaRicetta();
@@ -1199,15 +1345,23 @@ document.querySelectorAll('.oven-choice-card').forEach((card) => {
 // 5. Convertitore Universale Lieviti
 function aggiornaYeastConverterUI() {
     if (!el('yeast-res-qty')) return;
-    const qty = parseFloat(el('conv_yeast_qty')?.value) || 0;
+    const qty = parseFloat(el('conv_yeast_qty')?.value);
     const fromType = el('conv_yeast_from')?.value || 'lbf';
     const toType = el('conv_yeast_to')?.value || 'lbs';
     const res = convertiLievito({ quantita: qty, daTipo: fromType, aTipo: toType });
 
-    el('yeast-res-qty').textContent = `${res.quantitaEquivalente.toFixed(2)} g`;
-
     const isEn = document.documentElement.lang === 'en';
     const compEl = el('yeast-res-compensation');
+
+    // Quantità assente o non valida: si azzera il risultato invece di leggere
+    // proprietà su un valore nullo.
+    if (!res) {
+        el('yeast-res-qty').textContent = '—';
+        if (compEl) compEl.style.display = 'none';
+        return;
+    }
+
+    el('yeast-res-qty').textContent = `${res.quantitaEquivalente.toFixed(2)} g`;
     if (compEl) {
         if (res.differenzaFarina > 0 || res.differenzaAcqua > 0) {
             compEl.innerHTML = isEn

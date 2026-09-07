@@ -119,7 +119,7 @@ export function calcolaWBlend(farine = []) {
  * 
  * @returns {{
  *   possibile: boolean,
- *   avviso?: string,
+ *   avviso?: { chiave: string, params: Object },
  *   percentualeForte: number,
  *   percentualeDebole: number,
  *   pesoForte: number,
@@ -154,7 +154,7 @@ export function calcolaTaglioDueFarine({
     if (forte === debole) {
         return {
             possibile: target === forte,
-            avviso: 'Le due farine hanno la stessa forza W.',
+            avviso: { chiave: 'blend.warn_same_w', params: {} },
             percentualeForte: 100,
             percentualeDebole: 0,
             pesoForte: tot,
@@ -169,7 +169,7 @@ export function calcolaTaglioDueFarine({
     if (target >= forte) {
         return {
             possibile: false,
-            avviso: `Il W desiderato (${target}) è maggiore o uguale alla farina più forte (${forte} W).`,
+            avviso: { chiave: 'blend.warn_target_too_high', params: { target, forte } },
             percentualeForte: 100,
             percentualeDebole: 0,
             pesoForte: tot,
@@ -184,7 +184,7 @@ export function calcolaTaglioDueFarine({
     if (target <= debole) {
         return {
             possibile: false,
-            avviso: `Il W desiderato (${target}) è minore o uguale alla farina più debole (${debole} W).`,
+            avviso: { chiave: 'blend.warn_target_too_low', params: { target, debole } },
             percentualeForte: 0,
             percentualeDebole: 100,
             pesoForte: 0,
@@ -237,6 +237,7 @@ export function calcolaTaglioDueFarine({
  * @param {number} [params.oreFrigo=0] - Ore trascorse in frigo (4°C)
  * 
  * @returns {{ wConsigliato: number, wMin: number, wMax: number, descrizione: string }}
+ *          `descrizione` è una chiave i18n: il testo lo compone la pagina.
  */
 export function suggerisciWPerRicetta({ tipoPizza, oreTotali, oreFrigo = 0 }) {
     const oreTA = Math.max(0, (oreTotali || 8) - (oreFrigo || 0));
@@ -249,19 +250,19 @@ export function suggerisciWPerRicetta({ tipoPizza, oreTotali, oreFrigo = 0 }) {
     if (oreEquivalenti <= 8) {
         wMin = 180;
         wMax = 240;
-        descrizione = 'Lievitazione breve / diretta in giornata. Farina debole o media.';
+        descrizione = 'blend.desc_short';
     } else if (oreEquivalenti <= 18) {
         wMin = 250;
         wMax = 290;
-        descrizione = 'Maturazione media (12-24h con parziale frigo). Farina di media forza.';
+        descrizione = 'blend.desc_medium';
     } else if (oreEquivalenti <= 36) {
         wMin = 290;
         wMax = 340;
-        descrizione = 'Lunga maturazione in frigo (24-48h). Farina forte e tenace.';
+        descrizione = 'blend.desc_long';
     } else {
         wMin = 340;
         wMax = 400;
-        descrizione = 'Altissima idratazione o maturazioni prolungate (>48h). Richiede farine di forza/Manitoba.';
+        descrizione = 'blend.desc_very_long';
     }
 
     if (tipoPizza === 'teglia' || tipoPizza === 'pala' || tipoPizza === 'contemporanea') {

@@ -6,27 +6,41 @@
     <title>Scienza della Pizza | PizzaLab</title>
     <meta name="description" content="Articoli scientifici, chimica della panificazione, reologia del glutine, reazione di Maillard e digestione degli amidi nella pizza.">
     <meta name="keywords" content="scienza della pizza, chimica impasto, reazione maillard, proteolisi farina, fermentazione lattica, microbiologia pizza">
-    <meta name="robots" content="index, follow">
+    <!--
+        noindex temporaneo: data/scienza.json è ancora vuoto e la pagina mostra
+        solo il messaggio "nessun approfondimento". Rimettere "index, follow"
+        (e ripristinare la voce in sitemap.xml) appena il primo articolo è online.
+    -->
+    <meta name="robots" content="noindex, follow">
     <link rel="canonical" href="https://pizzalab.pizza/scienza.html">
     <link rel="alternate" hreflang="it" href="https://pizzalab.pizza/scienza.html">
     <link rel="alternate" hreflang="en" href="https://pizzalab.pizza/scienza.html?lang=en">
     <link rel="alternate" hreflang="x-default" href="https://pizzalab.pizza/scienza.html">
     <meta property="og:title" content="Scienza della Pizza & Articoli Tecnici | PizzaLab">
     <meta property="og:description" content="Approfondimenti scientifici e reologici sulla panificazione moderna.">
-    <meta property="og:image" content="https://pizzalab.pizza/img/logo.png">
+    <meta property="og:image" content="https://pizzalab.pizza/img/og-image.jpg">
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://pizzalab.pizza/scienza.html">
+    <meta name="twitter:title" content="Scienza della Pizza & Articoli Tecnici | PizzaLab">
+    <meta name="twitter:description" content="Approfondimenti scientifici e reologici sulla panificazione moderna.">
+    <meta name="twitter:image" content="https://pizzalab.pizza/img/og-image.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
     <link rel="stylesheet" href="css/main.css">
     <link rel="icon" href="logo.ico" type="image/x-icon">
     <link rel="manifest" href="manifest.webmanifest">
     <meta name="theme-color" content="#08090c">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="img/logo.png">
+    <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 </head>
 <body>
     <nav class="site-nav">
         <div class="nav-container">
             <a href="index.html" class="nav-brand">
-                <img src="img/logo.png" alt="PizzaLab">
+                <img src="img/logo.png" alt="PizzaLab" width="128" height="128">
                 PizzaLab
             </a>
             <ul class="nav-links">
@@ -65,17 +79,30 @@
     <script src="js/nav.js" defer></script>
     <script type="module">
         import { renderListing } from './js/listing.js';
-        import { getSavedLocale } from './js/i18n-engine.js';
+        import { t } from './js/i18n-engine.js';
 
-        function checkEmpty() {
-            const container = document.querySelector('#scienza-container');
-            if (container && !container.children.length) {
-                const isEn = (document.documentElement.lang === 'en') || (getSavedLocale() === 'en');
-                const msg = isEn 
-                    ? 'No articles published at the moment: this section is periodically updated with verified scientific literature.'
-                    : 'Nessun approfondimento pubblicato al momento: la sezione si aggiorna periodicamente con contenuti verificati da fonti scientifiche.';
-                container.innerHTML = `<p class="listing-error">${msg}</p>`;
+        // Gli articoli sono redatti dal workflow automatico e revisionati a mano,
+        // ma restano contenuto generato: vanno inseriti come testo, mai come HTML.
+        const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+        }[c]));
+
+        // Accetta solo http/https: un href arbitrario permetterebbe javascript:.
+        const urlSicuro = (v) => {
+            try {
+                const u = new URL(String(v), window.location.origin);
+                return (u.protocol === 'http:' || u.protocol === 'https:') ? u.href : '#';
+            } catch (e) {
+                return '#';
             }
+        };
+
+        function mostraVuoto(container) {
+            const p = document.createElement('p');
+            p.className = 'listing-error';
+            p.textContent = t('scienza.empty', {},
+                'Nessun approfondimento pubblicato al momento: la sezione si aggiorna periodicamente con contenuti verificati da fonti scientifiche.');
+            container.replaceChildren(p);
         }
 
         renderListing({
@@ -84,19 +111,22 @@
             renderItem: (voce) => `
                 <article class="listing-card">
                     <div class="listing-card__body">
-                        <h3>${voce.titolo}</h3>
-                        <p>${voce.sintesi}</p>
-                        <p>${voce.corpo}</p>
+                        <h3>${esc(voce.titolo)}</h3>
+                        <p>${esc(voce.sintesi)}</p>
+                        <p>${esc(voce.corpo)}</p>
                         <ul class="listing-card__tags">
-                            ${(voce.fonti || []).map((f) => `<li><a href="${f.url}" target="_blank" rel="noopener noreferrer">${f.titolo}</a></li>`).join('')}
+                            ${(voce.fonti || []).map((f) => `<li><a href="${esc(urlSicuro(f.url))}" target="_blank" rel="noopener noreferrer">${esc(f.titolo)}</a></li>`).join('')}
                         </ul>
                     </div>
                 </article>
             `,
+            // Lo stato "nessun articolo" arriva dal rendering stesso: con un
+            // setTimeout la scrittura del messaggio e quella della lista
+            // potevano invertirsi su rete lenta, lasciando la pagina bianca.
+            onRender: ({ vuoto, errore }) => {
+                if (vuoto && !errore) mostraVuoto(document.querySelector('#scienza-container'));
+            },
         });
-
-        setTimeout(checkEmpty, 300);
-        window.addEventListener('pizzalab:locale-changed', () => setTimeout(checkEmpty, 300));
     </script>
 </body>
 </html>

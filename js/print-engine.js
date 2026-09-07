@@ -10,8 +10,6 @@ export function stampaSchedaRicetta(datiRicetta) {
         return;
     }
 
-    const isEn = getSavedLocale() === 'en';
-
     // Raccoglie i dati formattati
     const printWindow = window.open('', '_blank', 'width=800,height=900');
     if (!printWindow) {

@@ -4,6 +4,17 @@
 // 2. Calcolo Temperatura Acqua FDT (Fattore Temperatura Finale Desiderata)
 // 3. Guida e Parametri di Setup Forni
 
+// `Number(x) || default` tratta lo zero come valore mancante: 0 °C in un locale
+// freddo è un input legittimo e veniva silenziosamente sostituito col default.
+// Questo helper ripiega solo quando il valore è davvero assente o non numerico.
+// Attenzione a null e stringa vuota: Number() li converte entrambi in 0, quindi
+// vanno esclusi prima della conversione.
+function numero(valore, predefinito) {
+    if (valore === null || valore === undefined || valore === '') return predefinito;
+    const n = Number(valore);
+    return Number.isFinite(n) ? n : predefinito;
+}
+
 /**
  * Calcola i grammi esatti di condimento in base alla superficie e al tipo di farcitura.
  * 
@@ -26,10 +37,10 @@ export function calcolaCondimenti({
 }) {
     let areaCm2 = 0;
     if (forma === 'tonda') {
-        const raggio = (Number(diametro) || 30) / 2;
+        const raggio = numero(diametro, 30) / 2;
         areaCm2 = Math.PI * raggio * raggio;
     } else {
-        areaCm2 = (Number(base) || 40) * (Number(altezza) || 60);
+        areaCm2 = numero(base, 40) * numero(altezza, 60);
     }
 
     const isEn = locale === 'en';
@@ -106,9 +117,10 @@ export function calcolaTempAcquaFDT({
     tipoImpastatrice = 'mani',
     locale = 'it'
 }) {
-    const tTarget = Number(tempTarget) || 24;
-    const tAmb = Number(tempAmbiente) || 22;
-    const tFar = tempFarina !== null && !isNaN(tempFarina) ? Number(tempFarina) : tAmb - 1;
+    const tTarget = numero(tempTarget, 24);
+    const tAmb = numero(tempAmbiente, 22);
+    // Se la farina non è stata misurata si assume un grado sotto l'ambiente.
+    const tFar = numero(tempFarina, tAmb - 1);
 
     const frizioneImpasto = {
         mani: 1,
@@ -145,11 +157,19 @@ export function calcolaTempAcquaFDT({
         consiglio = isEn
             ? 'Use room temperature water to promote optimal and timely yeast activation.'
             : 'Usa acqua a temperatura ambiente per favorire una corretta e rapida attivazione dei lieviti.';
-    } else {
+    } else if (tAcqua <= 40) {
         tipoAcqua = isEn ? '♨️ Lukewarm Water (28-32°C)' : '♨️ Acqua tiepida (28-32°C)';
         consiglio = isEn
             ? 'Cold environment: use slightly lukewarm water (never hot, to protect yeast) to kickstart fermentation.'
             : 'Ambiente freddo: usa acqua leggermente tiepida (non bollente per non uccidere il lievito) per aiutare la partenza fermentativa.';
+    } else {
+        // Sopra i 40 °C circa il lievito inizia a soffrire e oltre i 50 °C muore:
+        // la temperatura richiesta dalla formula non è utilizzabile e va detto,
+        // invece di etichettarla come "acqua tiepida".
+        tipoAcqua = isEn ? '⚠️ Target not reachable with water alone' : '⚠️ Obiettivo non raggiungibile con la sola acqua';
+        consiglio = isEn
+            ? `Reaching ${tTarget}°C from a ${tAmb}°C room would require water at about ${tAcqua}°C, hot enough to kill the yeast. Warm the room or the flour first, or accept a lower final dough temperature and lengthen the fermentation.`
+            : `Per arrivare a ${tTarget}°C partendo da un ambiente a ${tAmb}°C servirebbe acqua a circa ${tAcqua}°C, abbastanza calda da uccidere il lievito. Scalda prima l'ambiente o la farina, oppure accetta una temperatura finale più bassa e allunga la lievitazione.`;
     }
 
     return {
@@ -159,7 +179,9 @@ export function calcolaTempAcquaFDT({
         tempTarget: tTarget,
         frizione: tFriz,
         tipoAcqua,
-        consiglio
+        consiglio,
+        // Segnala che il valore è teorico e non applicabile in pratica.
+        raggiungibile: tAcqua <= 40,
     };
 }
 

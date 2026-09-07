@@ -3,7 +3,9 @@
    dati-centrico. Prototipo: solo homepage.
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+/* I font sono caricati con <link rel="preconnect"> + <link rel="stylesheet">
+   nell'<head> di ogni pagina: un @import qui incatenerebbe le richieste
+   (HTML -> main.css -> CSS font -> woff2) ritardando il primo render. */
 
 :root {
     --bg-dark: #08090c;
@@ -121,7 +123,9 @@ a { color: inherit; }
     transform: scale(1.03);
 }
 
-.nav-brand img { height: 34px; }
+/* width:auto lascia che sia l'aspect ratio degli attributi width/height
+   dell'immagine a determinare la larghezza, a entrambi i breakpoint. */
+.nav-brand img { height: 34px; width: auto; }
 
 .nav-links {
     display: flex;
@@ -284,6 +288,7 @@ a { color: inherit; }
 
     .nav-brand img {
         height: 26px;
+        width: auto;
     }
 
     .lang-switch-container {
@@ -750,6 +755,15 @@ footer {
     margin-bottom: 24px;
 }
 
+.form-hint[hidden] { display: none; }
+
+/* Esito del form contatti: compare sotto il pulsante di invio */
+#form-contatti-esito {
+    margin-top: 16px;
+    margin-bottom: 0;
+    color: var(--text-muted);
+}
+
 .btn-secondary {
     display: inline-flex;
     align-items: center;
@@ -852,6 +866,52 @@ footer {
     padding: 12px 16px;
     color: #ffcb80;
     font-size: 0.9rem;
+}
+
+/* Messaggi di validazione degli input del calcolatore */
+.validation-box {
+    margin-top: 20px;
+    display: grid;
+    gap: 10px;
+}
+
+.validation-box[hidden] { display: none; }
+
+.validation-box p {
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.validation-box p::before {
+    flex-shrink: 0;
+    font-size: 1rem;
+    line-height: 1.4;
+}
+
+.validation-box .validation-error {
+    background: rgba(255, 82, 38, 0.12);
+    border: 1px solid rgba(255, 82, 38, 0.4);
+    color: #ffb3a0;
+}
+
+.validation-box .validation-error::before { content: "⛔"; }
+
+.validation-box .validation-warning {
+    background: rgba(255, 152, 0, 0.1);
+    border: 1px solid rgba(255, 152, 0, 0.3);
+    color: #ffcb80;
+}
+
+.validation-box .validation-warning::before { content: "⚠️"; }
+
+/* Campo che ha generato un errore di validazione */
+.form-control.is-invalid {
+    border-color: rgba(255, 82, 38, 0.7);
+    box-shadow: 0 0 0 3px rgba(255, 82, 38, 0.15);
 }
 
 /* ===== LISTING (Tipi di Pizza, Prefermenti, Farine, Shop) ===== */

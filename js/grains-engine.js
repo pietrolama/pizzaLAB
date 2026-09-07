@@ -1,6 +1,7 @@
 // grains-engine.js
 // Motore di calcolo e raccomandazione per cereali, grani antichi e farine speciali.
 import { getSavedLocale } from './i18n-engine.js';
+import { risolviContenitore } from './dom-target.js';
 
 let cerealiCache = null;
 
@@ -17,8 +18,9 @@ export async function caricaCerealiData() {
     }
 }
 
-export function renderCerealiCards(items, containerEl) {
-    if (!containerEl) return;
+export function renderCerealiCards(items, target) {
+    const containerEl = risolviContenitore(target);
+    if (!containerEl || !Array.isArray(items)) return;
     const isEn = getSavedLocale() === 'en';
 
     containerEl.innerHTML = items.map((c) => {

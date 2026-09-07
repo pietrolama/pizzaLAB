@@ -17,7 +17,13 @@
     <meta property="og:url" content="https://pizzalab.pizza/calcolatore.html">
     <meta property="og:title" content="Calcolatore Impasto Pizza Professionale Gratuito | PizzaLab">
     <meta property="og:description" content="Calcola dosi perfette al grammo, gestisci idratazione, prefermenti (biga, poolish, licoli), taglio farine W e cronoprogramma di fermentazione.">
-    <meta property="og:image" content="https://pizzalab.pizza/img/calcolatore.jpg">
+    <meta property="og:image" content="https://pizzalab.pizza/img/og-image.jpg">
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://pizzalab.pizza/calcolatore.html">
+    <meta name="twitter:title" content="Calcolatore Impasto Pizza Professionale Gratuito | PizzaLab">
+    <meta name="twitter:description" content="Calcola dosi perfette al grammo, gestisci idratazione, prefermenti (biga, poolish, licoli), taglio farine W e cronoprogramma di fermentazione.">
+    <meta name="twitter:image" content="https://pizzalab.pizza/img/og-image.jpg">
 
     <!-- Schema.org WebApplication & FAQPage -->
     <script type="application/ld+json">
@@ -86,19 +92,22 @@
       }
     ]
     </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
     <link rel="stylesheet" href="css/main.css">
     <link rel="icon" href="logo.ico" type="image/x-icon">
     <link rel="manifest" href="manifest.webmanifest">
     <meta name="theme-color" content="#08090c">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="img/logo.png">
+    <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 </head>
 <body>
     <nav class="site-nav">
         <div class="nav-container">
             <a href="index.html" class="nav-brand">
-                <img src="img/logo.png" alt="PizzaLab">
+                <img src="img/logo.png" alt="PizzaLab" width="128" height="128">
                 PizzaLab
             </a>
             <ul class="nav-links">
@@ -152,7 +161,7 @@
                 </div>
                 <div class="form-group">
                     <label for="forza_farina" data-i18n="calc.flour_strength">Forza farina (W)</label>
-                    <input type="number" id="forza_farina" class="form-control" value="260" min="90" placeholder="es. 260">
+                    <input type="number" id="forza_farina" class="form-control" value="260" min="90" placeholder="es. 260" max="450" step="5">
                 </div>
             </div>
 
@@ -235,11 +244,11 @@
             <div id="sezione_teglia" class="form-row hidden">
                 <div class="form-group">
                     <label for="teglia_base" data-i18n="calc.pan_base">Base teglia (cm)</label>
-                    <input type="number" id="teglia_base" class="form-control" value="40">
+                    <input type="number" id="teglia_base" class="form-control" value="40" min="10" max="200" step="1">
                 </div>
                 <div class="form-group">
                     <label for="teglia_altezza" data-i18n="calc.pan_height">Altezza teglia (cm)</label>
-                    <input type="number" id="teglia_altezza" class="form-control" value="60">
+                    <input type="number" id="teglia_altezza" class="form-control" value="60" min="10" max="200" step="1">
                 </div>
                 <div class="form-group">
                     <label for="teglia_spessore" data-i18n="calc.pan_thickness">Spessore</label>
@@ -251,7 +260,7 @@
                 </div>
                 <div class="form-group">
                     <label for="teglia_numero" data-i18n="calc.pan_quantity">Numero teglie</label>
-                    <input type="number" id="teglia_numero" class="form-control" value="1" min="1">
+                    <input type="number" id="teglia_numero" class="form-control" value="1" min="1" max="50" step="1">
                 </div>
             </div>
             <p class="form-hint hidden" id="teglia_hint" data-i18n="calc.pan_hint">Il peso dell'impasto viene calcolato dalle dimensioni della teglia e sostituisce Peso Panetto / Numero Panetti qui sotto.</p>
@@ -259,109 +268,111 @@
             <div id="sezione_diretto" class="form-row">
                 <div class="form-group">
                     <label for="peso_panetto_diretto" data-i18n="calc.ball_weight">Peso panetto (g)</label>
-                    <input type="number" id="peso_panetto_diretto" class="form-control" value="250">
+                    <input type="number" id="peso_panetto_diretto" class="form-control" value="250" min="50" max="2000" step="5">
                 </div>
                 <div class="form-group">
                     <label for="num_panetti_diretto" data-i18n="calc.num_balls">Numero panetti</label>
-                    <input type="number" id="num_panetti_diretto" class="form-control" value="4">
+                    <input type="number" id="num_panetti_diretto" class="form-control" value="4" min="1" max="100" step="1">
                 </div>
                 <div class="form-group">
                     <label for="idratazione_totale_diretto" data-i18n="calc.total_hydration">Idratazione totale (%)</label>
-                    <input type="number" id="idratazione_totale_diretto" class="form-control" value="65">
+                    <input type="number" id="idratazione_totale_diretto" class="form-control" value="65" min="40" max="110" step="1">
                 </div>
                 <div class="form-group">
                     <label for="temperatura_ambiente_diretto" data-i18n="calc.room_temp">T° ambiente (°C)</label>
-                    <input type="number" id="temperatura_ambiente_diretto" class="form-control" value="22">
+                    <input type="number" id="temperatura_ambiente_diretto" class="form-control" value="22" min="1" max="40" step="0.5">
                 </div>
                 <div class="form-group">
                     <label for="tempoLievTotale_diretto" data-i18n="calc.total_time">Tempo totale (ore)</label>
-                    <input type="number" id="tempoLievTotale_diretto" class="form-control" value="24">
+                    <input type="number" id="tempoLievTotale_diretto" class="form-control" value="24" min="1" max="120" step="1">
                 </div>
                 <div class="form-group">
                     <label for="tempoFrigo_diretto" data-i18n="calc.fridge_time">Tempo in frigo (ore)</label>
-                    <input type="number" id="tempoFrigo_diretto" class="form-control" value="18">
+                    <input type="number" id="tempoFrigo_diretto" class="form-control" value="18" min="0" max="119" step="1">
                 </div>
             </div>
 
             <div id="sezione_biga" class="form-row hidden">
                 <div class="form-group">
                     <label for="peso_panetto_biga" data-i18n="calc.ball_weight">Peso panetto (g)</label>
-                    <input type="number" id="peso_panetto_biga" class="form-control" value="250">
+                    <input type="number" id="peso_panetto_biga" class="form-control" value="250" min="50" max="2000" step="5">
                 </div>
                 <div class="form-group">
                     <label for="num_panetti_biga" data-i18n="calc.num_balls">Numero panetti</label>
-                    <input type="number" id="num_panetti_biga" class="form-control" value="4">
+                    <input type="number" id="num_panetti_biga" class="form-control" value="4" min="1" max="100" step="1">
                 </div>
                 <div class="form-group">
                     <label for="idratazione_totale_biga" data-i18n="calc.total_hydration">Idratazione totale (%)</label>
-                    <input type="number" id="idratazione_totale_biga" class="form-control" value="70">
+                    <input type="number" id="idratazione_totale_biga" class="form-control" value="70" min="40" max="110" step="1">
                 </div>
                 <div class="form-group">
                     <label for="percentuale_biga" data-i18n="calc.biga_perc">Percentuale biga (%)</label>
-                    <input type="number" id="percentuale_biga" class="form-control" value="100">
+                    <input type="number" id="percentuale_biga" class="form-control" value="100" min="10" max="100" step="5">
                 </div>
             </div>
 
             <div id="sezione_poolish" class="form-row hidden">
                 <div class="form-group">
                     <label for="peso_panetto_poolish" data-i18n="calc.ball_weight">Peso panetto (g)</label>
-                    <input type="number" id="peso_panetto_poolish" class="form-control" value="250">
+                    <input type="number" id="peso_panetto_poolish" class="form-control" value="250" min="50" max="2000" step="5">
                 </div>
                 <div class="form-group">
                     <label for="num_panetti_poolish" data-i18n="calc.num_balls">Numero panetti</label>
-                    <input type="number" id="num_panetti_poolish" class="form-control" value="4">
+                    <input type="number" id="num_panetti_poolish" class="form-control" value="4" min="1" max="100" step="1">
                 </div>
                 <div class="form-group">
                     <label for="idratazione_totale_poolish" data-i18n="calc.total_hydration">Idratazione totale (%)</label>
-                    <input type="number" id="idratazione_totale_poolish" class="form-control" value="70">
+                    <input type="number" id="idratazione_totale_poolish" class="form-control" value="70" min="40" max="110" step="1">
                 </div>
                 <div class="form-group">
                     <label for="percentuale_poolish" data-i18n="calc.poolish_perc">Percentuale poolish (%)</label>
-                    <input type="number" id="percentuale_poolish" class="form-control" value="50">
+                    <input type="number" id="percentuale_poolish" class="form-control" value="50" min="10" max="100" step="5">
                 </div>
             </div>
 
             <div id="sezione_lievito_madre" class="form-row hidden">
                 <div class="form-group">
                     <label for="peso_panetto_lievito" data-i18n="calc.ball_weight">Peso panetto (g)</label>
-                    <input type="number" id="peso_panetto_lievito" class="form-control" value="250">
+                    <input type="number" id="peso_panetto_lievito" class="form-control" value="250" min="50" max="2000" step="5">
                 </div>
                 <div class="form-group">
                     <label for="num_panetti_lievito" data-i18n="calc.num_balls">Numero panetti</label>
-                    <input type="number" id="num_panetti_lievito" class="form-control" value="4">
+                    <input type="number" id="num_panetti_lievito" class="form-control" value="4" min="1" max="100" step="1">
                 </div>
                 <div class="form-group">
                     <label for="idratazione_totale_lievito" data-i18n="calc.total_hydration">Idratazione totale (%)</label>
-                    <input type="number" id="idratazione_totale_lievito" class="form-control" value="68">
+                    <input type="number" id="idratazione_totale_lievito" class="form-control" value="68" min="40" max="110" step="1">
                 </div>
                 <div class="form-group">
                     <label for="percentuale_lievito" data-i18n="calc.sourdough_perc">Percentuale lievito madre (%)</label>
-                    <input type="number" id="percentuale_lievito" class="form-control" value="20">
+                    <input type="number" id="percentuale_lievito" class="form-control" value="20" min="5" max="40" step="1">
                 </div>
             </div>
 
             <div id="sezione_biga_poolish" class="form-row hidden">
                 <div class="form-group">
                     <label for="peso_panetto_biga_poolish" data-i18n="calc.ball_weight">Peso panetto (g)</label>
-                    <input type="number" id="peso_panetto_biga_poolish" class="form-control" value="250">
+                    <input type="number" id="peso_panetto_biga_poolish" class="form-control" value="250" min="50" max="2000" step="5">
                 </div>
                 <div class="form-group">
                     <label for="num_panetti_biga_poolish" data-i18n="calc.num_balls">Numero panetti</label>
-                    <input type="number" id="num_panetti_biga_poolish" class="form-control" value="4">
+                    <input type="number" id="num_panetti_biga_poolish" class="form-control" value="4" min="1" max="100" step="1">
                 </div>
                 <div class="form-group">
                     <label for="idratazione_totale_biga_poolish" data-i18n="calc.total_hydration">Idratazione totale (%)</label>
-                    <input type="number" id="idratazione_totale_biga_poolish" class="form-control" value="75">
+                    <input type="number" id="idratazione_totale_biga_poolish" class="form-control" value="75" min="40" max="110" step="1">
                 </div>
                 <div class="form-group">
                     <label for="percentuale_biga_bp" data-i18n="calc.biga_perc">Percentuale biga (%)</label>
-                    <input type="number" id="percentuale_biga_bp" class="form-control" value="30">
+                    <input type="number" id="percentuale_biga_bp" class="form-control" value="30" min="10" max="100" step="5">
                 </div>
                 <div class="form-group">
                     <label for="percentuale_poolish_bp" data-i18n="calc.poolish_perc">Percentuale poolish (%)</label>
-                    <input type="number" id="percentuale_poolish_bp" class="form-control" value="20">
+                    <input type="number" id="percentuale_poolish_bp" class="form-control" value="20" min="10" max="100" step="5">
                 </div>
             </div>
+
+            <div id="validazione-messaggi" class="validation-box" role="alert" aria-live="polite" hidden></div>
 
             <div style="text-align: center; margin-top: 8px; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
                 <button id="calcola-button" class="btn" data-i18n="calc.calculate_btn">Calcola e genera ricetta</button>
@@ -461,11 +472,11 @@
                     </div>
                     <div class="form-group hidden" id="group_topping_teglia_base">
                         <label for="topping_teglia_base" data-i18n="topping.pan_base">Base Teglia (cm)</label>
-                        <input type="number" id="topping_teglia_base" class="form-control" value="40">
+                        <input type="number" id="topping_teglia_base" class="form-control" value="40" min="10" max="200" step="1">
                     </div>
                     <div class="form-group hidden" id="group_topping_teglia_alt">
                         <label for="topping_teglia_alt" data-i18n="topping.pan_height">Altezza Teglia (cm)</label>
-                        <input type="number" id="topping_teglia_alt" class="form-control" value="60">
+                        <input type="number" id="topping_teglia_alt" class="form-control" value="60" min="10" max="200" step="1">
                     </div>
                     <div class="form-group">
                         <label for="topping_farcitura" data-i18n="topping.type">Tipo di Farcitura</label>
@@ -500,11 +511,11 @@
                     </div>
                     <div class="form-group">
                         <label for="fdt_ambiente" data-i18n="fdt.room_temp">T° Stanza / Ambiente (°C)</label>
-                        <input type="number" id="fdt_ambiente" class="form-control" value="22">
+                        <input type="number" id="fdt_ambiente" class="form-control" value="22" min="-10" max="45" step="0.5">
                     </div>
                     <div class="form-group">
                         <label for="fdt_farina" data-i18n="fdt.flour_temp">T° Sacco Farina (°C)</label>
-                        <input type="number" id="fdt_farina" class="form-control" value="21" placeholder="Se non misurata: T.Ambiente - 1">
+                        <input type="number" id="fdt_farina" class="form-control" value="21" placeholder="Se non misurata: T.Ambiente - 1" min="-10" max="45" step="0.5">
                     </div>
                     <div class="form-group">
                         <label for="fdt_impastatrice" data-i18n="fdt.mixing_method">Metodo / Frizione Meccanica</label>

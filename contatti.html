@@ -12,20 +12,29 @@
     <link rel="alternate" hreflang="x-default" href="https://pizzalab.pizza/contatti.html">
     <meta property="og:title" content="Contatta PizzaLab | PizzaLab">
     <meta property="og:description" content="Scrivici per suggerimenti, collaborazioni o domande tecniche sul mondo della pizza.">
-    <meta property="og:image" content="https://pizzalab.pizza/img/logo.png">
+    <meta property="og:image" content="https://pizzalab.pizza/img/og-image.jpg">
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://pizzalab.pizza/contatti.html">
+    <meta name="twitter:title" content="Contatta PizzaLab | PizzaLab">
+    <meta name="twitter:description" content="Scrivici per suggerimenti, collaborazioni o domande tecniche sul mondo della pizza.">
+    <meta name="twitter:image" content="https://pizzalab.pizza/img/og-image.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
     <link rel="stylesheet" href="css/main.css">
     <link rel="icon" href="logo.ico" type="image/x-icon">
     <link rel="manifest" href="manifest.webmanifest">
     <meta name="theme-color" content="#08090c">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="img/logo.png">
+    <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 </head>
 <body>
     <nav class="site-nav">
         <div class="nav-container">
             <a href="index.html" class="nav-brand">
-                <img src="img/logo.png" alt="PizzaLab">
+                <img src="img/logo.png" alt="PizzaLab" width="128" height="128">
                 PizzaLab
             </a>
             <ul class="nav-links">
@@ -65,7 +74,14 @@
 
         <section class="calculator-card">
             <h2 style="margin-bottom: 20px;" data-i18n="contatti.form_title">Scrivimi un messaggio</h2>
-            <form action="mailto:pizzalab@gmail.com" method="post" enctype="text/plain">
+            <!--
+                Il form apre il client di posta dell'utente con il messaggio già
+                compilato. Non usa più action="mailto:" con method="post": quella
+                combinazione non è supportata dai browser moderni (Chrome ed Edge
+                aprivano una mail vuota o non facevano nulla) e i messaggi
+                andavano semplicemente persi.
+            -->
+            <form id="form-contatti" novalidate="false">
                 <div class="form-row">
                     <div class="form-group">
                         <label for="name" data-i18n="contatti.full_name">Nome completo</label>
@@ -81,6 +97,7 @@
                     <textarea id="message" name="message" class="form-control" rows="5" placeholder="Scrivi qui..." data-i18n-placeholder="contatti.placeholder_msg" required></textarea>
                 </div>
                 <button type="submit" class="btn" data-i18n="contatti.send_btn">Invia messaggio</button>
+                <p id="form-contatti-esito" class="form-hint" role="status" aria-live="polite" hidden></p>
             </form>
         </section>
     </main>
@@ -90,5 +107,35 @@
     </footer>
 
     <script src="js/nav.js" defer></script>
+    <script type="module">
+        import { t } from './js/i18n-engine.js';
+
+        const DESTINATARIO = 'pizzalab@gmail.com';
+        const form = document.getElementById('form-contatti');
+        const esito = document.getElementById('form-contatti-esito');
+
+        form?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (!form.reportValidity()) return;
+
+            const nome = form.elements.name.value.trim();
+            const email = form.elements.email.value.trim();
+            const messaggio = form.elements.message.value.trim();
+
+            const oggetto = t('contatti.mail_subject', { nome }, `Messaggio da ${nome} — PizzaLab`);
+            const corpo = t('contatti.mail_body', { nome, email, messaggio },
+                `${messaggio}\n\n—\n${nome}\n${email}`);
+
+            // encodeURIComponent e non encodeURI: gli a capo e le e-commerciali
+            // del messaggio troncherebbero i parametri del mailto.
+            window.location.href = `mailto:${DESTINATARIO}`
+                + `?subject=${encodeURIComponent(oggetto)}`
+                + `&body=${encodeURIComponent(corpo)}`;
+
+            esito.textContent = t('contatti.mail_opened', {},
+                'Ho aperto il tuo programma di posta con il messaggio già pronto: controlla che si sia aperto e premi invia.');
+            esito.hidden = false;
+        });
+    </script>
 </body>
 </html>

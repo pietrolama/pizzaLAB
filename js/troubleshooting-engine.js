@@ -1,6 +1,7 @@
 // troubleshooting-engine.js
 // Motore di diagnosi e risoluzione problemi per impasti (Pronto Soccorso Impasti).
 import { getSavedLocale } from './i18n-engine.js';
+import { risolviContenitore } from './dom-target.js';
 
 let troubleshootingCache = null;
 
@@ -17,8 +18,17 @@ export async function caricaTroubleshootingData() {
     }
 }
 
-export function renderTroubleshootingList(items, containerEl, filterCat = 'all', searchQuery = '') {
-    if (!containerEl) return;
+/**
+ * @param {Array} items - elenco completo dei casi
+ * @param {string|Element} target - selettore o elemento contenitore
+ * @param {{ categoria?: string, query?: string }} [filtri]
+ */
+export function renderTroubleshootingList(items, target, filtri = {}) {
+    const containerEl = risolviContenitore(target);
+    if (!containerEl || !Array.isArray(items)) return;
+
+    const filterCat = filtri.categoria || 'all';
+    const searchQuery = filtri.query || '';
     const locale = getSavedLocale();
     const isEn = locale === 'en';
 

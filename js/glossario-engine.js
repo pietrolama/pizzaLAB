@@ -1,6 +1,7 @@
 // glossario-engine.js
 // Motore per glossario scientifico della panificazione con tooltip e cassetto interattivo.
 import { getSavedLocale } from './i18n-engine.js';
+import { risolviContenitore } from './dom-target.js';
 
 let glossarioCache = null;
 
@@ -17,8 +18,18 @@ export async function caricaGlossarioData() {
     }
 }
 
-export function initGlossaryTooltips() {
-    caricaGlossarioData().then((terms) => {
+/**
+ * Attiva i tooltip sugli elementi con attributo data-glossary.
+ *
+ * @param {Array} [termini] - termini già caricati dal chiamante. Passandoli si
+ *   evita una seconda risoluzione del dataset; se omessi vengono caricati qui.
+ */
+export function inizializzaGlossarioTooltips(termini) {
+    const sorgente = Array.isArray(termini)
+        ? Promise.resolve(termini)
+        : caricaGlossarioData();
+
+    sorgente.then((terms) => {
         if (!terms || terms.length === 0) return;
 
         // Crea il popover globale se non esiste
@@ -66,35 +77,38 @@ export function initGlossaryTooltips() {
     });
 }
 
-export function renderGlossarioDrawer(containerEl) {
-    if (!containerEl) return;
+/**
+ * @param {Array} items - termini del glossario
+ * @param {string|Element} target - selettore o elemento contenitore
+ */
+export function renderGlossarioDrawer(items, target) {
+    const containerEl = risolviContenitore(target);
+    if (!containerEl || !Array.isArray(items)) return;
     const isEn = getSavedLocale() === 'en';
 
-    caricaGlossarioData().then((terms) => {
-        containerEl.innerHTML = terms.map((t) => {
-            const title = isEn ? (t.termine_en || t.termine) : t.termine;
-            const brief = isEn ? (t.definizione_breve_en || t.definizione_breve) : t.definizione_breve;
-            const sci = isEn ? (t.spiegazione_scientifica_en || t.spiegazione_scientifica) : t.spiegazione_scientifica;
+    containerEl.innerHTML = items.map((t) => {
+        const title = isEn ? (t.termine_en || t.termine) : t.termine;
+        const brief = isEn ? (t.definizione_breve_en || t.definizione_breve) : t.definizione_breve;
+        const sci = isEn ? (t.spiegazione_scientifica_en || t.spiegazione_scientifica) : t.spiegazione_scientifica;
 
-            return `
-                <div class="glossary-card">
-                    <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
-                        <span style="font-size:1.4rem;">${t.icona || '🔬'}</span>
-                        <h4 style="margin:0; font-size:1.1rem; color:var(--primary-color);">${title}</h4>
-                    </div>
-                    <p style="font-size:0.92rem; color:var(--text-main); font-weight:600; margin:0 0 6px 0;">${brief}</p>
-                    <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.5; margin:0;">${sci}</p>
+        return `
+            <div class="glossary-card">
+                <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+                    <span style="font-size:1.4rem;">${t.icona || '🔬'}</span>
+                    <h4 style="margin:0; font-size:1.1rem; color:var(--primary-color);">${title}</h4>
                 </div>
-            `;
-        }).join('');
-    });
+                <p style="font-size:0.92rem; color:var(--text-main); font-weight:600; margin:0 0 6px 0;">${brief}</p>
+                <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.5; margin:0;">${sci}</p>
+            </div>
+        `;
+    }).join('');
 }
 
 // Inizializza automaticamente i tooltip
 if (typeof window !== 'undefined') {
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => initGlossaryTooltips());
+        document.addEventListener('DOMContentLoaded', () => inizializzaGlossarioTooltips());
     } else {
-        initGlossaryTooltips();
+        inizializzaGlossarioTooltips();
     }
 }

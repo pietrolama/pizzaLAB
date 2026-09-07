@@ -1,12 +1,15 @@
-import { getSavedLocale } from './i18n-engine.js';
+import { getSavedLocale, t } from './i18n-engine.js';
 
-export function renderListing({ containerSelector, jsonPath, renderItem }) {
+export function renderListing({ containerSelector, jsonPath, renderItem, onRender }) {
     const container = document.querySelector(containerSelector);
     if (!container) return;
 
-    async function loadAndRender() {
+    // La lingua arriva dall'evento di cambio lingua quando disponibile: leggerla
+    // ogni volta da localStorage renderebbe la lista insensibile al selettore
+    // nei contesti in cui la memoria del browser è bloccata (navigazione privata).
+    async function loadAndRender(localeRichiesta) {
         try {
-            const locale = getSavedLocale() || document.documentElement.lang || 'it';
+            const locale = localeRichiesta || getSavedLocale() || document.documentElement.lang || 'it';
             let targetPath = jsonPath;
             if (locale && locale !== 'it') {
                 const localizedPath = jsonPath.replace(/\.json$/, `.${locale}.json`);
@@ -26,7 +29,11 @@ export function renderListing({ containerSelector, jsonPath, renderItem }) {
             renderItems(items, locale);
         } catch (err) {
             console.error(`Errore nel caricamento di ${jsonPath}:`, err);
-            container.innerHTML = '<p class="listing-error">Contenuto non disponibile al momento.</p>';
+            const p = document.createElement('p');
+            p.className = 'listing-error';
+            p.textContent = t('listing.error', {}, 'Contenuto non disponibile al momento.');
+            container.replaceChildren(p);
+            onRender?.({ vuoto: true, errore: true });
         }
     }
 
@@ -35,13 +42,16 @@ export function renderListing({ containerSelector, jsonPath, renderItem }) {
             const html = renderItem(item, locale);
             return html.replace(/class="([^"]*listing-card[^"]*)"/, `class="$1 reveal is-visible" style="animation-delay: ${index * 60}ms"`);
         }).join('');
+        // Notifica a chi usa la lista che il rendering è concluso: permette di
+        // reagire allo stato "nessun contenuto" senza ricorrere a un timer.
+        onRender?.({ vuoto: items.length === 0, errore: false });
     }
 
     loadAndRender();
 
     // Re-render quando l'utente cambia lingua dall'interfaccia
-    window.addEventListener('pizzalab:locale-changed', () => {
-        loadAndRender();
+    window.addEventListener('pizzalab:locale-changed', (e) => {
+        loadAndRender(e.detail?.locale);
     });
 }
 

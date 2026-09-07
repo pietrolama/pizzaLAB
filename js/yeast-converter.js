@@ -1,5 +1,6 @@
 // yeast-converter.js
-// Motore di conversione universale tra tipologie di lieviti con compensazione farina/acqua.
+// Motore di conversione universale tra tipologie di lieviti con compensazione
+// di farina e acqua nell'impasto principale.
 
 export const TIPI_LIEVITO = {
     lbf: { id: 'lbf', nome: 'Lievito di Birra Fresco (LBF)', nome_en: 'Fresh Compressed Yeast (LBF)', fattore: 1.0 },
@@ -8,56 +9,60 @@ export const TIPI_LIEVITO = {
     solido: { id: 'solido', nome: 'Lievito Madre Solido / Pasta Madre (50%)', nome_en: 'Solid Sourdough Paste (50% hydration)', fattore: 6.0 }
 };
 
-export function convertiLievito({ quantita, daTipo, aTipo, farinaTotaleImpasto = 1000 }) {
-    if (!quantita || quantita <= 0) return null;
+// Quanta farina e quanta acqua porta in dote ogni tipo di lievito, come
+// frazione del proprio peso. Il lievito di birra (fresco o secco) è una massa
+// trascurabile e non altera il bilancio dell'impasto; i lieviti madre invece
+// sono a tutti gli effetti farina e acqua già impastate:
+//   - Li.Co.Li, idratazione 100%  -> metà farina, metà acqua
+//   - pasta madre solida, idr. 50% -> 2/3 farina, 1/3 acqua
+const COMPOSIZIONE_LIEVITO = {
+    lbf: { farina: 0, acqua: 0 },
+    lbs: { farina: 0, acqua: 0 },
+    licoli: { farina: 0.5, acqua: 0.5 },
+    solido: { farina: 2 / 3, acqua: 1 / 3 },
+};
 
-    // 1. Normalizza tutto a grammi di LBF (Lievito di Birra Fresco)
-    let grammiLBF = 0;
-    if (daTipo === 'lbf') {
-        grammiLBF = quantita;
-    } else if (daTipo === 'lbs') {
-        grammiLBF = quantita * 3.03; // ~ 1/0.33
-    } else if (daTipo === 'licoli') {
-        grammiLBF = quantita / 5.0;
-    } else if (daTipo === 'solido') {
-        grammiLBF = quantita / 6.0;
-    }
+/**
+ * Converte una quantità di lievito da un tipo all'altro e calcola come
+ * correggere farina e acqua dell'impasto per mantenere invariata l'idratazione.
+ *
+ * @param {Object} params
+ * @param {number} params.quantita - grammi del lievito di partenza
+ * @param {string} params.daTipo - lbf | lbs | licoli | solido
+ * @param {string} params.aTipo  - lbf | lbs | licoli | solido
+ * @returns {Object|null} null se gli argomenti non sono utilizzabili
+ */
+export function convertiLievito({ quantita, daTipo, aTipo }) {
+    const q = Number(quantita);
+    if (!Number.isFinite(q) || q <= 0) return null;
+    if (!TIPI_LIEVITO[daTipo] || !TIPI_LIEVITO[aTipo]) return null;
 
-    // 2. Calcola la quantità nel tipo di destinazione
-    let risultato = 0;
-    if (aTipo === 'lbf') {
-        risultato = grammiLBF;
-    } else if (aTipo === 'lbs') {
-        risultato = grammiLBF * 0.33;
-    } else if (aTipo === 'licoli') {
-        risultato = grammiLBF * 5.0;
-    } else if (aTipo === 'solido') {
-        risultato = grammiLBF * 6.0;
-    }
+    // Si passa per il lievito di birra fresco come unità di riferimento: il
+    // `fattore` di ogni tipo esprime quanti grammi servono al posto di 1 g di
+    // LBF, quindi si divide per entrare e si moltiplica per uscire. Usare la
+    // stessa costante nei due sensi garantisce che una conversione di andata e
+    // ritorno restituisca il valore di partenza.
+    const grammiLBF = q / TIPI_LIEVITO[daTipo].fattore;
+    const quantitaEquivalente = grammiLBF * TIPI_LIEVITO[aTipo].fattore;
 
-    // 3. Calcolo compensazione acqua e farina nell'impasto
-    let sottraiFarina = 0;
-    let sottraiAcqua = 0;
+    // Compensazione con segno: farina e acqua che il nuovo lievito aggiunge
+    // all'impasto, meno quelle che il vecchio già apportava.
+    //   > 0  -> vanno sottratte dall'impasto principale
+    //   < 0  -> vanno aggiunte
+    const origine = COMPOSIZIONE_LIEVITO[daTipo];
+    const destinazione = COMPOSIZIONE_LIEVITO[aTipo];
 
-    if (aTipo === 'licoli') {
-        // Licoli è 50% farina e 50% acqua
-        sottraiFarina = Math.round(risultato * 0.5);
-        sottraiAcqua = Math.round(risultato * 0.5);
-    } else if (aTipo === 'solido') {
-        // Solido è 66.6% farina e 33.3% acqua (idro 50%)
-        sottraiFarina = Math.round(risultato * 0.666);
-        sottraiAcqua = Math.round(risultato * 0.333);
-    }
+    const differenzaFarina = (quantitaEquivalente * destinazione.farina) - (q * origine.farina);
+    const differenzaAcqua = (quantitaEquivalente * destinazione.acqua) - (q * origine.acqua);
+
+    const arrotonda = (v) => Math.round(v * 100) / 100;
 
     return {
-        quantitaOriginale: quantita,
+        quantitaOriginale: q,
         daTipo,
         aTipo,
-        risultato: Math.round(risultato * 100) / 100,
-        sottraiFarina,
-        sottraiAcqua,
-        notaCompensazione: (sottraiFarina > 0 || sottraiAcqua > 0)
-            ? `Dovrai sottrarre ${sottraiFarina}g di farina e ${sottraiAcqua}g di acqua dalla ricetta base per mantenere l'idratazione invariata.`
-            : 'Nessuna compensazione di idratazione necessaria.'
+        quantitaEquivalente: arrotonda(quantitaEquivalente),
+        differenzaFarina: arrotonda(differenzaFarina),
+        differenzaAcqua: arrotonda(differenzaAcqua),
     };
 }

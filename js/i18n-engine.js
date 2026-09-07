@@ -14,18 +14,48 @@ let currentLocale = DEFAULT_LOCALE;
 let translations = {};
 const loadedLocales = new Map();
 
+const PARAM_LINGUA = 'lang';
+
 /**
- * Ottiene la lingua preferita memorizzata o dal browser.
+ * Legge la lingua dal parametro ?lang= dell'URL, se valido.
+ * È l'unico segnale che un crawler può vedere, quindi ha la precedenza su tutto.
+ */
+export function getLocaleFromUrl() {
+    try {
+        const richiesta = new URLSearchParams(window.location.search).get(PARAM_LINGUA);
+        if (richiesta) {
+            const normalizzata = richiesta.slice(0, 2).toLowerCase();
+            if (SUPPORTED_LOCALES.includes(normalizzata)) return normalizzata;
+        }
+    } catch (e) {
+        // URL non analizzabile: si prosegue con gli altri criteri
+    }
+    return null;
+}
+
+/**
+ * Determina la lingua da usare, in ordine di priorità:
+ *
+ *   1. ?lang= nell'URL — è la versione dichiarata negli hreflang e nella
+ *      sitemap, quindi deve vincere sempre: è ciò che Google indicizza e ciò
+ *      che l'utente riceve quando gli viene condiviso un link.
+ *   2. preferenza salvata dall'utente in localStorage.
+ *   3. lingua predefinita del sito.
+ *
+ * La lingua del browser NON viene più usata come ripiego: faceva sì che
+ * l'URL canonico italiano venisse mostrato in inglese a chiunque avesse il
+ * browser in inglese, Googlebot compreso, che indicizzava così contenuti
+ * inglesi sotto l'URL italiano. Chi arriva senza preferenze vede la lingua
+ * predefinita e può cambiarla dal selettore.
  */
 export function getSavedLocale() {
+    const daUrl = getLocaleFromUrl();
+    if (daUrl) return daUrl;
+
     try {
         const saved = localStorage.getItem(STORAGE_KEY);
         if (saved && SUPPORTED_LOCALES.includes(saved)) {
             return saved;
-        }
-        const browserLang = (navigator.language || '').slice(0, 2).toLowerCase();
-        if (SUPPORTED_LOCALES.includes(browserLang)) {
-            return browserLang;
         }
     } catch (e) {
         // Fallback sicuro se localStorage è bloccato
@@ -117,6 +147,7 @@ export async function setLocale(locale) {
     } catch (e) { }
 
     document.documentElement.lang = locale;
+    sincronizzaUrlECanonical(locale);
 
     if (locale === 'it') {
         // Lingua sorgente: per elementi statici l'HTML contiene già il testo IT,
@@ -134,6 +165,54 @@ export async function setLocale(locale) {
     }));
 
     aggiornaStatoSelettoreUI(locale);
+}
+
+/**
+ * Allinea URL e link canonico alla lingua attiva.
+ *
+ * L'italiano è la versione predefinita e vive sull'URL pulito; l'inglese vive
+ * su ?lang=en, esattamente come dichiarato negli hreflang e nella sitemap.
+ * Il canonico viene reso auto-referenziale: senza questo, la pagina inglese
+ * dichiarerebbe come canonico l'URL italiano e Google non la indicizzerebbe
+ * affatto, rendendo inutile l'intera annotazione hreflang.
+ */
+function sincronizzaUrlECanonical(locale) {
+    if (typeof window === 'undefined' || !window.history?.replaceState) return;
+
+    let url;
+    try {
+        url = new URL(window.location.href);
+    } catch (e) {
+        return;
+    }
+
+    if (locale === DEFAULT_LOCALE) {
+        url.searchParams.delete(PARAM_LINGUA);
+    } else {
+        url.searchParams.set(PARAM_LINGUA, locale);
+    }
+
+    // replaceState e non pushState: il cambio lingua non è un passo di
+    // navigazione, non deve riempire la cronologia del browser.
+    const nuovo = url.pathname + (url.search || '') + url.hash;
+    if (nuovo !== window.location.pathname + window.location.search + window.location.hash) {
+        window.history.replaceState(null, '', nuovo);
+    }
+
+    const canonical = document.querySelector('link[rel="canonical"]');
+    if (canonical) {
+        try {
+            const canonicalUrl = new URL(canonical.getAttribute('href'), window.location.origin);
+            if (locale === DEFAULT_LOCALE) {
+                canonicalUrl.searchParams.delete(PARAM_LINGUA);
+            } else {
+                canonicalUrl.searchParams.set(PARAM_LINGUA, locale);
+            }
+            canonical.setAttribute('href', canonicalUrl.toString());
+        } catch (e) {
+            // href canonico non analizzabile: si lascia invariato
+        }
+    }
 }
 
 /**

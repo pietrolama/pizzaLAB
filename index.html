@@ -18,7 +18,7 @@
     <meta property="og:url" content="https://pizzalab.pizza/">
     <meta property="og:title" content="PizzaLab — Il Laboratorio della Pizza Perfetta">
     <meta property="og:description" content="La scienza esatta di un impasto perfetto: calcola farine, idratazione, lievito, temperature e pianifica la tua infornata con metodo scientifico.">
-    <meta property="og:image" content="https://pizzalab.pizza/img/logo.png">
+    <meta property="og:image" content="https://pizzalab.pizza/img/og-image.jpg">
     <meta property="og:site_name" content="PizzaLab">
     <meta property="og:locale" content="it_IT">
     <meta property="og:locale:alternate" content="en_US">
@@ -28,7 +28,7 @@
     <meta name="twitter:url" content="https://pizzalab.pizza/">
     <meta name="twitter:title" content="PizzaLab — Il Laboratorio della Pizza Perfetta">
     <meta name="twitter:description" content="La scienza esatta di un impasto perfetto: calcola farine, idratazione, lievito e temperature.">
-    <meta name="twitter:image" content="https://pizzalab.pizza/img/logo.png">
+    <meta name="twitter:image" content="https://pizzalab.pizza/img/og-image.jpg">
 
     <!-- Schema.org JSON-LD -->
     <script type="application/ld+json">
@@ -43,23 +43,26 @@
         "@type": "Organization",
         "name": "PizzaLab",
         "url": "https://pizzalab.pizza",
-        "logo": "https://pizzalab.pizza/img/logo.png"
+        "logo": "https://pizzalab.pizza/img/icon-512.png"
       }
     }
     </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
     <link rel="stylesheet" href="css/main.css">
     <link rel="icon" href="logo.ico" type="image/x-icon">
     <link rel="manifest" href="manifest.webmanifest">
     <meta name="theme-color" content="#08090c">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="img/logo.png">
+    <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 </head>
 <body>
     <nav class="site-nav">
         <div class="nav-container">
             <a href="index.html" class="nav-brand">
-                <img src="img/logo.png" alt="PizzaLab">
+                <img src="img/logo.png" alt="PizzaLab" width="128" height="128">
                 PizzaLab
             </a>
             <ul class="nav-links">
@@ -128,15 +131,15 @@
                     </div>
                     <div class="mini-calc__field">
                         <label for="mc-numero" data-i18n="home.minicalc.dough_balls">Numero panetti</label>
-                        <input type="number" id="mc-numero" class="mini-calc__input" value="4" min="1">
+                        <input type="number" id="mc-numero" class="mini-calc__input" value="4" min="1" max="100" step="1">
                     </div>
                     <div class="mini-calc__field">
                         <label for="mc-peso" data-i18n="home.minicalc.ball_weight">Peso panetto (g)</label>
-                        <input type="number" id="mc-peso" class="mini-calc__input" value="250" min="50">
+                        <input type="number" id="mc-peso" class="mini-calc__input" value="250" min="50" max="2000" step="5">
                     </div>
                     <div class="mini-calc__field">
                         <label for="mc-idro" data-i18n="home.minicalc.hydration">Idratazione (%)</label>
-                        <input type="number" id="mc-idro" class="mini-calc__input" value="62" min="40" max="100">
+                        <input type="number" id="mc-idro" class="mini-calc__input" value="62" min="40" max="110" step="1">
                     </div>
                 </div>
 

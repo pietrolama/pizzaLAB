@@ -50,7 +50,11 @@ function aggiorna() {
     const idratazioneTotale = parseFloat(campi.idro.value);
     const tipoPizza = campi.tipo.value;
 
-    if (!numPanetti || !pesoPanetto || !idratazioneTotale) return;
+    // Il mini-calcolatore non ha spazio per messaggi di errore: se i valori non
+    // sono utilizzabili si lascia semplicemente l'ultimo risultato valido.
+    if (!Number.isFinite(numPanetti) || numPanetti < 1) return;
+    if (!Number.isFinite(pesoPanetto) || pesoPanetto <= 0) return;
+    if (!Number.isFinite(idratazioneTotale) || idratazioneTotale <= 0) return;
 
     const ricetta = calcolaImpastoDiretto({
         pesoPanetto,
@@ -65,7 +69,16 @@ function aggiorna() {
     animateNumber(output.farina, Math.round(ricetta.pesoFarina), 0);
     animateNumber(output.acqua, Math.round(ricetta.pesoAcqua), 0);
     animateNumber(output.sale, Math.round(ricetta.pesoSale), 0);
-    animateNumber(output.lievito, parseFloat(ricetta.pesoLievito), 2);
+
+    // pesoLievito è null quando la formula non è applicabile (idratazione fuori
+    // scala): in quel caso si mostra un trattino invece di NaN.
+    const lievito = parseFloat(ricetta.pesoLievito);
+    if (Number.isFinite(lievito)) {
+        animateNumber(output.lievito, lievito, 2);
+    } else {
+        output.lievito.textContent = '—';
+        delete output.lievito.dataset.currentVal;
+    }
 }
 
 Object.values(campi).forEach((el) => {
