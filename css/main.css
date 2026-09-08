@@ -121,6 +121,11 @@ a { color: inherit; }
     font-weight: 800;
     font-size: 1.3rem;
     transition: transform 0.2s ease;
+    /* Senza questo il marchio, che e' un flex item, viene compresso quando i
+       link non ci stanno: il testo "PizzaLab" sborda dal proprio box e finisce
+       sopra la prima voce del menu. */
+    flex-shrink: 0;
+    white-space: nowrap;
 }
 
 .nav-brand:hover {
