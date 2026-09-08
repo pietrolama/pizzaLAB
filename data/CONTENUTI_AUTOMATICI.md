@@ -74,9 +74,18 @@ citata (obbligatoria — niente affermazioni senza link verificabile).
 ## Regole per l'agente di ricerca
 
 - Solo fonti affidabili: enti di ricerca, riviste peer-reviewed, istituzioni
-  (es. CREA, università, riviste scientifiche di settore). Niente blog non
-  verificati o contenuti generati da altre IA senza fonte primaria.
+  scientifiche ed universitarie. Niente blog non verificati, testate generaliste
+  o comunicati acritici di uffici stampa.
 - Ogni voce deve avere almeno una fonte con URL verificabile in `fonti`.
+- **Protocollo Avvocato del Diavolo (Debunking dei Miti)**:
+  L'agente non deve accettare passivamente il marketing o il folklore della pizza.
+  Prima di formulare una proposta deve provare a "smontarla":
+  - Verificare se l'affermazione regge al confronto con la biochimica e fisiologia
+    umana reale (es. gelatinizzazione degli amidi in cottura, pepsina gastrica vs
+    proteasi della farina, inattivazione termica del lievito a 55-60°C).
+  - Se la notizia contiene slogan commerciali diffusi (es. "tempi lunghi predigeriscono
+    il glutine"), deve smontare il mito nel testo spiegando la realtà scientifica,
+    oppure scartare la notizia.
 - L'agente scrive solo nei file `*_bozza.json`. Non deve mai toccare
   `stagionale.json` o `scienza.json` direttamente: la pubblicazione è una
   scelta umana.

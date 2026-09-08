@@ -46,11 +46,15 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
-  <!--
-    scienza.html è temporaneamente esclusa: data/scienza.json è ancora vuoto,
-    quindi la pagina non ha contenuto da indicizzare. Va rimessa qui (priority
-    0.8, changefreq weekly) non appena il primo articolo viene pubblicato.
-  -->
+  <url>
+    <loc>https://pizzalab.pizza/scienza.html</loc>
+    <xhtml:link rel="alternate" hreflang="it" href="https://pizzalab.pizza/scienza.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://pizzalab.pizza/scienza.html?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://pizzalab.pizza/scienza.html" />
+    <lastmod>2026-09-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
   <url>
     <loc>https://pizzalab.pizza/diario.html</loc>
     <xhtml:link rel="alternate" hreflang="it" href="https://pizzalab.pizza/diario.html" />

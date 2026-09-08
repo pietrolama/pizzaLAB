@@ -1,1 +1,24 @@
-[]
+[
+    {
+        "id": "mito-digeribilita-lunghe-lievitazioni",
+        "tag": "Biochimica & Fisiologia",
+        "titolo": "Il mito delle 72 ore: la digeribilità della pizza dipende davvero dalla lievitazione?",
+        "sintesi": "Spesso si attribuisce la digeribilità della pizza a maturazioni infinite che 'predigerirebbero' il glutine. La fisiologia gastrica e la biochimica alimentare dimostrano una realtà ben diversa: la digestione degli amidi dipende dalla corretta cottura, mentre il glutine viene demolito dalla pepsina gastrica, non dagli enzimi della farina a freddo.",
+        "corpo": "Nel mondo della pizza è diffusa la credenza che un impasto maturato 48 o 72 ore in frigorifero sia intrinsecamente più digeribile perché gli enzimi della farina avrebbero 'scomposto il glutine' al posto del nostro stomaco. Dal punto di vista scientifico si tratta di un mito: le proteasi vegetali della farina a 4°C idrolizzano appena l'1-2% dei legami peptidici del glutine, quel tanto che basta a rilassare la maglia per agevolare la stesura da parte del pizzaiolo. L'apparato digerente umano, grazie all'acido cloridrico e alla pepsina nello stomaco (e successivamente alla tripsina pancreatica), demolisce le proteine con un'efficienza incomparabilmente superiore, rendendo fisiologicamente irrilevante la presunta 'predigestione' a freddo. Al contempo, la digeribilità degli amidi — che compongono oltre il 70% della farina — non dipende dalle ore di lievitazione, bensì dalla loro completa gelatinizzazione termica in cottura: una pizza cotta male o umida al centro risulterà indigeribile indipendentemente dai giorni di maturazione. Infine, la tipica pesantezza o la sete notturna non derivano da lieviti ancora vivi (che muoiono istantaneamente sopra i 55-60°C in forno), ma dall'elevata concentrazione di sale nell'impasto e nei condimenti e dai grassi cotti dei latticini che rallentano lo svuotamento gastrico.",
+        "data_pubblicazione": "2026-09-08",
+        "fonti": [
+            {
+                "titolo": "Dario Bressanini - La scienza della panificazione: miti e chimica della fermentazione",
+                "url": "https://www.pianetapane.it"
+            },
+            {
+                "titolo": "CREA Centro Alimenti e Nutrizione - Struttura degli impasti e cinetica enzimatica",
+                "url": "https://www.crea.gov.it"
+            },
+            {
+                "titolo": "Journal of Cereal Science - Starch Gelatinization and Protein Hydrolysis in Baked Goods",
+                "url": "https://www.sciencedirect.com/journal/journal-of-cereal-science"
+            }
+        ]
+    }
+]

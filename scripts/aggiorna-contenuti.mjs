@@ -93,16 +93,25 @@ Se trovi una ricorrenza pertinente, rispondi SOLO con un JSON (array con un ogge
 
 Il campo "immagine" deve essere uno tra: img/farine.jpg, img/lievito-madre.jpg, img/pala.jpg, img/biga.jpg, img/poolish.jpg, img/napoletana.jpg (scegli il più coerente). Il campo "link" deve essere una pagina esistente del sito tra: prefermenti_e_farine.html, tipi-di-pizza.html, calcolatore.html. Non includere testo fuori dal JSON.`;
 
-const promptScienza = `Usa la ricerca web per trovare UNA notizia o studio scientifico recente (ultimi 6 mesi, se possibile) legato a impasti, fermentazione, lieviti, farine o nutrizione della pizza/pane. Cerca solo su fonti affidabili: enti di ricerca, università, riviste scientifiche o istituzioni alimentari (es. CREA) — evita blog non verificati o fonti senza autore/ente identificabile.
+const promptScienza = `Usa la ricerca web per trovare UNA notizia o studio scientifico (preferibilmente recente) legato a chimica degli impasti, microbiologia della fermentazione, lieviti, reologia delle farine o nutrizione della pizza/pane. Cerca solo su fonti affidabili: enti di ricerca, università, riviste scientifiche peer-reviewed o istituzioni alimentari serie. Evita blog non verificati, testate generaliste o comunicati acritici di uffici stampa.
 
-Rispondi SOLO con un JSON (array con un oggetto, o array vuoto se non trovi nulla di sufficientemente affidabile) con questo schema esatto:
+PROTOCOLLO DI VERIFICA CRITICA E DEBUNKING ("AVVOCATO DEL DIAVOLO"):
+Prima di redigere l'articolo, metti alla prova le informazioni raccolte cercando attivamente di smontarle:
+1. Distingui il marketing e il folklore delle pizzerie dalla fisiologia e biochimica reale. Non accettare miti comuni, quali:
+   - "Le lunghe lievitazioni predigeriscono il glutine al posto dello stomaco" (falso: la pepsina e l'HCl gastrico sono milioni di volte più efficaci delle proteasi vegetali della farina a freddo, che scindono solo l'1-2% dei legami).
+   - "Il lievito continua a fermentare nello stomaco" (falso: a 55-60°C il lievito muore istantaneamente).
+   - "La digeribilità degli amidi dipende dalle ore di lievitazione" (falso: l'amido diventa digeribile tramite la gelatinizzazione termica in cottura a >80°C, non durante il riposo a crudo).
+2. Se la notizia o la fonte contiene affermazioni semplificate o slogan promozionali, applica il fact-checking: spiega cosa dice davvero la biochimica, smonta il mito nel corpo del testo chiarendo il vero meccanismo (es. il ruolo della cottura, del sale, dell'idratazione o dell'acidificazione con pasta madre).
+3. Se la notizia non regge alla verifica critica o è una bufala commerciale indifendibile, scartala e cercane un'altra, oppure restituisci un array vuoto [].
+
+Rispondi SOLO con un JSON (array con un oggetto, o array vuoto se non trovi nulla di scientificamente solido e verificato) con questo schema esatto:
 
 [
   {
     "id": "slug-breve-univoco",
     "titolo": "Titolo dell'approfondimento",
-    "sintesi": "1-2 frasi di sintesi",
-    "corpo": "3-6 frasi che spiegano il contenuto in modo divulgativo ma accurato",
+    "sintesi": "1-2 frasi di sintesi chiara ed esatta",
+    "corpo": "3-6 frasi che spiegano il contenuto con rigore scientifico e divulgativo, smontando eventuali falsi miti correlati",
     "data_pubblicazione": "${oggi}",
     "fonti": [{ "titolo": "Nome fonte", "url": "https://..." }]
   }
