@@ -12,7 +12,14 @@
     --bg-surface: #121420;
     --bg-glass: rgba(18, 20, 32, 0.7);
 
+    /* --primary-color e' l'arancio del marchio: va benissimo come accento, come
+       bordo e come TESTO su fondo scuro (6.15:1). Non regge pero' il testo
+       bianco sopra, che si ferma a 3.24:1 contro i 4.5:1 richiesti da WCAG AA.
+       Per i fondi pieni che portano testo bianco si usano i due token qui
+       sotto, stessa famiglia cromatica ma conformi (4.80:1 e 6.28:1). */
     --primary-color: #ff5226;
+    --primary-solid: #d03e0d;
+    --primary-solid-deep: #b0340b;
     --primary-glow: rgba(255, 82, 38, 0.35);
     --secondary-color: #ff9800;
 
@@ -65,7 +72,7 @@ a { color: inherit; }
     font-weight: 700;
     font-size: 1rem;
     color: #fff;
-    background: linear-gradient(135deg, var(--primary-color), #e03e12);
+    background: linear-gradient(135deg, var(--primary-solid), var(--primary-solid-deep));
     border-radius: 12px;
     text-decoration: none;
     box-shadow: 0 8px 24px var(--primary-glow);
@@ -198,7 +205,7 @@ a { color: inherit; }
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    background: var(--primary-color);
+    background: var(--primary-solid);
     color: #fff;
     display: flex;
     align-items: center;
@@ -240,13 +247,13 @@ a { color: inherit; }
 }
 
 .lang-btn.active {
-    background: var(--primary-color);
+    background: var(--primary-solid);
     color: #fff;
     box-shadow: 0 2px 8px var(--primary-glow);
 }
 
 .nav-links li a.active {
-    background: var(--primary-color);
+    background: var(--primary-solid);
     color: #fff;
 }
 
@@ -772,6 +779,15 @@ footer {
 .form-hint {
     color: var(--text-dim);
     font-size: 0.85rem;
+    margin-top: 6px;
+    margin-bottom: 0;
+}
+
+/* Il margine negativo serve solo alla nota che commenta l'intera riga di campi
+   che la precede, per avvicinarla. Applicato a tutte le .form-hint finiva anche
+   su quelle interne a un .form-group (l'assistente ne genera cinque), dove
+   trascinava il testo sopra l'input. */
+.form-row + .form-hint {
     margin-top: -12px;
     margin-bottom: 24px;
 }
@@ -864,7 +880,7 @@ footer {
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    background: var(--primary-color);
+    background: var(--primary-solid);
     color: #fff;
     font-family: var(--font-heading);
     font-weight: 700;
@@ -1062,6 +1078,23 @@ footer {
     transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
 }
 
+/* Il pulsante di conferma del wizard ha class="btn", ma il selettore per ID
+   qui sopra ha specificita' maggiore della classe e gli portava via il
+   gradiente: la CTA principale finiva identica alle opzioni di risposta. */
+#options-container button.btn {
+    background: linear-gradient(135deg, var(--primary-solid), var(--primary-solid-deep));
+    border: none;
+    color: #fff;
+    font-weight: 700;
+    box-shadow: 0 8px 24px var(--primary-glow);
+}
+
+#options-container button.btn:hover {
+    background: linear-gradient(135deg, var(--primary-solid), var(--primary-solid-deep));
+    border: none;
+    transform: translateY(-2px);
+}
+
 #options-container button:hover {
     border-color: var(--primary-color);
     background: rgba(255, 82, 38, 0.08);
@@ -1162,7 +1195,7 @@ footer {
 }
 
 .segmented-btn.active {
-    background: var(--primary-color);
+    background: var(--primary-solid);
     color: #fff;
     box-shadow: 0 2px 8px var(--primary-glow);
 }
@@ -1398,7 +1431,7 @@ footer {
 }
 
 .step-timer-btn:hover {
-    background: var(--primary-color);
+    background: var(--primary-solid);
     color: #fff;
     box-shadow: 0 2px 8px var(--primary-glow);
     transform: translateY(-1px);
@@ -1627,12 +1660,37 @@ footer {
     padding-top: 36px;
 }
 
+/* Le sette schede non stanno su una riga sola nemmeno a 1280px: due finivano
+   fuori dallo scorrimento orizzontale, senza alcun segnale che esistessero.
+   Andando a capo restano tutte visibili a qualunque larghezza. Lo scorrimento
+   resta come rete di sicurezza, con una barra visibile invece di quella a
+   scomparsa, che su alcuni sistemi non si vede finche' non si scorre. */
 .tools-nav-pills {
     display: flex;
+    flex-wrap: wrap;
     gap: 8px;
     margin-bottom: 24px;
     overflow-x: auto;
     padding-bottom: 4px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
+}
+
+.tools-nav-pills::-webkit-scrollbar { height: 6px; }
+.tools-nav-pills::-webkit-scrollbar-track { background: transparent; }
+
+.tools-nav-pills::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.22);
+    border-radius: 999px;
+}
+
+/* Su schermi stretti andare a capo produrrebbe sette righe impilate: li' lo
+   strip che scorre in orizzontale e' il comportamento giusto, ed e' anche
+   quello che l'utente si aspetta da una fila di chip su mobile. */
+@media (max-width: 640px) {
+    .tools-nav-pills {
+        flex-wrap: nowrap;
+    }
 }
 
 .tool-tab-btn {
