@@ -23,6 +23,18 @@ const output = {
 };
 
 function animateNumber(element, targetValue, decimals = 0, duration = 350) {
+    const scriviValore = () => {
+        element.dataset.currentVal = targetValue;
+        element.textContent = decimals > 0 ? targetValue.toFixed(decimals) : Math.round(targetValue);
+    };
+
+    // Coerente con il calcolatore: chi preferisce meno movimento vede subito il
+    // valore, senza passare da requestAnimationFrame.
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+        scriviValore();
+        return;
+    }
+
     const startValue = parseFloat(element.dataset.currentVal) || 0;
     if (startValue === targetValue) return;
     const startTime = performance.now();
@@ -37,8 +49,7 @@ function animateNumber(element, targetValue, decimals = 0, duration = 350) {
         if (progress < 1) {
             requestAnimationFrame(update);
         } else {
-            element.dataset.currentVal = targetValue;
-            element.textContent = decimals > 0 ? targetValue.toFixed(decimals) : Math.round(targetValue);
+            scriviValore();
         }
     }
     requestAnimationFrame(update);

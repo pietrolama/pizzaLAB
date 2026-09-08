@@ -18,7 +18,11 @@
 
     --text-main: #f5f6f8;
     --text-muted: #9aa0ad;
-    --text-dim: #676d7a;
+    /* #676d7a dava 3.84:1 sul fondo scuro, sotto la soglia WCAG AA di 4.5
+       per il testo normale (viene usato per note, hint e footer, tutti in
+       corpo piccolo). #7d8493 porta a 5.30:1 sul fondo e 4.88:1 sulle
+       superfici, restando un grigio neutro della stessa famiglia. */
+    --text-dim: #7d8493;
 
     --border-color: rgba(255, 255, 255, 0.08);
 
@@ -258,7 +262,12 @@ a { color: inherit; }
     border-radius: 2px;
 }
 
-@media (max-width: 900px) {
+/* Il menu passa a hamburger a 1150px e non a 900px: con dieci voci piu' il
+   selettore lingua, la barra desktop non ci sta gia' sotto i ~1150px e i link
+   finali (Shop, Contatti) finivano fuori dal contenitore, tagliati da
+   overflow-x:hidden. Nell'intervallo 901-1150px il marchio si sovrapponeva
+   anche alla prima voce. */
+@media (max-width: 1150px) {
     .site-nav {
         padding: 10px 0;
         width: 100%;
@@ -289,6 +298,13 @@ a { color: inherit; }
     .nav-brand img {
         height: 26px;
         width: auto;
+    }
+
+    /* 32px di padding per lato lasciano solo 296px utili su un telefono da
+       360px: e' la causa per cui le griglie piu' larghe sbordavano. */
+    .page-container {
+        padding-left: 16px;
+        padding-right: 16px;
     }
 
     .lang-switch-container {
@@ -934,7 +950,7 @@ footer {
 
 .listing-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
     gap: 24px;
 }
 
@@ -1984,7 +2000,11 @@ footer {
 /* ===== 1. SOS IMPASTO / TROUBLESHOOTING ===== */
 .troubleshoot-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    /* min(320px, 100%) invece di 320px secco: una colonna con minimo fisso non
+       puo' restringersi sotto quel valore e su schermi stretti sborda dal
+       contenitore, dove overflow-x:hidden la taglia invece di farla scorrere.
+       Su schermi larghi il comportamento e' identico. */
+    grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
     gap: 20px;
     margin-top: 16px;
 }

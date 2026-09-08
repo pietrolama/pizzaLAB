@@ -224,17 +224,17 @@ function aggiornaMetodiDisponibili() {
     const metodiDisponibili = metodiPerPizza[tipoPizza] || [];
     const metodoAttuale = metodoSelect.value;
 
+    // Le opzioni statiche nel markup portano data-i18n="method.*": ricostruirle
+    // con testo fisso le lasciava in italiano anche in inglese e ne cancellava
+    // l'attributo, così nemmeno un cambio lingua successivo le recuperava.
+    // Qui si traduce subito e si rimette l'attributo per le traduzioni future.
     metodoSelect.innerHTML = '';
     metodiDisponibili.forEach((metodo) => {
         const opt = document.createElement('option');
+        const chiave = `method.${metodo}`;
         opt.value = metodo;
-        opt.textContent = {
-            diretto: 'Impasto Diretto',
-            biga: 'Prefermento Biga',
-            poolish: 'Prefermento Poolish',
-            lievito_madre: 'Lievito Madre',
-            biga_poolish: 'Biga + Poolish',
-        }[metodo] || metodo;
+        opt.setAttribute('data-i18n', chiave);
+        opt.textContent = t(chiave, {}, metodo);
         metodoSelect.appendChild(opt);
     });
 
@@ -471,6 +471,21 @@ function animateNumber(element, targetValue, decimals = 0, duration = 400) {
         return;
     }
 
+    const scriviValore = () => {
+        element.dataset.currentVal = targetValue;
+        element.textContent = decimals > 0 ? targetValue.toFixed(decimals) : Math.round(targetValue);
+    };
+
+    // Chi ha chiesto meno animazioni riceve subito il valore finale. Il CSS
+    // rispetta gia' questa preferenza (vedi @media prefers-reduced-motion),
+    // ma il conteggio animato e' JavaScript e la ignorava. Scrivere il valore
+    // direttamente elimina anche la dipendenza da requestAnimationFrame, che
+    // non parte in ogni contesto di rendering.
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
+        scriviValore();
+        return;
+    }
+
     const startValue = parseFloat(element.dataset.currentVal) || 0;
     const startTime = performance.now();
 
@@ -484,8 +499,7 @@ function animateNumber(element, targetValue, decimals = 0, duration = 400) {
         if (progress < 1) {
             requestAnimationFrame(update);
         } else {
-            element.dataset.currentVal = targetValue;
-            element.textContent = decimals > 0 ? targetValue.toFixed(decimals) : Math.round(targetValue);
+            scriviValore();
         }
     }
     requestAnimationFrame(update);
@@ -1436,7 +1450,10 @@ window.addEventListener('pizzalab:locale-changed', () => {
     aggiornaFDTUI();
     const activeOven = document.querySelector('.oven-choice-card.active')?.dataset?.oven || 'domestico';
     renderOvenDetail(activeOven);
-    aggiornaWConsigliato();
+    // La funzione si chiama aggiornaSuggerimentoW: il nome sbagliato sollevava
+    // un ReferenceError che interrompeva il gestore prima del re-render della
+    // scheda, lasciandola nella lingua precedente.
+    aggiornaSuggerimentoW();
     if (ultimoStatoRicetta && ultimoDatiCalcolati) {
         renderRisultato(ultimoDatiCalcolati, ultimoStatoRicetta.tipoImpasto);
     }

@@ -115,10 +115,14 @@
     </main>
 
     <footer>
-        <p data-i18n="footer.copy">&copy; 2026 PizzaLab — La tua guida alla pizza perfetta</p>
+        <p data-i18n="footer.copy">© 2026 PizzaLab — La tua guida alla pizza perfetta</p>
     </footer>
 
     <script src="js/nav.js" defer></script>
-    <script src="js/diario-page.js" defer></script>
+    <!-- type="module": diario-page.js importa firebase-auth.js, quindi caricato
+         come script classico falliva con "Cannot use import statement outside a
+         module" e l'intera pagina restava senza JavaScript. I moduli sono
+         differiti per definizione, defer non serve. -->
+    <script type="module" src="js/diario-page.js"></script>
 </body>
 </html>
