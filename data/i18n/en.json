@@ -344,6 +344,7 @@
     "valid.warn_high_temp": "Room temperature of {temperatura}°C: fermentation speeds up considerably, keep an eye on the dough so it does not collapse.",
     "valid.warn_long_fermentation": "Fermentation of {ore} hours: beyond 72 hours you need a strong enough flour and a cold retard in the fridge.",
     "valid.warn_low_hydration": "Hydration at {idratazione}%: this is a fairly dry dough, the gluten network will develop more slowly.",
+    "valid.warn_low_temp": "Room temperature of {temperatura}°C: fermentation slows down a lot and takes considerably longer. Below 15°C the estimate is less reliable — judge the dough itself rather than going by the clock alone.",
     "yeast.converter_subtitle": "Convert any dose between Fresh, Dry, LiCoLi, or Sourdough, with auto-adjustment of flour and water offsets.",
     "yeast.converter_title": "Universal Yeast Converter",
     "yeast.from_label": "From Yeast:",

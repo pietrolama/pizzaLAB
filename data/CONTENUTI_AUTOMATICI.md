@@ -71,21 +71,26 @@ citata (obbligatoria — niente affermazioni senza link verificabile).
 }
 ```
 
-## Regole per l'agente di ricerca
+## Regole per l'agente di ricerca e prevenzione della ripetitività
 
-- Solo fonti affidabili: enti di ricerca, riviste peer-reviewed, istituzioni
-  scientifiche ed universitarie. Niente blog non verificati, testate generaliste
-  o comunicati acritici di uffici stampa.
-- Ogni voce deve avere almeno una fonte con URL verificabile in `fonti`.
-- **Protocollo Avvocato del Diavolo (Debunking dei Miti)**:
-  L'agente non deve accettare passivamente il marketing o il folklore della pizza.
-  Prima di formulare una proposta deve provare a "smontarla":
-  - Verificare se l'affermazione regge al confronto con la biochimica e fisiologia
-    umana reale (es. gelatinizzazione degli amidi in cottura, pepsina gastrica vs
-    proteasi della farina, inattivazione termica del lievito a 55-60°C).
-  - Se la notizia contiene slogan commerciali diffusi (es. "tempi lunghi predigeriscono
-    il glutine"), deve smontare il mito nel testo spiegando la realtà scientifica,
-    oppure scartare la notizia.
-- L'agente scrive solo nei file `*_bozza.json`. Non deve mai toccare
-  `stagionale.json` o `scienza.json` direttamente: la pubblicazione è una
-  scelta umana.
+Lo script `scripts/aggiorna-contenuti.mjs` adotta un'architettura avanzata per garantire varietà e rigore scientifico:
+
+1. **Memoria dell'Archivio (Blacklist dei temi già trattati)**:
+   Lo script legge prima `data/scienza.json` e le bozze esistenti, estrae i titoli e gli ID, e impone a Kimi di **non proporre mai argomenti simili o già coperti**.
+
+2. **Ruota dei 5 Cluster Tematici (Rotazione settimanale)**:
+   Per evitare che il bot parli sempre delle stesse cose (es. lievito madre e digeribilità), la ricerca ruota in base al numero della settimana dell'anno (`settimana % 5`):
+   - **Cluster 1 — Microbiologia e Cinetica Fermentativa**: ceppi non convenzionali, batteri lattici (LAB), acidi organici e composti aromatici (VOC).
+   - **Cluster 2 — Reologia e Chimica Fisica della Cottura**: gelatinizzazione termica degli amidi, reazione di Maillard, alveografia (W, P/L), dinamica termica nei forni.
+   - **Cluster 3 — Chimica delle Farine e Agronomia del Frumento**: frazioni glutenine/gliadine, ceneri, tasso di abburattamento, grani antichi vs moderni (dati reologici reali).
+   - **Cluster 4 — Fisiologia Gastrointestinale e Nutrizione Reale**: risposta glicemica/insulinica, acido fitico e biodisponibilità minerali, FODMAP e fermentazione colica, impatto dei grassi cotti.
+   - **Cluster 5 — Debunking Scientifico di Luoghi Comuni**: smontaggio biochimico di miti commerciali e folklore della panificazione.
+
+3. **Protocollo "Avvocato del Diavolo" a Due Fasi (Chain-of-Verification / Red Team)**:
+   - **Fase 1 (Il Ricercatore)**: trova uno studio/notizia candidato su fonti autorevoli (CREA, riviste peer-reviewed, università) e ne estrae la tesi.
+   - **Fase 2 (Il Revisore Scettico)**: Kimi assume il ruolo di un severo professore di chimica degli alimenti ed esegue una **seconda ricerca web avversariale** per cercare smentite, critiche o miti commerciali.
+     - Se la notizia è una semplificazione promozionale o una bufala -> viene **scartata** (`[]`).
+     - Se il fenomeno è reale -> viene **riscritta** con il massimo rigore scientifico, integrando i limiti metodologici e smontando eventuali falsi miti.
+
+4. **Controllo Umano**:
+   L'agente scrive solo nei file `*_bozza.json`. Non tocca mai `stagionale.json` o `scienza.json` direttamente: la pubblicazione è sempre una scelta umana tramite Pull Request.

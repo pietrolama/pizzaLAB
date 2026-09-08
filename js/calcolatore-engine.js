@@ -60,27 +60,99 @@ export function calcolaPesoTeglia(base, altezza, spessore) {
 
 // Quantità di lievito fresco (g) necessaria, in funzione di massa d'impasto,
 // idratazione, sale/grassi (in % sul peso farina), tempi e temperatura.
-// usaTeglia (bool) applica la correzione termica valida per Teglia e Pala:
-// entrambe sono un'unica massa d'impasto stesa e sottile, a differenza dei
-// panetti tondi, quindi risentono maggiormente della temperatura ambiente.
+// usaTeglia (bool) applica la correzione valida per Teglia e Pala: entrambe
+// sono un'unica massa d'impasto stesa e sottile, a differenza dei panetti
+// tondi, quindi fermentano più lentamente.
+//
+// ATTENZIONE: questa formula è EMPIRICA. Non deriva da un modello cinetico,
+// è stata ricavata sul campo e le sue costanti non hanno un significato
+// teorico. Va trattata come una curva interpolata, non come una legge.
+//
+// Inviluppo entro cui è stata verificata:
+//   - temperatura   15-35 °C   (fuori, vedi la nota su fattoreTemperatura)
+//   - tempo          8-72 h
+//   - idratazione   40-110 %   (limite duro 23-114, vedi sotto)
+//
+// Riscontri esterni, per chi dovesse rimetterci mano:
+//   - le dosi cadono dentro l'inviluppo del disciplinare AVPN (0,06-1,88 g di
+//     lievito fresco per kg di farina, lievitazione raccomandata 8-24 h) in
+//     tutto l'intervallo 10-24 h fra i 18 e i 25 °C;
+//   - la risposta alla temperatura implica un Q10 fra 2 e 3, che è il valore
+//     riportato in letteratura per il lievito in impasto fra 18 e 30 °C.
+// Entrambi sono congelati in test/lievito.test.mjs.
+//
+// Limiti noti e non corretti:
+//   - il termine del sale, (1 + sale/200), è circa dieci volte più debole di
+//     quanto riportato in letteratura. Oggi è innocuo perché il sale è una
+//     costante per tipo di pizza e non varia mai; andrà rivisto il giorno che
+//     diventasse un valore modificabile dall'utente;
+//   - il termine dei grassi non ha riscontri: a queste percentuali l'effetto
+//     reale è trascurabile in entrambe le direzioni;
+//   - il polinomio dell'idratazione ha un minimo intorno al 69% e risale sopra,
+//     cioè sostiene che un impasto molto idratato richieda più lievito. Nessuna
+//     fonte lo conferma; è probabilmente un artefatto dell'interpolazione
+//     quadratica. L'effetto pratico resta contenuto (+14% all'85%);
+//   - sopra i ~35 °C la formula continua ad accelerare, mentre l'attività del
+//     lievito in realtà raggiunge un massimo e poi cala.
+//
 // L'intervallo di idratazione entro cui il polinomio al denominatore
 // (4.2·i − 80 − 0.0305·i²) resta positivo: fuori da qui la formula cambia segno
 // e non ha più significato fisico. Le radici sono ~22.83% e ~114.87%.
 export const IDRATAZIONE_VALIDA_LIEVITO = { min: 23, max: 114 };
 
+// --- Risposta alla temperatura ---
+//
+// La versione precedente elevava i gradi Celsius alla 2.5. Fra i 20 e i 30 °C
+// quella curva è ottima: implica un Q10 fra 2.1 e 2.8 e una variazione di circa
+// l'11% per grado, entrambi dentro i valori riportati in letteratura per il
+// lievito in impasto. Fuori da lì però degenera, perché una legge di potenza
+// sui Celsius deve divergere avvicinandosi allo zero: implicava un Q10 di 4.6
+// a 12 °C e di 22.9 a 4 °C, e a 0 °C restituiva infinito. In pratica, per una
+// cucina a 10 °C chiedeva 9.5 g di lievito per kg di farina, cinque volte il
+// massimo previsto dal disciplinare AVPN.
+//
+// Qui si usa la forma corretta di un Q10 — esponenziale — resa tangente alla
+// curva precedente nel punto di ancoraggio, così dove il modello era già
+// validato i risultati coincidono (scarto sotto il 5% fra 18 e 25 °C) mentre al
+// freddo la pendenza resta costante all'11.4% per grado invece di impennarsi.
+//
+// Effetto collaterale utile: il modello smette di contraddirsi sul frigorifero.
+// Questa legge dà un rallentamento di 7.7x a 4 °C, vicino al fattore 10 usato
+// empiricamente per convertire le ore di frigo, contro i 71x della precedente.
+export const TEMPERATURA_RIFERIMENTO = 22;
+export const Q10_LIEVITO = Math.exp(10 * 2.5 / TEMPERATURA_RIFERIMENTO);
+
+// Teglia e pala sono un'unica massa stesa e sottile, quindi risentono di più
+// dell'ambiente e fermentano più lentamente dei panetti tondi. È lo stesso
+// rallentamento implicito nella legge precedente (0.75^2.5), mantenuto come
+// fattore costante: con un'esponenziale moltiplicare i gradi non è più una
+// trasformazione neutra e renderebbe la correzione dipendente dalla temperatura.
+const FATTORE_TEGLIA = Math.pow(0.75, 2.5);
+
+/**
+ * Fattore di velocità della fermentazione alla temperatura data.
+ * Valore più alto = fermentazione più rapida = meno lievito necessario.
+ */
+export function fattoreTemperatura(temperatura, usaTeglia = false) {
+    const T = Number(temperatura);
+    if (!Number.isFinite(T)) return null;
+
+    const base = Math.pow(TEMPERATURA_RIFERIMENTO, 2.5)
+        * Math.pow(Q10_LIEVITO, (T - TEMPERATURA_RIFERIMENTO) / 10);
+    return usaTeglia ? base * FATTORE_TEGLIA : base;
+}
+
 export function calcolaLievito(numPanetti, pesoPanetto, idratazione, sale, grassi, tempoLievitazione, oreFrigo, temperaturaAmbiente, usaTeglia) {
-    // La correzione termica vale solo per teglia e pala: `usaTeglia` è un
-    // booleano, va normalizzato a 0/1 perché un undefined produrrebbe NaN.
-    const correzioneTeglia = usaTeglia ? 1 : 0;
-    const tempCorretta = Number(temperaturaAmbiente) * (1 - 0.25 * correzioneTeglia);
+    const fattoreTemp = fattoreTemperatura(temperaturaAmbiente, Boolean(usaTeglia));
     const fattoreCrescitaLievito = 0.005;
 
     const tempoLievitazioneCorretto = tempoLievitazione - (9 * oreFrigo / 10);
 
-    // Casi degeneri: la formula richiede temperatura e tempo utile strettamente
-    // positivi e un'idratazione entro l'intervallo di validità del polinomio.
-    // Restituire null (anziché 0) distingue "non calcolabile" da "zero lievito".
-    if (!Number.isFinite(tempCorretta) || tempCorretta <= 0) return null;
+    // Casi degeneri: la formula richiede un tempo utile positivo e un'idratazione
+    // entro l'intervallo di validità del polinomio. Restituire null (anziché 0)
+    // distingue "non calcolabile" da "zero lievito". La temperatura non ha più
+    // bisogno di essere positiva: l'esponenziale resta finita a qualunque valore.
+    if (fattoreTemp === null || fattoreTemp <= 0) return null;
     if (!Number.isFinite(tempoLievitazioneCorretto) || tempoLievitazioneCorretto <= 0) return null;
     if (!Number.isFinite(idratazione)
         || idratazione < IDRATAZIONE_VALIDA_LIEVITO.min
@@ -88,7 +160,7 @@ export function calcolaLievito(numPanetti, pesoPanetto, idratazione, sale, grass
     if (!Number.isFinite(numPanetti) || !Number.isFinite(pesoPanetto)) return null;
 
     const forzaLievitoSpecifica = 2250 * (1 + sale / 200) * (1 + grassi / 300)
-        / ((4.2 * idratazione - 80 - 0.0305 * idratazione * idratazione) * Math.pow(tempCorretta, 2.5) * Math.pow(tempoLievitazioneCorretto, 1.2));
+        / ((4.2 * idratazione - 80 - 0.0305 * idratazione * idratazione) * fattoreTemp * Math.pow(tempoLievitazioneCorretto, 1.2));
     const pesoImpasto = numPanetti * pesoPanetto;
     const quantitaFarinaImpasto = 100000 * pesoImpasto / (idratazione * (sale + grassi) + 1000 * (idratazione + 100));
     const lievitoNecessarioImpasto = (quantitaFarinaImpasto * forzaLievitoSpecifica - fattoreCrescitaLievito);

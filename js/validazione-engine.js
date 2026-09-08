@@ -146,6 +146,13 @@ export function validaInput(tipoImpasto, input) {
     if (Number.isFinite(input.temperaturaAmbiente) && input.temperaturaAmbiente > 30) {
         avvisi.push(avv('valid.warn_high_temp', { temperatura: input.temperaturaAmbiente }));
     }
+    // Sotto i 15 °C la stima resta calcolabile ma nessun modello è stato
+    // validato lì: la curva di risposta alla temperatura è tarata sul campo
+    // fra i 18 e i 30 °C e più in basso è un'estrapolazione. Si avverte senza
+    // bloccare, perché una cucina non riscaldata d'inverno è un caso reale.
+    if (Number.isFinite(input.temperaturaAmbiente) && input.temperaturaAmbiente < 15) {
+        avvisi.push(avv('valid.warn_low_temp', { temperatura: input.temperaturaAmbiente }));
+    }
     if (tipoImpasto === 'diretto' && Number.isFinite(input.tempoLievitazioneTotale)
         && input.tempoLievitazioneTotale > 72) {
         avvisi.push(avv('valid.warn_long_fermentation', { ore: input.tempoLievitazioneTotale }));

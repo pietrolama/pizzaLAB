@@ -344,6 +344,7 @@
     "valid.warn_high_temp": "Temperatura ambiente di {temperatura}°C: la lievitazione accelera molto, tieni d’occhio l’impasto per evitare che collassi.",
     "valid.warn_long_fermentation": "Lievitazione di {ore} ore: oltre le 72 ore serve una farina di forza adeguata e il passaggio in frigorifero.",
     "valid.warn_low_hydration": "Idratazione al {idratazione}%: è un impasto piuttosto asciutto, la maglia glutinica farà più fatica a svilupparsi.",
+    "valid.warn_low_temp": "Temperatura ambiente di {temperatura}°C: la lievitazione rallenta molto e i tempi si allungano. Sotto i 15°C la stima è meno affidabile — controlla l’impasto invece di affidarti solo all’orologio.",
     "yeast.converter_subtitle": "Converti qualsiasi dose tra Lievito Fresco, Secco, Licoli o Pasta Madre, con ricalcolo automatico dell'acqua e farina da sottrarre.",
     "yeast.converter_title": "Convertitore Universale di Lieviti",
     "yeast.from_label": "Da Lievito:",
