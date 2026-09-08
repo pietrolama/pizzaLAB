@@ -172,6 +172,27 @@ a { color: inherit; }
     background: rgba(255, 255, 255, 0.08);
 }
 
+/* La barra completa — marchio, dieci voci, pulsante di accesso e selettore
+   lingua — richiede circa 1320px. Sotto quella soglia il contenuto sbordava a
+   destra e il selettore lingua finiva tagliato da overflow-x:hidden, sparendo
+   parzialmente proprio sui 1280px, una larghezza tutt'altro che rara.
+   Fra il breakpoint del menu mobile e i 1320px si stringono le voci invece di
+   nascondere l'intero menu dietro l'hamburger: il contenuto scende a ~1170px
+   e ci sta comodamente. */
+@media (min-width: 1151px) and (max-width: 1320px) {
+    .nav-links { gap: 2px; }
+
+    .nav-links li a {
+        padding: 8px 9px;
+        font-size: 0.85rem;
+    }
+
+    .lang-switch-container {
+        margin-left: 4px;
+        margin-right: 0;
+    }
+}
+
 .lang-switch-container {
     display: inline-flex;
     align-items: center;
