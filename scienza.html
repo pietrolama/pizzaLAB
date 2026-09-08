@@ -106,12 +106,19 @@
             renderItem: (voce) => `
                 <article class="listing-card">
                     <div class="listing-card__body">
+                        <div class="listing-card__meta" style="display: flex; gap: 8px; align-items: center; margin-bottom: 10px; font-size: 0.82rem;">
+                            ${voce.tag ? `<span style="background: rgba(230, 57, 70, 0.15); color: #ff6b6b; padding: 2px 8px; border-radius: 4px; font-weight: 600;">${esc(voce.tag)}</span>` : ''}
+                            ${voce.data_pubblicazione ? `<span style="color: var(--text-muted, #888); font-family: monospace;">${esc(voce.data_pubblicazione)}</span>` : ''}
+                        </div>
                         <h3>${esc(voce.titolo)}</h3>
-                        <p>${esc(voce.sintesi)}</p>
-                        <p>${esc(voce.corpo)}</p>
-                        <ul class="listing-card__tags">
-                            ${(voce.fonti || []).map((f) => `<li><a href="${esc(urlSicuro(f.url))}" target="_blank" rel="noopener noreferrer">${esc(f.titolo)}</a></li>`).join('')}
-                        </ul>
+                        <p style="font-weight: 500; color: var(--text-primary, #f0f0f0); margin-bottom: 12px;">${esc(voce.sintesi)}</p>
+                        <p style="line-height: 1.6; margin-bottom: 16px;">${esc(voce.corpo)}</p>
+                        <div style="margin-top: auto;">
+                            <strong style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted, #888); display: block; margin-bottom: 6px;" data-i18n="scienza.fonti">Fonti & Riferimenti:</strong>
+                            <ul class="listing-card__tags">
+                                ${(voce.fonti || []).map((f) => `<li><a href="${esc(urlSicuro(f.url))}" target="_blank" rel="noopener noreferrer">${esc(f.titolo)}</a></li>`).join('')}
+                            </ul>
+                        </div>
                     </div>
                 </article>
             `,
