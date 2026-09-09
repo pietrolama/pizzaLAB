@@ -15,6 +15,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { LIMITI } from '../js/validazione-engine.js';
+import { faqVisibili } from '../scripts/genera-faq-jsonld.mjs';
 import { metodiPerPizza, composizionePizza, IDRATAZIONE_BIGA } from '../js/calcolatore-engine.js';
 
 const html = fs.readFileSync(new URL('../calcolatore.html', import.meta.url), 'utf8');
@@ -121,5 +122,34 @@ test('i due dizionari citano gli stessi numeri', () => {
     for (const k of chiaviConNumeri) {
         assert.deepEqual(numeri(it[k]), numeri(en[k]),
             `${k}: i numeri citati in italiano e in inglese non coincidono`);
+    }
+});
+
+test('i dati strutturati dichiarano esattamente le FAQ visibili sulla pagina', () => {
+    // Google richiede che il contenuto delle FAQ sia visibile. Erano già
+    // divergenti: calcolatore.html dichiarava una domanda sull'idratazione che
+    // in pagina non c'era e ne ometteva una sulla teglia che invece c'era, e
+    // prefermenti_e_farine.html dichiarava tre FAQ tutte invisibili.
+    // Se questo test fallisce, esegui: npm run genera-faq
+    for (const pagina of ['calcolatore.html', 'prefermenti_e_farine.html']) {
+        const sorgente = fs.readFileSync(new URL(`../${pagina}`, import.meta.url), 'utf8');
+        const blocco = sorgente.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
+        assert.ok(blocco, `${pagina}: blocco di dati strutturati assente`);
+
+        const dati = JSON.parse(blocco[1]);
+        const elenco = Array.isArray(dati) ? dati : [dati];
+        const faqPage = elenco.find((x) => x['@type'] === 'FAQPage');
+        assert.ok(faqPage, `${pagina}: nessun FAQPage nei dati strutturati`);
+
+        const visibili = faqVisibili(sorgente);
+        assert.equal(faqPage.mainEntity.length, visibili.length,
+            `${pagina}: ${faqPage.mainEntity.length} FAQ dichiarate a Google ma ${visibili.length} visibili`);
+
+        faqPage.mainEntity.forEach((voce, i) => {
+            assert.equal(voce.name, visibili[i].domanda,
+                `${pagina}, FAQ ${i + 1}: la domanda dichiarata non e quella visibile`);
+            assert.equal(voce.acceptedAnswer.text, visibili[i].risposta,
+                `${pagina}, FAQ ${i + 1}: la risposta dichiarata non e quella visibile`);
+        });
     }
 });
