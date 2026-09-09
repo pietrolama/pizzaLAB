@@ -1,24 +1,25 @@
 [
     {
         "id": "mito-digeribilita-lunghe-lievitazioni",
-        "tag": "Biochemistry & Physiology",
-        "titolo": "The 72-Hour Myth: Does Pizza Digestibility Really Depend on Fermentation Time?",
-        "sintesi": "Pizza digestibility is frequently credited to ultra-long proofs that allegedly 'predigest' gluten. Gastrointestinal physiology and food biochemistry reveal a very different reality: starch digestion depends on proper baking, while gluten is broken down by gastric pepsin, not dormant flour enzymes in the fridge.",
-        "corpo": "It is widely believed that dough fermented for 48 or 72 hours in the refrigerator is inherently easier to digest because flour enzymes have supposedly 'broken down the gluten' for our stomach. Scientifically, this is largely a marketing myth: plant proteases at 4°C hydrolyze a mere 1-2% of gluten peptide bonds, just enough to relax the dough matrix and make stretching easier for the pizzaiolo. The human digestive system, equipped with gastric hydrochloric acid, pepsin, and pancreatic proteases, degrades dietary proteins with vastly superior efficiency, making cold 'predigestion' physiologically negligible. Furthermore, the digestibility of starches—accounting for over 70% of flour weight—does not depend on fermentation hours, but on complete thermal gelatinization during baking. A poorly baked, soggy pizza will cause indigestion regardless of how many days it matured. Finally, nocturnal thirst and post-meal heaviness do not stem from 'yeast still fermenting in the stomach' (yeast dies instantly above 55-60°C in the oven), but from excessive sodium in the crust and toppings, combined with heated dairy fats that delay gastric emptying.",
+        "tag": "Biochimica & Fisiologia",
+        "titolo": "The 72-hour myth: does pizza digestibility really depend on fermentation?",
+        "sintesi": "Pizza digestibility is often attributed to endless maturation times that would 'predigest' gluten. Gastric physiology and food biochemistry, however, demonstrate a very different reality: starch digestion depends on proper baking, while gluten is broken down by gastric pepsin, not by the enzymes in the flour at low temperatures.",
+        "corpo": "In the pizza world, there is a widespread belief that dough matured for 48 or 72 hours in the refrigerator is intrinsically more digestible because the enzymes in the flour would have 'broken down the gluten' in place of our stomach. From a scientific standpoint, this is a myth: the plant proteases in flour at 4°C hydrolyze only 1-2% of gluten's peptide bonds, just enough to relax the mesh and facilitate stretching by the pizzaiolo. The human digestive system, thanks to hydrochloric acid and pepsin in the stomach (and subsequently pancreatic trypsin), breaks down proteins with incomparably higher efficiency, making the alleged 'cold predigestion' physiologically irrelevant. At the same time, the digestibility of starches — which make up over 70% of the flour — does not depend on hours of fermentation, but on their complete thermal gelatinization during baking: a pizza that is poorly baked or moist in the center will be indigestible regardless of maturation days. Finally, the typical heaviness or nighttime thirst does not stem from still-living yeast (which die instantly above 55-60°C in the oven), but from the high salt concentration in the dough and toppings and from the cooked fats in dairy products that slow gastric emptying.",
         "data_pubblicazione": "2026-09-08",
         "fonti": [
             {
-                "titolo": "Dario Bressanini - Food Chemistry: Myths and Science of Fermentation",
+                "titolo": "Dario Bressanini - La scienza della panificazione: miti e chimica della fermentazione",
                 "url": "https://www.pianetapane.it"
             },
             {
-                "titolo": "CREA Food & Nutrition Research Centre - Dough Rheology and Enzyme Kinetics",
+                "titolo": "CREA Centro Alimenti e Nutrizione - Struttura degli impasti e cinetica enzimatica",
                 "url": "https://www.crea.gov.it"
             },
             {
                 "titolo": "Journal of Cereal Science - Starch Gelatinization and Protein Hydrolysis in Baked Goods",
                 "url": "https://www.sciencedirect.com/journal/journal-of-cereal-science"
             }
-        ]
+        ],
+        "_source_hash": "ab19d68418ee41ef"
     }
 ]
