@@ -99,6 +99,17 @@ async function verificaCalcolatore() {
     const sporco = await valuta("/NaN|Infinity|undefined/.test(document.getElementById('risultato').textContent)");
     esito(sporco === false, 'nessun NaN o Infinity a schermo');
 
+    // Gli strumenti vivono in tools-page.js: se quel modulo non si carica, i
+    // contenitori restano vuoti senza che nulla lo segnali.
+    for (const [nome, selettore] of [
+        ['SOS Impasto', '#troubleshoot-cards-container'],
+        ['Cereali', '#cereali-cards-container'],
+        ['Glossario', '#glossario-cards-container'],
+    ]) {
+        const quanti = await valuta(`document.querySelector('${selettore}')?.children.length ?? 0`);
+        esito(quanti > 0, `sezione ${nome} popolata`, `${quanti} elementi`);
+    }
+
     // Un input impossibile deve bloccare, non produrre numeri negativi.
     await valuta(`(function () {
         var m = document.getElementById('tipo_pizza'); m.value = 'contemporanea'; m.dispatchEvent(new Event('change'));

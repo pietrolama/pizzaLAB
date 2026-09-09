@@ -43,6 +43,7 @@ const ASSETS_TO_CACHE = [
     './js/timer-engine.js',
     './js/pizza-card-engine.js',
     './js/tools-engine.js',
+    './js/tools-page.js',
     './js/firebase-auth.js',
     './js/diario-page.js',
     './js/diario-storage.js',
