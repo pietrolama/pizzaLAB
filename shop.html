@@ -31,13 +31,14 @@
     <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 </head>
 <body>
+    <a class="skip-link" href="#contenuto" data-i18n="nav.skip_to_content">Vai al contenuto</a>
     <nav class="site-nav">
         <div class="nav-container">
             <a href="index.html" class="nav-brand">
                 <img src="img/logo.png" alt="PizzaLab" width="128" height="128">
                 PizzaLab
             </a>
-            <ul class="nav-links">
+            <ul class="nav-links" id="nav-links">
                 <li><a href="index.html" data-i18n="nav.home">Home</a></li>
                 <li><a href="tipi-di-pizza.html" data-i18n="nav.tipi_pizza">Tipi di Pizza</a></li>
                 <li><a href="prefermenti_e_farine.html" data-i18n="nav.prefermenti">Prefermenti e Farine</a></li>
@@ -49,11 +50,11 @@
                 <li><a href="shop.html" class="active" data-i18n="nav.shop">Shop</a></li>
                 <li><a href="contatti.html" data-i18n="nav.contatti">Contatti</a></li>
             </ul>
-            <div class="hamburger" aria-label="Toggle navigation" role="button" tabindex="0">
+            <button type="button" class="hamburger" aria-label="Apri il menu di navigazione" data-i18n-aria-label="nav.toggle_menu" aria-expanded="false" aria-controls="nav-links">
                 <span class="bar"></span>
                 <span class="bar"></span>
                 <span class="bar"></span>
-            </div>
+            </button>
         </div>
     </nav>
 
@@ -62,7 +63,7 @@
         <p data-i18n="shop.header.subtitle">Gli strumenti che fanno davvero la differenza: pale, pietre refrattarie, contenitori per lievitazione e termometri.</p>
     </header>
 
-    <main class="page-container" style="max-width: 1200px;">
+    <main id="contenuto" tabindex="-1" class="page-container" style="max-width: 1200px;">
         <div class="listing-grid" id="shop-container"></div>
         <p style="color: var(--text-dim); font-size: 0.8rem; text-align: center; margin-top: 32px;" data-i18n="shop.affiliate_disclaimer">Link di affiliazione: acquistando tramite questi link potresti contribuire a sostenere PizzaLab, senza costi aggiuntivi per te.</p>
     </main>

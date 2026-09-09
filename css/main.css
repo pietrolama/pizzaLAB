@@ -82,6 +82,45 @@ a { color: inherit; }
 .btn:hover { transform: translateY(-2px); box-shadow: 0 12px 32px var(--primary-glow); }
 .btn:active { transform: translateY(0) scale(0.97); }
 
+/* ===== FOCUS DA TASTIERA =====
+   Il sito non aveva alcuno stile di focus: chi naviga con il Tab non poteva
+   sapere quale elemento fosse selezionato. Si usa :focus-visible, che il
+   browser attiva solo per la navigazione da tastiera e non al clic del mouse. */
+:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 3px;
+    border-radius: 6px;
+}
+
+/* Sugli elementi già tondi l'anello segue la loro forma */
+.nav-links li a:focus-visible,
+.lang-btn:focus-visible,
+.btn-chip:focus-visible {
+    border-radius: 999px;
+}
+
+/* Salta al contenuto: prima voce raggiungibile con il Tab, visibile solo
+   quando riceve il fuoco. Evita di dover attraversare dieci voci di menu
+   a ogni pagina. */
+.skip-link {
+    position: absolute;
+    left: 16px;
+    top: -100px;
+    z-index: 1200;
+    padding: 10px 18px;
+    background: var(--primary-solid);
+    color: #fff;
+    border-radius: 0 0 10px 10px;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    text-decoration: none;
+    transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+    top: 0;
+}
+
 /* ===== NAV ===== */
 /* Selettore scoped alla classe (non al tag "nav"): il rail di progresso più
    in basso è anch'esso un <nav>, e con un selettore per tag ne avrebbe
@@ -278,14 +317,21 @@ a { color: inherit; }
     color: #fff;
 }
 
+/* È un <button> vero e non un <div role="button">: quest'ultimo è raggiungibile
+   con il Tab ma non si attiva con Invio o Spazio, quindi sotto il breakpoint
+   l'intero menu era inutilizzabile da tastiera. Il reset di border e font serve
+   perché il pulsante non erediti l'aspetto predefinito del browser. */
 .hamburger {
     display: none;
     flex-direction: column;
     gap: 5px;
     cursor: pointer;
     padding: 8px;
+    border: none;
     border-radius: 8px;
     background: rgba(255, 255, 255, 0.05);
+    font: inherit;
+    color: inherit;
 }
 
 .hamburger .bar {

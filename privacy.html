@@ -40,13 +40,14 @@
     <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 </head>
 <body>
+    <a class="skip-link" href="#contenuto" data-i18n="nav.skip_to_content">Vai al contenuto</a>
     <nav class="site-nav">
         <div class="nav-container">
             <a href="index.html" class="nav-brand">
                 <img src="img/logo.png" alt="PizzaLab" width="128" height="128">
                 PizzaLab
             </a>
-            <ul class="nav-links">
+            <ul class="nav-links" id="nav-links">
                 <li><a href="index.html" data-i18n="nav.home">Home</a></li>
                 <li><a href="tipi-di-pizza.html" data-i18n="nav.tipi_pizza">Tipi di Pizza</a></li>
                 <li><a href="prefermenti_e_farine.html" data-i18n="nav.prefermenti">Prefermenti e Farine</a></li>
@@ -58,11 +59,11 @@
                 <li><a href="shop.html" data-i18n="nav.shop">Shop</a></li>
                 <li><a href="contatti.html" data-i18n="nav.contatti">Contatti</a></li>
             </ul>
-            <div class="hamburger" aria-label="Toggle navigation" role="button" tabindex="0">
+            <button type="button" class="hamburger" aria-label="Apri il menu di navigazione" data-i18n-aria-label="nav.toggle_menu" aria-expanded="false" aria-controls="nav-links">
                 <span class="bar"></span>
                 <span class="bar"></span>
                 <span class="bar"></span>
-            </div>
+            </button>
         </div>
     </nav>
 
@@ -70,7 +71,7 @@
         <h1 data-i18n="privacy.header.title">Informativa sulla Privacy</h1>
     </header>
 
-    <main class="page-container">
+    <main id="contenuto" tabindex="-1" class="page-container">
         <section class="calculator-card" style="margin-bottom: 20px;">
             <h2 style="margin-bottom: 12px;" data-i18n="privacy.sec_intro.title">Introduzione</h2>
             <p style="color: var(--text-muted);" data-i18n="privacy.sec_intro.desc">La tua privacy è importante. Questa informativa descrive come vengono raccolti, utilizzati e protetti i tuoi dati personali durante l'uso del sito.</p>

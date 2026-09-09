@@ -31,6 +31,7 @@ const ASSETS_TO_CACHE = [
     './js/home.js',
     './js/i18n-engine.js',
     './js/dom-target.js',
+    './js/focus-trap.js',
     './js/listing.js',
     './js/mini-calc.js',
     './js/stagionale.js',

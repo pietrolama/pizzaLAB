@@ -42,6 +42,7 @@ import { caricaCerealiData, renderCerealiCards } from './grains-engine.js';
 import { caricaGlossarioData, renderGlossarioDrawer, inizializzaGlossarioTooltips } from './glossario-engine.js';
 import { getSavedLocale, t } from './i18n-engine.js';
 import { validaInput, verificaRisultato } from './validazione-engine.js';
+import { intrappolaFuoco } from './focus-trap.js';
 
 const el = (id) => document.getElementById(id);
 
@@ -925,6 +926,10 @@ function assegnaFase(idx, totale, testo) {
     return isEn ? `Step ${idx + 1}` : `Passo ${idx + 1}`;
 }
 
+// Funzione restituita da intrappolaFuoco: va conservata per poter rilasciare
+// il fuoco alla chiusura.
+let rilasciaFuocoPiano = null;
+
 function apriPianoOperativo() {
     const stepItems = el('risultato-steps')?.querySelectorAll('li');
     if (!stepItems || stepItems.length === 0) return;
@@ -945,6 +950,9 @@ function apriPianoOperativo() {
     if (modal) {
         modal.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
+        // Il fuoco deve entrare nel modale e restarci: aria-modal lo dichiara
+        // ai lettori di schermo ma non trattiene la tastiera.
+        rilasciaFuocoPiano = intrappolaFuoco(modal);
     }
 
     if (el('piano-pizza-label') && ultimoStatoRicetta) {
@@ -963,6 +971,11 @@ function chiudiPianoOperativo() {
     if (modal) {
         modal.classList.add('hidden');
         document.body.style.overflow = '';
+    }
+    // Riporta il fuoco sul pulsante che aveva aperto il piano.
+    if (rilasciaFuocoPiano) {
+        rilasciaFuocoPiano();
+        rilasciaFuocoPiano = null;
     }
     disattivaWakeLock();
 }

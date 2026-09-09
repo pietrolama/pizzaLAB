@@ -5,16 +5,37 @@ document.addEventListener('DOMContentLoaded', () => {
     const hamburger = document.querySelector('.hamburger');
     const navLinks = document.querySelector('.nav-links');
     if (hamburger && navLinks) {
+        // aria-expanded dice ai lettori di schermo se il menu è aperto: senza,
+        // il pulsante annuncia solo il proprio nome e mai il proprio stato.
+        const impostaMenu = (aperto) => {
+            navLinks.classList.toggle('active', aperto);
+            hamburger.classList.toggle('toggle', aperto);
+            hamburger.setAttribute('aria-expanded', aperto ? 'true' : 'false');
+        };
+
         hamburger.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-            hamburger.classList.toggle('toggle');
+            impostaMenu(!navLinks.classList.contains('active'));
         });
 
         navLinks.querySelectorAll('a').forEach((link) => {
-            link.addEventListener('click', () => {
-                navLinks.classList.remove('active');
-                hamburger.classList.remove('toggle');
-            });
+            link.addEventListener('click', () => impostaMenu(false));
+        });
+
+        // Escape chiude il menu e riporta il fuoco sul pulsante, altrimenti
+        // resterebbe su un link ormai nascosto e il Tab ripartirebbe dal nulla.
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && navLinks.classList.contains('active')) {
+                impostaMenu(false);
+                hamburger.focus();
+            }
+        });
+
+        // Un clic fuori dal menu aperto lo chiude: comportamento atteso e
+        // utile anche a chi usa il touch.
+        document.addEventListener('click', (e) => {
+            if (!navLinks.classList.contains('active')) return;
+            if (hamburger.contains(e.target) || navLinks.contains(e.target)) return;
+            impostaMenu(false);
         });
     }
 
