@@ -4,3 +4,6 @@
 .DS_Store
 Thumbs.db
 node_modules/
+
+# Profilo temporaneo del browser usato dai test
+.tmp-browser/

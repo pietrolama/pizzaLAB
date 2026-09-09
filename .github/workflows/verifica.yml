@@ -1,0 +1,34 @@
+name: Verifica
+
+# Gira su ogni push e su ogni pull request, comprese quelle aperte
+# automaticamente dai workflow di generazione contenuti: quelle PR modificano
+# i dataset che il sito legge, e finora nulla controllava che il sito
+# continuasse a funzionare dopo il merge.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch: {}
+
+jobs:
+  verifica:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      # Test unitari: formula del lievito e coerenza fra testi pubblicati e
+      # comportamento reale del calcolatore. Nessuna dipendenza da installare.
+      - name: Test unitari
+        run: npm test
+
+      # Verifica nel browser: carica ogni pagina, raccoglie errori di console,
+      # controlla il layout a otto larghezze e prova il flusso del calcolatore
+      # e la navigazione da tastiera. Chrome è preinstallato sui runner Ubuntu.
+      - name: Verifica nel browser
+        run: npm run verifica
+        env:
+          CHROME_PATH: /usr/bin/google-chrome

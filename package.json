@@ -1,0 +1,15 @@
+{
+  "name": "pizzalab",
+  "version": "1.0.0",
+  "description": "Calcolatore scientifico per impasti di pizza",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "verifica": "node test/browser/verifica.mjs",
+    "controlla": "npm test && npm run verifica"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
