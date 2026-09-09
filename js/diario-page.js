@@ -1,6 +1,12 @@
 // diario-page.js
 // Diario di fermentazione salvato in localStorage + sincronizzazione opzionale su Firebase Firestore.
 import { onAuthChange, salvaDiarioCloud, caricaDiarioCloud, eliminaDiarioCloud } from './firebase-auth.js';
+import {
+    unisciDiari,
+    deserializza,
+    serializza,
+    normalizzaFermentazione,
+} from './diario-storage.js';
 
 const CHIAVE_STORAGE = 'diarioFermentazioni';
 let currentUser = null;
@@ -12,12 +18,7 @@ onAuthChange(async (user) => {
             const cloudEntries = await caricaDiarioCloud();
             if (cloudEntries && cloudEntries.length > 0) {
                 const locali = leggiFermentazioni();
-                // Unisci per ID evitando duplicati
-                const idMap = new Map();
-                cloudEntries.forEach((e) => idMap.set(e.id || `${e.nome}_${e.data}`, e));
-                locali.forEach((e) => idMap.set(e.id || `${e.nome}_${e.data}`, e));
-                const uniti = Array.from(idMap.values());
-                salvaFermentazioni(uniti);
+                salvaFermentazioni(unisciDiari(locali, cloudEntries));
                 renderLista();
             }
         } catch (e) {
@@ -26,16 +27,34 @@ onAuthChange(async (user) => {
     }
 });
 
+/** Legge il diario, migrando in modo trasparente il formato precedente. */
 function leggiFermentazioni() {
     try {
-        return JSON.parse(localStorage.getItem(CHIAVE_STORAGE)) || [];
+        return deserializza(JSON.parse(localStorage.getItem(CHIAVE_STORAGE)));
     } catch (e) {
+        console.warn('Diario illeggibile, si riparte da vuoto:', e);
         return [];
     }
 }
 
+/**
+ * Salva il diario nell'involucro versionato.
+ * @returns {boolean} false se il browser ha rifiutato la scrittura
+ */
 function salvaFermentazioni(lista) {
-    localStorage.setItem(CHIAVE_STORAGE, JSON.stringify(lista));
+    try {
+        localStorage.setItem(CHIAVE_STORAGE, JSON.stringify(serializza(lista)));
+        return true;
+    } catch (e) {
+        // localStorage pieno o disabilitato: senza questo blocco il salvataggio
+        // falliva in silenzio e l'utente credeva di aver salvato.
+        console.error('Impossibile salvare il diario:', e);
+        const isEn = document.documentElement.lang === 'en';
+        alert(isEn
+            ? 'The diary could not be saved: your browser storage is full or blocked. Export a backup and free some space.'
+            : 'Non è stato possibile salvare il diario: la memoria del browser è piena o bloccata. Esporta un backup e libera spazio.');
+        return false;
+    }
 }
 
 function formattaData(iso) {
@@ -55,55 +74,7 @@ function escapeHtml(valore) {
     }[c]));
 }
 
-// Campi ammessi in una scheda del diario, con il tipo atteso.
-const CAMPI_FERMENTAZIONE = {
-    nome: 'stringa', data: 'stringa', note: 'stringa',
-    tipo_pizza: 'stringa', tipo_impasto: 'stringa',
-    idratazione: 'numero', lievito: 'numero', farina_w: 'numero',
-    tempo: 'numero', tempo_lievitazione: 'numero', tempo_frigo: 'numero',
-    num_panetti: 'numero', peso_panetto: 'numero',
-    percentuale_biga: 'numero', percentuale_poolish: 'numero',
-    percentuale_lievito_madre: 'numero',
-};
 
-const CAMPI_BLEND = {
-    possibile: 'booleano',
-    pesoForte: 'numero', percentualeForte: 'numero',
-    pesoDebole: 'numero', percentualeDebole: 'numero',
-};
-
-function copiaCampiAmmessi(origine, schema) {
-    const out = {};
-    for (const [campo, tipo] of Object.entries(schema)) {
-        const v = origine[campo];
-        if (v === undefined || v === null) continue;
-        if (tipo === 'numero') {
-            const n = Number(v);
-            if (Number.isFinite(n)) out[campo] = n;
-        } else if (tipo === 'booleano') {
-            out[campo] = Boolean(v);
-        } else {
-            out[campo] = String(v).slice(0, 2000);
-        }
-    }
-    return out;
-}
-
-/**
- * Riduce una voce di backup ai soli campi previsti. Restituisce null se la
- * voce non è un oggetto utilizzabile.
- */
-function normalizzaFermentazione(voce) {
-    if (!voce || typeof voce !== 'object' || Array.isArray(voce)) return null;
-
-    const pulita = copiaCampiAmmessi(voce, CAMPI_FERMENTAZIONE);
-    if (!pulita.nome) return null;
-
-    if (voce.blend && typeof voce.blend === 'object' && !Array.isArray(voce.blend)) {
-        pulita.blend = copiaCampiAmmessi(voce.blend, CAMPI_BLEND);
-    }
-    return pulita;
-}
 
 function renderLista() {
     const lista = leggiFermentazioni();
@@ -204,9 +175,12 @@ document.getElementById('fermentazione-form').addEventListener('submit', async (
         lievito: document.getElementById('lievito').value,
         tempo: document.getElementById('tempo').value,
         note: document.getElementById('note').value,
+        // Serve a decidere quale copia vince quando la stessa voce esiste su
+        // piu' dispositivi. Stesso nome del campo che usa gia' il cloud.
+        aggiornato: new Date().toISOString(),
     };
     lista.unshift(nuovaEntry);
-    salvaFermentazioni(lista);
+    if (!salvaFermentazioni(lista)) return;
     
     if (currentUser) {
         try {
