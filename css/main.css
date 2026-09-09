@@ -39,11 +39,19 @@
 
 * , *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
+/* Niente overflow-x:hidden su html e body.
+   Sembra una protezione, in realta' e' la ragione per cui ogni sbordamento di
+   questo sito e' rimasto invisibile fino a che qualcuno non ci e' inciampato:
+   il selettore lingua tagliato sui monitor da 1280, due delle sette schede
+   strumenti fuori vista, le griglie che uscivano sotto i 360px, la guida SEO
+   intrappolata in un div mai chiuso. Con quel `hidden` il contenuto viene
+   ritagliato in silenzio; senza, compare una barra di scorrimento orizzontale
+   — brutta, ma che si annuncia da sola.
+   Gli sbordamenti veri sono stati corretti e test/browser/verifica.mjs
+   controlla a otto larghezze che non ne ricompaiano. */
 html {
     scroll-behavior: smooth;
     color-scheme: dark;
-    overflow-x: hidden;
-    max-width: 100%;
 }
 
 body {
@@ -51,7 +59,6 @@ body {
     background: var(--bg-dark);
     color: var(--text-main);
     line-height: 1.6;
-    overflow-x: hidden;
     max-width: 100%;
     width: 100%;
     position: relative;
