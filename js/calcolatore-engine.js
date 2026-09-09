@@ -18,11 +18,11 @@ export const metodiPerPizza = {
 // farina (percentuali panificatorie). La napoletana segue il disciplinare AVPN:
 // solo farina, acqua, sale e lievito, senza zucchero né olio.
 export const COMPOSIZIONE_PER_PIZZA = {
-    napoletana: { sale: 2.5, zucchero: 0, olio: 0 },
-    romana: { sale: 2, zucchero: 1.3, olio: 3.2 },
-    contemporanea: { sale: 2, zucchero: 1.3, olio: 3.2 },
-    pala: { sale: 2, zucchero: 1.3, olio: 3.2 },
-    padellino: { sale: 2, zucchero: 1.3, olio: 3.2 },
+    napoletana: { sale: 3, zucchero: 0, olio: 0 },
+    romana: { sale: 2.5, zucchero: 1.3, olio: 3.2 },
+    contemporanea: { sale: 2.5, zucchero: 1.3, olio: 3.2 },
+    pala: { sale: 2.8, zucchero: 1.3, olio: 3.2 },
+    padellino: { sale: 2.5, zucchero: 1.3, olio: 3.2 },
     teglia: { sale: 2, zucchero: 1.3, olio: 3.2 },
 };
 

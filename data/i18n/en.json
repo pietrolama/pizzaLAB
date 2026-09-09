@@ -73,7 +73,7 @@
     "calc.seo.faq1_q": "How to calculate yeast based on temperature and fermentation time?",
     "calc.seo.faq2_a": "To convert fresh yeast (LBF) to active dry yeast (LBS), divide fresh dosage by 3 (1:3 ratio). For instance, 9g fresh equals 3g dry. If using Licoli (100% hydration liquid sourdough), recommended ratio is 15% to 20% of flour weight, remembering to subtract 50% of its weight from recipe water and 50% from recipe flour.",
     "calc.seo.faq2_q": "How to convert fresh baker's yeast to active dry yeast or liquid sourdough (licoli)?",
-    "calc.seo.faq3_a": "In a 100% Biga dough, all recipe flour is mixed with 44-45% water and 1% fresh yeast, without salt. The dough is not fully developed (left shaggy) and fermented at 16-18°C for 16-24 hours. In the final refresh, remaining water (to reach desired final hydration, e.g. 75-80%), 2.5-3% salt, and optional malt are added.",
+    "calc.seo.faq3_a": "In a 100% Biga dough, all recipe flour is mixed with 44-45% water and 1% fresh yeast, without salt. The dough is not fully developed (left shaggy) and fermented at 16-18°C for 16-24 hours. In the final refresh, remaining water (to reach desired final hydration, e.g. 75-80%), 2-2.8% salt (depending on chosen style), and optional malt are added.",
     "calc.seo.faq3_q": "How does 100% Biga calculation work for pizza?",
     "calc.seo.faq4_a": "The formula uses tray surface area multiplied by a thickness coefficient: <code>Weight (g) = (Base × Height) × Coefficient</code>. For a standard home tray (e.g. 40x30 cm = 1200 cm²), multiply by 0.55 for medium soft thickness (~660g dough), 0.50 for thin crispy pizza (600g), or 0.65 for thick bakery focaccia (780g).",
     "calc.seo.faq4_q": "How to calculate dough weight for a baking pan or tray?",

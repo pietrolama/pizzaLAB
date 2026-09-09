@@ -4,7 +4,7 @@
 
 // La versione va incrementata a ogni rilascio che cambia gli asset: l'attivazione
 // cancella le cache con nome diverso, forzando il ri-download del guscio.
-const CACHE_VERSION = 'v3';
+const CACHE_VERSION = 'v4';
 const CACHE_NAME = `pizzalab-cache-${CACHE_VERSION}`;
 
 // Guscio dell'applicazione: pagine, stile, moduli e dataset necessari a usare
