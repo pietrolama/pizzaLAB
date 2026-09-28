@@ -1,1 +1,20 @@
-[]
+[
+    {
+        "id": "ecologia-microbica-pasta-madre-voc-lieviti-non-convenzionali",
+        "tag": "Microbiologia e Cinetica Fermentativa",
+        "titolo": "Biodiversità microbica e precursori aromatici in paste acide di grano Maiorca: perché il profilo dei VOC non basta a definire l'aroma del pane",
+        "sintesi": "I consorzi lieviti-LAB delle paste madri tradizionali di grano antico Maiorca producono metaboliti volatili che influenzano la fase pre-cottura, ma il profilo aromatico finale è determinato dall'interazione di questi precursori con le reazioni termiche di forno, rendendo imprudente correlare direttamente biodiversità in vitro e qualità sensoriale.",
+        "corpo": "I consorzi microbici delle paste acide siciliane comprendono LAB omo- ed eterofermentanti (Lactobacillus sanfranciscensis, L. fermentum, L. plantarum) e lieviti non-Saccharomyces, il cui metabolismo genera alcoli, esteri e aldeidi volatili; tuttavia, identificarli con PCR-DGGE o sequenziamento parziale del rRNA offre solo una fotografia taxonomica a bassa risoluzione, oggi superabile da approcci metagenomici. È inoltre impreciso classificare l'acido lattico tra i VOC: esso modula il sapore per acidità ma è chimicamente poco volatile, a differenza dell'acido acetico. Il passaggio in forno è il vero confine epistemologico dello studio: a temperature superiori ai 55–60 °C i microrganismi vengono inattivati, mentre i composti pre-formati reagiscono con zuccheri riducenti e amminoacidi liberi della matrice in reazioni di Maillard e caramellizzazione, alterando o mascherando il profilo fermentativo. Di conseguenza, la biodiversità specie-specifica non equivale a qualità aromatica, e solo l'accoppiata tra screening funzionale dei ceppi e valutazione sensoriale post-cottura può fondare una selezione ragionata di starter autoctoni.",
+        "data_pubblicazione": "2026-09-28",
+        "fonti": [
+            {
+                "titolo": "Università di Catania (Di3A), Università di Modena e Reggio Emilia, Università di Perugia (CERB) – Atti XIII Convegno Nazionale sulla Biodiversità",
+                "url": "https://air.uniud.it/retrieve/e27ce0ca-3024-055e-e053-6605fe0a7873/foggia.pdf"
+            },
+            {
+                "titolo": "Chiriotti Editori – Tecnica Molitoria, Profilo microbiologico e biochimico della pasta madre",
+                "url": "http://www.chiriottieditori.it/newsletter/PDF/riviste/tm/2021/TMol339aprile21.pdf"
+            }
+        ]
+    }
+]
