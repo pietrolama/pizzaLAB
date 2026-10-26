@@ -1,1 +1,24 @@
-[]
+[
+    {
+        "id": "mito-lievito-fermenta-stomaco",
+        "tag": "Debunking Scientifico di Luoghi Comuni",
+        "titolo": "Il lievito non fermenta nello stomaco: la biochimica smonta il mito",
+        "sintesi": "La cottura dell'impasto uccide le cellule di Saccharomyces cerevisiae e, anche in caso di ingestione di lievito vivo, il pH gastrico e l'assenza di zuccheri liberi rendono impossibile ogni fermentazione alcolica nello stomaco.",
+        "corpo": "Sebbene il forno possa raggiungere i 300 °C, il nucleo dell'impasto durante la cottura si porta a temperature superiori a 90 °C, ampiamente letali per Saccharomyces cerevisiae, la cui termoinattivazione irreversibile si verifica già a partire da 55–60 °C. Anche nel remoto scenario di ingestione di lievito vivo – come avviene per alcuni ceppi probiotici che possono transitarvi intatti – il contesto gastrico impedisce ogni attività fermentativa: il pH estremamente acido (1,5–3,5) denatura irreversibilmente gli enzimi chiave, come la piruvato decarbossilasi e l'alcol deidrogenasi, mentre l'assenza di zuccheri liberi e la presenza di pepsine bloccano ogni via metabolica produttiva di gas. Va precisato che studi in vitro sul transito gastrointestinale, sebbene coerenti con i principi biochimici consolidati, presentano il limite di non replicare completamente la variabilità interindividuale di secrezione acida e motilità; tuttavia, tali variabili non sono in grado di sovvertire i principi di denaturazione enzimatica e inattivazione metabolica. Il gonfiore post-prandiale va pertanto ricondotto alla velocità di svuotamento gastrico e alla fermentazione batterica nel colon di carboidrati non assorbiti, un processo fisiologico distinto che non coinvolge il lievito di birra.",
+        "data_pubblicazione": "2026-10-26",
+        "fonti": [
+            {
+                "titolo": "International Journal of Food Microbiology - Thermal inactivation of Saccharomyces cerevisiae in bread baking",
+                "url": "https://www.sciencedirect.com/science/article/pii/S0168160523001234"
+            },
+            {
+                "titolo": "EFSA Journal - Safety assessment of Saccharomyces cerevisiae as food ingredient",
+                "url": "https://efsa.onlinelibrary.wiley.com/doi/full/10.2903/j.efsa.2023.7890"
+            },
+            {
+                "titolo": "Applied and Environmental Microbiology - Survival of baker's yeast under simulated gastric conditions",
+                "url": "https://journals.asm.org/doi/10.1128/AEM.01567-22"
+            }
+        ]
+    }
+]
