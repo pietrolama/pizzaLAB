@@ -1,1 +1,22 @@
-[]
+[
+    {
+        "id": "pan-co-santi",
+        "nome": "Pan co' Santi",
+        "eyebrow": "Il lievitato del momento — Ognissanti",
+        "descrizione": "Impasto dolce lievitato a base di farina di grano tenero, arricchito da zucchero, uova e strutto, con l'aggiunta di uva sultanina, noci tostate e semi di anice. L'elevata concentrazione osmotica di grassi e zuccheri rallenta l'attività dei lieviti, rendendo necessaria una fermentazione controllata e prolungata per sviluppare profili aromatici complessi e una struttura glutinica armonica. La mollica risulta compatta e umida, con una crosta dorata che protegge le note speziate e fruttate tipiche della ricorrenza.",
+        "immagine": "img/farine.jpg",
+        "link": "prefermenti_e_farine.html",
+        "inizio": "11-01",
+        "fine": "11-02",
+        "fonti": [
+            {
+                "titolo": "Accademia Italiana della Cucina",
+                "url": "https://www.accademiaitalianadellacucina.it/ricette/pan-co-santi"
+            },
+            {
+                "titolo": "Gambero Rosso",
+                "url": "https://www.gamberorosso.it/notizie/pan-co-santi-ricetta-toscana"
+            }
+        ]
+    }
+]
